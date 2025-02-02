@@ -1,3 +1,18 @@
+/**
+ * Safely check if a file path exists without crashing due to a lack of permissions
+ *
+ * @param {String} filePath File path
+ * @Boolean True if the path exists. False otherwise
+ */
+export function safeExistsSync(filePath: string): boolean;
+/**
+ * Safely create a directory without crashing due to a lack of permissions
+ *
+ * @param {String} filePath File path
+ * @param options {Options} mkdir options
+ * @Boolean True if the path exists. False otherwise
+ */
+export function safeMkdirSync(filePath: string, options: Options): string;
 export function shouldFetchLicense(): boolean;
 export function shouldFetchVCS(): boolean;
 export function getJavaCommand(): string;
@@ -148,12 +163,24 @@ export function parseYarnLock(yarnLockFile: string): Promise<{
  */
 export function parseNodeShrinkwrap(swFile: string): Promise<any[]>;
 /**
+ * Parse pnpm workspace file
+ *
+ * @param {string} workspaceFile pnpm-workspace.yaml
+ * @returns {object} Object containing packages and catalogs
+ */
+export function parsePnpmWorkspace(workspaceFile: string): object;
+/**
  * Parse nodejs pnpm lock file
  *
  * @param {string} pnpmLock pnpm-lock.yaml file
- * @param {object} parentComponent parent component
+ * @param {Object} parentComponent parent component
+ * @param {Array[String]} workspacePackages Workspace packages
+ * @param {Object} workspaceSrcFiles Workspace package.json files
+ * @param {Object} workspaceCatalogs Workspace catalogs
+ * @param {Object} workspaceDirectDeps Direct dependencies of each workspace
+ * @param {Object} depsWorkspaceRefs Workspace references for each dependency
  */
-export function parsePnpmLock(pnpmLock: string, parentComponent?: object): Promise<{
+export function parsePnpmLock(pnpmLock: string, parentComponent?: any, workspacePackages?: any, workspaceSrcFiles?: any, _workspaceCatalogs?: {}, _workspaceDirectDeps?: {}, depsWorkspaceRefs?: any): Promise<{
     pkgList?: undefined;
     dependenciesList?: undefined;
     parentSubComponents?: undefined;
@@ -608,7 +635,7 @@ export function toGemModuleNames(name: any): string[];
  * @param {String} bundleCommand Bundle command to use
  * @param {String} gemHome Value to use as GEM_HOME env variable
  * @param {String} gemName Name of the gem
- * @param {String} filePath File path
+ * @param {String} filePath File path to the directory containing the Gemfile or .bundle directory
  *
  * @returns {Array<string>} List of module names
  */
@@ -680,7 +707,15 @@ export function parseCargoDependencyData(cargoLockData: any): {
     dependsOn: any[];
 }[];
 export function parseCargoAuditableData(cargoData: any): Promise<any[]>;
-export function parsePubLockData(pubLockData: any): Promise<any[]>;
+/**
+ * Method to parse pubspec.lock files.
+ *
+ * @param pubLockData Contents of lock data
+ * @param lockFile Filename for setting evidence
+ *
+ * @returns {Object}
+ */
+export function parsePubLockData(pubLockData: any, lockFile: any): any;
 export function parsePubYamlData(pubYamlData: any): any[];
 export function parseHelmYamlData(helmData: any): any[];
 export function recurseImageNameLookup(keyValueObj: any, pkgList: any, imgList: any): any;
@@ -1345,6 +1380,7 @@ export function isPartialTree(dependencies: any[], componentsCount?: number): bo
  */
 export function recomputeScope(pkgList: any[], dependencies: any[]): any[];
 export const dirNameStr: string;
+export const isSecureMode: any;
 export const isWin: boolean;
 export const isMac: boolean;
 export let ATOM_DB: string;

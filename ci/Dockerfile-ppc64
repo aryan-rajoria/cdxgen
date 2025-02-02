@@ -13,8 +13,8 @@ LABEL maintainer="cyclonedx" \
 
 ARG SBT_VERSION=1.10.7
 ARG MAVEN_VERSION=3.9.9
-ARG GRADLE_VERSION=8.11
-ARG GO_VERSION=1.23.4
+ARG GRADLE_VERSION=8.12.1
+ARG GO_VERSION=1.23.5
 ARG PYTHON_VERSION=3.12
 
 ENV GOPATH=/opt/app-root/go \
@@ -87,6 +87,7 @@ RUN set -e; \
     && curl -LO "https://dl.google.com/go/go${GO_VERSION}.linux-${GOBIN_VERSION}.tar.gz" \
     && tar -C /usr/local -xzf go${GO_VERSION}.linux-${GOBIN_VERSION}.tar.gz \
     && rm go${GO_VERSION}.linux-${GOBIN_VERSION}.tar.gz \
+    && go telemetry off \
     && curl -LO "https://raw.githubusercontent.com/technomancy/leiningen/stable/bin/lein" \
     && chmod +x lein \
     && mv lein /usr/local/bin/ \
@@ -111,5 +112,5 @@ RUN cd /opt/cdxgen && corepack enable && corepack pnpm install --prod --package-
     && chmod a-w -R /opt \
     && rm -rf /root/.cache /var/cache/yum /root/.cargo \
     && microdnf clean all
-
+WORKDIR /app
 ENTRYPOINT ["node", "/opt/cdxgen/bin/cdxgen.js"]

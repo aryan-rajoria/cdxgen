@@ -72,6 +72,7 @@ const args = yargs(hideBin(process.argv))
       "php",
       "swift",
       "ios",
+      "ruby",
     ],
   })
   .option("db-path", {
@@ -160,6 +161,10 @@ const evinseArt = `
 ███████╗ ╚████╔╝ ██║██║ ╚████║███████║███████╗
 ╚══════╝  ╚═══╝  ╚═╝╚═╝  ╚═══╝╚══════╝╚══════╝
 `;
+
+if (process.env?.CDXGEN_NODE_OPTIONS) {
+  process.env.NODE_OPTIONS = `${process.env.NODE_OPTIONS || ""} ${process.env.CDXGEN_NODE_OPTIONS}`;
+}
 
 console.log(evinseArt);
 (async () => {

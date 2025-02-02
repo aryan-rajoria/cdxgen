@@ -6,7 +6,7 @@ ENV LC_ALL=en_US.UTF-8 \
     LANG=en_US.UTF-8 \
     LANGUAGE=en_US.UTF-8 \
     ATOM_RUBY_VERSION=$ATOM_RUBY_VERSION \
-    ATOM_RUBY_HOME=/root/.rbenv/versions/${ATOM_RUBY_VERSION} \
+    ATOM_RUBY_HOME=/root/.rbenv/versions/3.4.1 \
     BUNDLE_SILENCE_ROOT_WARNING=true \
     JAVA_OPTIONS="-Dhttps.protocols=TLSv1.1,TLSv1.2" \
     RUBY_BUILD_BUILD_PATH="/tmp/rbenv" \
@@ -41,6 +41,8 @@ RUN set -e; \
     && mkdir -p "$(rbenv root)/plugins" \
     && git clone https://github.com/rbenv/ruby-build.git --depth=1 "$(rbenv root)/plugins/ruby-build" \
     && rbenv install ${ATOM_RUBY_VERSION} \
+    && ruby --version \
+    && java --version \
     && zypper clean -a
 
-CMD /bin/bash
+CMD ["/bin/bash"]

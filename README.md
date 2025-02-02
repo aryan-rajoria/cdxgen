@@ -58,10 +58,22 @@ Sections include:
 npm install -g @cyclonedx/cdxgen
 ```
 
+To run cdxgen without installing (hotloading), use the [pnpm dlx](https://pnpm.io/cli/dlx) command.
+
+```shell
+corepack pnpm dlx @cyclonedx/cdxgen --help
+```
+
 If you are a [Homebrew][homebrew-homepage] user, you can also install [cdxgen][homebrew-cdxgen] via:
 
 ```shell
 $ brew install cdxgen
+```
+
+If you are a [Winget][winget-homepage] user on windows, you can also install cdxgen via:
+
+```shell
+$ winget install cdxgen
 ```
 
 Deno and bun runtime can be used with limited support.
@@ -72,7 +84,7 @@ deno install --allow-read --allow-env --allow-run --allow-sys=uid,systemMemoryIn
 
 You can also use the cdxgen container image with node, deno, or bun runtime versions.
 
-The default version uses Node.js 22
+The default version uses Node.js 23
 
 ```bash
 docker run --rm -e CDXGEN_DEBUG_MODE=debug -v /tmp:/tmp -v $(pwd):/app:rw -t ghcr.io/cyclonedx/cdxgen:master -r /app -o /app/bom.json
@@ -456,7 +468,9 @@ Use the [CycloneDX CLI][cyclonedx-cli-github] tool for advanced use cases such a
 
 ## Including .NET Global Assembly Cache dependencies in the results
 
-Global Assembly Cache (GAC) dependencies must be made available in the build output of the project for cdxgen in order for it to inspect and include in the results. A cdxgen scan with the `--deep` flag will look for additional dependencies in the form of dll files. A simple way to have the dotnet build copy the GAC dependencies into the build directory is to place the file `Directory.Build.props` into the root of the project and ensure the contents include the following:
+For `dotnet` and `dotnet-framework`, SBOM could include components without a version number. Often, these components begin with the prefix `System.`.
+
+Global Assembly Cache (GAC) dependencies (System Runtime dependencies) must be made available in the build output of the project for version detection. A simple way to have the dotnet build copy the GAC dependencies into the build directory is to place the file `Directory.Build.props` into the root of the project and ensure the contents include the following:
 
 ```
 <Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
@@ -467,6 +481,8 @@ Global Assembly Cache (GAC) dependencies must be made available in the build out
 </ItemDefinitionGroup>
 </Project>
 ```
+
+Then, run cdxgen cli with the `--deep` argument.
 
 ## License
 
@@ -509,6 +525,10 @@ pnpm run lint
 pnpm test
 ```
 
+## Sponsors
+
+<img src="./docs/_media/LevoLogo-LightBg.jpg" width="200" height="auto">
+
 <!-- LINK LABELS -->
 <!-- Badges -->
 
@@ -548,6 +568,7 @@ pnpm test
 [github-rate-limit]: https://docs.github.com/en/rest/overview/rate-limits-for-the-rest-api#primary-rate-limit-for-github_token-in-github-actions
 [homebrew-homepage]: https://brew.sh
 [homebrew-cdxgen]: https://formulae.brew.sh/formula/cdxgen
+[winget-homepage]: https://learn.microsoft.com/en-us/windows/package-manager/winget/
 [jsr-cdxgen]: https://jsr.io/@cyclonedx/cdxgen
 [jwt-homepage]: https://jwt.io
 [jwt-libraries]: https://jwt.io/libraries

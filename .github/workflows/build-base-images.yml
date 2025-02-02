@@ -57,7 +57,7 @@ jobs:
           labels: ${{ steps.meta-bci-lang.outputs.labels }}
 
   sle-dotnet-image:
-    if: github.repository == 'CycloneDX/cdxgen'
+    if: false
     runs-on: ubuntu-latest
     permissions:
       contents: read
@@ -83,19 +83,20 @@ jobs:
         with:
           images: |
             ghcr.io/cyclonedx/bci-dotnet
+            ghcr.io/cyclonedx/bci-dotnet6
 
       - name: Build and push Docker images
         uses: docker/build-push-action@v5
         with:
           context: .
           file: ci/base-images/sle/Dockerfile.dotnet6
-          platforms: linux/amd64,linux/arm64
+          platforms: linux/amd64
           push: true
           tags: ${{ steps.meta-bci-dotnet.outputs.tags }}
           labels: ${{ steps.meta-bci-dotnet.outputs.labels }}
 
   cdxgen-dotnet-image:
-    if: github.repository == 'CycloneDX/cdxgen'
+    if: false
     runs-on: ubuntu-latest
     needs: sle-dotnet-image
     permissions:
@@ -129,7 +130,7 @@ jobs:
         with:
           context: .
           file: ci/base-images/cdxgen/Dockerfile.dotnet6
-          platforms: linux/amd64,linux/arm64
+          platforms: linux/amd64
           push: true
           tags: ghcr.io/cyclonedx/cdxgen-dotnet:v11,ghcr.io/cyclonedx/cdxgen-dotnet6:v11
           labels: ${{ steps.meta-cdxgen-dotnet.outputs.labels }}
@@ -140,7 +141,7 @@ jobs:
         with:
           context: .
           file: ci/base-images/cdxgen/Dockerfile.dotnet6
-          platforms: linux/amd64,linux/arm64
+          platforms: linux/amd64
           push: true
           tags: ${{ steps.meta-cdxgen-dotnet.outputs.tags }}
           labels: ${{ steps.meta-cdxgen-dotnet.outputs.labels }}
@@ -222,6 +223,18 @@ jobs:
           tags: ghcr.io/cyclonedx/cdxgen-debian-dotnet6:v11
           labels: ${{ steps.meta-cdxgen-debian-dotnet6.outputs.labels }}
 
+      - name: Build and push Docker images
+        uses: docker/build-push-action@v5
+        if: startsWith(github.ref, 'refs/tags/')
+        with:
+          context: .
+          file: ci/base-images/cdxgen/debian/Dockerfile.dotnet6
+          platforms: linux/amd64,linux/arm64
+          push: true
+          tags: ${{ steps.meta-cdxgen-debian-dotnet6.outputs.tags }}
+          labels: ${{ steps.meta-cdxgen-debian-dotnet6.outputs.labels }}
+
+
   sle-ruby25-image:
     if: github.repository == 'CycloneDX/cdxgen'
     runs-on: ubuntu-latest
@@ -255,7 +268,7 @@ jobs:
         with:
           context: .
           file: ci/base-images/sle/Dockerfile.ruby25
-          platforms: linux/amd64,linux/arm64
+          platforms: linux/amd64
           push: true
           tags: ${{ steps.meta-sle-ruby25.outputs.tags }}
           labels: ${{ steps.meta-sle-ruby25.outputs.labels }}
@@ -294,7 +307,7 @@ jobs:
         with:
           context: .
           file: ci/base-images/cdxgen/Dockerfile.ruby25
-          platforms: linux/amd64,linux/arm64
+          platforms: linux/amd64
           push: true
           tags: ghcr.io/cyclonedx/cdxgen-ruby25:v11
           labels: ${{ steps.meta-cdxgen-sle-ruby25.outputs.labels }}
@@ -490,6 +503,83 @@ jobs:
           push: true
           tags: ${{ steps.meta-debian-ruby18.outputs.tags }}
           labels: ${{ steps.meta-debian-ruby18.outputs.labels }}
+
+  debian-ruby26-image:
+    if: github.repository == 'CycloneDX/cdxgen'
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      packages: write
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up QEMU
+        uses: docker/setup-qemu-action@v3
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Log in to the Container registry
+        uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Extract metadata (tags, labels) for Docker
+        id: meta-debian-ruby26
+        uses: docker/metadata-action@v5
+        with:
+          images: |
+            ghcr.io/cyclonedx/debian-ruby26
+
+      - name: Build and push Docker images
+        uses: docker/build-push-action@v5
+        with:
+          context: .
+          file: ci/base-images/debian/Dockerfile.ruby26
+          platforms: linux/amd64,linux/arm64
+          push: true
+          tags: ${{ steps.meta-debian-ruby26.outputs.tags }}
+          labels: ${{ steps.meta-debian-ruby26.outputs.labels }}
+
+  cdxgen-debian-ruby26-image:
+    if: github.repository == 'CycloneDX/cdxgen'
+    runs-on: ubuntu-latest
+    needs: debian-ruby26-image
+    permissions:
+      packages: write
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up QEMU
+        uses: docker/setup-qemu-action@v3
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Log in to the Container registry
+        uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Extract metadata (tags, labels) for Docker
+        id: meta-cdxgen-debian-ruby26
+        uses: docker/metadata-action@v5
+        with:
+          images: |
+            ghcr.io/cyclonedx/cdxgen-debian-ruby26
+
+      - name: Build and push Docker images
+        uses: docker/build-push-action@v5
+        if: github.ref == 'refs/heads/master'
+        with:
+          context: .
+          file: ci/base-images/cdxgen/debian/Dockerfile.ruby26
+          platforms: linux/amd64,linux/arm64
+          push: true
+          tags: ghcr.io/cyclonedx/cdxgen-debian-ruby26:v11
+          labels: ${{ steps.meta-cdxgen-debian-ruby26.outputs.labels }}
 
   sle-dotnet7-image:
     if: github.repository == 'CycloneDX/cdxgen'
@@ -918,6 +1008,17 @@ jobs:
           platforms: linux/amd64,linux/arm64
           push: true
           tags: ghcr.io/cyclonedx/cdxgen-debian-dotnet9:v11
+          labels: ${{ steps.meta-cdxgen-debian-dotnet9.outputs.labels }}
+
+      - name: Build and push Docker images
+        uses: docker/build-push-action@v5
+        if: startsWith(github.ref, 'refs/tags/')
+        with:
+          context: .
+          file: ci/base-images/cdxgen/debian/Dockerfile.dotnet9
+          platforms: linux/amd64,linux/arm64
+          push: true
+          tags: ${{ steps.meta-cdxgen-debian-dotnet9.outputs.tags }}
           labels: ${{ steps.meta-cdxgen-debian-dotnet9.outputs.labels }}
 
   sle-java-image:
