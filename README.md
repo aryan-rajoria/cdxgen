@@ -122,10 +122,10 @@ Commands:
 
 Options:
   -o, --output                    Output file. Default bom.json                                    [default: "bom.json"]
-  -t, --type                      Project type. Please refer to https://cyclonedx.github.io/cdxgen/#/PROJECT_TYPES for s
-                                  upported languages/platforms.                                                  [array]
-      --exclude-type              Project types to exclude. Please refer to https://cyclonedx.github.io/cdxgen/#/PROJECT
-                                  _TYPES for supported languages/platforms.
+  -t, --type                      Project type. Please refer to https://cdxgen.github.io/cdxgen/#/PROJECT_TYPES for supp
+                                  orted languages/platforms.                                                     [array]
+      --exclude-type              Project types to exclude. Please refer to https://cdxgen.github.io/cdxgen/#/PROJECT_TY
+                                  PES for supported languages/platforms.
   -r, --recurse                   Recurse mode suitable for mono-repos. Defaults to true. Pass --no-recurse to disable.
                                                                                                [boolean] [default: true]
   -p, --print                     Print the SBOM as a table with tree.                                         [boolean]
@@ -612,14 +612,14 @@ pnpm dlx cdxgen --help
 
 <!-- cdxgen documentation site -->
 
-[docs-homepage]: https://cyclonedx.github.io/cdxgen
-[docs-advanced-usage]: https://cyclonedx.github.io/cdxgen/#/ADVANCED
-[docs-cli]: https://cyclonedx.github.io/cdxgen/#/CLI
-[docs-env-vars]: https://cyclonedx.github.io/cdxgen/#/ENV
-[docs-permissions]: https://cyclonedx.github.io/cdxgen/#/PERMISSIONS
-[docs-project-types]: https://cyclonedx.github.io/cdxgen/#/PROJECT_TYPES
-[docs-server]: https://cyclonedx.github.io/cdxgen/#/SERVER
-[docs-support]: https://cyclonedx.github.io/cdxgen/#/PROJECT_TYPES
+[docs-homepage]: https://cdxgen.github.io/cdxgen
+[docs-advanced-usage]: https://cdxgen.github.io/cdxgen/#/ADVANCED
+[docs-cli]: https://cdxgen.github.io/cdxgen/#/CLI
+[docs-env-vars]: https://cdxgen.github.io/cdxgen/#/ENV
+[docs-permissions]: https://cdxgen.github.io/cdxgen/#/PERMISSIONS
+[docs-project-types]: https://cdxgen.github.io/cdxgen/#/PROJECT_TYPES
+[docs-server]: https://cdxgen.github.io/cdxgen/#/SERVER
+[docs-support]: https://cdxgen.github.io/cdxgen/#/PROJECT_TYPES
 
 <!-- web links-->
 

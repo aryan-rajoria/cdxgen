@@ -8,7 +8,7 @@ info:
 
 
     Some useful links:
-    - [Documentation](https://cyclonedx.github.io/cdxgen/#/)
+    - [Documentation](https://cdxgen.github.io/cdxgen/#/)
     - [Source API definition](https://github.com/CycloneDX/cdxgen/blob/master/lib/server/openapi.yaml)
     - [CycloneDX Specification](https://cyclonedx.org/specification/overview/)
     - [CycloneDX JSON Schema Specification](https://github.com/CycloneDX/specification/blob/1.6/schema/bom-1.6.schema.json)
@@ -223,7 +223,7 @@ components:
           default: "universal"
           externalDocs:
             description: Single or comma separated values. See supported project types
-            url: https://cyclonedx.github.io/cdxgen/#/PROJECT_TYPES
+            url: https://cdxgen.github.io/cdxgen/#/PROJECT_TYPES
         excludeType:
           type: array
           items:
@@ -231,7 +231,7 @@ components:
           description: Exclude Types
           externalDocs:
             description: Project types to exclude
-            url: https://cyclonedx.github.io/cdxgen/#/PROJECT_TYPES
+            url: https://cdxgen.github.io/cdxgen/#/PROJECT_TYPES
         multiProject:
           type: boolean
         requiredOnly:

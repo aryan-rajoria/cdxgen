@@ -85,11 +85,11 @@ const args = _yargs
   .option("type", {
     alias: "t",
     description:
-      "Project type. Please refer to https://cyclonedx.github.io/cdxgen/#/PROJECT_TYPES for supported languages/platforms.",
+      "Project type. Please refer to https://cdxgen.github.io/cdxgen/#/PROJECT_TYPES for supported languages/platforms.",
   })
   .option("exclude-type", {
     description:
-      "Project types to exclude. Please refer to https://cyclonedx.github.io/cdxgen/#/PROJECT_TYPES for supported languages/platforms.",
+      "Project types to exclude. Please refer to https://cdxgen.github.io/cdxgen/#/PROJECT_TYPES for supported languages/platforms.",
   })
   .option("recurse", {
     alias: "r",
@@ -381,7 +381,7 @@ const args = _yargs
     ],
     ["$0 --server", "Run cdxgen as a server"],
   ])
-  .epilogue("for documentation, visit https://cyclonedx.github.io/cdxgen")
+  .epilogue("for documentation, visit https://cdxgen.github.io/cdxgen")
   .config(config)
   .scriptName("cdxgen")
   .version(retrieveCdxgenVersion())

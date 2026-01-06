@@ -65,10 +65,10 @@ Commands:
 
 Options:
   -o, --output                    Output file. Default bom.json                                    [default: "bom.json"]
-  -t, --type                      Project type. Please refer to https://cyclonedx.github.io/cdxgen/#/PROJECT_TYPES for s
-                                  upported languages/platforms.                                                  [array]
-      --exclude-type              Project types to exclude. Please refer to https://cyclonedx.github.io/cdxgen/#/PROJECT
-                                  _TYPES for supported languages/platforms.
+  -t, --type                      Project type. Please refer to https://cdxgen.github.io/cdxgen/#/PROJECT_TYPES for supp
+                                  orted languages/platforms.                                                     [array]
+      --exclude-type              Project types to exclude. Please refer to https://cdxgen.github.io/cdxgen/#/PROJECT_TY
+                                  PES for supported languages/platforms.
   -r, --recurse                   Recurse mode suitable for mono-repos. Defaults to true. Pass --no-recurse to disable.
                                                                                                [boolean] [default: true]
   -p, --print                     Print the SBOM as a table with tree.                                         [boolean]
@@ -143,7 +143,7 @@ Examples:
   cdxgen -t python --profile research .  Generate a Python SBOM for appsec research.
   cdxgen --server                        Run cdxgen as a server
 
-for documentation, visit https://cyclonedx.github.io/cdxgen
+for documentation, visit https://cdxgen.github.io/cdxgen
 ```
 
 All boolean arguments accept `--no` prefix to toggle the behavior.

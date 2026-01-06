@@ -29,7 +29,7 @@ const args = _yargs
     description: "Public key in PEM format. Default public.key",
   })
   .completion("completion", "Generate bash/zsh completion")
-  .epilogue("for documentation, visit https://cyclonedx.github.io/cdxgen")
+  .epilogue("for documentation, visit https://cdxgen.github.io/cdxgen")
   .scriptName("cdx-verify")
   .version(retrieveCdxgenVersion())
   .help(false)

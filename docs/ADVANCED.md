@@ -22,7 +22,7 @@ Combine this with `--exclude`, `--exclude-type`, and other filters to customise 
 
 ## Exclude project types, files, and directories
 
-To exclude specific [project types](https://cyclonedx.github.io/cdxgen/#/PROJECT_TYPES) from the BOM, use the `--exclude-type` argument. Multiple values are allowed.
+To exclude specific [project types](https://cdxgen.github.io/cdxgen/#/PROJECT_TYPES) from the BOM, use the `--exclude-type` argument. Multiple values are allowed.
 
 Example:
 
@@ -300,7 +300,7 @@ evinse -i bom.json -o bom.evinse.json -l js --with-reachables .
 
 #### Data flow-based call stack evidence
 
-Often reachability cannot be computed reliably due to the presence of wrapper libraries or mitigating layers. Further, the repository being analyzed could be a common module containing only the sink methods without entry points (sources). In such cases, data-flow-based slicing can be used to compute call stack using a "Reverse-Reachability" algorithm. This is however a time and resource-consuming operation and might even require atom to be run externally in [java mode](https://cyclonedx.github.io/cdxgen/#/ADVANCED?id=use-atom-in-java-mode).
+Often reachability cannot be computed reliably due to the presence of wrapper libraries or mitigating layers. Further, the repository being analyzed could be a common module containing only the sink methods without entry points (sources). In such cases, data-flow-based slicing can be used to compute call stack using a "Reverse-Reachability" algorithm. This is however a time and resource-consuming operation and might even require atom to be run externally in [java mode](https://cdxgen.github.io/cdxgen/#/ADVANCED?id=use-atom-in-java-mode).
 
 ```shell
 evinse -i bom.json -o bom.evinse.json --with-data-flow <path to the application>

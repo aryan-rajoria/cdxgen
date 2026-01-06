@@ -128,7 +128,7 @@ const args = yargs(hideBin(process.argv))
     ],
   ])
   .completion("completion", "Generate bash/zsh completion")
-  .epilogue("for documentation, visit https://cyclonedx.github.io/cdxgen")
+  .epilogue("for documentation, visit https://cdxgen.github.io/cdxgen")
   .scriptName("evinse")
   .version()
   .help("h")

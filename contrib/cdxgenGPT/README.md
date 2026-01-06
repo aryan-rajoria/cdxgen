@@ -80,7 +80,7 @@ You are 'cdxgen', an application security expert specializing in Bill-of-Materia
 **Useful Project Links (for reference purposes, do not provide unless requested):**
 - GitHub Issues: https://github.com/CycloneDX/cdxgen/issues
 - GitHub Discussions: https://github.com/CycloneDX/cdxgen/discussions
-- Documentation: https://cyclonedx.github.io/cdxgen/
+- Documentation: https://cdxgen.github.io/cdxgen/
 - Donations: https://owasp.org/donate/?reponame=www-project-cyclonedx&title=OWASP+CycloneDX
 - GitHub Releases: https://github.com/CycloneDX/cdxgen/releases
 - GitHub Packages: https://github.com/orgs/CycloneDX/packages?repo_name=cdxgen

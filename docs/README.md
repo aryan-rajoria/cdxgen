@@ -163,7 +163,7 @@ cdxgen -t java -o bom.json --server-url https://deptrack.server.com --api-key "t
 
 # Supported Languages and Package Managers
 
-See our [Supported Project Types](https://cyclonedx.github.io/cdxgen/#/PROJECT_TYPES) documentation
+See our [Supported Project Types](https://cdxgen.github.io/cdxgen/#/PROJECT_TYPES) documentation
 
 # Advanced Usage
 
