@@ -93,10 +93,10 @@ RUN set -e; \
     && curl -fsSL https://deno.land/x/install/install.sh | sh \
     && deno install -g --node-modules-dir=auto --allow-scripts=npm:@appthreat/sqlite3@6.0.9 --allow-read --allow-env --allow-run --allow-sys=uid,systemMemoryInfo,gid,homedir --allow-write --allow-net -n cdxgen "npm:@cyclonedx/cdxgen/cdxgen" \
     && deno install -g --allow-read --allow-env --allow-run --allow-sys=uid,systemMemoryInfo,gid,homedir --allow-write -n atom "npm:@appthreat/atom/atom" \
-    && deno install -g --allow-read --allow-env --allow-run --allow-sys=uid,systemMemoryInfo,gid,homedir --allow-write -n astgen "npm:@appthreat/atom/astgen" \
-    && deno install -g --allow-read --allow-env --allow-run --allow-sys=uid,systemMemoryInfo,gid,homedir --allow-write -n phpastgen "npm:@appthreat/atom/phpastgen" \
-    && deno install -g --allow-read --allow-env --allow-run --allow-sys=uid,systemMemoryInfo,gid,homedir --allow-write -n rbastgen "npm:@appthreat/atom/rbastgen" \
-    && deno install -g --allow-read --allow-env --allow-run --allow-sys=uid,systemMemoryInfo,gid,homedir --allow-write -n scalasem "npm:@appthreat/atom/scalasem" \
+    && deno install -g --allow-read --allow-env --allow-run --allow-sys=uid,systemMemoryInfo,gid,homedir --allow-write -n astgen "npm:@appthreat/atom-parsetools/astgen" \
+    && deno install -g --allow-read --allow-env --allow-run --allow-sys=uid,systemMemoryInfo,gid,homedir --allow-write -n phpastgen "npm:@appthreat/atom-parsetools/phpastgen" \
+    && deno install -g --allow-read --allow-env --allow-run --allow-sys=uid,systemMemoryInfo,gid,homedir --allow-write -n rbastgen "npm:@appthreat/atom-parsetools/rbastgen" \
+    && deno install -g --allow-read --allow-env --allow-run --allow-sys=uid,systemMemoryInfo,gid,homedir --allow-write -n scalasem "npm:@appthreat/atom-parsetools/scalasem" \
     && ln -s /root/.deno/bin/deno /usr/bin/node \
     && cdxgen --version \
     && atom --help \
