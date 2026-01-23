@@ -43,7 +43,7 @@ env:
   NEXUS_UBUNTU_REPO_PATH: /repository/ubuntu
   REPO: ghcr.io
   TAG: v12
-  TEAM: cyclonedx
+  TEAM: cdxgen
 
 
 # https://docs.github.com/en/actions/writing-workflows/choosing-what-your-workflow-does/controlling-permissions-for-github_token
