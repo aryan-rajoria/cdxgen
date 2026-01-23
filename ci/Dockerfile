@@ -1,4 +1,4 @@
-FROM ghcr.io/cyclonedx/cdxgen-ruby-builder:master AS base
+FROM ghcr.io/cdxgen/cdxgen-ruby-builder:master AS base
 
 ARG SWIFT_SIGNING_KEY=52BB7E3DE28A71BE22EC05FFEF80A866B47A981F
 ARG SWIFT_PLATFORM=ubi9

@@ -1,4 +1,4 @@
-FROM ghcr.io/cyclonedx/cdxgen-ruby-builder:master
+FROM ghcr.io/cdxgen/cdxgen-ruby-builder:master
 
 LABEL maintainer="cyclonedx" \
       org.opencontainers.image.authors="Prabhu Subramanian <prabhu@appthreat.com>" \

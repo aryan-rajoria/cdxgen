@@ -49,7 +49,7 @@ jobs:
     if: github.repository == 'cdxgen/cdxgen'
     runs-on: 'ubuntu-24.04'
     outputs:
-      image-uri: ghcr.io/cyclonedx/cdxgen-ruby-builder@${{ steps.build.outputs.digest }}
+      image-uri: ghcr.io/cdxgen/cdxgen-ruby-builder@${{ steps.build.outputs.digest }}
     permissions:
       packages: write  # needed for uploading images to GH package registry
     steps:
@@ -71,7 +71,7 @@ jobs:
         uses: docker/metadata-action@c299e40c65443455700f0fdfc63efafe5b349051 # v5.10.0
         with:
           images: |
-            ghcr.io/cyclonedx/cdxgen-ruby-builder
+            ghcr.io/cdxgen/cdxgen-ruby-builder
           flavor: latest=false,suffix=-amd64
       - name: Build and push Docker images
         uses: docker/build-push-action@263435318d21b8e681c14492fe198d362a7d2c83 # v6.18.0
@@ -87,12 +87,12 @@ jobs:
         id: out
         with:
           outputs: |-
-            image-uri: ghcr.io/cyclonedx/cdxgen-ruby-builder@${{ steps.build.outputs.digest }}
+            image-uri: ghcr.io/cdxgen/cdxgen-ruby-builder@${{ steps.build.outputs.digest }}
   containers-ruby-builder-arm64:
     if: github.repository == 'cdxgen/cdxgen'
     runs-on: 'ubuntu-24.04-arm'
     outputs:
-      image-uri: ghcr.io/cyclonedx/cdxgen-ruby-builder@${{ steps.build.outputs.digest }}
+      image-uri: ghcr.io/cdxgen/cdxgen-ruby-builder@${{ steps.build.outputs.digest }}
     permissions:
       packages: write  # needed for uploading images to GH package registry
     steps:
@@ -114,7 +114,7 @@ jobs:
         uses: docker/metadata-action@c299e40c65443455700f0fdfc63efafe5b349051 # v5.10.0
         with:
           images: |
-            ghcr.io/cyclonedx/cdxgen-ruby-builder
+            ghcr.io/cdxgen/cdxgen-ruby-builder
           flavor: latest=false,suffix=-arm64
       - name: Build and push Docker images
         uses: docker/build-push-action@263435318d21b8e681c14492fe198d362a7d2c83 # v6.18.0
@@ -130,13 +130,13 @@ jobs:
         id: out
         with:
           outputs: |-
-            image-uri: ghcr.io/cyclonedx/cdxgen-ruby-builder@${{ steps.build.outputs.digest }}
+            image-uri: ghcr.io/cdxgen/cdxgen-ruby-builder@${{ steps.build.outputs.digest }}
   containers-ruby-builder-deploy-manifest:
     if: github.repository == 'cdxgen/cdxgen'
     runs-on: ubuntu-24.04
     needs: [ containers-ruby-builder-amd64, containers-ruby-builder-arm64 ]
     outputs:
-      image-uri: ghcr.io/cyclonedx/cdxgen-ruby-builder@${{ steps.build.outputs.digest }}
+      image-uri: ghcr.io/cdxgen/cdxgen-ruby-builder@${{ steps.build.outputs.digest }}
     permissions:
       packages: write  # needed for uploading images to GH package registry
     steps:
@@ -157,7 +157,7 @@ jobs:
         id: build
         with:
           index-annotations: ${{ steps.metadata.outputs.labels }}
-          tags: ghcr.io/cyclonedx/cdxgen-ruby-builder:master
+          tags: ghcr.io/cdxgen/cdxgen-ruby-builder:master
           sources: |
             ${{ needs.containers-ruby-builder-amd64.outputs.image-uri }}
             ${{ needs.containers-ruby-builder-arm64.outputs.image-uri }}
@@ -202,7 +202,7 @@ jobs:
         uses: docker/metadata-action@c299e40c65443455700f0fdfc63efafe5b349051 # v5.10.0
         with:
           images: |
-            ghcr.io/cyclonedx/cdxgen
+            ghcr.io/cdxgen/cdxgen
       - name: Build and push Docker images
         uses: docker/build-push-action@263435318d21b8e681c14492fe198d362a7d2c83 # v6.18.0
         with:
@@ -286,7 +286,7 @@ jobs:
         uses: docker/metadata-action@c299e40c65443455700f0fdfc63efafe5b349051 # v5.10.0
         with:
           images: |
-            ghcr.io/cyclonedx/cdxgen-secure
+            ghcr.io/cdxgen/cdxgen-secure
       - name: Build and push Docker images
         uses: docker/build-push-action@263435318d21b8e681c14492fe198d362a7d2c83 # v6.18.0
         with:
@@ -358,7 +358,7 @@ jobs:
         uses: docker/metadata-action@c299e40c65443455700f0fdfc63efafe5b349051 # v5.10.0
         with:
           images: |
-            ghcr.io/cyclonedx/cdxgen-deno
+            ghcr.io/cdxgen/cdxgen-deno
       - name: Build and push Docker images
         uses: docker/build-push-action@263435318d21b8e681c14492fe198d362a7d2c83 # v6.18.0
         with:
@@ -428,7 +428,7 @@ jobs:
         uses: docker/metadata-action@c299e40c65443455700f0fdfc63efafe5b349051 # v5.10.0
         with:
           images: |
-            ghcr.io/cyclonedx/cdxgen-ppc64
+            ghcr.io/cdxgen/cdxgen-ppc64
       - name: Build and push Docker images
         uses: docker/build-push-action@263435318d21b8e681c14492fe198d362a7d2c83 # v6.18.0
         with:
@@ -482,7 +482,7 @@ jobs:
         uses: docker/metadata-action@c299e40c65443455700f0fdfc63efafe5b349051 # v5.10.0
         with:
           images: |
-            ghcr.io/cyclonedx/cdxgen-bun
+            ghcr.io/cdxgen/cdxgen-bun
       - name: Build and push Docker images
         uses: docker/build-push-action@263435318d21b8e681c14492fe198d362a7d2c83 # v6.18.0
         with:
