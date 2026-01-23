@@ -113,6 +113,7 @@ jobs:
 
           - lang: java8
             distro: temurin
+            fix-qemu: true
 
           - lang: java11
             runner: macos-hosted
@@ -131,12 +132,14 @@ jobs:
 
           - lang: java21
             distro: temurin
+            fix-qemu: true
 
           - lang: java24
             distro: alpine
 
           - lang: java24
             distro: temurin
+            fix-qemu: true
 
           - lang: node20
             cdxgen-image:
