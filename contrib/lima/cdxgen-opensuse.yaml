@@ -49,7 +49,7 @@ provision:
   script: |
     #!/bin/bash
     set -e -o pipefail
-    export MAVEN_VERSION=3.9.11
+    export MAVEN_VERSION=3.9.12
     export SBT_VERSION=1.11.6
     export GRADLE_VERSION=8.14
     export MAVEN_HOME="/.sdkman/candidates/maven/${MAVEN_VERSION}"
