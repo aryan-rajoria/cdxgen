@@ -579,8 +579,8 @@ pnpm dlx cdxgen --help
 ## Sponsors
 
 <div style="display: flex; align-items: center; gap: 20px;">
-  <img src="./docs/_media/GithubLogo-LightBg.png" width="170" height="auto">
-  <img src="./docs/_media/MicrosoftLogo.png" width="180" height="auto">
+  <img src="./docs/_media/GithubLogo-LightBg.png" width="180" height="180">
+  <img src="./docs/_media/MicrosoftLogo.png" width="180" height="180">
 </div>
 
 Some features are funded through [NGI Zero Core](https://nlnet.nl/core), a fund established by [NLnet](https://nlnet.nl) with financial support from the European Commission's [Next Generation Internet](https://ngi.eu) program. Learn more at the [NLnet project page](https://nlnet.nl/project/OWASP-dep-scan).
