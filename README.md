@@ -51,6 +51,7 @@ Sections include:
 ## Usage
 
 ## For Contributors / Developers
+
 ```shell
 pnpm install
 pnpm dlx cdxgen
@@ -346,8 +347,6 @@ cdxgen can retain the dependency tree under the `dependencies` attribute for a s
 - Ruby (Gemfile.lock)
 - Rust (Cargo.lock)
 
-
-
 ## Plugins
 
 cdxgen could be extended with external binary plugins to support more SBOM use cases. These are now installed as an optional dependency.
@@ -355,7 +354,6 @@ cdxgen could be extended with external binary plugins to support more SBOM use c
 ```shell
 sudo npm install -g @cyclonedx/cdxgen-plugins-bin
 ```
-
 
 ## Plugins (pnpm)
 
@@ -365,7 +363,6 @@ These are now installed as optional dependencies and can be used without a globa
 ```shell
 pnpm dlx @cyclonedx/cdxgen-plugins-bin
 ```
-
 
 ## Docker / OCI container support
 
@@ -448,7 +445,6 @@ npm install -g @cyclonedx/cdxgen
 cdx-verify -i bom.json --public-key public.key
 ```
 
-
 ### Verifying the signature (pnpm)
 
 Use the bundled `cdx-verify` command, which supports verifying a single signature added at the BOM level.
@@ -458,7 +454,6 @@ You can run it directly using pnpm (no global install needed):
 ```shell
 pnpm dlx @cyclonedx/cdxgen cdx-verify -i bom.json --public-key public.key
 ```
-
 
 ### Custom verification tool (Node.js example)
 
@@ -571,7 +566,6 @@ corepack pnpm add -g --allow-build @appthreat/sqlite3 https://github.com/cdxgen/
 cdxgen --help
 ```
 
-
 ### Testing main branch (No Global Install)
 
 To quickly test the latest main branch without installing globally, you can use `pnpm` in a local or temporary environment.
@@ -582,14 +576,17 @@ pnpm install --prefer-offline
 pnpm dlx cdxgen --help
 ```
 
-
 ## Sponsors
 
 <div style="display: flex; align-items: center; gap: 20px;">
-  <img src="./docs/_media/LevoLogo-LightBg.jpg" width="200" height="auto">
   <img src="./docs/_media/GithubLogo-LightBg.png" width="170" height="auto">
   <img src="./docs/_media/MicrosoftLogo.png" width="180" height="auto">
 </div>
+
+Some features are funded through [NGI Zero Core](https://nlnet.nl/core), a fund established by [NLnet](https://nlnet.nl) with financial support from the European Commission's [Next Generation Internet](https://ngi.eu) program. Learn more at the [NLnet project page](https://nlnet.nl/project/OWASP-dep-scan).
+
+[<img src="https://nlnet.nl/logo/banner.png" alt="NLnet foundation logo" width="20%" />](https://nlnet.nl)
+[<img src="https://nlnet.nl/image/logos/NGI0_tag.svg" alt="NGI Zero Logo" width="20%" />](https://nlnet.nl/core)
 
 <!-- LINK LABELS -->
 <!-- Badges -->
