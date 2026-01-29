@@ -87,6 +87,13 @@
       "minimumReleaseAge": "1 day"
     },
     {
+      "description": "Automerge all GitHub Actions",
+      "extends": ["helpers:pinGitHubActionDigests"],
+      "automerge": true,
+      "automergeType": "pr",
+      "minimumReleaseAge": "1 day"
+    },
+    {
       "description": "Automerge digest pins for latest tags",
       "matchDatasources": ["docker"],
       "matchUpdateTypes": ["digest"],
