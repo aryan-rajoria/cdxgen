@@ -28,6 +28,7 @@
       "extends": [":separatePatchReleases"],
       "automerge": true,
       "automergeType": "pr",
+      "rebaseWhen": "conflicted",
       "minimumReleaseAge": "1 day"
     },
     {
@@ -84,6 +85,7 @@
       "versioning": "regex:^v?(?<major>\\d+)(\\.(?<minor>\\d+)\\.(?<patch>\\d+))?$",
       "automerge": true,
       "automergeType": "pr",
+      "rebaseWhen": "conflicted",
       "minimumReleaseAge": "1 day"
     },
     {
@@ -91,6 +93,7 @@
       "extends": ["helpers:pinGitHubActionDigests"],
       "automerge": true,
       "automergeType": "pr",
+      "rebaseWhen": "conflicted",
       "minimumReleaseAge": "1 day"
     },
     {
@@ -100,6 +103,7 @@
       "matchCurrentValue": "latest",
       "automerge": true,
       "automergeType": "pr",
+      "rebaseWhen": "conflicted",
       "minimumReleaseAge": "1 day",
       "minimumReleaseAgeBehaviour": "timestamp-optional"
     },
