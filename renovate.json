@@ -26,7 +26,7 @@
       "matchDatasources": ["docker"],
       "matchFileNames": ["ci/**/Dockerfile.*"],
       "extends": [":separatePatchReleases"],
-      "automerge": "true",
+      "automerge": true,
       "automergeType": "pr",
       "minimumReleaseAge": "1 day"
     },
@@ -82,7 +82,7 @@
       "matchPackageNames": ["addnab/docker-run-action"],
       "extractVersion": "^(?<version>v?\\d+)$",
       "versioning": "regex:^v?(?<major>\\d+)(\\.(?<minor>\\d+)\\.(?<patch>\\d+))?$",
-      "automerge": "true",
+      "automerge": true,
       "automergeType": "pr",
       "minimumReleaseAge": "1 day"
     },
