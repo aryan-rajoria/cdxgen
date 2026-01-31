@@ -9,7 +9,7 @@
     "customManagers:dockerfileVersions"
   ],
   "labels": ["dependency"],
-  "minimumReleaseAge": "3 days",
+  "minimumReleaseAge": "1 day",
   "gitIgnoredAuthors": [
     "41898282+github-actions[bot]@users.noreply.github.com"
   ],
@@ -68,8 +68,7 @@
       "extends": [":separatePatchReleases"],
       "automerge": true,
       "automergeType": "pr",
-      "rebaseWhen": "conflicted",
-      "minimumReleaseAge": "1 day"
+      "rebaseWhen": "conflicted"
     },
     {
       "description": "cdxgen images: exclude major version updates for images pinned to a specific major version by filename convention",
@@ -125,16 +124,14 @@
       "versioning": "regex:^v?(?<major>\\d+)(\\.(?<minor>\\d+)\\.(?<patch>\\d+))?$",
       "automerge": true,
       "automergeType": "pr",
-      "rebaseWhen": "conflicted",
-      "minimumReleaseAge": "1 day"
+      "rebaseWhen": "conflicted"
     },
     {
       "description": "Automerge all GitHub Actions",
       "extends": ["helpers:pinGitHubActionDigests"],
       "automerge": true,
       "automergeType": "pr",
-      "rebaseWhen": "conflicted",
-      "minimumReleaseAge": "1 day"
+      "rebaseWhen": "conflicted"
     },
     {
       "description": "Automerge digest pins for latest tags",
@@ -144,7 +141,6 @@
       "automerge": true,
       "automergeType": "pr",
       "rebaseWhen": "conflicted",
-      "minimumReleaseAge": "1 day",
       "minimumReleaseAgeBehaviour": "timestamp-optional"
     },
     {
