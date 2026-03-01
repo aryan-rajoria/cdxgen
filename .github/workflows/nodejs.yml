@@ -76,6 +76,7 @@ jobs:
         with:
           node-version: ${{ matrix.node-version }}
       - name: pnpm install, build and test
+        shell: bash
         run: |
           pnpm install:frozen
           FETCH_LICENSE=true node bin/cdxgen.js --exclude test/\*\* -t js --deep
