@@ -11,7 +11,6 @@
   "labels": ["dependency"],
   "minimumReleaseAge": "1 day",
   "minimumReleaseAgeBehaviour": "timestamp-optional",
-  "prCreation": "not-pending",
   "internalChecksFilter": "strict",
   "gitIgnoredAuthors": [
     "41898282+github-actions[bot]@users.noreply.github.com"
