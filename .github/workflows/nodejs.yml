@@ -78,10 +78,10 @@ jobs:
       - name: pnpm install, build and test
         run: |
           pnpm install:frozen
+          FETCH_LICENSE=true node bin/cdxgen.js --exclude test/\*\* -t js --deep
           pnpm test
         env:
           CI: true
-          FETCH_LICENSE: true
           NPM_CONFIG_PROVENANCE: true
         
   depscan:
