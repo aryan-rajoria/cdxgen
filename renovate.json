@@ -10,6 +10,7 @@
   ],
   "labels": ["dependency"],
   "minimumReleaseAge": "1 day",
+  "minimumReleaseAgeBehaviour": "timestamp-optional",
   "prCreation": "not-pending",
   "internalChecksFilter": "strict",
   "gitIgnoredAuthors": [
@@ -30,9 +31,7 @@
       "extends": [":separatePatchReleases"],
       "automerge": true,
       "automergeType": "pr",
-      "rebaseWhen": "conflicted",
-      "minimumReleaseAge": "1 day",
-      "minimumReleaseAgeBehaviour": "timestamp-optional"
+      "rebaseWhen": "conflicted"
     },
     {
       "description": "cdxgen images: exclude major version updates for images pinned to a specific major version by filename convention",
@@ -94,8 +93,7 @@
       "matchCurrentValue": "latest",
       "automerge": true,
       "automergeType": "pr",
-      "rebaseWhen": "conflicted",
-      "minimumReleaseAgeBehaviour": "timestamp-optional"
+      "rebaseWhen": "conflicted"
     },
     {
       "description": "Disable digest pins for cyclonedx/cdxgen-ruby-builder",
