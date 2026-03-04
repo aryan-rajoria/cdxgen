@@ -72,7 +72,7 @@ overrides:
   b4a: 1.8.0
   balanced-match: 4.0.4
   bare-events: 2.8.2
-  bare-fs: 4.5.4
+  bare-fs: 4.5.5
   bare-os: 3.6.2
   bare-path: 3.0.0
   bare-stream: 2.8.0
@@ -813,8 +813,8 @@ packages:
       bare-abort-controller:
         optional: true
 
-  bare-fs@4.5.4:
-    resolution: {integrity: sha512-POK4oplfA7P7gqvetNmCs4CNtm9fNsx+IAh7jH7GgU0OJdge2rso0R20TNWVq6VoWcCvsTdlNDaleLHGaKx8CA==}
+  bare-fs@4.5.5:
+    resolution: {integrity: sha512-XvwYM6VZqKoqDll8BmSww5luA5eflDzY0uEFfBJtFKe4PAAtxBjU3YIxzIBzhyaEQBy1VXEQBto4cpN5RZJw+w==}
     engines: {bare: '>=1.16.0'}
     peerDependencies:
       bare-buffer: '*'
@@ -2008,7 +2008,7 @@ snapshots:
   bare-events@2.8.2:
     optional: true
 
-  bare-fs@4.5.4:
+  bare-fs@4.5.5:
     dependencies:
       bare-events: 2.8.2
       bare-path: 3.0.0
@@ -2935,7 +2935,7 @@ snapshots:
       pump: 3.0.4
       tar-stream: 3.1.7
     optionalDependencies:
-      bare-fs: 4.5.4
+      bare-fs: 4.5.5
       bare-path: 3.0.0
     transitivePeerDependencies:
       - bare-abort-controller
