@@ -2,8 +2,6 @@
 
 cdxgen is available as an npm package, container image, and single executable binaries. Begin your journey by selecting your use case.
 
-<!-- tabs:start -->
-
 ## For Contributors / Developers
 
 ```shell
@@ -193,8 +191,6 @@ Invoke cdxgen with the below arguments to automatically submit the BOM to your o
 cdxgen -t java -o bom.json --server-url https://deptrack.server.com --api-key "token" --project-group ...
 ```
 
-<!-- tabs:end -->
-
 # Supported Languages and Package Managers
 
 See our [Supported Project Types](https://cdxgen.github.io/cdxgen/#/PROJECT_TYPES) documentation
@@ -202,8 +198,6 @@ See our [Supported Project Types](https://cdxgen.github.io/cdxgen/#/PROJECT_TYPE
 # Advanced Usage
 
 cdxgen supports advanced use cases as a library and in REPL mode.
-
-<!-- tabs:start -->
 
 #### **Resolving Licenses**
 
@@ -390,5 +384,3 @@ Below are some example commands to create an SBOM for a spring application and p
 ### REPL History
 
 Repl history will persist under the `$HOME/.config/.cdxgen` directory. To override this location, use the environment variable `CDXGEN_REPL_HISTORY`.
-
-<!-- tabs:end -->
