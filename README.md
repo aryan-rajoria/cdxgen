@@ -600,6 +600,10 @@ Some features are funded through [NGI Zero Core](https://nlnet.nl/core), a fund 
 [<img src="https://nlnet.nl/logo/banner.png" alt="NLnet foundation logo" width="20%" />](https://nlnet.nl)
 [<img src="https://nlnet.nl/image/logos/NGI0_tag.svg" alt="NGI Zero Logo" width="20%" />](https://nlnet.nl/core)
 
+cdxgen is an OWASP Foundation production project.
+
+[<img src="https://owasp.org/assets/images/logo.png" width="20%" />](https://owasp.org)
+
 <!-- LINK LABELS -->
 <!-- Badges -->
 
