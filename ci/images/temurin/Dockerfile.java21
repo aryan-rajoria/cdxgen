@@ -102,7 +102,7 @@ RUN set -e; \
       --no-cache-dir \
       --upgrade \
         pip \
-        setuptools==77.0.3 \
+        setuptools \
         virtualenv \
         wheel \
  && ${PYTHON_CMD} -m pip install \

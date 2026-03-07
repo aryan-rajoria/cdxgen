@@ -104,7 +104,7 @@ RUN set -e; \
       --no-cache-dir \
       --upgrade \
         pip \
-        setuptools==77.0.3\
+        setuptools \
         virtualenv \
  && python3 -m pip install \
       --no-cache-dir \

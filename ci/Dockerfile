@@ -78,7 +78,7 @@ RUN set -e; \
     && ruby --version \
     && which ruby \
     && /usr/bin/python3 --version \
-    && /usr/bin/python3 -m pip install --no-cache-dir --upgrade setuptools==77.0.3 wheel pip virtualenv \
+    && /usr/bin/python3 -m pip install --no-cache-dir --upgrade setuptools wheel pip virtualenv \
     && /usr/bin/python3 -m pip install --no-cache-dir --upgrade pipenv poetry blint atom-tools uv --target /opt/pypi \
     && ${PYTHONPATH}/bin/poetry --version \
     && ${PYTHONPATH}/bin/pipenv --version \
