@@ -605,6 +605,14 @@ cdxgen is an OWASP Foundation production project.
 
 [<img src="https://owasp.org/assets/images/logo.png" width="20%" />](https://owasp.org)
 
+## cdxgen badge
+
+Copy the below block to your markdown files to show your ❤️ for cdxgen.
+
+```markdown
+[![SBOM](https://img.shields.io/badge/SBOM-with_%E2%9D%A4%EF%B8%8F_by_cdxgen-FF753D)](https://github.com/cdxgen/cdxgen)
+```
+
 <!-- LINK LABELS -->
 <!-- Badges -->
 

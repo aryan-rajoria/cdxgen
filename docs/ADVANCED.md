@@ -674,3 +674,11 @@ Below table summarizes all available container image versions. These images incl
 | Rust     | 1                            | ghcr.io/cyclonedx/cdxgen-debian-rust, ghcr.io/cyclonedx/cdxgen-debian-rust1:v12                                                                                                      | This is a rolling version that will get the latest released version. Currently, 1.87.                                                     |
 
 Replace `:v12` with a release version tag or sha256 hash for fine-grained control over the image tag.
+
+## cdxgen badge
+
+Copy the below block to your markdown files to show your ❤️ for cdxgen.
+
+```markdown
+[![SBOM](https://img.shields.io/badge/SBOM-with_%E2%9D%A4%EF%B8%8F_by_cdxgen-FF753D)](https://github.com/cdxgen/cdxgen)
+```
