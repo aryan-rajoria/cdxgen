@@ -1,3 +1,4 @@
+[![SBOM](https://img.shields.io/badge/SBOM-with_%E2%9D%A4%EF%B8%8F_by_cdxgen-FF753D)](https://github.com/cdxgen/cdxgen)
 [![JSR][badge-jsr]][jsr-cdxgen]
 [![NPM][badge-npm]][npmjs-cdxgen]
 [![GitHub Releases][badge-github-releases]][github-releases]
