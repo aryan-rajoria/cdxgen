@@ -4,6 +4,7 @@
     "config:best-practices",
     ":disableRateLimiting",
     ":enableVulnerabilityAlerts",
+    ":maintainLockFilesDisabled",
     ":separateMultipleMajorReleases",
     "customManagers:biomeVersions",
     "customManagers:dockerfileVersions"
