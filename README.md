@@ -51,13 +51,6 @@ Sections include:
 
 ## Usage
 
-## For Contributors / Developers
-
-```shell
-pnpm install
-pnpm dlx cdxgen
-```
-
 ## Installing
 
 ```shell
@@ -79,7 +72,7 @@ $ brew install cdxgen
 If you are a [Winget][winget-homepage] user on windows, you can also install cdxgen via:
 
 ```shell
-$ winget install cdxgen
+winget install cdxgen
 ```
 
 Deno and bun runtime can be used with limited support.

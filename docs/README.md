@@ -2,13 +2,6 @@
 
 cdxgen is available as an npm package, container image, and single executable binaries. Begin your journey by selecting your use case.
 
-## For Contributors / Developers
-
-```shell
-pnpm install
-pnpm dlx cdxgen
-```
-
 ## Installation
 
 ```shell
@@ -19,6 +12,12 @@ If you are a [Homebrew](https://brew.sh/) user, you can also install [cdxgen](ht
 
 ```bash
 brew install cdxgen
+```
+
+If you are a [Winget](https://learn.microsoft.com/en-us/windows/package-manager/winget/) user on windows, you can also install cdxgen via:
+
+```shell
+winget install cdxgen
 ```
 
 ## Single Executable Application (SEA) Binaries
