@@ -199,7 +199,7 @@ overrides:
   path-scurry: 2.0.2
   picocolors: 1.1.1
   picomatch: 4.0.3
-  poku: 4.0.0
+  poku: 4.1.0
   proc-log: 6.1.0
   promise-retry: 2.0.1
   properties-reader: 3.0.1
@@ -237,7 +237,7 @@ overrides:
   supports-color: 10.2.2
   table: 6.9.0
   tagged-tag: 1.0.0
-  tar: 7.5.10
+  tar: 7.5.11
   tinyglobby: 0.2.15
   toidentifier: 1.0.1
   treeverse: 3.0.0
@@ -366,8 +366,8 @@ importers:
         specifier: 6.9.0
         version: 6.9.0
       tar:
-        specifier: 7.5.10
-        version: 7.5.10
+        specifier: 7.5.11
+        version: 7.5.11
       treeverse:
         specifier: 3.0.0
         version: 3.0.0
@@ -397,8 +397,8 @@ importers:
         specifier: 2.7.3
         version: 2.7.3
       poku:
-        specifier: 4.0.0
-        version: 4.0.0
+        specifier: 4.1.0
+        version: 4.1.0
       sinon:
         specifier: 21.0.2
         version: 21.0.2
@@ -1293,8 +1293,8 @@ packages:
     resolution: {integrity: sha512-5gTmgEY/sqK6gFXLIsQNH19lWb4ebPDLA4SdLP7dsWkIXHWlG66oPuVvXSGFPppYZz8ZDZq0dYYrbHfBCVUb1Q==}
     engines: {node: '>=12'}
 
-  poku@4.0.0:
-    resolution: {integrity: sha512-nAyJ+isqi1f4knwqxYIicmF/0m9PKTfoLzF2SJIXvHUNY1UXxhmIVDjcqKrlxT2VglFn7PZXsaKH8Nr91x/S3Q==}
+  poku@4.1.0:
+    resolution: {integrity: sha512-gHyR0sE1zZ7qDowChiToZjQ75Dwqf0JDA3cHh5hVD8K00HOnVW4nr9XlximThE/AyenlxVatSEuiLfwYFcJS7w==}
     engines: {bun: '>=1.x.x', deno: '>=2.x.x', node: '>=16.x.x', typescript: '>=5.x.x'}
     hasBin: true
 
@@ -1439,8 +1439,8 @@ packages:
     resolution: {integrity: sha512-yEFYrVhod+hdNyx7g5Bnkkb0G6si8HJurOoOEgC8B/O0uXLHlaey/65KRv6cuWBNhBgHKAROVpc7QyYqE5gFng==}
     engines: {node: '>=20'}
 
-  tar@7.5.10:
-    resolution: {integrity: sha512-8mOPs1//5q/rlkNSPcCegA6hiHJYDmSLEI8aMH/CdSQJNWztHC9WHNam5zdQlfpTwB9Xp7IBEsHfV5LKMJGVAw==}
+  tar@7.5.11:
+    resolution: {integrity: sha512-ChjMH33/KetonMTAtpYdgUFr0tbz69Fp2v7zWxQfYZX4g5ZN2nOBXm1R2xyA+lMIKrLKIoKAwFj93jE/avX9cQ==}
     engines: {node: '>=18'}
 
   tinyglobby@0.2.15:
@@ -2376,7 +2376,7 @@ snapshots:
       nopt: 9.0.0
       proc-log: 6.1.0
       semver: 7.7.4
-      tar: 7.5.10
+      tar: 7.5.11
       tinyglobby: 0.2.15
       which: 6.0.1
     transitivePeerDependencies:
@@ -2466,7 +2466,7 @@ snapshots:
   picomatch@4.0.3:
     optional: true
 
-  poku@4.0.0: {}
+  poku@4.1.0: {}
 
   proc-log@6.1.0: {}
 
@@ -2627,7 +2627,7 @@ snapshots:
 
   tagged-tag@1.0.0: {}
 
-  tar@7.5.10:
+  tar@7.5.11:
     dependencies:
       '@isaacs/fs-minipass': 4.0.1
       chownr: 3.0.0
