@@ -245,7 +245,7 @@ overrides:
   type-fest: 5.4.4
   type-is: 2.0.1
   typescript: 5.9.3
-  undici: 7.22.0
+  undici: 7.24.4
   unique-filename: 5.0.0
   unique-slug: 6.0.0
   unpipe: 1.0.0
@@ -1472,8 +1472,8 @@ packages:
     engines: {node: '>=14.17'}
     hasBin: true
 
-  undici@7.22.0:
-    resolution: {integrity: sha512-RqslV2Us5BrllB+JeiZnK4peryVTndy9Dnqq62S3yYRRTj0tFQCwEniUy2167skdGOy3vqRzEvl1Dm4sV2ReDg==}
+  undici@7.24.4:
+    resolution: {integrity: sha512-BM/JzwwaRXxrLdElV2Uo6cTLEjhSb3WXboncJamZ15NgUURmvlXvxa6xkwIOILIjPNo9i8ku136ZvWV0Uly8+w==}
     engines: {node: '>=20.18.1'}
 
   unique-filename@5.0.0:
@@ -1932,7 +1932,7 @@ snapshots:
       parse5: 8.0.0
       parse5-htmlparser2-tree-adapter: 8.0.0
       parse5-parser-stream: 8.0.0
-      undici: 7.22.0
+      undici: 7.24.4
       whatwg-mimetype: 4.0.0
 
   chownr@3.0.0: {}
@@ -2662,7 +2662,7 @@ snapshots:
 
   typescript@5.9.3: {}
 
-  undici@7.22.0: {}
+  undici@7.24.4: {}
 
   unique-filename@5.0.0:
     dependencies:
