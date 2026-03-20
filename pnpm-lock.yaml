@@ -267,7 +267,7 @@ overrides:
   yargs-parser: 22.0.0
   yoctocolors: 2.1.2
   hermes-parser: 0.33.3
-  hermes-estree: 0.33.3
+  hermes-estree: 0.34.0
 
 pnpmfileChecksum: sha256-nfOeuxPm0PLhmHqhdzVKpjFk27e1GEgHAqcQJ7ot+gg=
 
@@ -1014,8 +1014,8 @@ packages:
     resolution: {integrity: sha512-0hJU9SCPvmMzIBdZFqNPXWa6dqh7WdH0cII9y+CyS8rG3nL48Bclra9HmKhVVUHyPWNH5Y7xDwAB7bfgSjkUMQ==}
     engines: {node: '>= 0.4'}
 
-  hermes-estree@0.33.3:
-    resolution: {integrity: sha512-6kzYZHCk8Fy1Uc+t3HGYyJn3OL4aeqKLTyina4UFtWl8I0kSL7OmKThaiX+Uh2f8nGw3mo4Ifxg0M5Zk3/Oeqg==}
+  hermes-estree@0.34.0:
+    resolution: {integrity: sha512-6qLylexjmuKa/YYhMiNn/3VejBsdzwmYUGmNpc693/pJzymmbufhkRW/2K6GqFgu0ApRWoqF0NbM6u82jFcOXA==}
 
   hermes-parser@0.33.3:
     resolution: {integrity: sha512-Yg3HgaG4CqgyowtYjX/FsnPAuZdHOqSMtnbpylbptsQ9nwwSKsy6uRWcGO5RK0EqiX12q8HvDWKgeAVajRO5DA==}
@@ -2166,12 +2166,12 @@ snapshots:
       function-bind: 1.1.2
     optional: true
 
-  hermes-estree@0.33.3:
+  hermes-estree@0.34.0:
     optional: true
 
   hermes-parser@0.33.3:
     dependencies:
-      hermes-estree: 0.33.3
+      hermes-estree: 0.34.0
     optional: true
 
   hosted-git-info@9.0.2:
