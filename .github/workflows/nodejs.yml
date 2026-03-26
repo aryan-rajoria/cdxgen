@@ -120,26 +120,25 @@ jobs:
       - name: check sbom for vulns
         if: github.ref == 'refs/heads/master'
         run: |
-          node bin/cdxgen.js -t js -t php -t jar -t ruby -o $(pwd)/reports/sbom-build.cdx.json --include-formulation --export-proto --proto-bin-file $(pwd)/reports/sbom-build.cdx.proto --exclude "**/test/**" --profile research $(pwd)
+          node bin/cdxgen.js -t js -t php -t jar -t ruby -t github -o $(pwd)/reports/sbom-build.cdx.json --include-formulation --export-proto --proto-bin-file $(pwd)/reports/sbom-build.cdx.proto --exclude "**/test/**" $(pwd)
           docker pull ghcr.io/cyclonedx/cdxgen:master
           node bin/cdxgen.js -t docker -o $(pwd)/reports/sbom-container-js.cdx.json ghcr.io/cyclonedx/cdxgen:master
           depscan --src $(pwd) --bom-dir $(pwd)/reports --reports-dir $(pwd)/reports --reachability-analyzer SemanticReachability --explain
         env:
           COLUMNS: 140
-          CDXGEN_DEBUG_MODE: debug
           JAVA_TOOL_OPTIONS: "-XX:UseSVE=0 -Dfile.encoding=UTF-8"
+          FETCH_LICENSE: true
       - name: Generate atom and slices
         if: startsWith(github.ref, 'refs/tags/')
         run: |
-          node bin/cdxgen.js -t js -t php -t jar -t ruby -o $(pwd)/reports/sbom-build.cdx.json --include-formulation --export-proto --proto-bin-file $(pwd)/reports/sbom-build.cdx.proto --exclude "**/test/**" --profile research $(pwd)
+          node bin/cdxgen.js -t js -t php -t jar -t ruby -t github -o $(pwd)/reports/sbom-build.cdx.json --include-formulation --export-proto --proto-bin-file $(pwd)/reports/sbom-build.cdx.proto --exclude "**/test/**" $(pwd)
+        env:
+          FETCH_LICENSE: true
       - name: Upload atom and slices
         uses: softprops/action-gh-release@153bb8e04406b158c6c84fc1615b65b24149a1fe # v2.6.1
         if: startsWith(github.ref, 'refs/tags/')
         with:
           files: |
-            reports/js-app.atom
-            reports/js-reachables.slices.json
-            reports/js-usages.slices.json
             reports/sbom-build.cdx.json
             reports/sbom-build.cdx.proto
       - name: Cleanup
