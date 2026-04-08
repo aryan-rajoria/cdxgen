@@ -610,12 +610,29 @@ jobs:
           bin/cdxgen.js -t python repotests/django-DefectDojo -o bomresults/django-DefectDojo-safe.json --feature-flags safe-pip-install --fail-on-error
           bin/cdxgen.js -t python repotests/django-DefectDojo -o bomresults/django-DefectDojo.json --deep --include-crypto --spec-version 1.6
         shell: bash
-      - name: repotests blint
+      - name: Set up Python
+        uses: actions/setup-python@a309ff8b426b58ec0e2a45f0f869d46889d02405 # v6.2.0
+        with:
+          python-version: '3.12'
+      - name: repotests blint (--no-install-deps)
         run: |
           python -m pip install poetry || true
-          bin/cdxgen.js -t python repotests/blint -o bomresults/blint-req.json --required-only --fail-on-error
+          bin/cdxgen.js -t python repotests/blint -o bomresults/blint-req1.json --no-install-deps --fail-on-error
+        shell: bash
+        env:
+          CDXGEN_DEBUG_MODE: verbose
+      - name: repotests blint
+        run: |
+          bin/cdxgen.js -t python repotests/blint -o bomresults/blint-req2.json --required-only --fail-on-error
           bin/cdxgen.js -t python repotests/blint -o bomresults/blint-research.json --profile research --fail-on-error
         shell: bash
+      - name: repotests blint (no lock)
+        run: |
+          rm repotests/blint/poetry.lock
+          bin/cdxgen.js -t python repotests/blint -o bomresults/blint-req3.json--fail-on-error
+        shell: bash
+        env:
+          CDXGEN_DEBUG_MODE: verbose
       - name: repotests dbt-oracle
         run: |
           bin/cdxgen.js -t python repotests/dbt-oracle -o bomresults/dbt-oracle.json --deep --spec-version 1.6 --fail-on-error
