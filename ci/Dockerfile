@@ -55,7 +55,7 @@ ENV GOPATH=/opt/app-root/go \
     SDKMAN_DIR=/opt/.sdkman \
     SDKMAN_CANDIDATES_DIR=/opt/.sdkman/candidates \
     RBENV_ROOT=/opt/.rbenv
-ENV PATH=${PATH}:/opt/bin:/opt/.nvm/versions/node/v${NODE_VERSION}/bin:${JAVA_HOME}/bin:${MAVEN_HOME}/bin:${GRADLE_HOME}/bin:${SCALA_HOME}/bin:${SBT_HOME}/bin:${GOPATH}/bin:/usr/local/go/bin:/usr/local/bin/:/opt/.local/bin:${PYTHONPATH}/bin:/opt/.rbenv/bin:/opt/.rbenv/versions/4.0.1/bin
+ENV PATH=${PATH}:/opt/bin:/opt/.nvm/versions/node/v${NODE_VERSION}/bin:${JAVA_HOME}/bin:${MAVEN_HOME}/bin:${GRADLE_HOME}/bin:${SCALA_HOME}/bin:${SBT_HOME}/bin:${GOPATH}/bin:/usr/local/go/bin:/usr/local/bin/:/opt/.local/bin:${PYTHONPATH}/bin:/opt/.rbenv/bin:/opt/.rbenv/versions/4.0.2/bin
 
 RUN set -e; \
     ARCH_NAME="$(rpm --eval '%{_arch}')"; \
