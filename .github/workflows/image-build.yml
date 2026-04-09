@@ -16,7 +16,13 @@ on:
       latest:
         required: true
         type: boolean
-
+  secrets:
+    GITHUB_TOKEN:
+      description: "Token for authenticating to ghcr.io"
+      required: true
+    SBOM_SIGN_PRIVATE_KEY:
+      description: "Private key for signing SBOMs"
+      required: true
 env:
   NEXUS_ALPINE_REPO_PATH: /repository/alpine
   NEXUS_COMPOSER_PATH: /repository/composer
