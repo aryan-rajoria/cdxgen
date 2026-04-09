@@ -37,6 +37,7 @@ RUN set -e; \
       python3-dev \
       py3-pip \
       py3-virtualenv \
+ && rm /usr/local/bin/yarn* \
  && npm install -g \
       corepack \
       npm \
