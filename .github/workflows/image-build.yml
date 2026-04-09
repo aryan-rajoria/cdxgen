@@ -17,9 +17,6 @@ on:
         required: true
         type: boolean
     secrets:
-      GITHUB_TOKEN:
-        description: "Token for authenticating to ghcr.io"
-        required: true
       SBOM_SIGN_PRIVATE_KEY:
         description: "Private key for signing SBOMs"
         required: true

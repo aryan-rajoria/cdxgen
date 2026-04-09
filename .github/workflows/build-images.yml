@@ -250,7 +250,6 @@ jobs:
 
     uses: ./.github/workflows/image-build.yml
     secrets:
-      GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       SBOM_SIGN_PRIVATE_KEY: ${{ secrets.SBOM_SIGN_PRIVATE_KEY }}
     with:
       image: ${{ toJSON(matrix.image) }}
