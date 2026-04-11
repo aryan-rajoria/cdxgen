@@ -2,5 +2,10 @@ minimumReleaseAge: '4320'
 minimumReleaseAgeExclude:
 - '@cdxgen/*'
 - '@appthreat/*'
-- tar
-- typescript
+trustPolicy: no-downgrade
+blockExoticSubdeps: true
+lockfileIncludeTarballUrl: true
+strictDepBuilds: true
+preferSymlinkedExecutables: false
+optimisticRepeatInstall: true
+cleanupUnusedCatalogs: true
