@@ -60,9 +60,9 @@ export function createNodejsBom(path: string, options: Object): Promise<Object>;
  *
  * @param {String} path
  * @param {Object} options
- * @returns {Object} BOM object
+ * @returns {Object | null} BOM object, or `null` when `pixi.lock` is absent and `options.installDeps` is false
  */
-export function createPixiBom(path: string, options: Object): Object;
+export function createPixiBom(path: string, options: Object): Object | null;
 /**
  * Function to create bom string for Python projects
  *
@@ -76,17 +76,17 @@ export function createPythonBom(path: string, options: Object): Promise<Object>;
  *
  * @param {string} path to the project
  * @param {Object} options Parse options from the cli
- * @returns {Promise<Object>} Promise resolving to BOM object
+ * @returns {Promise<Object | undefined>} Promise resolving to a BOM object or `undefined`
  */
-export function createGoBom(path: string, options: Object): Promise<Object>;
+export function createGoBom(path: string, options: Object): Promise<Object | undefined>;
 /**
  * Function to create bom string for Rust projects
  *
  * @param {string} path to the project
  * @param {Object} options Parse options from the cli
- * @returns {Promise<Object>} Promise resolving to BOM object
+ * @returns {Promise<Object|undefined>} Promise resolving to a BOM object or undefined
  */
-export function createRustBom(path: string, options: Object): Promise<Object>;
+export function createRustBom(path: string, options: Object): Promise<Object | undefined>;
 /**
  * Function to create bom string for Dart projects
  *
@@ -180,9 +180,9 @@ export function createSwiftBom(path: string, options: Object): Promise<Object>;
  *
  * @param {string} path to the project
  * @param {Object} options Parse options from the cli
- * @returns {Promise<Object>} Promise resolving to BOM object
+ * @returns {Promise<Object | undefined>} Promise resolving to a BOM object, or `undefined` when no Podfiles are found
  */
-export function createCocoaBom(path: string, options: Object): Promise<Object>;
+export function createCocoaBom(path: string, options: Object): Promise<Object | undefined>;
 /**
  * Function to create bom string for Nix flakes
  *
