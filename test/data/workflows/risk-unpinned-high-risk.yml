@@ -1,0 +1,7 @@
+name: Risk Unpinned High-Risk
+on: [pull_request_target]
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: third-party/action@v1.2.3  # tag-pinned, not SHA

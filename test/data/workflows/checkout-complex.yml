@@ -1,0 +1,14 @@
+name: Checkout Complex
+on: push
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          repository: myorg/myrepo
+          ref: develop
+          token: ${{ secrets.CUSTOM_TOKEN }}
+          persist-credentials: true
+          fetch-depth: 0
+          lfs: true

@@ -1,0 +1,7 @@
+name: Injection Head Ref
+on: [pull_request]
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - run: git checkout ${{ github.head_ref }}

@@ -1,0 +1,7 @@
+name: Script Injection Test
+on: [pull_request]
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - run: echo "${{ github.event.pull_request.title }}"  # Should trigger CI-007

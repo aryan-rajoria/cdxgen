@@ -88,3 +88,102 @@
       "triggers": $prop($, 'cdx:github:workflow:triggers'),
       "hasWritePermissions": $prop($, 'cdx:github:workflow:hasWritePermissions')
     }
+- id: CI-005
+  name: "Checkout step persists credentials unnecessarily"
+  description: "actions/checkout with persist-credentials=true (default) exposes GITHUB_TOKEN to subsequent steps"
+  severity: medium
+  category: ci-permission
+  condition: |
+    components[
+      $prop($, 'cdx:github:action:uses') ~> $contains('actions/checkout')
+      and (
+        not($exists($prop($, 'cdx:github:checkout:persistCredentials')))
+        or $prop($, 'cdx:github:checkout:persistCredentials') = 'true'
+      )
+      and (
+        $prop($, 'cdx:github:workflow:hasWritePermissions') = 'true'
+        or $prop($, 'cdx:github:job:hasWritePermissions') = 'true'
+      )
+    ]
+  location: |
+    {
+      "bomRef": $."bom-ref",
+      "purl": purl,
+      "file": $prop($, 'cdx:github:workflow:file')
+    }
+  message: "Checkout step uses persist-credentials=true in privileged workflow; consider persist-credentials: false"
+  mitigation: "Add persist-credentials: false to checkout steps that don't require git push operations"
+  evidence: |
+    {
+      "persistCredentials": $prop($, 'cdx:github:checkout:persistCredentials'),
+      "workflowPermissions": $prop($, 'cdx:github:workflow:hasWritePermissions')
+    }
+- id: CI-006
+  name: "Cache usage in untrusted trigger context"
+  description: "GitHub Actions cache can be poisoned when used in workflows triggered by untrusted input (e.g., pull_request from forks)"
+  severity: high
+  category: ci-permission
+  condition: |
+    components[
+      $prop($, 'cdx:github:action:uses') ~> $contains('actions/cache')
+      and $prop($, 'cdx:github:workflow:triggers') ~> $split(',') ~> $contains('pull_request')
+    ]
+  location: |
+    {
+      "bomRef": $."bom-ref",
+      "purl": purl,
+      "file": $prop($, 'cdx:github:workflow:file')
+    }
+  message: "Cache action used in pull_request-triggered workflow; cache key '{{ $prop($, 'cdx:github:cache:key') }}' may be writable by untrusted code"
+  mitigation: "Scope cache keys to PR-specific values, validate restored cache contents, or avoid caching in untrusted workflows"
+  evidence: |
+    {
+      "cacheKey": $prop($, 'cdx:github:cache:key'),
+      "cachePath": $prop($, 'cdx:github:cache:path'),
+      "triggers": $prop($, 'cdx:github:workflow:triggers')
+    }
+- id: CI-007
+  name: "Script injection via untrusted context interpolation"
+  description: "Direct interpolation of github.event.* or inputs.* into run: blocks enables command injection"
+  severity: critical
+  category: ci-permission
+  condition: |
+    components[
+      $prop($, 'cdx:github:step:hasUntrustedInterpolation') = 'true'
+      and $prop($, 'cdx:github:step:type') = 'run'
+    ]
+  location: |
+    {
+      "bomRef": $."bom-ref",
+      "purl": purl,
+      "file": $prop($, 'cdx:github:workflow:file')
+    }
+  message: "Untrusted input interpolated into shell command: variables '{{ $prop($, 'cdx:github:step:interpolatedVars') }}'"
+  mitigation: "Use intermediate environment variables: env: TITLE: ${{ github.event.pull_request.title }} then reference $TITLE in run:"
+  evidence: |
+    {
+      "interpolatedVars": $prop($, 'cdx:github:step:interpolatedVars'),
+      "stepCommand": $prop($, 'cdx:github:step:command')
+    }
+- id: CI-008
+  name: "High-risk trigger with write permissions"
+  description: "Triggers like pull_request_target, issue_comment, or workflow_run combined with write permissions enable privilege escalation"
+  severity: high
+  category: ci-permission
+  condition: |
+    formulation.workflows[
+      $prop($, 'cdx:github:workflow:hasHighRiskTrigger') = 'true'
+      and $prop($, 'cdx:github:workflow:hasWritePermissions') = 'true'
+    ]
+  location: |
+    {
+      "bomRef": $."bom-ref",
+      "file": $prop($, 'cdx:github:workflow:file')
+    }
+  message: "Workflow '{{ $prop($, 'cdx:github:workflow:name') }}' uses high-risk trigger with write permissions"
+  mitigation: "Use pull_request instead of pull_request_target; require manual approval for issue_comment triggers; restrict permissions per job"
+  evidence: |
+    {
+      "triggers": $prop($, 'cdx:github:workflow:triggers'),
+      "hasWritePermissions": $prop($, 'cdx:github:workflow:hasWritePermissions')
+    }

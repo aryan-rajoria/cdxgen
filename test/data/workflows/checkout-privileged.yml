@@ -1,0 +1,10 @@
+name: Checkout Privileged
+on: push
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v4  # persist-credentials=true + write perms = risk
+      - run: git push origin main

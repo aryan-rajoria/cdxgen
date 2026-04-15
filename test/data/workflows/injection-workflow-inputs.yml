@@ -1,0 +1,11 @@
+name: Injection Inputs
+on:
+  workflow_dispatch:
+    inputs:
+      script:
+        type: string
+jobs:
+  run:
+    runs-on: ubuntu-latest
+    steps:
+      - run: bash -c "${{ inputs.script }}"

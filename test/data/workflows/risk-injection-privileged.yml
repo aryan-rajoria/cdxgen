@@ -1,0 +1,9 @@
+name: Risk Injection Privileged
+on: [pull_request]
+jobs:
+  dangerous:
+    permissions:
+      contents: write
+    runs-on: ubuntu-latest
+    steps:
+      - run: echo "${{ github.event.pull_request.title }}" | bash

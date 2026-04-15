@@ -1,0 +1,11 @@
+name: Trigger Privileged
+on: [pull_request_target]
+permissions:
+  contents: write
+  id-token: write
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - run: echo "High-risk + privileged"

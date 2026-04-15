@@ -4,9 +4,12 @@ changelog:
       labels:
         - breaking
         - possibly breaking
+    - title: 🤖 AI-pair Changes
+      labels:
+        - ai-pair
     - title: 🤖 AI-assisted Changes
       labels:
-        - AI-assisted
+        - ai-assisted
     - title: 🧠 Machine-Learning Changes
       labels:
         - ml
@@ -32,6 +35,3 @@ changelog:
     - title: 💳 Sponsored Work
       labels:
         - sponsored
-    - title: Other Changes
-      labels:
-        - "*"
