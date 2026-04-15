@@ -5,4 +5,4 @@ export function auditEnvironment(env?: any): {
     message: any;
     mitigation: string;
 }[];
-//# sourceMappingURL=env-audit.d.ts.map
+//# sourceMappingURL=envAudit.d.ts.map

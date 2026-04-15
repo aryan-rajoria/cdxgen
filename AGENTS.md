@@ -119,7 +119,7 @@ lib/
     server.js           connect-based HTTP server
   stages/
     postgen/            Post-processing (annotator.js, postgen.js)
-    pregen/             Pre-generation env setup (pregen.js, env-audit.js)
+    pregen/             Pre-generation env setup (pregen.js, envAudit.js)
   third-party/
     arborist/           Forked npm arborist for workspace support
 data/            Static data files (license SPDX list, frameworks list, …)
@@ -282,7 +282,7 @@ Always use the safe wrappers rather than the raw Node.js equivalents:
 
 For user-supplied strings that will be used in file paths or URLs, check `hasDangerousUnicode(str)` and `isValidDriveRoot(root)` (Windows) before use.
 
-Environment variables from `auditEnvironment` (`lib/stages/pregen/env-audit.js`) are checked at startup to detect dangerous `NODE_OPTIONS` values.
+Environment variables from `auditEnvironment` (`lib/stages/pregen/envAudit.js`) are checked at startup to detect dangerous `NODE_OPTIONS` values.
 
 ---
 
@@ -321,7 +321,7 @@ Tests are co-located with the source as **`<module>.poku.js`** files. The test r
 lib/helpers/utils.poku.js         ← tests for utils.js
 lib/helpers/pythonutils.poku.js   ← tests for pythonutils.js
 lib/cli/index.poku.js             ← tests for index.js
-lib/stages/pregen/env-audit.poku.js
+lib/stages/pregen/envAudit.poku.js
 …
 ```
 

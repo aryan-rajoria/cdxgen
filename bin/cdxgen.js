@@ -44,7 +44,7 @@ import {
 } from "../lib/helpers/utils.js";
 import { validateBom } from "../lib/helpers/validator.js";
 import { postProcess } from "../lib/stages/postgen/postgen.js";
-import { auditEnvironment } from "../lib/stages/pregen/env-audit.js";
+import { auditEnvironment } from "../lib/stages/pregen/envAudit.js";
 import { prepareEnv } from "../lib/stages/pregen/pregen.js";
 
 // Support for config files
@@ -383,6 +383,39 @@ const args = _yargs
     default: false,
     hidden: true,
   })
+  .option("bom-audit", {
+    type: "boolean",
+    description: "Perform post-generation security audit of BOM data",
+    default: false,
+    hidden: true,
+  })
+  .option("bom-audit-rules-dir", {
+    description:
+      "Directory containing additional YAML audit rules (merged with built-in)",
+    type: "string",
+    hidden: true,
+  })
+  .option("bom-audit-categories", {
+    description:
+      "Comma-separated list of rule categories to enable (default: all)",
+    type: "string",
+    hidden: true,
+  })
+  .option("bom-audit-min-severity", {
+    description:
+      "Minimum severity to report: low, medium, or high (default: low)",
+    type: "string",
+    choices: ["low", "medium", "high"],
+    default: "low",
+    hidden: true,
+  })
+  .option("bom-audit-fail-severity", {
+    description: "Severity threshold for secure mode failure (default: high)",
+    type: "string",
+    choices: ["high", "medium", "low"],
+    default: "high",
+    hidden: true,
+  })
   .completion("completion", "Generate bash/zsh completion")
   .array("type")
   .array("excludeType")
@@ -584,6 +617,7 @@ if (options.includeFormulation) {
     );
   }
 }
+
 /**
  * Method to apply advanced options such as profile and lifecycles
  *
@@ -680,7 +714,7 @@ const applyAdvancedOptions = (options) => {
         ].includes(options.projectType[0])
       ) {
         console.log(
-          "PREVIEW: post-build lifecycle SBOM generation is supported only for android, dotnet, go, and Rust projects. Please specify the type using the -t argument.",
+          "PREVIEW: post-build lifecycle SBOM generation is supported only for limited project types.",
         );
         process.exit(1);
       }
@@ -709,6 +743,14 @@ const applyAdvancedOptions = (options) => {
     thoughtLog(
       "I must avoid any package installations and focus solely on the available artefacts, such as lock files.",
     );
+  }
+  if (options.bomAudit) {
+    if (!options.includeFormulation) {
+      console.log(
+        "NOTE: Automatically collecting formulation information. The section may include sensitive data such as emails and secrets.\nPlease review the generated SBOM before distribution.\n",
+      );
+    }
+    options.includeFormulation = true;
   }
   return options;
 };
@@ -922,6 +964,37 @@ const needsBomSigning = ({ generateKeyAndSign }) =>
   }
   // Add extra metadata and annotations with post processing
   bomNSData = postProcess(bomNSData, options);
+  if (options.bomAudit && bomNSData?.bomJson) {
+    const {
+      auditBom,
+      formatAnnotations,
+      formatConsoleOutput,
+      hasCriticalFindings,
+    } = await import("../lib/stages/postgen/auditBom.js");
+    thoughtLog("Let's run security audit...");
+    const postAuditFindings = await auditBom(bomNSData.bomJson, options);
+    if (postAuditFindings.length) {
+      console.log(formatConsoleOutput(postAuditFindings, options));
+    } else if (DEBUG_MODE) {
+      console.log("BOM audit: No findings");
+    }
+    if (postAuditFindings.length && options.specVersion >= 1.4) {
+      bomNSData.bomJson.annotations = [
+        ...(bomNSData.bomJson.annotations || []),
+        ...formatAnnotations(postAuditFindings, bomNSData.bomJson),
+      ];
+      thoughtLog(
+        `Embedded ${postAuditFindings.length} audit findings as CycloneDX annotations`,
+      );
+    }
+    if (isSecureMode && hasCriticalFindings(postAuditFindings, options)) {
+      console.error("\nSecure mode: Critical audit findings detected.");
+      console.error(
+        "Review findings above or adjust --bom-audit-fail-severity to proceed.",
+      );
+      process.exit(1);
+    }
+  }
   if (
     options.output &&
     (typeof options.output === "string" || options.output instanceof String)

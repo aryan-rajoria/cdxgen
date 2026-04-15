@@ -1,0 +1,123 @@
+# Dependency Source Integrity Rules
+# Category: dependency-source
+# Evaluates package manager data for non-registry, local, or mutable sources
+- id: PKG-001
+  name: "Install script from non-registry source"
+  description: "npm packages with install scripts from git/file/local sources increase supply chain attack surface"
+  severity: high
+  category: dependency-source
+  condition: |
+    components[
+      $prop($, 'cdx:npm:hasInstallScript') = 'true'
+      and $prop($, 'cdx:npm:isRegistryDependency') = 'false'
+    ]
+  location: |
+    { "bomRef": $."bom-ref", "purl": purl }
+  message: "npm package '{{ name }}@{{ version }}' executes install script from non-registry source"
+  mitigation: "Avoid git/file dependencies with lifecycle hooks; use registry dependencies or vendor explicitly"
+  evidence: |
+    {
+      "riskyScripts": $prop($, 'cdx:npm:risky_scripts'),
+      "resolvedPath": $prop($, 'cdx:npm:resolvedPath'),
+      "isLink": $prop($, 'cdx:npm:isLink')
+    }
+- id: PKG-002
+  name: "Go module uses local replacement"
+  description: "Go modules with local_dir replacements are non-hermetic and may not be reproducible"
+  severity: high
+  category: dependency-source
+  condition: |
+    components[
+      $prop($, 'cdx:go:local_dir') != null
+    ]
+  location: |
+    { "bomRef": $."bom-ref", "purl": purl }
+  message: "Go module '{{ name }}' uses local replacement: {{ $prop($, 'cdx:go:local_dir') }}"
+  mitigation: "Use published module versions or vendor dependencies explicitly for reproducible builds"
+  evidence: |
+    {
+      "localDir": $prop($, 'cdx:go:local_dir'),
+      "toolchain": $prop($, 'cdx:go:toolchain')
+    }
+- id: PKG-003
+  name: "Swift local checkout in build"
+  description: "Swift packages with localCheckoutPath indicate developer-only dependencies not suitable for release"
+  severity: high
+  category: dependency-source
+  condition: |
+    components[
+      $prop($, 'cdx:swift:localCheckoutPath') != null
+    ]
+  location: |
+    { "bomRef": $."bom-ref", "purl": purl }
+  message: "Swift package '{{ name }}' uses local checkout: {{ $prop($, 'cdx:swift:localCheckoutPath') }}"
+  mitigation: "Use remote package references (URL or registry) for release artifacts"
+  evidence: |
+    {
+      "checkoutPath": $prop($, 'cdx:swift:localCheckoutPath'),
+      "packageName": $prop($, 'cdx:swift:packageName')
+    }
+- id: PKG-004
+  name: "Nix flake missing reproducibility metadata"
+  description: "Nix dependencies without revision or nar_hash cannot be verified for content integrity"
+  severity: high
+  category: dependency-source
+  condition: |
+    components[
+      $startsWith(purl, 'pkg:nix/')
+      and (
+        $prop($, 'cdx:nix:revision') = null
+        or $prop($, 'cdx:nix:nar_hash') = null
+      )
+    ]
+  location: |
+    { "bomRef": $."bom-ref", "purl": purl }
+  message: "Nix package '{{ name }}' missing reproducibility metadata (revision or nar_hash)"
+  mitigation: "Ensure flake.lock includes both revision and nar_hash for content-addressed reproducibility"
+  evidence: |
+    {
+      "inputUrl": $prop($, 'cdx:nix:input_url'),
+      "ref": $prop($, 'cdx:nix:ref'),
+      "hasRevision": $prop($, 'cdx:nix:revision') != null,
+      "hasNarHash": $prop($, 'cdx:nix:nar_hash') != null
+    }
+- id: PKG-005
+  name: "Ruby gem tracks mutable branch"
+  description: "Ruby gems sourced from git branches (without revision pin) can change unexpectedly"
+  severity: medium
+  category: dependency-source
+  condition: |
+    components[
+      $prop($, 'cdx:gem:remoteBranch') != null
+      and $prop($, 'cdx:gem:remoteRevision') = null
+    ]
+  location: |
+    { "bomRef": $."bom-ref", "purl": purl }
+  message: "Ruby gem '{{ name }}' tracks mutable branch '{{ $prop($, 'cdx:gem:remoteBranch') }}' without commit pin"
+  mitigation: "Pin to specific revision: gem 'foo', git: '...', ref: '<commit-sha>'"
+  evidence: |
+    {
+      "remote": $prop($, 'cdx:gem:remote'),
+      "branch": $prop($, 'cdx:gem:remoteBranch'),
+      "tag": $prop($, 'cdx:gem:remoteTag')
+    }
+- id: PKG-006
+  name: "Python dependency from non-approved registry"
+  description: "PyPI packages from unapproved registries may introduce unvetted code"
+  severity: low
+  category: dependency-source
+  condition: |
+    components[
+      $prop($, 'cdx:pypi:registry') != null
+      and $prop($, 'cdx:pypi:registry') != 'https://pypi.org/simple'
+      and $prop($, 'cdx:pypi:registry') != 'https://pypi.org'
+    ]
+  location: |
+    { "bomRef": $."bom-ref", "purl": purl }
+  message: "Python package '{{ name }}' sourced from non-default registry: {{ $prop($, 'cdx:pypi:registry') }}"
+  mitigation: "Verify registry trustworthiness"
+  evidence: |
+    {
+      "registry": $prop($, 'cdx:pypi:registry'),
+      "resolvedFrom": $prop($, 'cdx:pypi:resolved_from')
+    }
