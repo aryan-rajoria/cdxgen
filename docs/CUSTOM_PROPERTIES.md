@@ -54,24 +54,31 @@ CycloneDX custom properties are emitted as name/value pairs, so consumers should
 | `cdx:bom:*`                                                                | BOM-level metadata                                        | Component type set, discovered namespaces, source manifest files                                                    | Measure BOM completeness, identify broad component diversity, and support attestable “evidence-of-origin” for manifest inputs                                    | [Cross-cutting BOM/service/build metadata](#inventory-cross-cutting) | [5](#example-5)                  |
 | `cdx:build:versionSpecifiers`                                              | Build/manifest parsing (for example C/C++ build metadata) | Non-exact version constraints captured from build descriptors                                                       | Highlight non-pinned dependency constraints and prioritize hardening toward deterministic builds                                                                 | [Cross-cutting BOM/service/build metadata](#inventory-cross-cutting) | [5](#example-5)                  |
 | `cdx:osquery:category`                                                     | Host/package discovery via osquery                        | Query/source category for discovered packages                                                                       | Separate inventory confidence by collection method and tune host-level evidence policies                                                                         | [Cross-cutting BOM/service/build metadata](#inventory-cross-cutting) | [5](#example-5)                  |
+| `cdx:vscode-extension:*`                                                   | VS Code / IDE extensions (`.vsix` and installed dirs)     | Activation events, extension kind, contributed features, lifecycle scripts, workspace trust posture                 | Detect always-on extensions, flag install-time script execution, audit host/filesystem access, enforce workspace trust and virtual workspace policies            | [IDE and editor extensions](#inventory-ide-extensions)               | [7](#example-7)                  |
 | `cdx:service:httpMethod`                                                   | OpenAPI/service evidence                                  | HTTP method associated with discovered service endpoints                                                            | Support API exposure reviews (method-level attack surface and access-control assurance)                                                                          | [Cross-cutting BOM/service/build metadata](#inventory-cross-cutting) | [5](#example-5)                  |
 
 ## Useful keys
 
 These are the highest-leverage keys for first-pass policy authoring.
 
-| Key                                       | Why it matters                                                                     | Policy readiness |
-| ----------------------------------------- | ---------------------------------------------------------------------------------- | ---------------- |
-| `cdx:github:action:isShaPinned`           | Distinguishes immutable commit-pinned actions from mutable tag/branch references   | Hard deny        |
-| `cdx:github:workflow:hasWritePermissions` | Quickly identifies workflows that can modify repository or packages                | Hard deny        |
-| `cdx:github:workflow:hasIdTokenWrite`     | Flags OIDC token issuance capability                                               | Hard deny        |
-| `cdx:npm:hasInstallScript`                | Captures install-time execution surface                                            | Hard deny        |
-| `cdx:npm:isRegistryDependency`            | Detects git/file/local sources vs standard registry resolution                     | Hard deny        |
-| `cdx:pypi:registry`                       | Indicates non-default Python package index usage                                   | Hard deny        |
-| `cdx:gem:remoteRevision`                  | Lets policies distinguish immutable git revisions from mutable branch/tag sourcing | Warning / triage |
-| `cdx:nix:nar_hash`                        | Important reproducibility and content-integrity signal for flakes                  | Hard deny        |
-| `cdx:go:local_dir`                        | Detects local module replacements and non-hermetic resolution                      | Hard deny        |
-| `cdx:bom:componentSrcFiles`               | Useful gate for BOM completeness and downstream attestability                      | Warning / triage |
+| Key                                        | Why it matters                                                                     | Policy readiness |
+| ------------------------------------------ | ---------------------------------------------------------------------------------- | ---------------- |
+| `cdx:github:action:isShaPinned`            | Distinguishes immutable commit-pinned actions from mutable tag/branch references   | Hard deny        |
+| `cdx:github:workflow:hasWritePermissions`  | Quickly identifies workflows that can modify repository or packages                | Hard deny        |
+| `cdx:github:workflow:hasIdTokenWrite`      | Flags OIDC token issuance capability                                               | Hard deny        |
+| `cdx:npm:hasInstallScript`                 | Captures install-time execution surface                                            | Hard deny        |
+| `cdx:npm:isRegistryDependency`             | Detects git/file/local sources vs standard registry resolution                     | Hard deny        |
+| `cdx:pypi:registry`                        | Indicates non-default Python package index usage                                   | Hard deny        |
+| `cdx:gem:remoteRevision`                   | Lets policies distinguish immutable git revisions from mutable branch/tag sourcing | Warning / triage |
+| `cdx:nix:nar_hash`                         | Important reproducibility and content-integrity signal for flakes                  | Hard deny        |
+| `cdx:go:local_dir`                         | Detects local module replacements and non-hermetic resolution                      | Hard deny        |
+| `cdx:bom:componentSrcFiles`                | Useful gate for BOM completeness and downstream attestability                      | Warning / triage |
+| `cdx:vscode-extension:lifecycleScripts`    | Captures install-time execution surface from extension lifecycle hooks             | Hard deny        |
+| `cdx:vscode-extension:activationEvents`    | Wildcard (`*`) activation means always-on; broad trigger surface is higher risk    | Warning / triage |
+| `cdx:vscode-extension:untrustedWorkspaces` | Controls whether the extension operates in untrusted workspace contexts            | Warning / triage |
+| `cdx:vscode-extension:contributes`         | Reveals contributed features such as terminal access, debuggers, auth providers    | Warning / triage |
+| `cdx:vscode-extension:executesCode`        | Explicit declaration that the extension executes code; always-true is higher risk  | Warning / triage |
+| `cdx:vscode-extension:vscodeEngine`        | Minimum VS Code version required; older engines may lack security features         | Context only     |
 
 ## Current key inventory (grouped)
 
@@ -83,7 +90,7 @@ The grouped lists below remain the authoritative inventory. The compact tables, 
 
 #### Authoritative grouped index
 
-- **GitHub Actions:** `cdx:github:action:isShaPinned`, `cdx:github:action:uses`, `cdx:github:action:versionPinningType`, `cdx:github:cache:key`, `cdx:github:cache:path`, `cdx:github:cache:restoreKeys`, `cdx:github:checkout:persistCredentials`, `cdx:github:job:environment`, `cdx:github:job:hasWritePermissions`, `cdx:github:job:name`, `cdx:github:job:needs`, `cdx:github:job:runner`, `cdx:github:job:services`, `cdx:github:job:timeoutMinutes`, `cdx:github:run:line`, `cdx:github:step:command`, `cdx:github:step:condition`, `cdx:github:step:continueOnError`, `cdx:github:step:hasUntrustedInterpolation`, `cdx:github:step:interpolatedVars`, `cdx:github:step:name`, `cdx:github:step:timeout`, `cdx:github:step:type`, `cdx:github:workflow:concurrencyGroup`, `cdx:github:workflow:file`, `cdx:github:workflow:hasHighRiskTrigger`, `cdx:github:workflow:hasIdTokenWrite`, `cdx:github:workflow:hasWritePermissions`, `cdx:github:workflow:name`, `cdx:github:workflow:triggers`
+- **GitHub Actions:** `cdx:github:action:isShaPinned`, `cdx:github:action:uses`, `cdx:github:action:versionPinningType`, `cdx:github:cache:key`, `cdx:github:cache:path`, `cdx:github:cache:restoreKeys`, `cdx:github:checkout:persistCredentials`, `cdx:github:job:environment`, `cdx:github:job:timeoutMinutes`, `cdx:github:job:hasWritePermissions`, `cdx:github:job:name`, `cdx:github:job:needs`, `cdx:github:job:runner`, `cdx:github:job:services`, `cdx:github:job:timeoutMinutes`, `cdx:github:run:line`, `cdx:github:step:command`, `cdx:github:step:condition`, `cdx:github:step:continueOnError`, `cdx:github:step:hasUntrustedInterpolation`, `cdx:github:step:interpolatedVars`, `cdx:github:step:name`, `cdx:github:step:timeout`, `cdx:github:step:type`, `cdx:github:workflow:concurrencyGroup`, `cdx:github:workflow:file`, `cdx:github:workflow:hasHighRiskTrigger`, `cdx:github:workflow:hasIdTokenWrite`, `cdx:github:workflow:hasWritePermissions`, `cdx:github:workflow:name`, `cdx:github:workflow:triggers`
 - **GitHub action trust tags:** `cdx:actions:isOfficial`, `cdx:actions:isVerified`
 - **GitLab CI:** `cdx:gitlab:config`, `cdx:gitlab:job:environment`, `cdx:gitlab:job:image`, `cdx:gitlab:job:name`, `cdx:gitlab:job:needs`, `cdx:gitlab:job:services`, `cdx:gitlab:job:stage`, `cdx:gitlab:stages`
 - **Azure Pipelines:** `cdx:azure:config`, `cdx:azure:job:environment`, `cdx:azure:job:name`, `cdx:azure:job:pool:vmImage`, `cdx:azure:pool:vmImage`, `cdx:azure:stage:condition`, `cdx:azure:stage:dependsOn`, `cdx:azure:stage:name`, `cdx:azure:trigger:branches`
@@ -329,6 +336,106 @@ The grouped lists below remain the authoritative inventory. The compact tables, 
 }
 ```
 
+<a id="inventory-ide-extensions"></a>
+
+### IDE and editor extensions
+
+#### Authoritative grouped index
+
+- **VS Code extensions:** `cdx:vscode-extension:activationEvents`, `cdx:vscode-extension:browser`, `cdx:vscode-extension:contributes`, `cdx:vscode-extension:executesCode`, `cdx:vscode-extension:extensionDependencies`, `cdx:vscode-extension:extensionKind`, `cdx:vscode-extension:extensionPack`, `cdx:vscode-extension:ide`, `cdx:vscode-extension:lifecycleScripts`, `cdx:vscode-extension:main`, `cdx:vscode-extension:untrustedWorkspaces`, `cdx:vscode-extension:virtualWorkspaces`, `cdx:vscode-extension:vscodeEngine`
+
+#### Decision-oriented sub-groups
+
+- **Execution surface:** `cdx:vscode-extension:lifecycleScripts`, `cdx:vscode-extension:main`, `cdx:vscode-extension:browser`, `cdx:vscode-extension:contributes`, `cdx:vscode-extension:executesCode`
+- **Privilege / trust:** `cdx:vscode-extension:untrustedWorkspaces`, `cdx:vscode-extension:virtualWorkspaces`, `cdx:vscode-extension:activationEvents`
+- **Dependency chain:** `cdx:vscode-extension:extensionDependencies`, `cdx:vscode-extension:extensionPack`
+- **Context / provenance:** `cdx:vscode-extension:ide`, `cdx:vscode-extension:extensionKind`, `cdx:vscode-extension:vscodeEngine`
+
+#### Compact operational reference
+
+| Key                                          | Scope     | Value type                    | Typical values                                                                     | When emitted                                                           | Why it matters                                                                                                                                                                                                                                                        | Policy readiness |
+| -------------------------------------------- | --------- | ----------------------------- | ---------------------------------------------------------------------------------- | ---------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ---------------- |
+| `cdx:vscode-extension:activationEvents`      | component | list string (comma-separated) | `onLanguage:python, onCommand:ext.run, *`                                          | When extension declares activation events in package.json              | Wildcard `*` means the extension activates on every workspace open, increasing attack surface. Use `$contains($split(value, ','), '*')` in JSONata to detect always-on extensions.                                                                                    | Warning / triage |
+| `cdx:vscode-extension:extensionKind`         | component | list string                   | `ui`, `workspace`, `ui, workspace`                                                 | When extension declares where it can run                               | `workspace` extensions execute in the remote host context and can access the filesystem                                                                                                                                                                               | Context only     |
+| `cdx:vscode-extension:extensionDependencies` | component | list string                   | `ms-python.vscode-pylance, ms-toolsai.jupyter`                                     | When extension declares dependencies on other extensions               | Transitive trust chain; a compromised dependency extension can affect all dependants                                                                                                                                                                                  | Warning / triage |
+| `cdx:vscode-extension:extensionPack`         | component | list string                   | `ms-python.python, ms-python.vscode-pylance`                                       | When extension bundles other extensions as a pack                      | Pack extensions install additional extensions implicitly                                                                                                                                                                                                              | Warning / triage |
+| `cdx:vscode-extension:untrustedWorkspaces`   | component | string                        | `true`, `false`, `limited`                                                         | When extension declares workspace trust configuration                  | `true` means the extension runs in untrusted workspaces; `limited` restricts some features                                                                                                                                                                            | Warning / triage |
+| `cdx:vscode-extension:virtualWorkspaces`     | component | string                        | `true`, `false`                                                                    | When extension declares virtual workspace support                      | Extensions supporting virtual workspaces may operate without direct filesystem access                                                                                                                                                                                 | Context only     |
+| `cdx:vscode-extension:contributes`           | component | list string (comma-separated) | `commands:count:42, terminal-access, filesystem-provider, authentication-provider` | When extension package.json declares contributed features              | Summary of privileged capabilities; use `:count:` suffix to identify quantity of contribution points (e.g., `commands:count:12` means 12 commands contributed). Match specific capability keywords (`terminal-access`, `filesystem-provider`, etc.) for policy rules. | Warning / triage |
+| `cdx:vscode-extension:main`                  | component | path string                   | `./dist/extension.js`, `./out/main.js`                                             | When extension declares a Node.js entry point                          | Identifies the primary executable entry point for security review                                                                                                                                                                                                     | Context only     |
+| `cdx:vscode-extension:browser`               | component | path string                   | `./dist/web/extension.js`                                                          | When extension declares a browser/web entry point in package.json      | Indicates the extension can run in web/VS Code for Web contexts. Browser extensions run in a sandboxed environment with reduced permissions compared to Node.js (`main`) entry points. Use to differentiate web-safe vs. host-executing extensions.                   | Context only     |
+| `cdx:vscode-extension:lifecycleScripts`      | component | list string                   | `postinstall, vscode:prepublish`, `vscode:uninstall`                               | When extension package.json contains lifecycle hooks                   | Install-time script execution risk; `postinstall` can run arbitrary code during extension installation                                                                                                                                                                | Hard deny        |
+| `cdx:vscode-extension:executesCode`          | component | string                        | `true`, `false`                                                                    | When vsixmanifest Properties declares `ExecutesCode`                   | Explicitly declares whether the extension executes code; `true` confirms the extension runs arbitrary code                                                                                                                                                            | Warning / triage |
+| `cdx:vscode-extension:vscodeEngine`          | component | semver range string           | `^1.94.0`, `>=1.80.0`                                                              | When vsixmanifest Properties declares the required VS Code engine      | Minimum VS Code version required; older engines may lack security features like workspace trust                                                                                                                                                                       | Context only     |
+| `cdx:vscode-extension:ide`                   | component | string                        | `vscode`, `cursor`, `vscodium`, `windsurf`                                         | When extension is discovered from a specific IDE's extension directory | Indicates which IDE the extension was found in; useful for fleet-wide inventory                                                                                                                                                                                       | Context only     |
+
+#### High-value combinations
+
+- `cdx:vscode-extension:lifecycleScripts` present + `cdx:vscode-extension:activationEvents` contains `*` — always-on extension with install-time execution
+- `cdx:vscode-extension:untrustedWorkspaces=true` + `cdx:vscode-extension:contributes` contains `filesystem-provider` — extension operates in untrusted contexts with filesystem access
+- `cdx:vscode-extension:extensionKind` contains `workspace` + `cdx:vscode-extension:executesCode=true` — extension executes arbitrary code on remote hosts
+- `cdx:vscode-extension:extensionPack` present + any member has `lifecycleScripts` — pack implicitly installs extensions with install-time risks
+- `cdx:vscode-extension:browser` present + `cdx:vscode-extension:contributes` contains `terminal-access` — potential cross-context capability confusion
+
+> **Value normalization note for workspace trust properties:**  
+> The `cdx:vscode-extension:untrustedWorkspaces` and `cdx:vscode-extension:virtualWorkspaces` properties may originate from either a boolean or an object with a `supported` field in `package.json`. cdxgen normalizes these to string values:
+>
+> - `"true"` → extension explicitly supports untrusted/virtual workspaces
+> - `"false"` → extension does not support untrusted/virtual workspaces
+> - `"limited"` → extension supports untrusted workspaces with reduced functionality (only for `untrustedWorkspaces`)
+>
+> Policy authors should compare against these string values, not booleans.
+
+> **JSONata tip for VS Code extension rules:**  
+> List-valued properties like `cdx:vscode-extension:activationEvents`, `contributes`, and `extensionKind` are comma-separated strings. Use the following pattern to match individual values:
+>
+> ```jsonata
+> $nullSafeProp($, 'cdx:vscode-extension:activationEvents') ~> $contains('*')
+> ```
+>
+> The `$trim()` step removes whitespace around comma-separated values for reliable matching.
+
+#### Example payload fragment
+
+```json
+{
+  "name": "python",
+  "publisher": "ms-python",
+  "version": "2024.8.1",
+  "type": "application",
+  "purl": "pkg:vscode-extension/ms-python/python@2024.8.1",
+  "properties": [
+    { "name": "cdx:vscode-extension:ide", "value": "vscode" },
+    {
+      "name": "cdx:vscode-extension:activationEvents",
+      "value": "onLanguage:python, onCommand:python.runLinting"
+    },
+    { "name": "cdx:vscode-extension:extensionKind", "value": "workspace" },
+    {
+      "name": "cdx:vscode-extension:extensionDependencies",
+      "value": "ms-python.vscode-pylance"
+    },
+    { "name": "cdx:vscode-extension:untrustedWorkspaces", "value": "limited" },
+    {
+      "name": "cdx:vscode-extension:contributes",
+      "value": "commands:count:42, debuggers:1, terminal-access"
+    },
+    { "name": "cdx:vscode-extension:main", "value": "./dist/extension.js" },
+    {
+      "name": "cdx:vscode-extension:lifecycleScripts",
+      "value": "postinstall, vscode:prepublish"
+    }
+  ]
+}
+```
+
+#### Alias and overlap notes
+
+- The `cdx:vscode-extension:ide` property is set to the IDE name where the extension was discovered (for example `vscode`, `cursor`, `vscodium`, `windsurf`, `positron`). Extensions found from `.vsix` files do not have this property.
+- `cdx:vscode-extension:lifecycleScripts` is analogous to `cdx:npm:risky_scripts` for npm packages — both capture install-time execution risk.
+- `cdx:vscode-extension:contributes` is a summary list, not a full enumeration. The count suffix (for example `commands:count:42`) indicates how many contribution points exist in that category.
+- Extensions discovered via osquery (`-t os`) use the same `pkg:vscode-extension` purl type and may also carry `cdx:osquery:category`.
+
 ## Consumer-oriented views
 
 ### CI/CD trust
@@ -385,6 +492,18 @@ The grouped lists below remain the authoritative inventory. The compact tables, 
 - `cdx:osquery:category`
 - `cdx:service:httpMethod`
 
+### IDE extension trust
+
+- `cdx:vscode-extension:lifecycleScripts`
+- `cdx:vscode-extension:activationEvents`
+- `cdx:vscode-extension:untrustedWorkspaces`
+- `cdx:vscode-extension:virtualWorkspaces`
+- `cdx:vscode-extension:contributes`
+- `cdx:vscode-extension:extensionDependencies`
+- `cdx:vscode-extension:extensionPack`
+- `cdx:vscode-extension:extensionKind`
+- `cdx:vscode-extension:ide`
+
 ## Entry template for future additions
 
 When a new `cdx:` property is introduced, document it using this template so the inventory stays operational instead of becoming another flat list.
@@ -410,6 +529,18 @@ Below are realistic examples showing how to use attributes individually and in c
 - Escalate severity when both are true:
   - `cdx:github:action:isShaPinned=false`
   - `cdx:github:workflow:hasWritePermissions=true` (or `cdx:github:job:hasWritePermissions=true`)
+
+**JSONata**
+
+```
+components[
+  $prop($, 'cdx:github:action:isShaPinned') = 'false'
+  and (
+    $prop($, 'cdx:github:workflow:hasWritePermissions') = 'true'
+    or $prop($, 'cdx:github:job:hasWritePermissions') = 'true'
+  )
+]
+```
 
 **OPA (Rego)**
 
@@ -469,6 +600,15 @@ input.components.exists(c,
   - `cdx:npm:hasInstallScript=true` (or `cdx:npm:risky_scripts` present)
   - `cdx:npm:isRegistryDependency=false`
 
+**JSONata**
+
+```
+components[
+  $prop($, 'cdx:npm:hasInstallScript') = 'true'
+  and $prop($, 'cdx:npm:isRegistryDependency') = 'false'
+]
+```
+
 **OPA (Rego)**
 
 ```rego
@@ -516,6 +656,18 @@ input.components.exists(c,
 **Combined signal**
 
 - Combine non-approved registries or local checkouts with environment-specific release policy.
+
+**JSONata**
+
+```
+components[
+  $hasProp($, 'cdx:pypi:registry')
+  and not(
+    $prop($, 'cdx:pypi:registry') = 'https://pypi.org/simple'
+    or $prop($, 'cdx:pypi:registry') = 'https://pypi.org'
+  )
+]
+```
 
 **OPA (Rego)**
 
@@ -565,6 +717,20 @@ input.components.exists(c,
 
 - Consider a Nix dependency policy-compliant only when both lock properties are present.
 - Treat Go local replacements as non-hermetic unless explicitly allowed.
+
+**JSONata**
+
+```
+components[
+  $startsWith(purl, 'pkg:nix/')
+  and (
+    not($hasProp($, 'cdx:nix:revision'))
+    or not($hasProp($, 'cdx:nix:nar_hash'))
+  )
+]
+```
+
+For go, use `$hasProp($, 'cdx:go:local_dir')`
 
 **OPA (Rego)**
 
@@ -625,6 +791,15 @@ input.components.exists(c,
 
 - Require both metadata properties to exist before generating a “trusted” attestation.
 
+**JSONata**
+
+```
+not(
+  $count(metadata.properties[name = 'cdx:bom:componentTypes']) > 0
+  and $count(metadata.properties[name = 'cdx:bom:componentSrcFiles']) > 0
+)
+```
+
 **OPA (Rego)**
 
 ```rego
@@ -667,6 +842,15 @@ deny[msg] {
 
 - Escalate when a workflow can mint OIDC tokens and the action is neither official nor otherwise trusted by organization policy.
 
+**JSONata**
+
+```
+components[
+  $prop($, 'cdx:github:workflow:hasIdTokenWrite') = 'true'
+  and $prop($, 'cdx:actions:isOfficial') = 'false'
+]
+```
+
 **OPA (Rego)**
 
 ```rego
@@ -695,10 +879,96 @@ input.components.exists(c,
 )
 ```
 
+<a id="example-7"></a>
+
+### 7) Audit VS Code extensions for install-time execution and host access
+
+**Individual signals**
+
+- `cdx:vscode-extension:lifecycleScripts` present (especially containing `postinstall`) means the extension runs scripts during installation.
+- `cdx:vscode-extension:activationEvents` containing `*` means the extension activates on every workspace open.
+- `cdx:vscode-extension:contributes` containing `terminal-access`, `filesystem-provider`, or `authentication-provider` indicates privileged host interaction capabilities.
+
+**Combined signal**
+
+- Escalate when an always-on extension also has terminal access or lifecycle scripts:
+  - `cdx:vscode-extension:activationEvents` contains `*`
+  - `cdx:vscode-extension:contributes` contains `terminal-access`
+  - `cdx:vscode-extension:lifecycleScripts` present
+
+**JSONata**
+
+```
+components[
+  $startsWith(purl, 'pkg:vscode-extension/')
+  and $hasProp($, 'cdx:vscode-extension:lifecycleScripts')
+]
+```
+
+**OPA (Rego)**
+
+```rego
+package cdxgen.policies
+
+has_prop(c, name) {
+  some p in c.properties
+  p.name == name
+}
+
+prop_value(c, name) := v {
+  some p in c.properties
+  p.name == name
+  v := p.value
+}
+
+deny[msg] {
+  some c in input.components
+  startswith(c.purl, "pkg:vscode-extension/")
+  has_prop(c, "cdx:vscode-extension:lifecycleScripts")
+  msg := sprintf("VS Code extension has lifecycle scripts: %s", [c.purl])
+}
+
+warn[msg] {
+  some c in input.components
+  startswith(c.purl, "pkg:vscode-extension/")
+  v := prop_value(c, "cdx:vscode-extension:activationEvents")
+  contains(v, "*")
+  msg := sprintf("VS Code extension uses wildcard activation (always-on): %s", [c.purl])
+}
+
+deny[msg] {
+  some c in input.components
+  startswith(c.purl, "pkg:vscode-extension/")
+  v := prop_value(c, "cdx:vscode-extension:activationEvents")
+  contains(v, "*")
+  cv := prop_value(c, "cdx:vscode-extension:contributes")
+  contains(cv, "terminal-access")
+  msg := sprintf("Always-on VS Code extension with terminal access: %s", [c.purl])
+}
+```
+
+**CEL**
+
+```cel
+// extension with lifecycle scripts
+input.components.exists(c,
+  c.purl.startsWith("pkg:vscode-extension/") &&
+  c.properties.exists(p, p.name == "cdx:vscode-extension:lifecycleScripts")
+)
+
+// always-on extension with terminal access
+input.components.exists(c,
+  c.purl.startsWith("pkg:vscode-extension/") &&
+  c.properties.exists(p, p.name == "cdx:vscode-extension:activationEvents" && p.value.contains("*")) &&
+  c.properties.exists(p, p.name == "cdx:vscode-extension:contributes" && p.value.contains("terminal-access"))
+)
+```
+
 ## Notes for policy authors
 
 - Prefer evaluating these as **context enrichers** rather than strict truth assertions unless you explicitly normalize missing-vs-false semantics.
 - Treat workspace/local path indicators (`isLink`, `resolvedPath`, `localCheckoutPath`, `projectDir`, `flake_dir`, `local_dir`) as provenance signals that may require stronger trust controls.
 - Treat execution-related indicators (`risky_scripts`, `hasInstallScript`, CI write permissions, OIDC enablement, action pinning type) as high-priority triage fields for software supply chain risk.
+- Treat VS Code extension lifecycle scripts (`cdx:vscode-extension:lifecycleScripts`) with the same urgency as npm install scripts (`cdx:npm:hasInstallScript`); both represent install-time code execution risk. Wildcard activation events (`*`) combined with terminal access or filesystem provider contributions indicate extensions with broad host access capabilities.
 - In Rego examples, use helper predicates such as `has_prop(c, name, value)` to ensure all property checks evaluate against the same component instance, avoiding unintended cross-component matches from repeated `c.properties[_]` array iteration.
 - Match overlapping keys where noted (`cdx:npm:isWorkspace` and `cdx:npm:is_workspace`; Azure pool defaults and job overrides) so older and newer BOMs behave consistently in policy engines.
