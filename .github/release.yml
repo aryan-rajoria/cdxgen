@@ -9,7 +9,7 @@ changelog:
         - ai-pair
     - title: 🤖 AI-assisted Changes
       labels:
-        - ai-assisted
+        - AI-assisted
     - title: 🧠 Machine-Learning Changes
       labels:
         - ml
