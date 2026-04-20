@@ -101,8 +101,8 @@ Options:
       --validate                  Validate the generated SBOM using json schema. Defaults to true. Pass --no-validate to
                                    disable.                                                    [boolean] [default: true]
       --evidence                  Generate SBOM with evidence for supported languages.        [boolean] [default: false]
-      --spec-version              CycloneDX Specification version to use. Defaults to 1.6
-                                                                   [number] [choices: 1.4, 1.5, 1.6, 1.7] [default: 1.6]
+      --spec-version              CycloneDX Specification version to use. Defaults to 1.7
+                                                                   [number] [choices: 1.4, 1.5, 1.6, 1.7] [default: 1.7]
       --filter                    Filter components containing this word in purl or component.properties.value. Multiple
                                    values allowed.                                                               [array]
       --only                      Include components only containing this word in purl. Useful to generate BOM with firs
