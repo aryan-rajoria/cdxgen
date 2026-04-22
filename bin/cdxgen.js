@@ -171,6 +171,24 @@ const args = _yargs
     description: "Dependency track parent project id",
     type: "string",
   })
+  .option("parent-project-name", {
+    description: "Dependency track parent project name",
+    type: "string",
+  })
+  .option("parent-project-version", {
+    description: "Dependency track parent project version",
+    type: "string",
+  })
+  .option("auto-create", {
+    description: "Dependency track autoCreate value for BOM uploads",
+    type: "boolean",
+    hidden: true,
+  })
+  .option("is-latest", {
+    description: "Dependency track isLatest value for BOM uploads",
+    type: "boolean",
+    hidden: true,
+  })
   .option("required-only", {
     type: "boolean",
     description:
