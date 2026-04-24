@@ -4,11 +4,13 @@ changelog:
       labels:
         - breaking
         - possibly breaking
+    - title: 🤖 AI-auto Changes
+      labels:
+        - ai-auto
+        - ai-copilot
     - title: 🤖 AI-pair Changes
       labels:
         - ai-pair
-    - title: 🤖 AI-assisted Changes
-      labels:
         - AI-assisted
     - title: 🧠 Machine-Learning Changes
       labels:
