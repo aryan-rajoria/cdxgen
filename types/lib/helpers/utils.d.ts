@@ -2011,6 +2011,7 @@ export const PROJECT_TYPE_ALIASES: {
     nix: string[];
     caxa: string[];
     "vscode-extension": string[];
+    "chrome-extension": string[];
 };
 export namespace PACKAGE_MANAGER_ALIASES {
     let scala: string[];
