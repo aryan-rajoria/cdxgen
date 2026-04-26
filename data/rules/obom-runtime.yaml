@@ -1,0 +1,420 @@
+# OBOM Runtime Security & Compliance Rules
+# Category: obom-runtime
+# Detects host posture, persistence, and runtime indicators from osquery-derived OBOM components
+
+- id: OBOM-LNX-001
+  name: "Linux systemd unit sourced from temporary path"
+  description: "Systemd units loaded from /tmp or /var/tmp can indicate unauthorized persistence."
+  severity: high
+  category: obom-runtime
+  condition: |
+    components[
+      $prop($, 'cdx:osquery:category') = 'systemd_units'
+      and (
+        $contains($nullSafeProp($, 'fragment_path'), '/tmp/')
+        or $contains($nullSafeProp($, 'fragment_path'), '/var/tmp/')
+        or $contains($nullSafeProp($, 'source_path'), '/tmp/')
+        or $contains($nullSafeProp($, 'source_path'), '/var/tmp/')
+      )
+    ]
+  location: |
+    {
+      "bomRef": $."bom-ref",
+      "purl": purl
+    }
+  message: "Systemd unit '{{ name }}' references temporary execution artifacts in its unit file path configuration"
+  mitigation: "Move unit files to trusted system paths, validate ownership/permissions, and re-enable only approved services."
+  evidence: |
+    {
+      "activeState": $prop($, 'active_state'),
+      "unitFileState": $prop($, 'unit_file_state'),
+      "fragmentPath": $prop($, 'fragment_path'),
+      "sourcePath": $prop($, 'source_path')
+    }
+
+- id: OBOM-LNX-002
+  name: "Linux sudoers broad privilege rule"
+  description: "Sudoers entries allowing unrestricted command execution increase lateral movement and privilege escalation risk."
+  severity: high
+  category: obom-runtime
+  condition: |
+    components[
+      $prop($, 'cdx:osquery:category') = 'sudoers_snapshot'
+      and (
+        $contains(description, 'NOPASSWD:ALL')
+        or $contains(description, 'ALL=(ALL) ALL')
+      )
+    ]
+  location: |
+    {
+      "bomRef": $."bom-ref",
+      "purl": purl
+    }
+  message: "Sudo policy '{{ name }}' contains broad privilege grant: {{ description }}"
+  mitigation: "Replace broad grants with command-specific allowlists and enforce MFA/approval workflows for privileged operations."
+  evidence: |
+    {
+      "sourceFile": $prop($, 'path'),
+      "ruleDetails": description
+    }
+
+- id: OBOM-LNX-003
+  name: "Root authorized_keys entry without restrictions"
+  description: "Root SSH keys without command/from/no-agent-forwarding restrictions weaken access controls and traceability."
+  severity: medium
+  category: obom-runtime
+  condition: |
+    components[
+      $prop($, 'cdx:osquery:category') = 'authorized_keys_snapshot'
+      and name = 'root'
+      and $hasProp($, 'options')
+      and $safeStr($prop($, 'options')) = ''
+    ]
+  location: |
+    {
+      "bomRef": $."bom-ref",
+      "purl": purl
+    }
+  message: "Root authorized_keys entry in '{{ $prop($, 'key_file') }}' lacks restrictive key options"
+  mitigation: "Apply restrictive key options (from=, command=, no-agent-forwarding, no-port-forwarding) and rotate unmanaged keys."
+  evidence: |
+    {
+      "account": name,
+      "algorithm": version,
+      "keyFile": $prop($, 'key_file'),
+      "options": $prop($, 'options')
+    }
+
+- id: OBOM-WIN-001
+  name: "Windows drive without BitLocker protection"
+  description: "Drives with disabled BitLocker protection can violate endpoint encryption requirements and increase data exposure risk."
+  severity: high
+  category: obom-runtime
+  condition: |
+    components[
+      $prop($, 'cdx:osquery:category') = 'windows_bitlocker_info'
+      and $safeStr($prop($, 'protection_status')) != '1'
+    ]
+  location: |
+    {
+      "bomRef": $."bom-ref",
+      "purl": purl
+    }
+  message: "BitLocker protection is not enabled for drive '{{ version }}' (device '{{ name }}')"
+  mitigation: "Enable BitLocker with approved encryption policy and escrow recovery keys in managed KMS/AD."
+  evidence: |
+    {
+      "deviceId": name,
+      "driveLetter": version,
+      "protectionStatus": $prop($, 'protection_status'),
+      "encryptionMethod": $prop($, 'encryption_method'),
+      "percentageEncrypted": $prop($, 'percentage_encrypted')
+    }
+
+- id: OBOM-WIN-002
+  name: "Windows Security Center unhealthy state"
+  description: "Poor Security Center health indicates one or more key endpoint protections are disabled or degraded."
+  severity: high
+  category: obom-runtime
+  condition: |
+    components[
+      $prop($, 'cdx:osquery:category') = 'windows_security_center'
+      and (
+        name = 'Poor'
+        or version = 'Poor'
+        or description = 'Poor'
+        or $prop($, 'internet_settings') = 'Poor'
+        or $prop($, 'windows_security_center_service') = 'Poor'
+        or $prop($, 'user_account_control') = 'Poor'
+      )
+    ]
+  location: |
+    {
+      "bomRef": $."bom-ref",
+      "purl": purl
+    }
+  message: "Windows Security Center reports degraded protection posture (antivirus={{ name }}, firewall={{ version }}, autoupdate={{ description }})"
+  mitigation: "Restore endpoint protection controls and enforce policy baselines for AV, firewall, updates, and UAC."
+  evidence: |
+    {
+      "antivirus": name,
+      "firewall": version,
+      "autoupdate": description,
+      "internetSettings": $prop($, 'internet_settings'),
+      "securityCenterService": $prop($, 'windows_security_center_service'),
+      "uac": $prop($, 'user_account_control')
+    }
+
+- id: OBOM-WIN-003
+  name: "Windows Run key references temporary/script execution path"
+  description: "Run/RunOnce entries launching from temp or encoded script commands are common persistence techniques."
+  severity: critical
+  category: obom-runtime
+  condition: |
+    components[
+      $prop($, 'cdx:osquery:category') = 'windows_run_keys'
+      and (
+        $contains($lowercase($safeStr(description)), '\\appdata\\local\\temp\\')
+        or $contains($lowercase($safeStr(description)), '\\temp\\')
+        or $contains($lowercase($safeStr(description)), '-enc ')
+      )
+    ]
+  location: |
+    {
+      "bomRef": $."bom-ref",
+      "purl": purl
+    }
+  message: "Run key '{{ name }}' launches potentially suspicious command/path: {{ description }}"
+  mitigation: "Validate publisher and hash of the referenced executable/script, remove unauthorized entries, and investigate parent change events."
+  evidence: |
+    {
+      "registryPath": name,
+      "command": description,
+      "registryKey": $prop($, 'key'),
+      "mtime": version
+    }
+
+- id: OBOM-MAC-001
+  name: "macOS firewall disabled or stealth mode off"
+  description: "ALF misconfiguration can expose endpoints to unsolicited inbound traffic and weakens host hardening baselines."
+  severity: high
+  category: obom-runtime
+  condition: |
+    components[
+      $prop($, 'cdx:osquery:category') = 'alf'
+      and (
+        $safeStr(version) = '0'
+        or $safeStr($prop($, 'stealth_enabled')) = '0'
+      )
+    ]
+  location: |
+    {
+      "bomRef": $."bom-ref",
+      "purl": purl
+    }
+  message: "macOS ALF posture is weak (global_state={{ version }}, stealth_enabled={{ $prop($, 'stealth_enabled') }})"
+  mitigation: "Enable ALF and stealth mode via managed profile or MDM baseline."
+  evidence: |
+    {
+      "globalState": version,
+      "stealthEnabled": $prop($, 'stealth_enabled'),
+      "allowSignedEnabled": $prop($, 'allow_signed_enabled'),
+      "loggingEnabled": $prop($, 'logging_enabled')
+    }
+
+- id: OBOM-MAC-002
+  name: "macOS launchd item from user-writable temporary path"
+  description: "Launchd agents/daemons sourced from temporary paths are a strong persistence and execution abuse signal."
+  severity: critical
+  category: obom-runtime
+  condition: |
+    components[
+      $prop($, 'cdx:osquery:category') = 'launchd_services'
+      and (
+        $contains($nullSafeProp($, 'path'), '/tmp/')
+        or $contains($nullSafeProp($, 'path'), '/var/tmp/')
+        or $contains($nullSafeProp($, 'program'), '/tmp/')
+        or $contains($nullSafeProp($, 'program'), '/var/tmp/')
+      )
+      and (
+        $safeStr($prop($, 'run_at_load')) = 'true'
+        or $safeStr($prop($, 'run_at_load')) = '1'
+        or $safeStr($prop($, 'keep_alive')) = 'true'
+        or $safeStr($prop($, 'keep_alive')) = '1'
+      )
+    ]
+  location: |
+    {
+      "bomRef": $."bom-ref",
+      "purl": purl
+    }
+  message: "Launchd entry '{{ name }}' executes from temporary path and is configured for persistence"
+  mitigation: "Remove unauthorized plist entries, relocate approved binaries to trusted paths, and enforce signed launchd payloads."
+  evidence: |
+    {
+      "label": $prop($, 'label'),
+      "plistPath": $prop($, 'path'),
+      "program": $prop($, 'program'),
+      "runAtLoad": $prop($, 'run_at_load'),
+      "keepAlive": $prop($, 'keep_alive')
+    }
+
+- id: OBOM-MAC-003
+  name: "macOS firewall exception for binary in untrusted user path"
+  description: "ALF exceptions for binaries in user Downloads/Desktop/tmp increase risk of untrusted inbound network exposure."
+  severity: medium
+  category: obom-runtime
+  condition: |
+    components[
+      $prop($, 'cdx:osquery:category') = 'alf_exceptions'
+      and (
+        $contains($safeStr(name), '/Users/')
+        and (
+          $contains($safeStr(name), '/Downloads/')
+          or $contains($safeStr(name), '/Desktop/')
+          or $contains($safeStr(name), '/tmp/')
+        )
+      )
+    ]
+  location: |
+    {
+      "bomRef": $."bom-ref",
+      "purl": purl
+    }
+  message: "ALF exception allows inbound access for risky path '{{ name }}'"
+  mitigation: "Restrict exceptions to signed, managed applications in trusted system paths."
+  evidence: |
+    {
+      "path": name,
+      "state": version
+    }
+
+- id: OBOM-LNX-004
+  name: "Linux shell history contains suspicious download-execute pattern"
+  description: "Shell history with direct download-and-execute commands may indicate malware staging or hands-on-keyboard activity."
+  severity: high
+  category: obom-runtime
+  condition: |
+    components[
+      $prop($, 'cdx:osquery:category') = 'shell_history_snapshot'
+      and (
+        ($contains($lowercase(description), 'curl ') and $contains($lowercase(description), '| sh'))
+        or ($contains($lowercase(description), 'wget ') and $contains($lowercase(description), '| bash'))
+        or $contains($lowercase(description), 'base64 -d')
+        or $contains($lowercase(description), 'nc -e ')
+      )
+    ]
+  location: |
+    {
+      "bomRef": $."bom-ref",
+      "purl": purl
+    }
+  message: "Suspicious shell history entry for user '{{ name }}': {{ description }}"
+  mitigation: "Correlate with process/network telemetry, validate command intent, and isolate host if command lineage is untrusted."
+  evidence: |
+    {
+      "account": name,
+      "command": description,
+      "historyFile": $prop($, 'history_file'),
+      "timestamp": $prop($, 'time')
+    }
+
+- id: OBOM-LNX-005
+  name: "Docker API exposed over unauthenticated TCP port"
+  description: "Dockerd listening on TCP 2375 enables remote daemon control if not protected by network controls and TLS."
+  severity: critical
+  category: obom-runtime
+  condition: |
+    components[
+      $prop($, 'cdx:osquery:category') = 'listening_ports'
+      and $safeStr($prop($, 'port')) = '2375'
+      and (
+        $safeStr($prop($, 'address')) = '0.0.0.0'
+        or $safeStr($prop($, 'address')) = '::'
+      )
+    ]
+  location: |
+    {
+      "bomRef": $."bom-ref",
+      "purl": purl
+    }
+  message: "Potentially insecure Docker API exposure detected on {{ $prop($, 'address') }}:{{ $prop($, 'port') }} for process '{{ name }}'"
+  mitigation: "Disable insecure TCP listener, enforce TLS/mTLS, and restrict daemon access to trusted local interfaces."
+  evidence: |
+    {
+      "process": name,
+      "pid": $prop($, 'pid'),
+      "address": $prop($, 'address'),
+      "port": $prop($, 'port'),
+      "protocol": $prop($, 'protocol')
+    }
+
+- id: OBOM-WIN-004
+  name: "Hidden scheduled task uses suspicious execution path"
+  description: "Enabled hidden tasks executing from temp paths or encoded script launchers are common persistence tradecraft."
+  severity: high
+  category: obom-runtime
+  condition: |
+    components[
+      $prop($, 'cdx:osquery:category') = 'scheduled_tasks'
+      and $safeStr($prop($, 'enabled')) = '1'
+      and $safeStr($prop($, 'hidden')) = '1'
+      and (
+        $contains($lowercase($nullSafeProp($, 'path')), '\\temp\\')
+        or ($contains($lowercase($nullSafeProp($, 'action')), 'powershell') and $contains($lowercase($nullSafeProp($, 'action')), '-enc '))
+      )
+    ]
+  location: |
+    {
+      "bomRef": $."bom-ref",
+      "purl": purl
+    }
+  message: "Hidden scheduled task '{{ name }}' has suspicious action/path: {{ $prop($, 'action') }}"
+  mitigation: "Validate author and binary lineage, disable unauthorized tasks, and investigate task registration event history."
+  evidence: |
+    {
+      "taskName": name,
+      "taskPath": $prop($, 'path'),
+      "action": $prop($, 'action'),
+      "state": $prop($, 'state')
+    }
+
+- id: OBOM-WIN-005
+  name: "Auto-start Windows service points to user-writable path"
+  description: "Auto-start services from temp or AppData paths may indicate privilege persistence through service hijacking."
+  severity: critical
+  category: obom-runtime
+  condition: |
+    components[
+      $prop($, 'cdx:osquery:category') = 'services_snapshot'
+      and $safeStr($prop($, 'start_type')) = 'AUTO_START'
+      and (
+        $contains($lowercase($nullSafeProp($, 'path')), '\\temp\\')
+        or $contains($lowercase($nullSafeProp($, 'path')), '\\appdata\\')
+      )
+    ]
+  location: |
+    {
+      "bomRef": $."bom-ref",
+      "purl": purl
+    }
+  message: "Auto-start service '{{ name }}' launches from a user-writable path: {{ $prop($, 'path') }}"
+  mitigation: "Move binaries to protected system paths, lock ACLs, and validate service image hashes/signatures."
+  evidence: |
+    {
+      "serviceName": name,
+      "displayName": $prop($, 'display_name'),
+      "servicePath": $prop($, 'path'),
+      "account": $prop($, 'user_account')
+    }
+
+- id: OBOM-MAC-004
+  name: "macOS launchd override disables Apple-managed service"
+  description: "Launchd overrides disabling Apple-managed services can indicate tampering with built-in security or platform controls."
+  severity: medium
+  category: obom-runtime
+  condition: |
+    components[
+      $prop($, 'cdx:osquery:category') = 'launchd_overrides'
+      and $safeStr($prop($, 'key')) = 'Disabled'
+      and (
+        $safeStr($prop($, 'value')) = '1'
+        or $lowercase($safeStr($prop($, 'value'))) = 'true'
+      )
+      and $startsWith($safeStr($prop($, 'label')), 'com.apple.')
+    ]
+  location: |
+    {
+      "bomRef": $."bom-ref",
+      "purl": purl
+    }
+  message: "Launchd override disables Apple-managed label '{{ $prop($, 'label') }}'"
+  mitigation: "Review override provenance, restore approved launchd settings, and investigate unauthorized local configuration changes."
+  evidence: |
+    {
+      "label": $prop($, 'label'),
+      "key": $prop($, 'key'),
+      "value": $prop($, 'value'),
+      "uid": $prop($, 'uid'),
+      "plistPath": $prop($, 'path')
+    }
