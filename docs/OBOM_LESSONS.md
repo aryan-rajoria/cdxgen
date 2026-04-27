@@ -26,7 +26,7 @@ Most early compromise persistence techniques show up in host startup surfaces.
 
 ### What to review first
 
-- Linux: `systemd_units`, `sudoers_snapshot`, `authorized_keys_snapshot`
+- Linux: `systemd_units`, `sudoers_snapshot`, `authorized_keys_snapshot`, `elevated_processes`, `sudo_executions`, `privilege_transitions`, `privileged_listening_ports`
 - Windows: `windows_run_keys`, `scheduled_tasks`, `services_snapshot`, WMI tables
 - macOS: `launchd_services`, `launchd_overrides`, `alf_exceptions`
 
@@ -35,9 +35,12 @@ Most early compromise persistence techniques show up in host startup surfaces.
 ```bash
 cdxi obom.json
 .osinfocategories
-.print scheduled_tasks
-.print windows_run_keys
-.print launchd_services
+.scheduled_tasks
+.windows_run_keys
+.launchd_services
+.elevated_processes
+.sudo_executions
+.privileged_listening_ports
 ```
 
 ## 3) IR lesson: build a “possible initial access” shortlist
@@ -45,6 +48,8 @@ cdxi obom.json
 Focus on runtime records that often correlate with intrusion playbooks:
 
 - shells/processes with network sockets (`process_open_sockets`, `listening_ports`)
+- privileged listeners and admin surfaces (`privileged_listening_ports`, `elevated_processes`)
+- interactive privilege changes (`sudo_executions`, `privilege_transitions`)
 - suspicious startup references to temp/user-writable paths
 - encoded script launches (`-enc`) and script interpreters from startup keys/tasks
 
@@ -58,6 +63,7 @@ Then map findings to:
 Use OBOM sections as auditable evidence artifacts:
 
 - **Access control / privileged operations**: `sudoers_snapshot`, account/session tables
+- **Privileged package exposure**: `elevated_processes`, `sudo_executions`, `privilege_transitions`, `privileged_listening_ports`
 - **Change and configuration management**: startup/task/service/launchd/run-key tables
 - **Endpoint protection and hardening**: `windows_security_center`, `windows_security_products`, `alf`, `windows_bitlocker_info`
 - **Data protection**: drive encryption posture from BitLocker and related host controls
@@ -86,19 +92,12 @@ Suggested policy profile:
 4. Export findings into incident/compliance workflows.
 5. Track baseline drift by comparing periodic OBOMs.
 
----
+## 7) Privileged package exposure workflow
 
-## Refactor opportunities from `lib/helpers/utils.js`
+Use this when you want BOM audit to spotlight packages and services that run with elevated privileges:
 
-To improve maintainability, continue extracting domain-specific logic from `utils.js` into dedicated helper modules with focused tests.
-
-### Already started in this branch
-
-- `lib/helpers/osqueryTransform.js` (new): isolated osquery row transformation helpers
-- `lib/helpers/osqueryTransform.poku.js` (new): focused unit tests
-
-### Next recommended candidates
-
-- `convertOSQueryResults` and related package-manager enrichers (`executeDpkgList`, `executeRpmList`, etc.) into a dedicated `osquery` helper module.
-- Additional language/ecosystem parsing slices from `utils.js` into per-ecosystem helper modules with their own `*.poku.js` tests.
-- Keep `utils.js` as a stable façade while progressively delegating implementation to smaller modules.
+1. Generate an OBOM with audit enabled.
+2. Review `obom-runtime` findings for `OBOM-LNX-006` through `OBOM-LNX-011`.
+3. Inspect `elevated_processes`, `sudo_executions`, `privilege_transitions`, and `privileged_listening_ports` in the REPL.
+4. Confirm whether the package, listener, or privilege transition maps to an approved change.
+5. Compare periodic OBOMs to catch newly introduced privileged packages and admin surfaces.
