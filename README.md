@@ -12,7 +12,7 @@
 
 <img src="./docs/_media/cdxgen.png" width="200" height="auto" />
 
-cdxgen is a CLI tool, library, [REPL](./ADVANCED.md), and server to create, validate, sign, and verify [CycloneDX][cyclonedx-homepage] Bill of Materials (BOM) containing an aggregate of all project dependencies in JSON format. CycloneDX is a full-stack BOM specification that is easily created, human and machine-readable, and simple to parse. The tool supports CycloneDX specification versions from 1.5 - 1.7.
+cdxgen is a CLI tool, library, [REPL](./ADVANCED.md), and server to create, validate, sign, and verify software BOMs. It generates CycloneDX JSON BOMs and supports SPDX 3.0.1 JSON-LD export. CycloneDX is a full-stack BOM specification that is easily created, human and machine-readable, and simple to parse. The tool supports CycloneDX specification versions from 1.5 - 1.7.
 
 Supported BOM formats:
 
@@ -22,6 +22,11 @@ Supported BOM formats:
 - Software-as-a-Service (SaaSBOM) - For Java, Python, JavaScript, TypeScript, and PHP projects.
 - Attestations (CDXA) - Generate SBOM with templates for multiple standards. Sign the BOM document at a granular level to improve authenticity.
 - Vulnerability Disclosure Report (VDR) - Use cdxgen with [OWASP depscan](https://github.com/owasp-dep-scan/dep-scan) to automate the generation of VDR at scale.
+
+Supported output document formats:
+
+- CycloneDX JSON (primary native format)
+- SPDX 3.0.1 JSON-LD (`cdxgen --format spdx` or `cdx-convert`)
 
 ## Why cdxgen?
 
@@ -519,7 +524,19 @@ cdxgen can automatically detect names of services from YAML manifests such as do
 
 ## Conversion to SPDX format
 
-Use the [CycloneDX CLI][cyclonedx-cli-github] tool for advanced use cases such as conversion, diff and merging.
+For direct conversion of an existing CycloneDX JSON BOM to SPDX JSON-LD, use
+the bundled `cdx-convert` command:
+
+```shell
+cdx-convert -i bom.json -o bom.spdx.json
+```
+
+`cdx-convert` currently supports CycloneDX 1.6 and 1.7 inputs and exports
+SPDX 3.0.1 JSON-LD.
+
+Use `cdxgen --format spdx` (or `--format cyclonedx,spdx`) when generating BOMs.
+Use the [CycloneDX CLI][cyclonedx-cli-github] tool for advanced use cases such
+as diff and merging.
 
 ## Including .NET Global Assembly Cache dependencies in the results
 
