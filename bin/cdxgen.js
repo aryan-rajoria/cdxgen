@@ -487,6 +487,34 @@ const args = _yargs
     default: "high",
     hidden: true,
   })
+  .option("bom-audit-scope", {
+    description:
+      "Predictive audit target scope. Use 'required' to scan only dependencies with scope=required (missing scope is treated as required).",
+    type: "string",
+    choices: ["all", "required"],
+    default: "all",
+    hidden: true,
+  })
+  .option("bom-audit-max-targets", {
+    description:
+      "Optional upper bound for predictive audit targets. By default cdxgen scans required dependencies first and expands to at least 50 targets.",
+    type: "number",
+    hidden: true,
+  })
+  .option("bom-audit-include-trusted", {
+    description:
+      "Include packages already marked with trusted publishing metadata in predictive BOM audit target selection.",
+    type: "boolean",
+    default: false,
+    hidden: true,
+  })
+  .option("bom-audit-only-trusted", {
+    description:
+      "Restrict predictive BOM audit target selection to packages marked with trusted publishing metadata.",
+    type: "boolean",
+    default: false,
+    hidden: true,
+  })
   .completion("completion", "Generate bash/zsh completion")
   .array("type")
   .array("excludeType")
@@ -540,6 +568,12 @@ if (args.help) {
   console.log(`${retrieveCdxgenVersion()}\n`);
   _yargs.showHelp();
   process.exit(0);
+}
+if (args.bomAuditIncludeTrusted && args.bomAuditOnlyTrusted) {
+  console.error(
+    "Use either --bom-audit-include-trusted or --bom-audit-only-trusted, not both.",
+  );
+  process.exit(1);
 }
 
 // Native Enterprise Network Configuration (Node.js v22.21+, Bun, Deno)
@@ -1235,7 +1269,20 @@ const writeCycloneDxOutput = (jsonFile, bomJson, options) => {
   }
   prepareEnv(srcDir, options);
   thoughtLog("Getting ready to generate the BOM ⚡️.");
-  let bomNSData = (await createBom(srcDir, options)) || {};
+  const originalFetchPackageMetadata = process.env.CDXGEN_FETCH_PKG_METADATA;
+  if (options.bomAudit) {
+    process.env.CDXGEN_FETCH_PKG_METADATA = "true";
+  }
+  let bomNSData;
+  try {
+    bomNSData = (await createBom(srcDir, options)) || {};
+  } finally {
+    if (originalFetchPackageMetadata === undefined) {
+      delete process.env.CDXGEN_FETCH_PKG_METADATA;
+    } else {
+      process.env.CDXGEN_FETCH_PKG_METADATA = originalFetchPackageMetadata;
+    }
+  }
   if (bomNSData?.bomJson) {
     thoughtLog(
       "Tweaking the generated BOM data with useful annotations and properties.",
@@ -1244,6 +1291,14 @@ const writeCycloneDxOutput = (jsonFile, bomJson, options) => {
   // Add extra metadata and annotations with post processing
   bomNSData = postProcess(bomNSData, options, srcDir);
   if (options.bomAudit && bomNSData?.bomJson) {
+    const { finalizeAuditReport, runAuditFromBoms } = await import(
+      "../lib/audit/index.js"
+    );
+    const { createProgressTracker } = await import("../lib/audit/progress.js");
+    const { collectAuditTargets } = await import("../lib/audit/targets.js");
+    const { formatPredictiveAnnotations, renderConsoleReport } = await import(
+      "../lib/audit/reporters.js"
+    );
     const {
       auditBom,
       formatAnnotations,
@@ -1268,6 +1323,106 @@ const writeCycloneDxOutput = (jsonFile, bomJson, options) => {
     }
     if (isSecureMode && hasCriticalFindings(postAuditFindings, options)) {
       console.error("\nSecure mode: Critical audit findings detected.");
+      console.error(
+        "Review findings above or adjust --bom-audit-fail-severity to proceed.",
+      );
+      if (cleanup) {
+        cleanupSourceDir(srcDir);
+      }
+      process.exit(1);
+    }
+
+    thoughtLog("Let's run predictive dependency audit...");
+    const progressTracker = createProgressTracker();
+    const predictiveAuditScope =
+      options.bomAuditScope === "required" ? "required" : undefined;
+    const predictiveAuditTrusted = options.bomAuditOnlyTrusted
+      ? "only"
+      : options.bomAuditIncludeTrusted
+        ? "include"
+        : undefined;
+    const requiredAuditTargetCount = collectAuditTargets(
+      [
+        {
+          bomJson: bomNSData.bomJson,
+          source: filePath,
+        },
+      ],
+      {
+        scope: "required",
+        trusted: predictiveAuditTrusted,
+      },
+    ).targets.length;
+    const predictiveAuditMaxTargets =
+      typeof options.bomAuditMaxTargets === "number" &&
+      options.bomAuditMaxTargets > 0
+        ? options.bomAuditMaxTargets
+        : predictiveAuditScope === "required"
+          ? undefined
+          : Math.max(50, requiredAuditTargetCount);
+    let predictiveReport;
+    try {
+      predictiveReport = await runAuditFromBoms(
+        [
+          {
+            bomJson: bomNSData.bomJson,
+            source: filePath,
+          },
+        ],
+        {
+          categories: options.bomAuditCategories
+            ? options.bomAuditCategories
+                .split(",")
+                .map((category) => category.trim())
+                .filter(Boolean)
+            : undefined,
+          failSeverity: options.bomAuditFailSeverity,
+          maxTargets: predictiveAuditMaxTargets,
+          minSeverity: options.bomAuditMinSeverity,
+          onProgress: progressTracker.onProgress,
+          scope: predictiveAuditScope,
+          trusted: predictiveAuditTrusted,
+          trustedSelectionHelp:
+            "Use --bom-audit-include-trusted to include them or --bom-audit-only-trusted to audit just those packages.",
+        },
+      );
+    } finally {
+      progressTracker.stop();
+    }
+    if (predictiveReport.summary.totalTargets > 0) {
+      process.stderr.write(
+        renderConsoleReport(predictiveReport, {
+          minSeverity: options.bomAuditMinSeverity,
+        }),
+      );
+    } else if (DEBUG_MODE) {
+      console.log("Predictive BOM audit: No supported npm/PyPI targets found");
+    }
+    const predictiveAnnotations = formatPredictiveAnnotations(
+      predictiveReport,
+      bomNSData.bomJson,
+      {
+        minSeverity: options.bomAuditMinSeverity,
+      },
+    );
+    if (predictiveAnnotations.length && options.specVersion >= 1.4) {
+      bomNSData.bomJson.annotations = [
+        ...(bomNSData.bomJson.annotations || []),
+        ...predictiveAnnotations,
+      ];
+      thoughtLog(
+        `Embedded ${predictiveAnnotations.length} predictive audit annotations`,
+      );
+    }
+    const predictiveResult = finalizeAuditReport(predictiveReport, {
+      failSeverity: options.bomAuditFailSeverity,
+      minSeverity: options.bomAuditMinSeverity,
+      report: "console",
+    });
+    if (isSecureMode && predictiveResult.exitCode === 3) {
+      console.error(
+        "\nSecure mode: Predictive audit findings exceeded the configured threshold.",
+      );
       console.error(
         "Review findings above or adjust --bom-audit-fail-severity to proceed.",
       );
