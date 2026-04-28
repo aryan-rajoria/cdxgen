@@ -4,6 +4,36 @@
 
 In CLI mode, you can invoke cdxgen with Source Code, Container Image, or Binary Artifact as input to generate a Software Bill-of-Materials document. This can be subsequently used for a range of use cases as shown.
 
+## Command map
+
+The package ships multiple CLI entry points. Use this table as the top-level navigation map.
+
+| Command        | Purpose                                                                            | Standalone release binary | Dedicated docs                     |
+| -------------- | ---------------------------------------------------------------------------------- | ------------------------- | ---------------------------------- |
+| `cdxgen`       | Generate CycloneDX and SPDX BOMs from source, images, binaries, git URLs, or purls | yes                       | [CLI Usage](CLI.md)                |
+| `cdx-audit`    | Explainable upstream dependency risk prioritization from existing BOMs             | yes                       | [CDX_AUDIT.md](CDX_AUDIT.md)       |
+| `cdx-convert`  | Convert CycloneDX JSON to SPDX 3.0.1 JSON-LD                                       | yes                       | [CDX_CONVERT.md](CDX_CONVERT.md)   |
+| `cdx-sign`     | Sign a CycloneDX BOM                                                               | yes                       | [CDX_SIGN.md](CDX_SIGN.md)         |
+| `cdx-validate` | Validate structure, compliance, and signatures                                     | yes                       | [CDX_VALIDATE.md](CDX_VALIDATE.md) |
+| `cdx-verify`   | Verify BOM signatures                                                              | yes                       | [CDX_VERIFY.md](CDX_VERIFY.md)     |
+| `evinse`       | Add evidence, call stacks, reachability, and service data                          | no                        | [EVINSE.md](EVINSE.md)             |
+| `cdxi`         | Explore BOMs interactively in the REPL                                             | no                        | [REPL.md](REPL.md)                 |
+
+## Aliases and entry-point behavior
+
+Some commands are focused aliases rather than separate implementations.
+
+| Alias                                | Equivalent behavior                                                                                        |
+| ------------------------------------ | ---------------------------------------------------------------------------------------------------------- |
+| `obom`                               | `cdxgen -t os`                                                                                             |
+| `spdxgen`                            | `cdxgen --format spdx`                                                                                     |
+| `cbom`                               | `cdxgen` with `includeCrypto`, `evidence`, `deep`, and CycloneDX `1.7` defaults suited for CBOM generation |
+| `saasbom`                            | `cdxgen` with `evidence`, `deep`, and CycloneDX `1.7` defaults suited for service-evidence collection      |
+| `cdxgen-secure`                      | `cdxgen` with secure mode enabled and dependency installation disabled by default                          |
+| `cbom`, `obom`, `saasbom`, `spdxgen` | still accept the regular `cdxgen` flags in addition to their alias behavior                                |
+
+Installing `@cyclonedx/cdxgen` from npm exposes the commands in the command map plus the aliases in this section.
+
 For source-based scans, the primary positional input accepted by `cdxgen` can be:
 
 - a local filesystem path such as `.` or `/path/to/repo`
@@ -28,8 +58,23 @@ flowchart LR
 
 ## Installing
 
+Install the npm package when you want the full multi-command CLI surface:
+
 ```shell
 sudo npm install -g @cyclonedx/cdxgen
+```
+
+You can also invoke any packaged command without a global install:
+
+```shell
+corepack pnpm dlx @cyclonedx/cdxgen --help
+corepack pnpm dlx --package=@cyclonedx/cdxgen cdx-audit --help
+corepack pnpm dlx --package=@cyclonedx/cdxgen cdx-convert --help
+corepack pnpm dlx --package=@cyclonedx/cdxgen cdx-validate --help
+corepack pnpm dlx --package=@cyclonedx/cdxgen cdx-sign --help
+corepack pnpm dlx --package=@cyclonedx/cdxgen cdx-verify --help
+corepack pnpm dlx --package=@cyclonedx/cdxgen evinse --help
+corepack pnpm dlx --package=@cyclonedx/cdxgen cdxi --help
 ```
 
 If you are a [Homebrew](https://brew.sh/) user, you can also install [cdxgen](https://formulae.brew.sh/formula/cdxgen) via:
@@ -48,6 +93,77 @@ You can also use the cdxgen container image
 
 ```bash
 docker run --rm -v /tmp:/tmp -v $(pwd):/app:rw -t ghcr.io/cyclonedx/cdxgen -r /app -o /app/bom.json
+```
+
+### Standalone release binaries
+
+GitHub Releases publish single-file executables for `cdxgen`, `cdxgen-slim`, `cdx-audit`, `cdx-convert`, `cdx-sign`, `cdx-validate`, and `cdx-verify`.
+
+Use the asset name that matches your platform, for example `cdx-audit-linux-amd64`, `cdx-audit-darwin-arm64`, or `cdx-audit-windows-amd64.exe`.
+
+#### Linux
+
+```bash
+VERSION="v12.3.0"
+ASSET="cdx-audit-linux-amd64"
+BASE_URL="https://github.com/cdxgen/cdxgen/releases/download/${VERSION}"
+
+curl -fsSLO "${BASE_URL}/${ASSET}"
+curl -fsSLO "${BASE_URL}/${ASSET}.sha256"
+sha256sum -c "${ASSET}.sha256"
+chmod +x "${ASSET}"
+./"${ASSET}" --help
+```
+
+#### macOS
+
+```bash
+VERSION="v12.3.0"
+ASSET="cdx-audit-darwin-arm64"
+BASE_URL="https://github.com/cdxgen/cdxgen/releases/download/${VERSION}"
+
+curl -fsSLO "${BASE_URL}/${ASSET}"
+curl -fsSLO "${BASE_URL}/${ASSET}.sha256"
+shasum -a 256 -c "${ASSET}.sha256"
+chmod +x "${ASSET}"
+./"${ASSET}" --help
+```
+
+#### Windows (PowerShell)
+
+```powershell
+$Version = "v12.3.0"
+$Asset = "cdx-audit-windows-amd64.exe"
+$BaseUrl = "https://github.com/cdxgen/cdxgen/releases/download/$Version"
+
+Invoke-WebRequest -Uri "$BaseUrl/$Asset" -OutFile $Asset
+Invoke-WebRequest -Uri "$BaseUrl/$Asset.sha256" -OutFile "$Asset.sha256"
+$Expected = (Get-Content "$Asset.sha256" | Select-Object -First 1).Trim().Split()[0]
+$Actual = (Get-FileHash $Asset -Algorithm SHA256).Hash.ToLowerInvariant()
+if ($Actual -ne $Expected.ToLowerInvariant()) {
+  throw "SHA256 mismatch for $Asset"
+}
+.\$Asset --help
+```
+
+#### GitHub Actions with the GitHub CLI
+
+```yaml
+permissions:
+  contents: read
+
+steps:
+  - name: Download cdx-audit standalone binary
+    env:
+      GH_TOKEN: ${{ github.token }}
+    run: |
+      gh release download v12.3.0 \
+        --repo cdxgen/cdxgen \
+        --pattern 'cdx-audit-linux-amd64' \
+        --pattern 'cdx-audit-linux-amd64.sha256'
+      sha256sum -c cdx-audit-linux-amd64.sha256
+      chmod +x cdx-audit-linux-amd64
+      ./cdx-audit-linux-amd64 --help
 ```
 
 To use the deno version, use `ghcr.io/cyclonedx/cdxgen-deno` as the image name.
@@ -79,7 +195,7 @@ Options:
   -r, --recurse                   Recurse mode suitable for mono-repos. Defaults to true. Pass --no-recurse to disable.
                                                                                                [boolean] [default: true]
   -p, --print                     Print the SBOM as a table with tree.                                         [boolean]
-  -c, --resolve-class             Resolve class names for packages. jars only for now.                         [boolean]
+  -c, --resolve-class             Resolve class names for packages. Jar projects only.                          [boolean]
       --deep                      Perform deep searches for components. Useful while scanning C/C++ apps, live OS and
                                   oci images.                                                                  [boolean]
       --git-branch                Git branch to clone when the source is a git URL or purl                      [string]
