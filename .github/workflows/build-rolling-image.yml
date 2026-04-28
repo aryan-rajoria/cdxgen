@@ -11,8 +11,6 @@ name: Build rolling image
 # simple types!
 
 on:
-  schedule:
-    - cron: "0 6 * * *"
   workflow_dispatch:
 
 concurrency:
