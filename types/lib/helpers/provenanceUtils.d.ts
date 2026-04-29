@@ -26,7 +26,7 @@ export function hasAnyPropertyValue(properties: object[], propertyNames: string[
  * Determine whether a raw properties array includes trusted publishing metadata.
  *
  * @param {object[]} properties CycloneDX properties array
- * @returns {boolean} True when trusted publishing is recorded for npm or PyPI
+ * @returns {boolean} True when trusted publishing is recorded for npm, PyPI, or Cargo
  */
 export function hasTrustedPublishingProperties(properties: object[]): boolean;
 /**
@@ -40,7 +40,7 @@ export function hasRegistryProvenanceEvidenceProperties(properties: object[]): b
  * Determine whether a component includes trusted publishing metadata.
  *
  * @param {object} component CycloneDX component
- * @returns {boolean} True when trusted publishing is recorded for npm or PyPI
+ * @returns {boolean} True when trusted publishing is recorded for npm, PyPI, or Cargo
  */
 export function hasComponentTrustedPublishing(component: object): boolean;
 /**
@@ -75,15 +75,17 @@ export function getProvenanceComponents(components: object[]): object[];
  * Count components with trusted publishing metadata by registry ecosystem.
  *
  * @param {object[]} components BOM components
- * @returns {{npm: number, pypi: number, total: number}} Trusted publishing counts
+ * @returns {{cargo: number, npm: number, pypi: number, total: number}} Trusted publishing counts
  */
 export function getTrustedPublishingComponentCounts(components: object[]): {
+    cargo: number;
     npm: number;
     pypi: number;
     total: number;
 };
 export const NPM_PROVENANCE_EVIDENCE_PROPERTIES: string[];
 export const PYPI_PROVENANCE_EVIDENCE_PROPERTIES: string[];
+export const CARGO_PROVENANCE_EVIDENCE_PROPERTIES: string[];
 export const REGISTRY_PROVENANCE_EVIDENCE_PROPERTIES: string[];
 export const TRUSTED_PUBLISHING_PROPERTIES: string[];
 export const REGISTRY_PROVENANCE_ICON: "\uD83D\uDEE1";

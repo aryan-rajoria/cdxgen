@@ -8,6 +8,18 @@
  */
 export function isRequiredComponentScope(scope: string | undefined): boolean;
 /**
+ * Enrich input BOM components with registry provenance/trusted-publishing
+ * metadata so audit target filtering can exclude trusted packages even when the
+ * input BOM was generated without --bom-audit.
+ *
+ * @param {{ source: string, bomJson: object }[]} inputBoms loaded input BOMs
+ * @returns {Promise<void>}
+ */
+export function enrichInputBomsWithRegistryMetadata(inputBoms: {
+    source: string;
+    bomJson: object;
+}[]): Promise<void>;
+/**
  * Normalize package names for safe matching and grouping.
  *
  * @param {string | undefined} packageName package name

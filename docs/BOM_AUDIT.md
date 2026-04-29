@@ -64,17 +64,17 @@ The audit runs as a post-processing step after BOM generation:
 
 ## CLI options
 
-| Option                        | Type    | Default | Description                                                                                                              |
-| ----------------------------- | ------- | ------- | ------------------------------------------------------------------------------------------------------------------------ |
-| `--bom-audit`                 | boolean | `false` | Enable post-generation security audit                                                                                    |
-| `--bom-audit-rules-dir`       | string  | —       | Directory containing additional YAML rule files (merged with built-in rules)                                             |
-| `--bom-audit-categories`      | string  | all     | Comma-separated list of rule categories to enable                                                                        |
-| `--bom-audit-min-severity`    | string  | `low`   | Minimum severity to report: `low`, `medium`, `high`                                                                      |
-| `--bom-audit-fail-severity`   | string  | `high`  | Severity level at or above which findings cause secure mode failure (e.g., `medium` fails on medium, high, and critical) |
-| `--bom-audit-scope`           | string  | `all`   | Predictive dependency audit target scope: `all` or `required`                                                            |
+| Option                        | Type    | Default | Description                                                                                                                                 |
+| ----------------------------- | ------- | ------- | ------------------------------------------------------------------------------------------------------------------------------------------- |
+| `--bom-audit`                 | boolean | `false` | Enable post-generation security audit                                                                                                       |
+| `--bom-audit-rules-dir`       | string  | —       | Directory containing additional YAML rule files (merged with built-in rules)                                                                |
+| `--bom-audit-categories`      | string  | all     | Comma-separated list of rule categories to enable                                                                                           |
+| `--bom-audit-min-severity`    | string  | `low`   | Minimum severity to report: `low`, `medium`, `high`                                                                                         |
+| `--bom-audit-fail-severity`   | string  | `high`  | Severity level at or above which findings cause secure mode failure (e.g., `medium` fails on medium, high, and critical)                    |
+| `--bom-audit-scope`           | string  | `all`   | Predictive dependency audit target scope: `all` or `required`                                                                               |
 | `--bom-audit-max-targets`     | number  | auto    | Predictive dependency audit cap. By default cdxgen prioritizes direct runtime and required targets first and expands to at least 50 targets |
-| `--bom-audit-include-trusted` | boolean | `false` | Include predictive audit targets that already carry trusted publishing metadata                                          |
-| `--bom-audit-only-trusted`    | boolean | `false` | Restrict predictive audit targets to trusted-publishing-backed packages only                                             |
+| `--bom-audit-include-trusted` | boolean | `false` | Include predictive audit targets that already carry trusted publishing metadata                                                             |
+| `--bom-audit-only-trusted`    | boolean | `false` | Restrict predictive audit targets to trusted-publishing-backed packages only                                                                |
 
 ## Predictive dependency target selection
 
@@ -130,20 +130,20 @@ Rules that check package manager data for non-registry, local, or mutable depend
 
 Rules that detect deprecated, yanked, tampered, or suspicious packages.
 
-| Rule    | Severity | Description                                                              |
-| ------- | -------- | ------------------------------------------------------------------------ |
-| INT-001 | medium   | npm package has install-time execution hooks                             |
-| INT-002 | high     | npm package name or version mismatch (possible dependency confusion)     |
-| INT-003 | medium   | Deprecated Go module                                                     |
-| INT-004 | high     | Yanked Ruby gem                                                          |
-| INT-005 | low      | Deprecated npm package                                                   |
-| INT-006 | medium   | Dart pub uses non-default registry                                       |
-| INT-007 | low      | Maven package contains shaded/relocated classes                          |
-| INT-008 | medium   | README file contains hidden Unicode characters                           |
-| INT-009 | critical | npm lifecycle hook contains obfuscated or encoded install-time execution |
-| INT-010 | high     | Cargo crate has been yanked from crates.io                               |
-| INT-011 | medium   | Rust project uses Cargo build.rs or native build helpers                 |
-| INT-012 | medium   | Rust native build uses mutable Cargo toolchain setup action             |
+| Rule    | Severity | Description                                                               |
+| ------- | -------- | ------------------------------------------------------------------------- |
+| INT-001 | medium   | npm package has install-time execution hooks                              |
+| INT-002 | high     | npm package name or version mismatch (possible dependency confusion)      |
+| INT-003 | medium   | Deprecated Go module                                                      |
+| INT-004 | high     | Yanked Ruby gem                                                           |
+| INT-005 | low      | Deprecated npm package                                                    |
+| INT-006 | medium   | Dart pub uses non-default registry                                        |
+| INT-007 | low      | Maven package contains shaded/relocated classes                           |
+| INT-008 | medium   | README file contains hidden Unicode characters                            |
+| INT-009 | critical | npm lifecycle hook contains obfuscated or encoded install-time execution  |
+| INT-010 | high     | Cargo crate has been yanked from crates.io                                |
+| INT-011 | medium   | Rust project uses Cargo build.rs or native build helpers                  |
+| INT-012 | medium   | Rust native build uses mutable Cargo toolchain setup action               |
 | INT-013 | medium   | Rust native build is exercised by Cargo workflow build/test/package steps |
 
 ### Advanced predictive heuristics
@@ -181,7 +181,7 @@ Rules that evaluate OBOM runtime components from osquery-derived host telemetry 
 | OBOM-WIN-004 | high     | Hidden scheduled task uses suspicious execution path                 |
 | OBOM-WIN-005 | critical | Auto-start Windows service points to user-writable path              |
 | OBOM-WIN-006 | high     | Windows persistence surface references LOLBAS execution helper       |
-| OBOM-WIN-007 | critical | Windows WMI or AppCompat persistence uses LOLBAS                    |
+| OBOM-WIN-007 | critical | Windows WMI or AppCompat persistence uses LOLBAS                     |
 | OBOM-WIN-008 | high     | Windows startup or process activity uses network-capable LOLBAS      |
 | OBOM-WIN-009 | critical | Network-facing Windows listener is a LOLBAS execution helper         |
 | OBOM-WIN-010 | critical | Windows persistence artifact uses LOLBAS with UAC-bypass context     |

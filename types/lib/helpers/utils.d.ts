@@ -838,7 +838,7 @@ export function getDartMetadata(pkgList: any[]): Promise<any[]>;
  *
  * @returns {Array} Package list
  */
-export function parseCargoTomlData(cargoTomlFile: string, simple?: boolean, pkgFilesMap?: Object): any[];
+export function parseCargoTomlData(cargoTomlFile: string, simple?: boolean, pkgFilesMap?: Object, context?: {}): any[];
 /**
  * Parse a Cargo.lock file to find components within the Rust project.
  *
@@ -849,6 +849,15 @@ export function parseCargoTomlData(cargoTomlFile: string, simple?: boolean, pkgF
  * @returns {Array} A list of the project's components as described by the Cargo.lock-file.
  */
 export function parseCargoData(cargoLockFile: string, simple?: boolean, pkgFilesMap?: Object): any[];
+/**
+ * Build a Cargo dependency graph from manifest relationships so workspace roots
+ * and member-to-member links can complement lockfile-derived dependency data.
+ *
+ * @param {string} cargoTomlFile Cargo.toml path
+ * @param {object} [context] manifest graph context
+ * @returns {object[]} Cargo dependency relationships
+ */
+export function parseCargoManifestDependencyData(cargoTomlFile: string, context?: object): object[];
 /**
  * Parses a Cargo.lock file's TOML data and returns a flat dependency graph as an
  * array of objects mapping each package purl to the purls it directly depends on.
@@ -2001,6 +2010,7 @@ export const PROJECT_TYPE_ALIASES: {
     "gradle-index": string[];
     "sbt-index": string[];
     "maven-index": string[];
+    "cargo-cache": string[];
     js: string[];
     py: string[];
     go: string[];

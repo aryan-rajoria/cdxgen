@@ -141,10 +141,10 @@ These commands are most useful after importing a BOM generated with `--bom-audit
 
 ### Cargo-oriented commands
 
-| Command           | Description                                                                                |
-| ----------------- | ------------------------------------------------------------------------------------------ |
+| Command           | Description                                                                               |
+| ----------------- | ----------------------------------------------------------------------------------------- |
 | `.cargohotspots`  | Show Cargo package components with high-signal source, workspace, target, or build fields |
-| `.cargoworkflows` | Show Cargo-native formulation entries plus Cargo-related GitHub Actions/setup/run steps    |
+| `.cargoworkflows` | Show Cargo-native formulation entries plus Cargo-related GitHub Actions/setup/run steps   |
 
 These commands are most useful after importing a Cargo SBOM generated with `--include-formulation`, `--bom-audit`, or both.
 

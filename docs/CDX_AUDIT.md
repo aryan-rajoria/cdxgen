@@ -165,21 +165,21 @@ CDXGEN_THINK_MODE=true cdx-audit --bom bom.json --max-targets 10
 
 ## CLI reference
 
-| Option                | Description                                                         |
-| --------------------- | ------------------------------------------------------------------- |
-| `--bom`               | Path to a single CycloneDX JSON BOM                                 |
-| `--bom-dir`           | Directory containing CycloneDX JSON BOMs                            |
-| `--workspace-dir`     | Reuse git clones and cached child SBOMs between runs                |
-| `--reports-dir`       | Persist generated child SBOMs and per-target findings               |
-| `--report`            | Output format: `console`, `json`, or `sarif`                        |
-| `--report-file`, `-o` | Write the final report to a file instead of stdout                  |
-| `--categories`        | Comma-separated rule categories for child SBOM analysis             |
-| `--min-severity`      | Minimum final target severity to include in console or SARIF output |
-| `--fail-severity`     | Exit with code `3` when any target reaches this final severity      |
-| `--max-targets`       | Safety limit for the number of unique purls analyzed                |
-| `--scope`             | Target selection scope: `all` or `required`                         |
-| `--include-trusted`   | Include targets already marked with trusted publishing metadata     |
-| `--only-trusted`      | Restrict analysis to trusted-publishing-backed targets              |
+| Option                        | Description                                                                            |
+| ----------------------------- | -------------------------------------------------------------------------------------- |
+| `--bom`                       | Path to a single CycloneDX JSON BOM                                                    |
+| `--bom-dir`                   | Directory containing CycloneDX JSON BOMs                                               |
+| `--workspace-dir`             | Reuse git clones and cached child SBOMs between runs                                   |
+| `--reports-dir`               | Persist generated child SBOMs and per-target findings                                  |
+| `--report`                    | Output format: `console`, `json`, or `sarif`                                           |
+| `--report-file`, `-o`         | Write the final report to a file instead of stdout                                     |
+| `--categories`                | Comma-separated rule categories for child SBOM analysis                                |
+| `--min-severity`              | Minimum final target severity to include in console or SARIF output                    |
+| `--fail-severity`             | Exit with code `3` when any target reaches this final severity                         |
+| `--max-targets`               | Safety limit for the number of unique purls analyzed                                   |
+| `--scope`                     | Target selection scope: `all` or `required`                                            |
+| `--include-trusted`           | Include targets already marked with trusted publishing metadata                        |
+| `--only-trusted`              | Restrict analysis to trusted-publishing-backed targets                                 |
 | `--prioritize-direct-runtime` | Keep direct runtime dependencies ahead of less actionable targets (enabled by default) |
 
 ## Exit behavior
