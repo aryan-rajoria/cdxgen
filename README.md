@@ -52,7 +52,7 @@ Supported output document formats:
 #### For SOC analysts
 
 - Use `obom` for live-system and runtime inventory on Linux and Windows hosts.
-- Focus on [OBOM lessons](docs/OBOM_LESSONS.md) when you need host triage, persistence review, or incident-response evidence.
+- Focus on [OBOM lessons](docs/OBOM_LESSONS.md) when you need host triage, persistence review, LOLBAS-backed Windows startup analysis, or incident-response evidence.
 
 #### For compliance and platform governance
 
@@ -81,6 +81,7 @@ Sections include:
 - [CLI Usage][docs-cli]
 - [Server Usage][docs-server]
 - [Hands-on Lessons](docs/LESSON8.md)
+- [Container Escape & Privilege Lesson](docs/LESSON9.md)
 - [Supported Project Types][docs-project-types]
 - [Environment Variables][docs-env-vars]
 - [Advanced Usage][docs-advanced-usage]

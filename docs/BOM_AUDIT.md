@@ -150,7 +150,7 @@ The Python detections are intentionally conservative phase-1 heuristics. They ar
 
 ### `obom-runtime` — Operational Runtime and Host Posture
 
-Rules that evaluate OBOM runtime components from osquery-derived host telemetry for persistence, endpoint control gaps, and suspicious startup/runtime behavior.
+Rules that evaluate OBOM runtime components from osquery-derived host telemetry for persistence, endpoint control gaps, suspicious startup/runtime behavior, and Windows LOLBAS / ATT&CK-aligned abuse patterns.
 
 | Rule         | Severity | Description                                                          |
 | ------------ | -------- | -------------------------------------------------------------------- |
@@ -170,10 +170,29 @@ Rules that evaluate OBOM runtime components from osquery-derived host telemetry 
 | OBOM-WIN-003 | critical | Windows Run key references temporary/script execution path           |
 | OBOM-WIN-004 | high     | Hidden scheduled task uses suspicious execution path                 |
 | OBOM-WIN-005 | critical | Auto-start Windows service points to user-writable path              |
+| OBOM-WIN-006 | high     | Windows persistence surface references LOLBAS execution helper       |
+| OBOM-WIN-007 | critical | Windows WMI or AppCompat persistence uses LOLBAS                    |
+| OBOM-WIN-008 | high     | Windows startup or process activity uses network-capable LOLBAS      |
+| OBOM-WIN-009 | critical | Network-facing Windows listener is a LOLBAS execution helper         |
+| OBOM-WIN-010 | critical | Windows persistence artifact uses LOLBAS with UAC-bypass context     |
 | OBOM-MAC-001 | high     | macOS firewall disabled or stealth mode off                          |
 | OBOM-MAC-002 | critical | macOS launchd item from user-writable temporary path                 |
 | OBOM-MAC-003 | medium   | macOS firewall exception for binary in untrusted user path           |
 | OBOM-MAC-004 | medium   | macOS launchd override disables Apple-managed service                |
+
+### `container-risk` — Container Escape, Privilege, and Post-Exploit Tooling
+
+Rules that evaluate collected container executables against GTFOBins-derived enrichment plus MITRE ATT&CK for Containers, Peirates/CDK/DEEPCE playbook knowledge, and Docker seccomp guidance to highlight container breakout helpers, privileged execution primitives, offensive toolkits, and seccomp-sensitive escape helpers.
+
+| Rule    | Severity | Description                                                         |
+| ------- | -------- | ------------------------------------------------------------------- |
+| CTR-001 | critical | Container image ships setuid/setgid GTFOBins execution primitive    |
+| CTR-002 | critical | Container image includes privileged container-escape helper         |
+| CTR-003 | high     | Container image includes privileged GTFOBins library-load primitive |
+| CTR-004 | high     | Container image retains privileged GTFOBins exfiltration primitive  |
+| CTR-005 | medium   | Container image includes mutable-path remote-execution helper       |
+| CTR-006 | high     | Container image ships dedicated offensive container toolkit         |
+| CTR-007 | medium   | Container image includes seccomp-sensitive namespace escape helper  |
 
 ### `vscode-extension` — VS Code Extension Security
 
