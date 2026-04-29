@@ -68,6 +68,7 @@ Use `cdx-audit` to accelerate prioritization and escalation decisions. Final dis
 
 `cdx-audit` currently evaluates package URLs for:
 
+- Cargo / crates.io (`pkg:cargo/...`)
 - npm (`pkg:npm/...`)
 - PyPI (`pkg:pypi/...`)
 
@@ -122,7 +123,7 @@ For Linux, macOS, and Windows download snippets with hash verification, see [`CL
 ## What the command does
 
 1. Load one BOM with `--bom` or many BOMs from `--bom-dir`
-2. Extract unique npm and PyPI package URLs from `components[]`
+2. Extract unique Cargo, npm, and PyPI package URLs from `components[]`
 3. Skip trusted-publishing-backed packages by default unless you override that behavior
 4. Resolve each supported purl to a source repository URL
 5. Clone or reuse the source under `--workspace-dir`
@@ -151,9 +152,15 @@ cdx-audit --bom bom.json --workspace-dir .cache/cdx-audit --reports-dir .reports
 # Focus on required dependencies only
 cdx-audit --bom bom.json --scope required
 
+# Limit the queue while keeping the default direct-runtime prioritization
+cdx-audit --bom bom.json --scope required --max-targets 25
+
 # Override trusted-publishing target selection
 cdx-audit --bom bom.json --include-trusted
 cdx-audit --bom bom.json --only-trusted
+
+# Explain risk scoring decisions in think mode
+CDXGEN_THINK_MODE=true cdx-audit --bom bom.json --max-targets 10
 ```
 
 ## CLI reference
@@ -173,6 +180,7 @@ cdx-audit --bom bom.json --only-trusted
 | `--scope`             | Target selection scope: `all` or `required`                         |
 | `--include-trusted`   | Include targets already marked with trusted publishing metadata     |
 | `--only-trusted`      | Restrict analysis to trusted-publishing-backed targets              |
+| `--prioritize-direct-runtime` | Keep direct runtime dependencies ahead of less actionable targets (enabled by default) |
 
 ## Exit behavior
 
@@ -186,9 +194,14 @@ cdx-audit --bom bom.json --only-trusted
 
 `cdx-audit` narrows target selection before cloning upstream repositories:
 
-- only npm and PyPI purls are considered
+- only Cargo, npm, and PyPI purls are considered
 - components with `scope: optional` or `scope: excluded` are skipped when `--scope required` is used
-- packages with trusted-publishing metadata such as `cdx:npm:trustedPublishing=true` or `cdx:pypi:trustedPublishing=true` are skipped by default
+- packages with trusted-publishing metadata such as `cdx:cargo:trustedPublishing=true`, `cdx:npm:trustedPublishing=true`, or `cdx:pypi:trustedPublishing=true` are skipped by default
+- when `--max-targets` trims the queue, direct runtime dependencies are prioritized by default
+- explicit `scope=required` is treated as a stronger prioritization indicator than an implicit missing scope
+- `evidence.occurrences` lifts packages that are observed in more source locations
+- development-only and platform-specific packages remain deprioritized relative to runtime/general packages
+- for Cargo targets, runtime-facing crates stay ahead of build-only workspace helper crates when the queue must be trimmed
 
 Use the trusted-publishing switches to override the default:
 
@@ -196,6 +209,55 @@ Use the trusted-publishing switches to override the default:
 - `--only-trusted` keeps only trusted-publishing-backed targets
 
 Passing both switches together is invalid.
+
+### Recommended filter combinations
+
+- `cdx-audit --bom bom.json --scope required --max-targets 25` keeps triage focused on required dependencies and caps the review queue
+- `cdx-audit --bom bom.json --include-trusted --max-targets 50` includes trusted-publishing-backed packages when you want a broader baseline review
+- `cdx-audit --bom bom.json --only-trusted` isolates the subset of packages already backed by trusted publishing metadata
+
+## Prioritization indicators
+
+When `cdx-audit` has to choose which packages to inspect first, it uses a small set of explainable indicators:
+
+1. direct runtime dependency status from the root dependency graph
+2. explicit CycloneDX `scope=required`
+3. source evidence density from `evidence.occurrences`
+4. absence of development-only markers
+5. absence of platform-specific constraints
+6. for Cargo, runtime-facing member crates before build-only workspace helper crates
+
+These indicators affect queue order, not the final risk severity. Final severity still comes from the findings observed in the generated child SBOM and the conservative scoring model.
+
+## Thought-log diagnostics
+
+If you want a lightweight explanation for why a dependency stayed low risk or was considered risky, run `cdx-audit` with thought logging enabled:
+
+```bash
+CDXGEN_THINK_MODE=true cdx-audit --bom bom.json --scope required --max-targets 10
+```
+
+The thought log emits one short decision summary per package with:
+
+- the final severity and score
+- confidence and confidence label
+- the number of findings and corroborating categories
+- a short preview of the top reasons behind the decision
+
+## Cargo-specific predictive signals
+
+Cargo support now folds several Cargo-native signals into prioritization and scoring:
+
+- yanked crates and publisher/cadence drift from crates.io metadata
+- native build surfaces from `build.rs`, build dependencies, and `-sys` helpers
+- workspace-resolved member dependencies so build-only helpers can be deprioritized beneath runtime-facing crates
+- exact GitHub Actions/setup/cache/build metadata when child SBOMs include formulation and workflow components
+
+In practice this means `cdx-audit` can now explain not only that a Cargo dependency looks risky, but also whether that risk is:
+
+- runtime-facing versus build-only
+- reinforced by Cargo-native build surfaces
+- reinforced by mutable Cargo setup actions or workflow steps that exercise native build logic
 
 ## What each audience gets back
 

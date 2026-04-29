@@ -72,17 +72,19 @@ The audit runs as a post-processing step after BOM generation:
 | `--bom-audit-min-severity`    | string  | `low`   | Minimum severity to report: `low`, `medium`, `high`                                                                      |
 | `--bom-audit-fail-severity`   | string  | `high`  | Severity level at or above which findings cause secure mode failure (e.g., `medium` fails on medium, high, and critical) |
 | `--bom-audit-scope`           | string  | `all`   | Predictive dependency audit target scope: `all` or `required`                                                            |
-| `--bom-audit-max-targets`     | number  | auto    | Predictive dependency audit cap. By default cdxgen scans required targets first and expands to at least 50 targets       |
+| `--bom-audit-max-targets`     | number  | auto    | Predictive dependency audit cap. By default cdxgen prioritizes direct runtime and required targets first and expands to at least 50 targets |
 | `--bom-audit-include-trusted` | boolean | `false` | Include predictive audit targets that already carry trusted publishing metadata                                          |
 | `--bom-audit-only-trusted`    | boolean | `false` | Restrict predictive audit targets to trusted-publishing-backed packages only                                             |
 
 ## Predictive dependency target selection
 
-When `--bom-audit` is enabled for npm or PyPI-heavy projects, cdxgen now narrows predictive dependency audit targets before cloning upstream repositories:
+When `--bom-audit` is enabled, cdxgen narrows predictive dependency audit targets before cloning upstream repositories:
 
-- packages with trusted publishing metadata (`cdx:npm:trustedPublishing=true` or `cdx:pypi:trustedPublishing=true`) are skipped by default
+- packages with trusted publishing metadata (`cdx:cargo:trustedPublishing=true`, `cdx:npm:trustedPublishing=true`, or `cdx:pypi:trustedPublishing=true`) are skipped by default
 - `--bom-audit-scope required` keeps only dependencies with CycloneDX `scope=required` (missing scope is treated as required)
-- unless you override it, cdxgen caps the predictive dependency audit to `max(50, required-target-count)` and prioritizes required targets first
+- unless you override it, cdxgen caps the predictive dependency audit to `max(50, required-target-count)` and prioritizes direct runtime and required targets first
+- explicit `scope=required` and richer `evidence.occurrences` act as prioritization indicators when cdxgen trims the queue
+- Cargo runtime-facing crates stay ahead of build-only workspace helper crates when the predictive queue is truncated
 
 Use the trusted-publishing switches to override the default:
 
@@ -121,6 +123,8 @@ Rules that check package manager data for non-registry, local, or mutable depend
 | PKG-004 | high     | Nix flake missing reproducibility metadata (revision or nar_hash) |
 | PKG-005 | medium   | Ruby gem tracks mutable branch without commit pin                 |
 | PKG-006 | medium   | Python package from non-default PyPI registry                     |
+| PKG-007 | high     | Cargo dependency tracks mutable git source without immutable pin  |
+| PKG-008 | high     | Cargo dependency uses local path source                           |
 
 ### `package-integrity` — Package Integrity and Lifecycle
 
@@ -137,6 +141,10 @@ Rules that detect deprecated, yanked, tampered, or suspicious packages.
 | INT-007 | low      | Maven package contains shaded/relocated classes                          |
 | INT-008 | medium   | README file contains hidden Unicode characters                           |
 | INT-009 | critical | npm lifecycle hook contains obfuscated or encoded install-time execution |
+| INT-010 | high     | Cargo crate has been yanked from crates.io                               |
+| INT-011 | medium   | Rust project uses Cargo build.rs or native build helpers                 |
+| INT-012 | medium   | Rust native build uses mutable Cargo toolchain setup action             |
+| INT-013 | medium   | Rust native build is exercised by Cargo workflow build/test/package steps |
 
 ### Advanced predictive heuristics
 
@@ -145,6 +153,8 @@ Beyond the YAML rule matches above, the current rollout also adds a small number
 - **GitHub Actions lateral movement:** downstream `workflow_dispatch` / `repository_dispatch` chains launched from fork-reachable or privileged workflows
 - **npm install-time concealment:** base64-decoding or otherwise obfuscated lifecycle hooks, including referenced JS files analyzed through the Babel-based source analyzer
 - **PyPI packaging surfaces:** shallow heuristics for suspicious logic in `setup.py` and package `__init__.py`
+- **Cargo registry and native build signals:** yanked crates, mutable git/path dependencies, build-only workspace helpers, and Cargo build.rs/native-helper build surfaces
+- **Cargo workflow tie-ins:** mutable Cargo setup actions plus Cargo build/test/package/publish workflow steps correlated with native build surfaces
 
 The Python detections are intentionally conservative phase-1 heuristics. They are meant to catch obviously suspicious packaging behavior today while a deeper Python static-analysis path is developed separately.
 
