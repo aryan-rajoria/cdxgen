@@ -410,7 +410,7 @@ jobs:
         run: |
           chmod +x contrib/free_disk_space.sh
           ./contrib/free_disk_space.sh
-      - uses: sbt/setup-sbt@93e926cbdb4a428e41b4ef754124ec82925ffdc2 # v1.1.23
+      - uses: sbt/setup-sbt@2e222825582620cc38d2a54e674f3c01b7c14f5d  # v1.1.24
       - name: Install bazelisk - linux
         if: matrix.os == 'ubuntu-24.04'
         run: |
@@ -463,7 +463,7 @@ jobs:
           ~/.swiftly/bin/swiftly init --quiet-shell-followup && \
           . ~/.swiftly/env.sh && \
           hash -r
-      - uses: ruby/setup-ruby@6aaa311d81eba98ae12eaffbcb63296ace0efcde  # v1.307.0
+      - uses: ruby/setup-ruby@afeafc3d1ab54a631816aba4c914a0081c12ff2f  # v1.310.0
         with:
           ruby-version: '3.4.9'
       - name: Set up Python
@@ -765,6 +765,11 @@ jobs:
         run: |
           curl -s "https://get.sdkman.io" | bash
         if: runner.os != 'Windows' && matrix.os != 'macos-15'
+      - uses: actions/setup-dotnet@c2fa09f4bde5ebb9d1777cf28262a3eb3db3ced7  # v5.2.0
+        with:
+          dotnet-version: '10.0.x'
+          cache: false
+        if: matrix.os != 'self-hosted-ubuntu'
       - name: setup rbenv
         run: |
           git clone https://github.com/rbenv/rbenv.git --depth=1 ~/.rbenv
@@ -1013,8 +1018,244 @@ jobs:
         run: |
           bin/cdxgen.js -r -t dotnet repotests/dotnet-paket -o bomresults/bom-dotnet-paket.json --deep
           FETCH_LICENSE=true bin/cdxgen.js -r -t dotnet repotests/dotnet-paket -o bomresults/bom-dotnet-paket-2.json --fail-on-error
-          bin/cdxgen.js -r -t dotnet repotests/dotnet-podcasts -o bomresults/bom-dotnet-podcasts.json --profile research --spec-version 1.6 --export-proto
+          bin/cdxgen.js -r -t dotnet repotests/dotnet-podcasts -o bomresults/bom-dotnet-podcasts.json --fail-on-error
+          rm -rf repotests/dotnet-api-smoke
+          dotnet new webapi --no-https -o repotests/dotnet-api-smoke
+          cd repotests/dotnet-api-smoke
+          dotnet add package Newtonsoft.Json --version 13.0.3
+          cat > Program.cs <<'EOF'
+          using System.Security.Cryptography;
+          using System.Text;
+          using Microsoft.AspNetCore.Mvc;
+          using Newtonsoft.Json;
+
+          var builder = WebApplication.CreateBuilder(args);
+          builder.Services.AddControllers();
+          var app = builder.Build();
+          app.MapControllers();
+          app.MapGet("/api/ping", () => Results.Ok(new { Message = "pong" }));
+          app.Run();
+
+          [ApiController]
+          [Route("api/[controller]")]
+          public sealed class PodcastsController : ControllerBase
+          {
+              [HttpGet("{id}")]
+              public IActionResult Get(int id)
+              {
+                  var payload = JsonConvert.SerializeObject(new { Id = id, Name = "cdxgen" });
+                  var digest = SHA256.HashData(Encoding.UTF8.GetBytes(payload));
+                  return Ok(new { payload, digest = Convert.ToHexString(digest) });
+              }
+          }
+          EOF
+          dotnet restore
+          cd ../..
+          bin/cdxgen.js -r -t dotnet repotests/dotnet-api-smoke -o bomresults/bom-dotnet-api-smoke.json --profile research --spec-version 1.6 --export-proto
+          node --input-type=module <<'EOF'
+          import { readFileSync } from "node:fs";
+
+          import { validateBom } from "./lib/validator/bomValidator.js";
+
+          const bomFile = "bomresults/bom-dotnet-api-smoke.json";
+          const bom = JSON.parse(readFileSync(bomFile, "utf-8"));
+          const dosaiTool = bom.metadata?.tools?.components?.some(
+            (component) => component.name === "dosai",
+          );
+          const services = bom.services || [];
+          const components = bom.components || [];
+          const occurrenceComponents = components.filter(
+            (component) => (component.evidence?.occurrences || []).length > 0,
+          );
+          const dllOccurrences = occurrenceComponents.flatMap((component) =>
+            (component.evidence?.occurrences || []).filter((occurrence) =>
+              String(occurrence.location || "").toLowerCase().endsWith(".dll"),
+            ),
+          );
+          const cryptoAssets = components.filter(
+            (component) => component.type === "cryptographic-asset",
+          );
+          const duplicateServices =
+            services.length -
+            new Set(services.map((service) => JSON.stringify(service))).size;
+          const serviceLeaks = JSON.stringify(services).match(
+            /sig=|access_token|client_secret|InternalPolicyName/i,
+          );
+          const schemaValid = validateBom(bom);
+
+          if (!schemaValid) {
+            throw new Error("dotnet-api-smoke BOM is not schema-valid");
+          }
+          if (!dosaiTool) {
+            throw new Error("Expected dosai tool metadata in deep .NET BOM");
+          }
+          if (services.length < 1) {
+            throw new Error(
+              "Expected dosai ApiEndpoints to produce SaaSBOM services",
+            );
+          }
+          if (duplicateServices !== 0) {
+            throw new Error(
+              `Expected unique services, found ${duplicateServices} duplicates`,
+            );
+          }
+          if (serviceLeaks) {
+            throw new Error(
+              `Service metadata appears to leak sensitive endpoint/auth data: ${serviceLeaks[0]}`,
+            );
+          }
+          if (occurrenceComponents.length < 1) {
+            throw new Error("Expected dosai PackageReachability occurrence evidence");
+          }
+          if (dllOccurrences.length) {
+            throw new Error(
+              `Expected source-only occurrence evidence, found ${dllOccurrences.length} DLL locations`,
+            );
+          }
+          if (cryptoAssets.length < 1) {
+            throw new Error(
+              "Expected dosai crypto analysis to produce CBOM components under research profile",
+            );
+          }
+          if (!cryptoAssets.every((component) => !component.purl)) {
+            throw new Error("Cryptographic assets must not have purls");
+          }
+          console.log(
+            JSON.stringify({
+              dosaiTool,
+              services: services.length,
+              occurrenceComponents: occurrenceComponents.length,
+              cryptoAssets: cryptoAssets.length,
+            }),
+          );
+          EOF
           bin/cdxgen.js -r -t dotnet repotests/react-native-windows -o bomresults/bom-react-native-windows.json
+        shell: bash
+      - name: repotests dotnet VB and F# dosai evidence
+        run: |
+          rm -rf repotests/dotnet-language-smoke
+          mkdir -p repotests/dotnet-language-smoke
+          dotnet new console -lang VB -o repotests/dotnet-language-smoke/vbapp
+          cd repotests/dotnet-language-smoke/vbapp
+          dotnet add package Newtonsoft.Json --version 13.0.3
+          cat > Program.vb <<'EOF'
+          Imports System
+          Imports System.Security.Cryptography
+          Imports System.Text
+          Imports Newtonsoft.Json
+
+          Module Program
+              Sub Main(args As String())
+                  Dim payload = New With {.Name = "cdxgen", .Language = "vb"}
+                  Dim json = JsonConvert.SerializeObject(payload)
+                  Dim digest = SHA256.HashData(Encoding.UTF8.GetBytes(json))
+                  Console.WriteLine($"{json}:{Convert.ToHexString(digest)}")
+              End Sub
+          End Module
+          EOF
+          dotnet restore
+          cd ../../..
+
+          dotnet new console -lang "F#" -o repotests/dotnet-language-smoke/fsapp
+          cd repotests/dotnet-language-smoke/fsapp
+          dotnet add package Newtonsoft.Json --version 13.0.3
+          cat > Program.fs <<'EOF'
+          open System
+          open System.Security.Cryptography
+          open System.Text
+          open Newtonsoft.Json
+
+          type Payload = { Name: string; Language: string }
+
+          [<EntryPoint>]
+          let main _ =
+              let payload = { Name = "cdxgen"; Language = "fsharp" }
+              let json = JsonConvert.SerializeObject(payload)
+              let digest = SHA256.HashData(Encoding.UTF8.GetBytes(json))
+              printfn "%s:%s" json (Convert.ToHexString(digest))
+              0
+          EOF
+          dotnet restore
+          cd ../../..
+
+          bin/cdxgen.js -t visualbasic repotests/dotnet-language-smoke/vbapp -o bomresults/bom-dotnet-vb-research.json --profile research --spec-version 1.6 --fail-on-error
+          node bin/evinse.js -i bomresults/bom-dotnet-vb-research.json -o bomresults/bom-dotnet-vb-research.evinse.json -l vbnet --profile research repotests/dotnet-language-smoke/vbapp
+          bin/cdxgen.js -t fs repotests/dotnet-language-smoke/fsapp -o bomresults/bom-dotnet-fs-research.json --profile research --spec-version 1.6 --fail-on-error
+          node bin/evinse.js -i bomresults/bom-dotnet-fs-research.json -o bomresults/bom-dotnet-fs-research.evinse.json -l "f#" --profile research repotests/dotnet-language-smoke/fsapp
+
+          node --input-type=module <<'EOF'
+          import { readFileSync } from "node:fs";
+
+          import { validateBom } from "./lib/validator/bomValidator.js";
+
+          for (const [language, bomFile, evinseFile] of [
+            [
+              "vb",
+              "bomresults/bom-dotnet-vb-research.json",
+              "bomresults/bom-dotnet-vb-research.evinse.json",
+            ],
+            [
+              "fsharp",
+              "bomresults/bom-dotnet-fs-research.json",
+              "bomresults/bom-dotnet-fs-research.evinse.json",
+            ],
+          ]) {
+            for (const file of [bomFile, evinseFile]) {
+              const bom = JSON.parse(readFileSync(file, "utf-8"));
+              const components = bom.components || [];
+              const occurrenceComponents = components.filter(
+                (component) =>
+                  (component.evidence?.occurrences || []).length > 0,
+              );
+              const cryptoAssets = components.filter(
+                (component) => component.type === "cryptographic-asset",
+              );
+              const dosaiTool = bom.metadata?.tools?.components?.some(
+                (component) => component.name === "dosai",
+              );
+              const newtonsoft = components.find((component) =>
+                component.purl?.startsWith("pkg:nuget/Newtonsoft.Json@"),
+              );
+              const dllOccurrences = occurrenceComponents.flatMap((component) =>
+                (component.evidence?.occurrences || []).filter((occurrence) =>
+                  String(occurrence.location || "")
+                    .toLowerCase()
+                    .endsWith(".dll"),
+                ),
+              );
+              if (!validateBom(bom)) {
+                throw new Error(`${language} ${file} is not schema-valid`);
+              }
+              if (!dosaiTool) {
+                throw new Error(`${language} ${file} missing dosai tool metadata`);
+              }
+              if (!newtonsoft) {
+                throw new Error(`${language} ${file} missing Newtonsoft.Json`);
+              }
+              if (!occurrenceComponents.length) {
+                throw new Error(`${language} ${file} missing occurrence evidence`);
+              }
+              if (!cryptoAssets.length) {
+                throw new Error(`${language} ${file} missing crypto assets`);
+              }
+              if (dllOccurrences.length) {
+                throw new Error(`${language} ${file} has DLL occurrences`);
+              }
+              if (cryptoAssets.some((component) => component.purl)) {
+                throw new Error(`${language} ${file} crypto asset has purl`);
+              }
+              console.log(
+                JSON.stringify({
+                  language,
+                  file,
+                  components: components.length,
+                  occurrenceComponents: occurrenceComponents.length,
+                  cryptoAssets: cryptoAssets.length,
+                }),
+              );
+            }
+          }
+          EOF
         shell: bash
       - name: repotests SimpleFrameworkApp
         run: |
@@ -1026,7 +1267,7 @@ jobs:
         with:
           distribution: 'temurin'
           java-version: '21'
-      - uses: sbt/setup-sbt@93e926cbdb4a428e41b4ef754124ec82925ffdc2 # v1.1.23
+      - uses: sbt/setup-sbt@2e222825582620cc38d2a54e674f3c01b7c14f5d  # v1.1.24
       - uses: coursier/setup-action@fd1707a76b027efdfb66ca79318b4d29b72e5a02 # v3.0.0
         with:
           apps: scala3 scalac
@@ -1265,7 +1506,7 @@ jobs:
         with:
           distribution: 'temurin'
           java-version: ${{ matrix.java-version }}
-      - uses: sbt/setup-sbt@93e926cbdb4a428e41b4ef754124ec82925ffdc2 # v1.1.23
+      - uses: sbt/setup-sbt@2e222825582620cc38d2a54e674f3c01b7c14f5d  # v1.1.24
       - uses: coursier/setup-action@fd1707a76b027efdfb66ca79318b4d29b72e5a02 # v3.0.0
         with:
           apps: scala3 scalac
@@ -1284,7 +1525,7 @@ jobs:
         run: |
           chmod +x contrib/free_disk_space.sh
           ./contrib/free_disk_space.sh
-      - uses: sbt/setup-sbt@93e926cbdb4a428e41b4ef754124ec82925ffdc2 # v1.1.23
+      - uses: sbt/setup-sbt@2e222825582620cc38d2a54e674f3c01b7c14f5d  # v1.1.24
       - name: Install bazelisk - linux
         if: matrix.os == 'ubuntu-24.04'
         run: |
@@ -1317,7 +1558,7 @@ jobs:
         uses: actions/setup-python@a309ff8b426b58ec0e2a45f0f869d46889d02405 # v6.2.0
         with:
           python-version: '3.13'
-      - uses: ruby/setup-ruby@6aaa311d81eba98ae12eaffbcb63296ace0efcde  # v1.307.0
+      - uses: ruby/setup-ruby@afeafc3d1ab54a631816aba4c914a0081c12ff2f  # v1.310.0
         with:
           ruby-version: '3.4.9'
       - name: pip install custom-json-diff
