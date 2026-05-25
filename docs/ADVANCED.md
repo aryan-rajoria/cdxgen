@@ -306,6 +306,8 @@ Options:
       --with-reachables          Enable auto-tagged reachable slicing. Requires
                                  SBOM generated with --deep mode.
                                                       [boolean] [default: false]
+      --exclude, --exclude-regex Additional glob pattern(s) to ignore during
+                                 Atom evidence generation.          [array]
       --usages-slices-file       Use an existing usages slices file.
                                                  [default: "usages.slices.json"]
       --data-flow-slices-file    Use an existing data-flow slices file.
@@ -381,6 +383,22 @@ For JavaScript or TypeScript projects, pass `-l javascript`.
 ```shell
 evinse -i bom.json -o bom.evinse.json --usages-slices-file usages.json --data-flow-slices-file data-flow.json -l javascript --with-data-flow <path to the application>
 ```
+
+#### Excluding source paths from Atom evidence
+
+When cdxgen or evinse invokes atom to create occurrence, reachability, or data-flow evidence, `--exclude` glob patterns are converted to Scala/Java-compatible regular expressions and applied to Atom evidence. Directory fragments are also forwarded through `CHEN_IGNORE_DIRS`, which Atom applies across supported frontends. For JavaScript and TypeScript, the same directory fragments are forwarded through `ASTGEN_IGNORE_DIRS` to improve astgen traversal performance.
+
+```shell
+cdxgen -t js --profile research --exclude "**/fixtures/**" --exclude "**/*.spec.js" -o bom.json <path to the application>
+```
+
+The same behavior applies when running evinse directly:
+
+```shell
+evinse -i bom.json -o bom.evinse.json -l javascript --exclude "**/fixtures/**" <path to the application>
+```
+
+This prevents excluded source files and directories from contributing package usage and occurrence evidence. cdxgen extracts stable literal directory fragments from excludes such as `**/fixtures/**` and merges them with any existing `CHEN_IGNORE_DIRS` value before invoking Atom. For JavaScript and TypeScript projects, directory fragments are also merged with `ASTGEN_IGNORE_DIRS`; full glob patterns such as `**/*.spec.js` are converted to regular expressions for evidence filtering.
 
 For Python with cached usages and reachables file.
 
