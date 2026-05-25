@@ -47,6 +47,7 @@ export function safeExtractArchive(sourcePath: any, targetPath: any, extractor: 
  * @returns {Object} spawnSync result object with status, stdout, stderr, and error fields
  */
 export function safeSpawnSync(command: string, args: string[], options: Object): Object;
+export function parseMavenArgs(argsString: any): string[];
 /**
  * Determines whether license information should be fetched from remote sources,
  * based on the FETCH_LICENSE environment variable.
@@ -350,6 +351,24 @@ export function parseMinJs(minJsFile: string): Promise<any[]>;
  * @returns {Object} Object containing pom properties, modules, and array of dependencies
  */
 export function parsePom(pomFile: string): Object;
+/**
+ * Parse maven dependency:tree json output
+ *
+ * @param rawOutput
+ * @param pomFile
+ * @returns {{parentComponent: {}, pkgList: *[], dependenciesList: *[]}|{}|{}|*|{parentComponent: {[p: string]: *}|{}, pkgList: [], dependenciesList: []}}
+ */
+export function parseMavenTreeJson(rawOutput: any, pomFile: any): {
+    parentComponent: {};
+    pkgList: any[];
+    dependenciesList: any[];
+} | {} | {} | any | {
+    parentComponent: {
+        [p: string]: any;
+    } | {};
+    pkgList: [];
+    dependenciesList: [];
+};
 /**
  * Parse maven tree output
  * @param {string} rawOutput Raw string output
