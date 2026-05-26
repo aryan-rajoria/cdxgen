@@ -179,6 +179,38 @@ For example, `--spec-version 1.5 --component-type cryptographic-asset` is reject
 
 The dedicated `cbom` command does not accept `--component-type`; use `cdxgen --include-crypto` instead when you need normal SBOM generation plus component-type filtering.
 
+## Go Evinse data-flow and crypto-flow evidence
+
+For Go projects, generate the base SBOM first and then enrich it with `evinse -l go`. The Go Evinse path uses the optional `golem` helper from `@cdxgen/cdxgen-plugins-bin` to attach occurrence evidence, call-stack frames, usage scopes, security signals, crypto components, and data-flow/crypto-flow properties.
+
+Routine semantic evidence:
+
+```shell
+cdxgen -t go -o bom.json /absolute/path/to/go/project
+evinse -i bom.json -o bom.evinse.json -l go --golem-callgraph static /absolute/path/to/go/project
+```
+
+Bounded data-flow and crypto-flow evidence:
+
+```shell
+evinse -i bom.json -o bom.evinse.json -l go \
+  --with-data-flow \
+  --golem-dataflow crypto \
+  --golem-dataflow-pattern-packs crypto \
+  /absolute/path/to/go/project
+```
+
+`--deep` enables the same Golem data-flow collection with performance safeguards. cdxgen caps worker count and `GOMAXPROCS`, applies slice and trace limits, skips generated files by default, and skips tests unless `--golem-tests` is supplied. Use `--golem-memory-limit 4GiB`, narrower `--golem-patterns`, or `--golem-dataflow crypto` when a large repository needs predictable CI runtime.
+
+The enriched BOM uses `cdx:golem:*` properties. High-value pivots include `cdx:golem:dataFlowMode`, `cdx:golem:dataFlowSliceCount`, `cdx:golem:cryptoDataFlow`, `cdx:golem:cryptoDataFlowCount`, `cdx:golem:cryptoAlgorithms`, `cdx:golem:usageScopes`, `cdx:golem:securitySignalSeverity`, `cdx:golem:localReplacement`, and `cdx:golem:vendored`. Rendered crypto components are `type: "cryptographic-asset"` and intentionally do not have purls.
+
+After enrichment, run the focused audit and inspect interactively:
+
+```shell
+cdx-audit --bom bom.evinse.json --direct-bom-audit --categories golem
+cdxi bom.evinse.json
+```
+
 ## Automatic compositions
 
 When using any filters, cdxgen would automatically set the [compositions.aggregate](https://cyclonedx.org/docs/1.5/json/#compositions_items_aggregate) property to "incomplete" or "incomplete_first_party_only".
@@ -265,7 +297,7 @@ Environment variables override values from the configuration files.
 
 ## Evinse Mode / SaaSBOM
 
-Evinse (Evinse Verification Is Nearly SBOM Evidence) generates component evidence and SaaSBOM data for supported languages. The tool is powered by [atom](https://github.com/AppThreat/atom) for Java, JavaScript, TypeScript, Python, and C/C++ flows, and by [dosai](https://github.com/owasp-dep-scan/dosai) for .NET flows. cdxgen also supports `--evidence` during BOM generation. This section focuses on direct `evinse` usage for advanced workflows. See [`EVINSE.md`](EVINSE.md) for the dedicated command guide.
+Evinse (Evinse Verification Is Nearly SBOM Evidence) generates component evidence and SaaSBOM data for supported languages. The tool is powered by [atom](https://github.com/AppThreat/atom) for Java, JavaScript, TypeScript, Python, and C/C++ flows, by [dosai](https://github.com/owasp-dep-scan/dosai) for .NET flows, and by `golem` for Go semantic evidence. cdxgen also supports `--evidence` during BOM generation. This section focuses on direct `evinse` usage for advanced workflows. See [`EVINSE.md`](EVINSE.md) for the dedicated command guide.
 
 <img src="_media/occurrence-evidence.png" alt="occurrence evidence" width="256">
 
@@ -384,6 +416,21 @@ For JavaScript or TypeScript projects, pass `-l javascript`.
 evinse -i bom.json -o bom.evinse.json --usages-slices-file usages.json --data-flow-slices-file data-flow.json -l javascript --with-data-flow <path to the application>
 ```
 
+For Go projects, generate the base BOM first and then run `evinse -l go`. When the optional `golem` binary is available from `@cdxgen/cdxgen-plugins-bin`, Evinse maps Go module inventory to semantic source evidence.
+
+```shell
+cdxgen -t go -o bom.json <path to the application>
+evinse -i bom.json -o bom.evinse.json -l go --golem-callgraph static <path to the application>
+```
+
+Golem adds occurrence and call-stack evidence plus `cdx:golem:*` properties for usage scopes, occurrence kinds, security signals, local replacements, vendoring, private module candidates, license-file evidence, build directives, generated files, native artifacts, and Go toolchain directives.
+
+Use `--golem-callgraph static` for normal CI, and use `rta` or `vta` for more precise root-based call graph evidence where higher runtime and memory use are acceptable. Use `--golem-tags` when build tags change the reachable packages, and `--golem-tests` when test-only dependency use is part of the review.
+
+After enrichment, import the BOM into `cdxi` and use `.golemsummary`, `.golemhotspots`, `.golemcoverage`, `.occurrences`, and `.callstack`. To audit the Golem properties, run `cdx-audit --bom bom.evinse.json --direct-bom-audit --categories golem`.
+
+See [Go Evinse with Golem](GO_EVINSE_GOLEM.md), [the Go Evinse threat model](GO_EVINSE_GOLEM_THREAT_MODEL.md), and [the Go Evinse tutorial](LESSON14.md) for the complete workflow.
+
 #### Excluding source paths from Atom evidence
 
 When cdxgen or evinse invokes atom to create occurrence, reachability, or data-flow evidence, `--exclude` glob patterns are converted to Scala/Java-compatible regular expressions and applied to Atom evidence. Directory fragments are also forwarded through `CHEN_IGNORE_DIRS`, which Atom applies across supported frontends. For JavaScript and TypeScript, the same directory fragments are forwarded through `ASTGEN_IGNORE_DIRS` to improve astgen traversal performance.
@@ -432,7 +479,7 @@ If a java project uses maven and gradle, maven is selected for SBOM generation u
 
 cdxgen supports generating container SBOM for Linux images on Windows. Follow the steps listed below.
 
-- Ensure cdxgen-plugins-bin >= 2.1.3 is installed.
+- Ensure cdxgen-plugins-bin >= 2.2.0 is installed.
 
 ```shell
 npm install -g @cdxgen/cdxgen-plugins-bin
@@ -546,11 +593,13 @@ docker run --rm -v /tmp:/tmp -v $(pwd):/app:rw -it ghcr.io/cyclonedx/cdxgen-dotn
 
 If the project requires legacy frameworks such as .Net Framework 4.6/4.7, then a Windows operating system or container is required to generate the SBOM correctly. A workaround is to commit the project.assets.json and the lock files to the repository from Windows and run cdxgen from Linux as normal.
 
-For legacy Java projects, use the custom images `ghcr.io/cyclonedx/cdxgen-java11:v12` (Java 11) or `ghcr.io/cyclonedx/cdxgen-java17:v12` (Java 17). Alternatively, use the CLI arguments as shown.
+For Java projects that require a specific runtime, use the custom images `ghcr.io/cyclonedx/cdxgen-java11:v12` (Java 11) or `ghcr.io/cyclonedx/cdxgen-java17:v12` (Java 17). Alternatively, use Java version aliases via CLI as shown.
 
 ```shell
 cdxgen -t java11
 cdxgen -t java17
+cdxgen -t java25
+cdxgen -t java26
 ```
 
 [sdkman](https://sdkman.io) must be installed and setup for these arguments to work.

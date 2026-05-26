@@ -2,7 +2,7 @@
 
 ## Description
 
-`cdxgen` is a universal, polyglot CLI tool that generates valid CycloneDX Bill-of-Materials (BOM) documents in JSON format. It produces SBOM, HBOM, CBOM, OBOM, SaaSBOM, VDR, and CDXA outputs for source code, containers, VMs, live operating systems, and supported hardware hosts. Supports CycloneDX spec versions `1.4`–`1.7` (default: `1.7`, with HBOM currently targeting `1.7`). cdxgen features a best-in-class, native **JSON Signature Format (JSF)** implementation for BOM signing, providing robust authenticity and non-repudiation capabilities. Unlike basic signing tools, our implementation fully supports granular signatures (signing individual components, services, and annotations), parallel Multi-Signatures (`signers`), and sequential Signature Chains (`chain`). When the optional companion binaries from `@cdxgen/cdxgen-plugins-bin` are available, cdxgen also enriches container/rootfs and live-OS scans with Trivy/osquery-powered metadata, Linux GTFOBins runtime context, and platform trust posture. HBOM collection is dynamically provided by the optional `@cdxgen/cdx-hbom` library on supported `darwin/arm64`, `linux/amd64`, and `linux/arm64` hosts. CBOM mode can also extract cryptographic algorithm inventory from JavaScript and TypeScript source through lightweight AST analysis.
+`cdxgen` is a universal, polyglot CLI tool that generates valid CycloneDX Bill-of-Materials (BOM) documents in JSON format. It produces SBOM, HBOM, CBOM, OBOM, SaaSBOM, VDR, and CDXA outputs for source code, containers, VMs, live operating systems, and supported hardware hosts. Supports CycloneDX spec versions `1.4`–`1.7` (default: `1.7`, with HBOM currently targeting `1.7`). cdxgen features a best-in-class, native **JSON Signature Format (JSF)** implementation for BOM signing, providing robust authenticity and non-repudiation capabilities. Unlike basic signing tools, our implementation fully supports granular signatures (signing individual components, services, and annotations), parallel Multi-Signatures (`signers`), and sequential Signature Chains (`chain`). When the optional companion binaries from `@cdxgen/cdxgen-plugins-bin` are available, cdxgen also enriches container/rootfs and live-OS scans with Trivy/osquery-powered metadata, Linux GTFOBins runtime context, platform trust posture, and Go Evinse evidence through the `golem` helper. HBOM collection is dynamically provided by the optional `@cdxgen/cdx-hbom` library on supported `darwin/arm64`, `linux/amd64`, and `linux/arm64` hosts. CBOM mode can also extract cryptographic algorithm inventory from JavaScript and TypeScript source through lightweight AST analysis.
 
 ## ✅ When to Invoke
 
@@ -11,6 +11,7 @@
 - User needs dependency inventory, license resolution, or vulnerability triage context.
 - User wants to export to Dependency-Track, sign/validate a BOM, convert CycloneDX JSON to SPDX JSON-LD, or generate evidence/callstacks.
 - User wants a predictive audit of an existing CycloneDX BOM with `cdx-audit`, especially for npm or PyPI package compromise posture.
+- User wants Go dependency evidence, usage scopes, call graph context, data-flow/crypto-flow evidence, local replacement review, vendoring/license evidence, crypto components, or security-sensitive API signals from `evinse -l go` with Golem.
 
 ## 📦 Prerequisites & Installation
 
@@ -24,6 +25,7 @@
 Notes:
 
 - The optional `@cdxgen/cdxgen-plugins-bin` packages provide native helpers such as Trivy and osquery.
+- The same plugin package also provides `golem` for Go Evinse semantic evidence when a platform binary is available.
 - Container and `rootfs` scans can surface repository source components plus trusted-key cryptographic assets when those binaries are present.
 - Container and `rootfs` scans also emit `cdx:container:unpackagedExecutableCount` and `cdx:container:unpackagedSharedLibraryCount` metadata properties so agents can spot native file inventory that was not traced to OS package ownership.
 - Linux live-OS profiles include hardening-oriented `sysctl_hardening` and `mount_hardening` snapshots plus GTFOBins enrichment on privileged and network-active runtime rows.
@@ -112,6 +114,14 @@ cdxgen --server --server-host 0.0.0.0 --server-port 8080
 # Predictive audit of an existing BOM
 cdx-audit --bom bom.json
 
+# Go Evinse with Golem semantic evidence
+cdxgen -t go -o bom.json /absolute/path/to/go/project
+evinse -i bom.json -o bom.evinse.json -l go --golem-callgraph static /absolute/path/to/go/project
+cdx-audit --bom bom.evinse.json --direct-bom-audit --categories golem
+
+# Go Evinse crypto-flow evidence with bounded data-flow analysis
+evinse -i bom.json -o bom.evinse.crypto.json -l go --with-data-flow --golem-dataflow crypto --golem-dataflow-pattern-packs crypto /absolute/path/to/go/project
+
 # Machine-readable predictive audit
 cdx-audit --bom bom.json --report sarif --report-file audit.sarif
 ```
@@ -182,6 +192,7 @@ These indicators affect **which packages are audited first**, not the final seve
 - For container/rootfs review in `cdxi`, use `.unpackagedbins` and `.unpackagedlibs` to isolate executable and shared-library file components that sit outside OS package ownership.
 - For live Linux OBOM work, also expect GTFOBins properties on selected osquery-derived runtime artifacts and hardening-oriented findings from `sysctl_hardening` and `mount_hardening`.
 - For CBOM review in `cdxi`, use `.sourcecryptos` when you want just the JavaScript or TypeScript source-derived algorithm components rather than the full cryptographic asset list.
+- For Go Evinse review in `cdxi`, use `.golemsummary`, `.golemhotspots`, and `.golemcoverage` before drilling into `.occurrences`, `.callstack`, or `.inspect <component>`. For crypto-flow review, prioritize components with `cdx:golem:cryptoDataFlow=true`, `cdx:golem:cryptoDataFlowCount`, and rendered `cryptographic-asset` algorithms.
 
 ## ⛔ Anti-Hallucination & Safety Constraints
 
@@ -202,6 +213,7 @@ These indicators affect **which packages are audited first**, not the final seve
 15. On macOS OBOM runs, use the troubleshooting guide if tables come back empty or permission-gated; shell-mode osquery execution avoids the older `/var/osquery` startup failure mode.
 16. For offline host or golden-image reviews, prefer `--bom-audit --bom-audit-categories rootfs-hardening` so repository trust, privileged helpers, and service drift are checked without requiring live osquery collection.
 17. Source-derived algorithm components must stay validator-safe. Emit only algorithms that can be mapped to a known OID.
+18. For Go Evinse/Golem evidence, do not expose raw `go:generate` commands, raw environment values, HTTP parameter values, raw key material, plaintext, ciphertext, embedded file contents, generated source contents, or secrets. Use the emitted `cdx:golem:*` counts, categories, rule IDs, taint kinds, scopes, call-stack frames, crypto algorithm/OID pivots, and module facts for review.
 
 ## 📤 Output & Validation
 
@@ -213,19 +225,20 @@ These indicators affect **which packages are audited first**, not the final seve
 
 ## 🤖 Agent Execution Guidelines
 
-| Scenario                      | Recommended Action                                                                                                                          |
-| ----------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------- |
-| **Command fails silently**    | Check Java version (`java -version`), missing build tools, or secure mode restrictions. Suggest container image or `--no-install-deps`.     |
-| **Network/registry timeouts** | Set `HTTP_PROXY`/`HTTPS_PROXY`. Node ≥ 22.21 auto-detects. Do not auto-retry without user confirmation.                                     |
-| **Large mono-repos**          | Use `--no-recurse` + explicit `-t <lang>` or `--exclude-type` to limit scope.                                                               |
-| **Server mode invocation**    | Poll `/health` first. POST to `/sbom` with JSON body or query params. Pass `GITHUB_TOKEN` via env if scanning private repos.                |
-| **Aliases**                   | `obom` = `cdxgen -t os`<br>`cbom` = `cdxgen --include-crypto --include-formulation --evidence --spec-version 1.6`                           |
-| **HBOM**                      | `hbom` is the dedicated host-hardware command. Equivalent library path: `cdxgen -t hbom`. Do not mix it with other project types.           |
-| **Output parsing**            | Use `-p` for human-readable tables. Parse JSON at `-o` path programmatically. Never assume stdout contains the BOM unless `-o` is omitted.  |
-| **Signature verification**    | Use bundled `cdx-verify -i bom.json --public-key public.key`.                                                                               |
-| **SBOM signing**              | Use bundled `cdx-sign -i bom.json -k private.key`.                                                                                          |
-| **Predictive auditing**       | Use bundled `cdx-audit --bom bom.json` for existing BOMs. Prefer `--report sarif --report-file audit.sarif` for code-scanning uploads.      |
-| **OBOM troubleshooting**      | For macOS permission/startup quirks, check `docs/OBOM_MACOS_TROUBLESHOOTING.md`; for live-host triage patterns, use `docs/OBOM_LESSONS.md`. |
+| Scenario                      | Recommended Action                                                                                                                                                                                                    |
+| ----------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| **Command fails silently**    | Check Java version (`java -version`), missing build tools, or secure mode restrictions. Suggest container image or `--no-install-deps`.                                                                               |
+| **Network/registry timeouts** | Set `HTTP_PROXY`/`HTTPS_PROXY`. Node ≥ 22.21 auto-detects. Do not auto-retry without user confirmation.                                                                                                               |
+| **Large mono-repos**          | Use `--no-recurse` + explicit `-t <lang>` or `--exclude-type` to limit scope.                                                                                                                                         |
+| **Server mode invocation**    | Poll `/health` first. POST to `/sbom` with JSON body or query params. Pass `GITHUB_TOKEN` via env if scanning private repos.                                                                                          |
+| **Aliases**                   | `obom` = `cdxgen -t os`<br>`cbom` = `cdxgen --include-crypto --include-formulation --evidence --spec-version 1.6`                                                                                                     |
+| **HBOM**                      | `hbom` is the dedicated host-hardware command. Equivalent library path: `cdxgen -t hbom`. Do not mix it with other project types.                                                                                     |
+| **Output parsing**            | Use `-p` for human-readable tables. Parse JSON at `-o` path programmatically. Never assume stdout contains the BOM unless `-o` is omitted.                                                                            |
+| **Signature verification**    | Use bundled `cdx-verify -i bom.json --public-key public.key`.                                                                                                                                                         |
+| **SBOM signing**              | Use bundled `cdx-sign -i bom.json -k private.key`.                                                                                                                                                                    |
+| **Predictive auditing**       | Use bundled `cdx-audit --bom bom.json` for existing BOMs. Prefer `--report sarif --report-file audit.sarif` for code-scanning uploads.                                                                                |
+| **OBOM troubleshooting**      | For macOS permission/startup quirks, check `docs/OBOM_MACOS_TROUBLESHOOTING.md`; for live-host triage patterns, use `docs/OBOM_LESSONS.md`.                                                                           |
+| **Go data-flow review**       | Use `evinse -l go --deep` or `--with-data-flow --golem-dataflow crypto` for Golem data-flow. Keep worker/proc/slice limits bounded for CI and inspect `cdx:golem:dataFlow*` / `cdx:golem:cryptoDataFlow*` properties. |
 
 ### Dry-run-first workflow for agents
 

@@ -46,7 +46,12 @@ cdxgen -o bom.json --bom-audit --bom-audit-include-trusted
 
 # Audit only trusted-publishing-backed packages
 cdxgen -o bom.json --bom-audit --bom-audit-only-trusted
+
+# Audit a Go Evinse BOM enriched with Golem semantic properties
+cdx-audit --bom bom.evinse.json --direct-bom-audit --categories golem
 ```
+
+For Go projects, run `evinse -l go --deep` or `evinse -l go --with-data-flow --golem-dataflow crypto` before `cdx-audit` when you want Golem data-flow and crypto-flow properties such as `cdx:golem:dataFlowSliceCount`, `cdx:golem:cryptoDataFlow`, and `cdx:golem:cryptoDataFlowCount` to participate in review and prioritization.
 
 > **Note:** `--bom-audit` automatically enables `--include-formulation` to collect CI/CD workflow data. The formulation section may include sensitive data such as emails and environment details. Always review the generated SBOM before distribution.
 
@@ -66,6 +71,9 @@ The categories that work best in dry-run mode are the formulation-centric ones:
 - `ci-permission`
 - `container-risk`
 - `dependency-source`
+- `golem-security`
+- `golem-performance`
+- `golem-compliance`
 - `hbom-security`
 - `hbom-performance`
 - `hbom-compliance`
@@ -218,6 +226,43 @@ Beyond the YAML rule matches above, the current rollout also adds a small number
 - **Cargo workflow tie-ins:** mutable Cargo setup actions plus Cargo build/test/package/publish workflow steps correlated with native build surfaces
 
 The Python detections are intentionally conservative phase-1 heuristics. They are meant to catch obviously suspicious packaging behavior today while a deeper Python static-analysis path is developed separately.
+
+### `golem-security`, `golem-performance`, `golem-compliance` — Go Evinse semantic evidence review
+
+Rules that evaluate `cdx:golem:*` properties emitted by `evinse -l go` when the `golem` helper is available. These rules are intended to run after the base Go SBOM has been enriched into `bom.evinse.json`.
+
+```bash
+cdxgen -t go -o bom.json /absolute/path/to/go/project
+evinse -i bom.json -o bom.evinse.json -l go /absolute/path/to/go/project
+cdx-audit --bom bom.evinse.json --direct-bom-audit --categories golem
+```
+
+`golem` is an alias for `golem-security,golem-performance,golem-compliance`.
+
+| Rule           | Category          | Severity | Description                                                        |
+| -------------- | ----------------- | -------- | ------------------------------------------------------------------ |
+| GOLEM-SEC-001  | golem-security    | medium   | Runtime Go dependency has a high-severity semantic security signal |
+| GOLEM-SEC-002  | golem-security    | low      | Go crypto material flows into a crypto sink                        |
+| GOLEM-SEC-003  | golem-security    | low      | Go component has a cryptographic finding                           |
+| GOLEM-SEC-004  | golem-security    | low      | Go module uses a local replacement in analyzed source              |
+| GOLEM-PERF-001 | golem-performance | low      | Go project crosses a native code boundary                          |
+| GOLEM-PERF-002 | golem-performance | low      | Go project relies on generated or embedded build inputs            |
+| GOLEM-PERF-003 | golem-performance | low      | Go data-flow evidence was truncated or sanitized                   |
+| GOLEM-COMP-001 | golem-compliance  | low      | Go module appears private or workspace-local                       |
+| GOLEM-COMP-002 | golem-compliance  | medium   | Vendored Go module lacks license-file evidence                     |
+| GOLEM-COMP-003 | golem-compliance  | low      | Go module graph uses exclude directives                            |
+
+These rules use properties such as `cdx:golem:securitySignalSeverity`, `cdx:golem:usageScopes`, `cdx:golem:cryptoDataFlow`, `cdx:golem:cryptoFinding`, `cdx:golem:localReplacement`, `cdx:golem:privateModuleCandidate`, `cdx:golem:vendored`, `cdx:golem:licenseFileCount`, `cdx:golem:nativeArtifactCount`, `cdx:golem:goGenerateCount`, `cdx:golem:goEmbedCount`, `cdx:golem:dataFlowTruncated`, and `cdx:golem:goModExcludeCount`.
+
+Typical reviewer actions:
+
+- inspect `.occurrences` and `.callstack` for dependencies with security signals before deciding whether the signal is reachable and relevant
+- review `cdx:golem:cryptoDataFlow*` and `cdx:golem:cryptoFinding*` evidence for key provenance, algorithm safety, TLS settings, and secret-handling risks
+- remove local replacements from release builds or document why a local or vendored source is part of the release baseline
+- verify internal provenance, access-control, license, and vulnerability intake for private module candidates
+- review native, generated, and embedded asset surfaces for reproducibility, license coverage, and cross-platform build behavior
+- treat truncated data-flow evidence as coverage-limited and rerun with narrower patterns or larger limits before relying on a clean result
+- document why each `go.mod` exclude directive exists and verify the selected module versions are safe and reproducible
 
 ### `asar-archive` — Electron ASAR release artifact review
 
