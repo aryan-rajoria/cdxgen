@@ -1,4 +1,4 @@
-FROM almalinux:10.1-minimal@sha256:1843302c3d8256e51225513c0452938e57f80af025f1553ad7e2ddbb30a7931c
+FROM almalinux:10.1-minimal@sha256:6836d8e266ef3911e483951556a2cd01cc8e86bab7d1eb1b040682d61393dbee
 
 LABEL maintainer="cyclonedx" \
       org.opencontainers.image.authors="Prabhu Subramanian <prabhu@appthreat.com>" \
@@ -21,7 +21,7 @@ ARG SBT_VERSION=1.12.9
 # renovate: datasource=maven lookupName=org.apache.maven:maven
 ARG MAVEN_VERSION=3.9.12
 # renovate: datasource=gradle-version depName=gradle
-ARG GRADLE_VERSION=9.4.1
+ARG GRADLE_VERSION=9.5.1
 # renovate: datasource=golang-version depName=golang
 ARG GO_VERSION=1.26.3
 ARG PYTHON_VERSION=3.12
