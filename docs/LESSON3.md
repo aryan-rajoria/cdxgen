@@ -41,8 +41,8 @@ docker push docker.io/<repo>/sign-test:latest
 
 ```shell
 cdxgen --generate-key-and-sign -t docker -o bom.json docker.io/<repo>/sign-test:latest
-oras attach --artifact-type sbom/cyclonedx docker.io/<repo>/sign-test:latest ./bom.json:application/json
-oras discover -o tree docker.io/<repo>/sign-test:latest
+oras attach --artifact-type sbom/cyclonedx docker.io/<repo>/sign-test:latest ./bom.json:application/vnd.cyclonedx+json
+oras discover --format tree docker.io/<repo>/sign-test:latest
 ```
 
 To download the SBOM attachment from the OCI image, use the `oras pull` command with the correct digest from the `discover` command.

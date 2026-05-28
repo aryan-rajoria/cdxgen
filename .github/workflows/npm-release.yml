@@ -238,7 +238,7 @@ jobs:
           node bin/verify.js -i cdxgen-oci-image.cdx.json --public-key contrib/bom-signer/public.key
           for tag in $tags; do
             echo "Processing tag: $tag"
-            oras attach --artifact-type sbom/cyclonedx "$tag" ./cdxgen-oci-image.cdx.json:application/json
+            oras attach --artifact-type sbom/cyclonedx "$tag" ./cdxgen-oci-image.cdx.json:application/vnd.cyclonedx+json
             oras discover --format tree "$tag"
             node bin/verify.js -i "$tag" --public-key contrib/bom-signer/public.key
           done
@@ -317,7 +317,7 @@ jobs:
           node bin/verify.js -i cdxgen-secure-oci-image.cdx.json --public-key contrib/bom-signer/public.key
           for tag in $tags; do
             echo "Processing tag: $tag"
-            oras attach --artifact-type sbom/cyclonedx "$tag" ./cdxgen-secure-oci-image.cdx.json:application/json
+            oras attach --artifact-type sbom/cyclonedx "$tag" ./cdxgen-secure-oci-image.cdx.json:application/vnd.cyclonedx+json
             oras discover --format tree "$tag"
             node bin/verify.js -i "$tag" --public-key contrib/bom-signer/public.key
           done
@@ -399,7 +399,7 @@ jobs:
           node bin/verify.js -i cdxgen-deno-oci-image.cdx.json --public-key contrib/bom-signer/public.key
           for tag in $tags; do
             echo "Processing tag: $tag"
-            oras attach --artifact-type sbom/cyclonedx "$tag" ./cdxgen-deno-oci-image.cdx.json:application/json
+            oras attach --artifact-type sbom/cyclonedx "$tag" ./cdxgen-deno-oci-image.cdx.json:application/vnd.cyclonedx+json
             oras discover --format tree "$tag"
             node bin/verify.js -i "$tag" --public-key contrib/bom-signer/public.key
           done
@@ -534,7 +534,7 @@ jobs:
           node bin/verify.js -i cdxgen-bun-oci-image.cdx.json --public-key contrib/bom-signer/public.key
           for tag in $tags; do
             echo "Processing tag: $tag"
-            oras attach --artifact-type sbom/cyclonedx "$tag" ./cdxgen-bun-oci-image.cdx.json:application/json
+            oras attach --artifact-type sbom/cyclonedx "$tag" ./cdxgen-bun-oci-image.cdx.json:application/vnd.cyclonedx+json
             oras discover --format tree "$tag"
             node bin/verify.js -i "$tag" --public-key contrib/bom-signer/public.key
           done
