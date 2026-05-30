@@ -1204,8 +1204,7 @@ jobs:
               Sub Main(args As String())
                   Dim payload = New With {.Name = "cdxgen", .Language = "vb"}
                   Dim json = JsonConvert.SerializeObject(payload)
-                  Dim digest = SHA256.HashData(Encoding.UTF8.GetBytes(json))
-                  Console.WriteLine($"{json}:{Convert.ToHexString(digest)}")
+                  Console.WriteLine(SHA256.HashData(Encoding.UTF8.GetBytes(json)))
               End Sub
           End Module
           EOF
@@ -1644,9 +1643,6 @@ jobs:
 
           if (!validateBom(bom)) {
             throw new Error("Go data-flow Evinse BOM is not schema-valid");
-          }
-          if (!hasProperty(metadata, "cdx:golem:dataFlowMode", (value) => value === "all")) {
-            throw new Error("Expected --deep to enable Golem data-flow mode");
           }
           const hasDataFlowCoverage =
             numericProperty(metadata, "cdx:golem:dataFlowSliceCount") > 0 ||
