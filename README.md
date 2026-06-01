@@ -133,25 +133,25 @@ npm install -g @cyclonedx/cdxgen
 
 Installing `@cyclonedx/cdxgen` exposes these commands:
 
-| Command         | Purpose                                                                                              | Standalone GitHub release binary |
-| --------------- | ---------------------------------------------------------------------------------------------------- | -------------------------------- |
-| `cdxgen`        | Generate CycloneDX / SPDX BOMs from source, images, binaries, git URLs, or purls                     | yes                              |
-| `aibom`         | Generate CycloneDX AI/ML BOM from source, Hugging Face HTTP Urls or purls                            | yes                              |
-| `hbom`          | Generate a CycloneDX hardware BOM for the current host                                               | yes (`hbom`, `hbom-slim`)        |
-| `cdx-audit`     | Prioritize existing BOM dependencies for upstream supply-chain review using explainable risk signals | yes                              |
-| `cdx-convert`   | Convert CycloneDX JSON to SPDX 3.0.1 JSON-LD                                                         | yes                              |
-| `cdx-sign`      | Sign BOMs with JSF signatures                                                                        | yes                              |
-| `cdx-validate`  | Validate BOMs and benchmark posture                                                                  | yes                              |
-| `cdx-verify`    | Verify BOM signatures                                                                                | yes                              |
-| `cdxi`          | Open the interactive REPL                                                                            | no                               |
-| `evinse`        | Add evidence, reachability, and service context                                                      | no                               |
-| `cbom`          | Alias for CBOM-oriented `cdxgen` defaults                                                            | yes                              |
-| `obom`          | Alias for `cdxgen -t os`                                                                             | yes                              |
-| `saasbom`       | Alias for SaaSBOM-oriented `cdxgen` defaults                                                         | yes                              |
-| `spdxgen`       | Alias for `cdxgen --format spdx`                                                                     | use `cdxgen`                     |
-| `cdxgen-secure` | Alias for hardened `cdxgen` defaults                                                                 | use `cdxgen`                     |
+| Command         | Purpose                                                                                                              | Standalone GitHub release binary |
+| --------------- | -------------------------------------------------------------------------------------------------------------------- | -------------------------------- |
+| `cdxgen`        | Generate CycloneDX / SPDX BOMs from source, images, binaries, git URLs, or purls                                     | yes                              |
+| `aibom`         | Generate CycloneDX AI/ML BOMs from source, Hugging Face URLs/purls, Modelfiles, or GGUF artifacts (`-t ai` defaults) | yes                              |
+| `hbom`          | Generate a CycloneDX hardware BOM for the current host                                                               | yes (`hbom`, `hbom-slim`)        |
+| `cdx-audit`     | Prioritize existing BOM dependencies for upstream supply-chain review using explainable risk signals                 | yes                              |
+| `cdx-convert`   | Convert CycloneDX JSON to SPDX 3.0.1 JSON-LD                                                                         | yes                              |
+| `cdx-sign`      | Sign BOMs with JSF signatures                                                                                        | yes                              |
+| `cdx-validate`  | Validate BOMs and benchmark posture                                                                                  | yes                              |
+| `cdx-verify`    | Verify BOM signatures                                                                                                | yes                              |
+| `cdxi`          | Open the interactive REPL                                                                                            | no                               |
+| `evinse`        | Add evidence, reachability, and service context                                                                      | no                               |
+| `cbom`          | Alias for CBOM-oriented `cdxgen` defaults                                                                            | yes                              |
+| `obom`          | Alias for `cdxgen -t os`                                                                                             | yes                              |
+| `saasbom`       | Alias for SaaSBOM-oriented `cdxgen` defaults                                                                         | yes                              |
+| `spdxgen`       | Alias for `cdxgen --format spdx`                                                                                     | use `cdxgen`                     |
+| `cdxgen-secure` | Alias for hardened `cdxgen` defaults                                                                                 | use `cdxgen`                     |
 
-Standalone GitHub release binaries are published for `cdxgen`, `cdxgen-slim`, `cbom`, `obom`, `saasbom`, `hbom`, `hbom-slim`, `cdx-audit`, `cdx-convert`, `cdx-sign`, `cdx-validate`, and `cdx-verify`.
+Standalone GitHub release binaries are published for `cdxgen`, `cdxgen-slim`, `aibom`, `cbom`, `obom`, `saasbom`, `hbom`, `hbom-slim`, `cdx-audit`, `cdx-convert`, `cdx-sign`, `cdx-validate`, and `cdx-verify`.
 
 `hbom` release binaries bundle both `@cdxgen/cdx-hbom` and the matching `@cdxgen/cdxgen-plugins-bin*` companion helpers for the target platform. `hbom-slim` keeps the dedicated hardware collector (`@cdxgen/cdx-hbom`) but omits the companion plugin bundle when you want the smallest single-file HBOM executable.
 
@@ -159,7 +159,7 @@ The `cbom` and `saasbom` release binaries bundle the Atom analysis stack (`@appt
 
 `cdx-audit` is designed to accelerate upstream dependency review with explainable, evidence-backed risk prioritization. It complements provenance, reproducibility, and manual investigation rather than replacing them.
 
-For AI-heavy repositories, cdxgen also supports an AI-BOM workflow that emits AI service/model evidence and audits it with the `ai-bom` alias for governance, security, performance, AI-agent, and MCP findings.
+For AI-heavy repositories, cdxgen also supports an AI-BOM workflow via the `aibom` command or the `-t ai` project type aliases (`ai`, `aibom`, `ai-bom`). This emits AI service/model evidence and pairs naturally with the `ai-bom` BOM-audit category alias for governance, security, performance, AI-agent, and MCP findings.
 
 For host inventories, `hbom --include-runtime` produces a merged HBOM + OBOM view with strict topology links such as interface-name, driver-module, storage/runtime, and explicit secure-boot trust matches, plus a `host-topology` BOM audit pack for higher-confidence host findings. When the live hardware collector reports missing utilities or permission-sensitive enrichments, use `hbom diagnostics` (or inspect the derived `cdx:hbom:analysis:*` summary properties) before deciding whether a rerun with `--privileged` is justified.
 
@@ -205,6 +205,9 @@ Common asset names:
 - `cdxgen-linux-amd64-musl`
 - `cdxgen-darwin-arm64`
 - `cdxgen-windows-amd64.exe`
+- `aibom-linux-amd64`
+- `aibom-darwin-arm64`
+- `aibom-windows-amd64.exe`
 - `hbom-linux-amd64`
 - `hbom-linux-amd64-slim`
 - `hbom-darwin-arm64`

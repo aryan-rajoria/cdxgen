@@ -31,6 +31,9 @@ cdxgen -r --include-formulation -o aibom.json --bom-audit --bom-audit-categories
 # Same flow via the dedicated AI-BOM CLI
 aibom .
 
+# Explicit project type form when combining AI inventory with other cdxgen options
+cdxgen -t ai --include-formulation .
+
 # Generate a direct AI-BOM from a Hugging Face purl, URL, Modelfile, or GGUF file
 aibom pkg:huggingface/rohitnagareddy/Qwen3-0.6B-Coding-Finetuned-v1
 aibom https://huggingface.co/deepseek-ai/DeepSeek-R1-Distill-Qwen-7B
@@ -43,6 +46,22 @@ cdx-audit --bom aibom.json --direct-bom-audit --categories ai-bom
 # Focus only on governance findings
 cdx-audit --bom aibom.json --direct-bom-audit --categories ai-governance
 ```
+
+## Command and project-type aliases
+
+The dedicated `aibom` command is the focused AI-BOM entry point. Internally it defaults to:
+
+- `--type ai`
+- `--include-formulation`
+- `--bom-audit-categories ai-bom`
+
+The accepted project-type aliases for this mode are:
+
+- `ai`
+- `aibom`
+- `ai-bom`
+
+Use `aibom <input>` when you want the dedicated AI-oriented defaults for a single scan. Use `cdxgen -t ai ...` when you want to combine AI inventory with other `cdxgen` project types or flags explicitly.
 
 ## AI-BOM categories
 

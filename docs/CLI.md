@@ -8,36 +8,38 @@ In CLI mode, you can invoke cdxgen with Source Code, Container Image, or Binary 
 
 The package ships multiple CLI entry points. Use this table as the top-level navigation map.
 
-| Command        | Purpose                                                                               | Standalone release binary | Dedicated docs                     |
-| -------------- | ------------------------------------------------------------------------------------- | ------------------------- | ---------------------------------- |
-| `cdxgen`       | Generate CycloneDX and SPDX BOMs from source, images, binaries, git URLs, or purls    | yes                       | [CLI Usage](CLI.md)                |
-| `hbom`         | Generate a CycloneDX hardware BOM for the current host, with optional protobuf export | yes (`hbom`, `hbom-slim`) | [HBOM.md](HBOM.md)                 |
-| `cdx-audit`    | Explainable upstream dependency risk prioritization from existing BOMs                | yes                       | [CDX_AUDIT.md](CDX_AUDIT.md)       |
-| `cdx-convert`  | Convert CycloneDX JSON or protobuf to SPDX 3.0.1 JSON-LD                              | yes                       | [CDX_CONVERT.md](CDX_CONVERT.md)   |
-| `cdx-sign`     | Sign a CycloneDX BOM                                                                  | yes                       | [CDX_SIGN.md](CDX_SIGN.md)         |
-| `cdx-validate` | Validate structure, compliance, and signatures                                        | yes                       | [CDX_VALIDATE.md](CDX_VALIDATE.md) |
-| `cdx-verify`   | Verify BOM signatures                                                                 | yes                       | [CDX_VERIFY.md](CDX_VERIFY.md)     |
-| `cbom`         | Generate CBOM-oriented inventories with crypto and evidence defaults                  | yes                       | [CLI Usage](CLI.md)                |
-| `obom`         | Generate live OS/runtime inventories; equivalent default type is `os`                 | yes                       | [OBOM_LESSONS.md](OBOM_LESSONS.md) |
-| `saasbom`      | Generate SaaSBOM-oriented inventories with service-evidence defaults                  | yes                       | [CLI Usage](CLI.md)                |
-| `evinse`       | Add evidence, call stacks, reachability, and service data                             | no                        | [EVINSE.md](EVINSE.md)             |
-| `cdxi`         | Explore BOMs interactively in the REPL                                                | no                        | [REPL.md](REPL.md)                 |
+| Command        | Purpose                                                                                                  | Standalone release binary | Dedicated docs                     |
+| -------------- | -------------------------------------------------------------------------------------------------------- | ------------------------- | ---------------------------------- |
+| `cdxgen`       | Generate CycloneDX and SPDX BOMs from source, images, binaries, git URLs, or purls                       | yes                       | [CLI Usage](CLI.md)                |
+| `aibom`        | Generate AI-BOM-oriented inventories from source, Hugging Face references, Modelfiles, or GGUF artifacts | yes                       | [AI_BOM.md](AI_BOM.md)             |
+| `hbom`         | Generate a CycloneDX hardware BOM for the current host, with optional protobuf export                    | yes (`hbom`, `hbom-slim`) | [HBOM.md](HBOM.md)                 |
+| `cdx-audit`    | Explainable upstream dependency risk prioritization from existing BOMs                                   | yes                       | [CDX_AUDIT.md](CDX_AUDIT.md)       |
+| `cdx-convert`  | Convert CycloneDX JSON or protobuf to SPDX 3.0.1 JSON-LD                                                 | yes                       | [CDX_CONVERT.md](CDX_CONVERT.md)   |
+| `cdx-sign`     | Sign a CycloneDX BOM                                                                                     | yes                       | [CDX_SIGN.md](CDX_SIGN.md)         |
+| `cdx-validate` | Validate structure, compliance, and signatures                                                           | yes                       | [CDX_VALIDATE.md](CDX_VALIDATE.md) |
+| `cdx-verify`   | Verify BOM signatures                                                                                    | yes                       | [CDX_VERIFY.md](CDX_VERIFY.md)     |
+| `cbom`         | Generate CBOM-oriented inventories with crypto and evidence defaults                                     | yes                       | [CLI Usage](CLI.md)                |
+| `obom`         | Generate live OS/runtime inventories; equivalent default type is `os`                                    | yes                       | [OBOM_LESSONS.md](OBOM_LESSONS.md) |
+| `saasbom`      | Generate SaaSBOM-oriented inventories with service-evidence defaults                                     | yes                       | [CLI Usage](CLI.md)                |
+| `evinse`       | Add evidence, call stacks, reachability, and service data                                                | no                        | [EVINSE.md](EVINSE.md)             |
+| `cdxi`         | Explore BOMs interactively in the REPL                                                                   | no                        | [REPL.md](REPL.md)                 |
 
 ## Aliases and entry-point behavior
 
 Some commands are focused aliases rather than separate implementations.
 
-| Alias                                | Equivalent behavior                                                                                                         |
-| ------------------------------------ | --------------------------------------------------------------------------------------------------------------------------- |
-| `obom`                               | `cdxgen -t os`                                                                                                              |
-| `hbom`                               | dedicated HBOM command backed by `@cdxgen/cdx-hbom`; includes `hbom diagnostics`; equivalent library path: `cdxgen -t hbom` |
-| `spdxgen`                            | `cdxgen --format spdx`                                                                                                      |
-| `cbom`                               | `cdxgen` with `includeCrypto`, `evidence`, `deep`, and CycloneDX `1.7` defaults suited for CBOM generation                  |
-| `saasbom`                            | `cdxgen` with `evidence`, `deep`, and CycloneDX `1.7` defaults suited for service-evidence collection                       |
-| `cdxgen-secure`                      | `cdxgen` with secure mode enabled and dependency installation disabled by default                                           |
-| `cbom`, `obom`, `saasbom`, `spdxgen` | still accept the regular `cdxgen` flags in addition to their alias behavior                                                 |
+| Alias                                         | Equivalent behavior                                                                                                         |
+| --------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------- |
+| `aibom`                                       | `cdxgen -t ai --include-formulation --bom-audit-categories ai-bom`                                                          |
+| `obom`                                        | `cdxgen -t os`                                                                                                              |
+| `hbom`                                        | dedicated HBOM command backed by `@cdxgen/cdx-hbom`; includes `hbom diagnostics`; equivalent library path: `cdxgen -t hbom` |
+| `spdxgen`                                     | `cdxgen --format spdx`                                                                                                      |
+| `cbom`                                        | `cdxgen` with `includeCrypto`, `evidence`, `deep`, and CycloneDX `1.7` defaults suited for CBOM generation                  |
+| `saasbom`                                     | `cdxgen` with `evidence`, `deep`, and CycloneDX `1.7` defaults suited for service-evidence collection                       |
+| `cdxgen-secure`                               | `cdxgen` with secure mode enabled and dependency installation disabled by default                                           |
+| `aibom`, `cbom`, `obom`, `saasbom`, `spdxgen` | still accept the regular `cdxgen` flags in addition to their alias behavior                                                 |
 
-Installing `@cyclonedx/cdxgen` from npm exposes the commands in the command map plus the aliases in this section. The standalone `cbom`, `obom`, and `saasbom` release binaries preserve the same alias behavior and include protobuf export support, so `--export-proto --proto-bin-file <file>` works without installing optional npm dependencies separately.
+Installing `@cyclonedx/cdxgen` from npm exposes the commands in the command map plus the aliases in this section. The standalone `aibom`, `cbom`, `obom`, and `saasbom` release binaries preserve the same alias behavior. The `cbom`, `obom`, and `saasbom` binaries also include protobuf export support, so `--export-proto --proto-bin-file <file>` works without installing optional npm dependencies separately.
 
 ## HBOM command
 
