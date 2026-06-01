@@ -14,7 +14,7 @@ cdxgen can already emit AI-related evidence in standard CycloneDX documents, inc
 - AI agent instruction files and skill files
 - MCP configs and discovered MCP services
 
-For Hugging Face model repositories, cdxgen now prefers `pkg:huggingface/<namespace>/<name>@<revision>` identifiers when a compliant model repository reference is available.
+For Hugging Face model repositories, cdxgen uses Hugging Face Package-URL `pkg:huggingface/<namespace>/<name>@<revision>` identifiers when a compliant model repository reference is available.
 
 When model cards reference Hugging Face datasets, cdxgen also keeps those dataset links stable by emitting reusable dataset component references with explicit Hugging Face purls alongside inline dataset summaries where appropriate.
 

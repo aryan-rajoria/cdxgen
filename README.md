@@ -21,6 +21,7 @@ Supported BOM formats:
 - Cryptography (CBOM) - For Java keystores and certificates, plus JavaScript and TypeScript source-level algorithm inventory.
 - Operations (OBOM) - For Linux container images and VMs running Linux or Windows operating systems.
 - Software-as-a-Service (SaaSBOM) - For Java, Python, JavaScript, TypeScript, and PHP projects.
+- AI/ML (AI-BOM) - For prompt files, AI services, MCP configs, and model metadata with explainable AI-governance, security, performance, and agentic findings.
 - Attestations (CDXA) - Generate SBOM with templates for multiple standards. Sign the BOM document at a granular level to improve authenticity.
 - Vulnerability Disclosure Report (VDR) - Use cdxgen with [OWASP depscan](https://github.com/owasp-dep-scan/dep-scan) to automate the generation of VDR at scale.
 
@@ -135,6 +136,7 @@ Installing `@cyclonedx/cdxgen` exposes these commands:
 | Command         | Purpose                                                                                              | Standalone GitHub release binary |
 | --------------- | ---------------------------------------------------------------------------------------------------- | -------------------------------- |
 | `cdxgen`        | Generate CycloneDX / SPDX BOMs from source, images, binaries, git URLs, or purls                     | yes                              |
+| `aibom`         | Generate CycloneDX AI/ML BOM from source, Hugging Face HTTP Urls or purls                            | yes                              |
 | `hbom`          | Generate a CycloneDX hardware BOM for the current host                                               | yes (`hbom`, `hbom-slim`)        |
 | `cdx-audit`     | Prioritize existing BOM dependencies for upstream supply-chain review using explainable risk signals | yes                              |
 | `cdx-convert`   | Convert CycloneDX JSON to SPDX 3.0.1 JSON-LD                                                         | yes                              |
