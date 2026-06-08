@@ -1,39 +1,129 @@
 changelog:
+  exclude:
+    labels:
+      - ignore-for-release
+      - duplicate
+      - question
+      - invalid
+      - wontfix
+      - needs triaging
+      - Ready for QA
+      - needs contributor
+      - help wanted
+      - good first issue
+      - Consider Funding
   categories:
-    - title: Breaking Changes 🛠
+    - title: "JavaScript / TypeScript / Node.js 🚀"
       labels:
-        - breaking
-        - possibly breaking
-    - title: 🤖 AI-auto Changes
+        - "lang:node"
+        - "lang: vscode-extension"
+        - "lang:chrome-extension"
+        - npm
+        - yarn
+        - pnpm
+        - bun
+        - angular
+        - vue
+        - esbuild
+        - node20
+        - jsr
+    - title: "Python 🐍"
       labels:
-        - ai-auto
-        - ai-copilot
-    - title: 🤖 AI-pair Changes
+        - "lang:python"
+        - pixi
+    - title: "Go 🐹"
       labels:
-        - ai-pair
-        - AI-assisted
-    - title: 🧠 Machine-Learning Changes
+        - "lang:go"
+    - title: "Rust 🦀"
       labels:
+        - "lang:rust"
+    - title: "Java / Kotlin / Scala / Clojure ☕"
+      labels:
+        - "lang:java"
+        - "lang:clojure"
+        - "lang:jar"
+        - maven
+        - gradle
+        - scala
+        - quarkus
+    - title: "C# / .NET 🎯"
+      labels:
+        - "lang:dotnet"
+    - title: "PHP 🐘"
+      labels:
+        - "lang:php"
+    - title: "Ruby 💎"
+      labels:
+        - "lang:ruby"
+    - title: "C / C++ 🛠"
+      labels:
+        - "lang:c"
+        - "c/c++"
+        - conan
+    - title: "Dart / Flutter 🎯"
+      labels:
+        - dart
+    - title: "Swift / Objective-C 🍎"
+      labels:
+        - "lang:swift"
+        - cocoapods
+    - title: "Docker / Containers / Infrastructure 🐳"
+      labels:
+        - "lang:container"
+        - "lang:docker-compose"
+        - "mode:container"
+        - infra
+    - title: "AI-BOM / Machine Learning / MCP 🧠"
+      labels:
+        - aibom
+        - "lang:mcp"
+        - skill
         - ml
         - llm
-    - title: 🚀 Features
+        - gpt
+        - ai-auto
+        - ai-pair
+        - AI-assisted
+    - title: "SaaSBOM / OBOM / CBOM / Cryptography / Evinse 🛡"
       labels:
-        - enhancement
-    - title: 🐛 Bug Fixes
+        - cbom
+        - obom
+        - hbom
+        - omnibor
+        - evinse
+        - formulation
+    - title: "CLI / REPL / HTTP Server / Deno 💻"
       labels:
-        - bug
-    - title: 🧼 Code Refactoring
+        - "mode:cli"
+        - "mode:server"
+        - "mode:repl"
+        - "mode:library"
+        - "mode:brew"
+        - "runtime:deno"
+    - title: "Integration & Specifications 📊"
       labels:
-        - refactor
-    - title: 📚 Documentation
+        - "intg:dtrack"
+        - "spec:1.6"
+        - "spec:1.7"
+        - "format:spdx"
+        - standard
+    - title: "Breaking Changes 🛠"
       labels:
-        - documentation
-    - title: 🧪 Testing
+        - breaking
+        - "possibly breaking"
+    - title: "CI/CD & GitHub Actions 🤖"
       labels:
-        - test
-    - title: 🏗️ Build System
-      labels:
-        - build
-    - title: 💳 Sponsored Work
+        - actions
+    - title: "Sponsored Work 💳"
       labels:
         - sponsored
+    - title: "Other Enhancements & Fixes 🧼"
+      labels:
+        - enhancement
+        - bug
+        - refactor
+        - documentation
+        - test
+        - build
+        - security
+        - regression
