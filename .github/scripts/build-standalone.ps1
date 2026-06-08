@@ -32,7 +32,7 @@ $commonSbomArgs = @(
   "--no-install-deps"
 )
 
-$caxaPackage = if ($env:CAXA_PACKAGE) { $env:CAXA_PACKAGE } else { "@appthreat/caxa@^3.0.1" }
+$caxaPackage = if ($env:CAXA_PACKAGE) { $env:CAXA_PACKAGE } else { "@cdxgen/caxa@^3.0.3" }
 $stagingDirs = [System.Collections.Generic.List[string]]::new()
 $sharedPnpmStore = if ($env:STANDALONE_PNPM_STORE) { $env:STANDALONE_PNPM_STORE } else { Join-Path ([System.IO.Path]::GetTempPath()) "cdxgen-standalone-pnpm-store-$PID" }
 $slimMaxBytes = if ($env:STANDALONE_SLIM_MAX_BYTES) { [int64]$env:STANDALONE_SLIM_MAX_BYTES } else { 104857600 }
