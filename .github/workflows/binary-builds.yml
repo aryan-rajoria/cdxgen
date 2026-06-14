@@ -105,7 +105,7 @@ jobs:
             libc: musl
             image: php:8.4-alpine3.21@sha256:9c1dd92c492546d1de23decef0d67280f3f9413942ff44ec119af6db642cd9f0
             libc-suffix: -musl
-            node-download-url: https://unofficial-builds.nodejs.org/download/release/
+            node-download-url: https://unofficial-builds.nodejs.org/download/release
             ext: ''
             prepare: |
               apk add --no-cache bash curl libstdc++ xz
@@ -155,7 +155,7 @@ jobs:
           NVM_VERSION=$(awk 'BEGIN {ORS=""}; FNR==2 {print $1}' .versions/nvm)
           curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/$NVM_VERSION/install.sh | bash
           if [[ "${{ matrix.libc }}" == "musl" ]]; then
-            sed -i 's/x64-musl/"${NVM_ARCH}-musl"/g' "$NVM_DIR/nvm.sh"
+            sed -i 's/x64) NVM_ARCH=x64-musl ;;/*) NVM_ARCH="${NVM_ARCH}-musl" ;;/g' "$NVM_DIR/nvm.sh"
           fi
           [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh" --no-use
           nvm install
