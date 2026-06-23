@@ -256,17 +256,24 @@ jobs:
         continue-on-error: true
         env:
           STEPS_META_OUTPUTS_TAGS: ${{ steps.meta.outputs.tags }}
+      - name: Checkout latest helper tools
+        uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+        with:
+          ref: ${{ github.sha }}
+          path: latest-cdxgen
+          persist-credentials: false
       - name: Attach cdx sbom
         run: |
           pnpm install:frozen
+          cd latest-cdxgen && pnpm install:frozen && cd ..
           tags="${STEPS_META_OUTPUTS_TAGS}"
           first_tag=$(echo "$tags" | head -n 1)
           node bin/cdxgen.js -t docker -o cdxgen-oci-image.cdx.json "$first_tag"
-          node bin/verify.js -i cdxgen-oci-image.cdx.json --public-key contrib/bom-signer/public.key
+          node latest-cdxgen/bin/verify.js -i cdxgen-oci-image.cdx.json --public-key contrib/bom-signer/public.key
           for tag in $tags; do
             echo "Processing tag: $tag"
-            node bin/sign.js -i cdxgen-oci-image.cdx.json --attach "$tag"
-            node bin/verify.js -i "$tag" --public-key contrib/bom-signer/public.key
+            node latest-cdxgen/bin/sign.js -i cdxgen-oci-image.cdx.json --attach "$tag"
+            node latest-cdxgen/bin/verify.js -i "$tag" --public-key contrib/bom-signer/public.key
           done
         env:
           CDXGEN_TEMP_DIR: ${{ runner.temp }}/cdxgen-sboms
@@ -341,17 +348,24 @@ jobs:
           push: true
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
+      - name: Checkout latest helper tools
+        uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+        with:
+          ref: ${{ github.sha }}
+          path: latest-cdxgen
+          persist-credentials: false
       - name: Attach cdx sbom
         run: |
           pnpm install:frozen
+          cd latest-cdxgen && pnpm install:frozen && cd ..
           tags="${STEPS_META_OUTPUTS_TAGS}"
           first_tag=$(echo "$tags" | head -n 1)
           node bin/cdxgen.js -t docker -o cdxgen-secure-oci-image.cdx.json "$first_tag"
-          node bin/verify.js -i cdxgen-secure-oci-image.cdx.json --public-key contrib/bom-signer/public.key
+          node latest-cdxgen/bin/verify.js -i cdxgen-secure-oci-image.cdx.json --public-key contrib/bom-signer/public.key
           for tag in $tags; do
             echo "Processing tag: $tag"
-            node bin/sign.js -i cdxgen-secure-oci-image.cdx.json --attach "$tag"
-            node bin/verify.js -i "$tag" --public-key contrib/bom-signer/public.key
+            node latest-cdxgen/bin/sign.js -i cdxgen-secure-oci-image.cdx.json --attach "$tag"
+            node latest-cdxgen/bin/verify.js -i "$tag" --public-key contrib/bom-signer/public.key
           done
         env:
           CDXGEN_TEMP_DIR: ${{ runner.temp }}/cdxgen-sboms
@@ -429,17 +443,24 @@ jobs:
           push: true
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
+      - name: Checkout latest helper tools
+        uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+        with:
+          ref: ${{ github.sha }}
+          path: latest-cdxgen
+          persist-credentials: false
       - name: Attach cdx sbom
         run: |
           pnpm install:frozen
+          cd latest-cdxgen && pnpm install:frozen && cd ..
           tags="${STEPS_META_OUTPUTS_TAGS}"
           first_tag=$(echo "$tags" | head -n 1)
           node bin/cdxgen.js -t docker -o cdxgen-deno-oci-image.cdx.json "$first_tag"
-          node bin/verify.js -i cdxgen-deno-oci-image.cdx.json --public-key contrib/bom-signer/public.key
+          node latest-cdxgen/bin/verify.js -i cdxgen-deno-oci-image.cdx.json --public-key contrib/bom-signer/public.key
           for tag in $tags; do
             echo "Processing tag: $tag"
-            node bin/sign.js -i cdxgen-deno-oci-image.cdx.json --attach "$tag"
-            node bin/verify.js -i "$tag" --public-key contrib/bom-signer/public.key
+            node latest-cdxgen/bin/sign.js -i cdxgen-deno-oci-image.cdx.json --attach "$tag"
+            node latest-cdxgen/bin/verify.js -i "$tag" --public-key contrib/bom-signer/public.key
           done
         env:
           CDXGEN_TEMP_DIR: ${{ runner.temp }}/cdxgen-sboms
@@ -576,17 +597,24 @@ jobs:
           push: true
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
+      - name: Checkout latest helper tools
+        uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+        with:
+          ref: ${{ github.sha }}
+          path: latest-cdxgen
+          persist-credentials: false
       - name: Attach cdx sbom
         run: |
           pnpm install:frozen
+          cd latest-cdxgen && pnpm install:frozen && cd ..
           tags="${STEPS_META_OUTPUTS_TAGS}"
           first_tag=$(echo "$tags" | head -n 1)
           node bin/cdxgen.js -t docker -o cdxgen-bun-oci-image.cdx.json "$first_tag"
-          node bin/verify.js -i cdxgen-bun-oci-image.cdx.json --public-key contrib/bom-signer/public.key
+          node latest-cdxgen/bin/verify.js -i cdxgen-bun-oci-image.cdx.json --public-key contrib/bom-signer/public.key
           for tag in $tags; do
             echo "Processing tag: $tag"
-            node bin/sign.js -i cdxgen-bun-oci-image.cdx.json --attach "$tag"
-            node bin/verify.js -i "$tag" --public-key contrib/bom-signer/public.key
+            node latest-cdxgen/bin/sign.js -i cdxgen-bun-oci-image.cdx.json --attach "$tag"
+            node latest-cdxgen/bin/verify.js -i "$tag" --public-key contrib/bom-signer/public.key
           done
         env:
           CDXGEN_TEMP_DIR: ${{ runner.temp }}/cdxgen-sboms
