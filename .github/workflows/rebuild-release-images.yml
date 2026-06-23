@@ -70,9 +70,10 @@ jobs:
           echo "Triggering npm-release.yml for tag: ${MATRIX_TAG}"
           gh workflow run npm-release.yml \
             -R ${{ github.repository }} \
-            -r refs/tags/${MATRIX_TAG} \
+            -r ${{ github.ref_name }} \
             -f rebuild-images-only=true \
-            -f latest=$IS_LATEST
+            -f latest=$IS_LATEST \
+            -f tag=${MATRIX_TAG}
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           MATRIX_TAG: ${{ matrix.tag }}
