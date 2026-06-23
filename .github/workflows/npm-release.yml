@@ -11,12 +11,12 @@ on:
         description: 'Rebuild container images only (skip NPM/JSR publish)'
         required: false
         type: boolean
-        default: false
+        default: true
       latest:
         description: 'Tag the images as latest on top of the given tags'
         required: false
         type: boolean
-        default: true
+        default: false
       tag:
         description: 'Tag/ref to build (leave empty for default trigger ref)'
         required: false
