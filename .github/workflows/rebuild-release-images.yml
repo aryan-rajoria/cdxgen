@@ -4,6 +4,11 @@ on:
   schedule:
     - cron: "0 16 * * 6"  # Saturdays at 16:00 UTC
   workflow_dispatch:
+    inputs:
+      versions:
+        description: 'Comma-separated or single version to rebuild (e.g., v12.0.0, v12.6.0). If empty, standard automatic selection is used.'
+        required: false
+        default: ''
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
@@ -33,6 +38,7 @@ jobs:
           node .github/workflows/determine-rebuild-tags.js releases.json
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          INPUT_VERSIONS: ${{ github.event.inputs.versions }}
 
   rebuild:
     needs: fetch-releases

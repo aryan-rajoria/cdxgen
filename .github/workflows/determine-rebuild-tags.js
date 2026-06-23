@@ -66,33 +66,60 @@ for (const rel of validReleases) {
   groups[key].push(rel);
 }
 
-// Get the sorted list of minor release keys (highest first)
-const minorKeys = Object.keys(groups).sort((a, b) => {
-  const [aMaj, aMin] = a.split(".").map(Number);
-  const [bMaj, bMin] = b.split(".").map(Number);
-  if (aMaj !== bMaj) return bMaj - aMaj;
-  return bMin - aMin;
-});
+let sortedSelectedTags = [];
+const inputVersions = process.env.INPUT_VERSIONS;
 
-// We want the last two minor releases
-const targetMinors = minorKeys.slice(0, 2);
+if (inputVersions && inputVersions.trim() !== "") {
+  // Split by comma, trim whitespace
+  const rawTags = inputVersions.split(",").map((t) => t.trim());
+  const parsedTags = [];
+  for (const tag of rawTags) {
+    if (!tag) continue;
+    // Normalize: if it doesn't start with 'v', prepend 'v'
+    const normalizedTag = tag.startsWith("v") ? tag : `v${tag}`;
+    const parsed = parseSemver(normalizedTag);
+    if (parsed) {
+      parsedTags.push(parsed);
+    } else {
+      console.warn(`Warning: Invalid semver format for input version: ${tag}`);
+    }
+  }
+  // Sort descending by semver
+  parsedTags.sort((a, b) => {
+    if (a.major !== b.major) return b.major - a.major;
+    if (a.minor !== b.minor) return b.minor - a.minor;
+    return b.patch - a.patch;
+  });
+  sortedSelectedTags = parsedTags.map((r) => r.tag);
+} else {
+  // Get the sorted list of minor release keys (highest first)
+  const minorKeys = Object.keys(groups).sort((a, b) => {
+    const [aMaj, aMin] = a.split(".").map(Number);
+    const [bMaj, bMin] = b.split(".").map(Number);
+    if (aMaj !== bMaj) return bMaj - aMaj;
+    return bMin - aMin;
+  });
 
-// For each of these minor releases, get the last 2 patch releases (highest patches)
-const selectedTags = [];
-for (const key of targetMinors) {
-  const groupReleases = groups[key]; // already sorted descending by patch
-  const topPatches = groupReleases.slice(0, 2).map((r) => r.tag);
-  selectedTags.push(...topPatches);
+  // We want the last two minor releases
+  const targetMinors = minorKeys.slice(0, 2);
+
+  // For each of these minor releases, get the last 2 patch releases (highest patches)
+  const selectedTags = [];
+  for (const key of targetMinors) {
+    const groupReleases = groups[key]; // already sorted descending by patch
+    const topPatches = groupReleases.slice(0, 2).map((r) => r.tag);
+    selectedTags.push(...topPatches);
+  }
+
+  // Ensure the final list of selected tags is also sorted descending by semver
+  const finalParsedTags = selectedTags.map(parseSemver).filter(Boolean);
+  finalParsedTags.sort((a, b) => {
+    if (a.major !== b.major) return b.major - a.major;
+    if (a.minor !== b.minor) return b.minor - a.minor;
+    return b.patch - a.patch;
+  });
+  sortedSelectedTags = finalParsedTags.map((r) => r.tag);
 }
-
-// Ensure the final list of selected tags is also sorted descending by semver
-const finalParsedTags = selectedTags.map(parseSemver).filter(Boolean);
-finalParsedTags.sort((a, b) => {
-  if (a.major !== b.major) return b.major - a.major;
-  if (a.minor !== b.minor) return b.minor - a.minor;
-  return b.patch - a.patch;
-});
-const sortedSelectedTags = finalParsedTags.map((r) => r.tag);
 
 // Determine the absolute latest tag (first element of overall sorted releases)
 const latestTag = validReleases[0] ? validReleases[0].tag : "";
