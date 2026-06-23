@@ -52,6 +52,19 @@ Below table summarizes all available container image versions. These images incl
 
 Replace `:v12` with a release version tag or sha256 hash for fine-grained control over the image tag.
 
+### Tagging Scheme
+
+Every container image is built and tagged automatically with multiple tag formats to support different use cases:
+
+- **Exact Version Tag (e.g., `12.6.0`)**: Resolves to the exact patch release. Recommended for production pipelines where reproducibility is critical.
+- **Minor Version Tracking Tag (e.g., `v12.6`)**: Tracks the minor release line. Users pulling this tag automatically receive patch and security updates within the minor release.
+- **Major Version Tracking Tag (e.g., `v12`)**: Tracks the major release line (consistent with historical tags like `:v12`).
+- **Latest Tag (`latest`)**: The absolute newest stable release of cdxgen.
+
+### Automatic Rebuilds
+
+A scheduled workflow runs weekly to rebuild container images for the last 2 patch releases (if available) of the last two minor releases. This keeps dependencies, base OS packages, and security fixes up-to-date in published release containers. Only the workflow run corresponding to the absolute latest version publishes the `:latest` tag, ensuring it is never accidentally overwritten by older patch rebuilds.
+
 ## cdxgen variants
 
 ### Legacy Java applications

@@ -54,7 +54,7 @@ jobs:
         env:
           MATRIX_TAG: ${{ matrix.tag }}
 
-      - name: Trigger build-images workflow
+      - name: Trigger rebuild workflows
         run: |
           IS_LATEST="false"
           if [[ "${MATRIX_TAG}" == "${NEEDS_FETCH_RELEASES_OUTPUTS_LATEST_TAG}" ]]; then
@@ -65,6 +65,13 @@ jobs:
           gh workflow run build-images.yml \
             -R ${{ github.repository }} \
             -r refs/tags/${MATRIX_TAG} \
+            -f latest=$IS_LATEST
+
+          echo "Triggering npm-release.yml for tag: ${MATRIX_TAG}"
+          gh workflow run npm-release.yml \
+            -R ${{ github.repository }} \
+            -r refs/tags/${MATRIX_TAG} \
+            -f rebuild-images-only=true \
             -f latest=$IS_LATEST
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}

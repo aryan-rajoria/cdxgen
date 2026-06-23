@@ -5,6 +5,17 @@ on:
     tags:
       - 'v*'
   workflow_dispatch:
+    inputs:
+      rebuild-images-only:
+        description: 'Rebuild container images only (skip NPM/JSR publish)'
+        required: false
+        type: boolean
+        default: false
+      latest:
+        description: 'Tag the images as latest on top of the given tags'
+        required: false
+        type: boolean
+        default: true
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
@@ -18,7 +29,7 @@ permissions: {}
 
 jobs:
   pkg:
-    if: github.repository == 'cdxgen/cdxgen'
+    if: github.repository == 'cdxgen/cdxgen' && github.event.inputs.rebuild-images-only != 'true'
     runs-on: ubuntu-latest
     permissions:
       contents: read
@@ -204,6 +215,11 @@ jobs:
         with:
           images: |
             ghcr.io/cdxgen/cdxgen
+          tags: |
+            type=semver,pattern={{version}}
+            type=semver,pattern=v{{major}}.{{minor}}
+            type=semver,pattern=v{{major}}
+            type=raw,value=latest,enable=${{ github.event_name == 'push' || github.event.inputs.latest == 'true' }}
       - name: Build and push Docker images
         uses: docker/build-push-action@f9f3042f7e2789586610d6e8b85c8f03e5195baf  # v7.2.0
         with:
@@ -296,6 +312,11 @@ jobs:
         with:
           images: |
             ghcr.io/cdxgen/cdxgen-secure
+          tags: |
+            type=semver,pattern={{version}}
+            type=semver,pattern=v{{major}}.{{minor}}
+            type=semver,pattern=v{{major}}
+            type=raw,value=latest,enable=${{ github.event_name == 'push' || github.event.inputs.latest == 'true' }}
       - name: Build and push Docker images
         uses: docker/build-push-action@f9f3042f7e2789586610d6e8b85c8f03e5195baf  # v7.2.0
         with:
@@ -376,6 +397,11 @@ jobs:
         with:
           images: |
             ghcr.io/cdxgen/cdxgen-deno
+          tags: |
+            type=semver,pattern={{version}}
+            type=semver,pattern=v{{major}}.{{minor}}
+            type=semver,pattern=v{{major}}
+            type=raw,value=latest,enable=${{ github.event_name == 'push' || github.event.inputs.latest == 'true' }}
       - name: Build and push Docker images
         uses: docker/build-push-action@f9f3042f7e2789586610d6e8b85c8f03e5195baf  # v7.2.0
         with:
@@ -452,6 +478,11 @@ jobs:
         with:
           images: |
             ghcr.io/cdxgen/cdxgen-ppc64
+          tags: |
+            type=semver,pattern={{version}}
+            type=semver,pattern=v{{major}}.{{minor}}
+            type=semver,pattern=v{{major}}
+            type=raw,value=latest,enable=${{ github.event_name == 'push' || github.event.inputs.latest == 'true' }}
       - name: Build and push Docker images
         uses: docker/build-push-action@f9f3042f7e2789586610d6e8b85c8f03e5195baf  # v7.2.0
         with:
@@ -508,6 +539,11 @@ jobs:
         with:
           images: |
             ghcr.io/cdxgen/cdxgen-bun
+          tags: |
+            type=semver,pattern={{version}}
+            type=semver,pattern=v{{major}}.{{minor}}
+            type=semver,pattern=v{{major}}
+            type=raw,value=latest,enable=${{ github.event_name == 'push' || github.event.inputs.latest == 'true' }}
       - name: Build and push Docker images
         uses: docker/build-push-action@f9f3042f7e2789586610d6e8b85c8f03e5195baf  # v7.2.0
         with:
