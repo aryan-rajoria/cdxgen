@@ -1,4 +1,5 @@
 name: Release npm package and container images
+run-name: ${{ github.event.inputs.tag && format('Rebuild images for tag {0}', github.event.inputs.tag) || '' }}
 
 on:
   push:
@@ -22,7 +23,7 @@ on:
         type: string
 
 concurrency:
-  group: ${{ github.workflow }}-${{ github.ref }}
+  group: ${{ github.workflow }}-${{ github.event.inputs.tag || github.ref }}
   cancel-in-progress: true
 
 env:
