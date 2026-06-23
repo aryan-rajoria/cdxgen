@@ -90,7 +90,6 @@ jobs:
         id: meta
         uses: docker/metadata-action@80c7e94dd9b9319bd5eb7a0e0fe9291e23a2a2e9  # v6.1.0
         with:
-          ref: ${{ env.REF }}
           images: |
             ghcr.io/cdxgen/cdxgen-ruby-builder
           flavor: latest=false,suffix=-amd64
@@ -135,7 +134,6 @@ jobs:
         id: meta
         uses: docker/metadata-action@80c7e94dd9b9319bd5eb7a0e0fe9291e23a2a2e9  # v6.1.0
         with:
-          ref: ${{ env.REF }}
           images: |
             ghcr.io/cdxgen/cdxgen-ruby-builder
           flavor: latest=false,suffix=-arm64
@@ -176,7 +174,6 @@ jobs:
       - uses: docker/metadata-action@80c7e94dd9b9319bd5eb7a0e0fe9291e23a2a2e9  # v6.1.0
         id: metadata
         with:
-          ref: ${{ env.REF }}
           images: ghcr.io/${{ github.repository }}
       - uses: int128/docker-manifest-create-action@b9d644eaa3312dd895ffdafb19333a7b266e6ba9  # v2.21.0
         id: build
@@ -227,7 +224,6 @@ jobs:
         id: meta
         uses: docker/metadata-action@80c7e94dd9b9319bd5eb7a0e0fe9291e23a2a2e9  # v6.1.0
         with:
-          ref: ${{ env.REF }}
           images: |
             ghcr.io/cdxgen/cdxgen
           tags: |
@@ -327,7 +323,6 @@ jobs:
         id: meta
         uses: docker/metadata-action@80c7e94dd9b9319bd5eb7a0e0fe9291e23a2a2e9  # v6.1.0
         with:
-          ref: ${{ env.REF }}
           images: |
             ghcr.io/cdxgen/cdxgen-secure
           tags: |
@@ -415,7 +410,6 @@ jobs:
         id: meta
         uses: docker/metadata-action@80c7e94dd9b9319bd5eb7a0e0fe9291e23a2a2e9  # v6.1.0
         with:
-          ref: ${{ env.REF }}
           images: |
             ghcr.io/cdxgen/cdxgen-deno
           tags: |
@@ -499,7 +493,6 @@ jobs:
         id: meta
         uses: docker/metadata-action@80c7e94dd9b9319bd5eb7a0e0fe9291e23a2a2e9  # v6.1.0
         with:
-          ref: ${{ env.REF }}
           images: |
             ghcr.io/cdxgen/cdxgen-ppc64
           tags: |
@@ -562,7 +555,6 @@ jobs:
         id: meta
         uses: docker/metadata-action@80c7e94dd9b9319bd5eb7a0e0fe9291e23a2a2e9  # v6.1.0
         with:
-          ref: ${{ env.REF }}
           images: |
             ghcr.io/cdxgen/cdxgen-bun
           tags: |
