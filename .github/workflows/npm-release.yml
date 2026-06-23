@@ -227,10 +227,11 @@ jobs:
           images: |
             ghcr.io/cdxgen/cdxgen
           tags: |
-            type=semver,pattern={{version}}
-            type=semver,pattern=v{{major}}.{{minor}}
-            type=semver,pattern=v{{major}}
+            type=semver,pattern={{version}},value=${{ github.event.inputs.tag || github.ref_name }},enable=${{ startsWith(env.REF, 'refs/tags/v') }}
+            type=semver,pattern=v{{major}}.{{minor}},value=${{ github.event.inputs.tag || github.ref_name }},enable=${{ startsWith(env.REF, 'refs/tags/v') }}
+            type=semver,pattern=v{{major}},value=${{ github.event.inputs.tag || github.ref_name }},enable=${{ startsWith(env.REF, 'refs/tags/v') }}
             type=raw,value=latest,enable=${{ github.event_name == 'push' || github.event.inputs.latest == 'true' }}
+            type=raw,value=master,enable=${{ env.REF == 'refs/heads/master' }}
       - name: Build and push Docker images
         uses: docker/build-push-action@f9f3042f7e2789586610d6e8b85c8f03e5195baf  # v7.2.0
         with:
@@ -326,10 +327,11 @@ jobs:
           images: |
             ghcr.io/cdxgen/cdxgen-secure
           tags: |
-            type=semver,pattern={{version}}
-            type=semver,pattern=v{{major}}.{{minor}}
-            type=semver,pattern=v{{major}}
+            type=semver,pattern={{version}},value=${{ github.event.inputs.tag || github.ref_name }},enable=${{ startsWith(env.REF, 'refs/tags/v') }}
+            type=semver,pattern=v{{major}}.{{minor}},value=${{ github.event.inputs.tag || github.ref_name }},enable=${{ startsWith(env.REF, 'refs/tags/v') }}
+            type=semver,pattern=v{{major}},value=${{ github.event.inputs.tag || github.ref_name }},enable=${{ startsWith(env.REF, 'refs/tags/v') }}
             type=raw,value=latest,enable=${{ github.event_name == 'push' || github.event.inputs.latest == 'true' }}
+            type=raw,value=master,enable=${{ env.REF == 'refs/heads/master' }}
       - name: Build and push Docker images
         uses: docker/build-push-action@f9f3042f7e2789586610d6e8b85c8f03e5195baf  # v7.2.0
         with:
@@ -413,10 +415,11 @@ jobs:
           images: |
             ghcr.io/cdxgen/cdxgen-deno
           tags: |
-            type=semver,pattern={{version}}
-            type=semver,pattern=v{{major}}.{{minor}}
-            type=semver,pattern=v{{major}}
+            type=semver,pattern={{version}},value=${{ github.event.inputs.tag || github.ref_name }},enable=${{ startsWith(env.REF, 'refs/tags/v') }}
+            type=semver,pattern=v{{major}}.{{minor}},value=${{ github.event.inputs.tag || github.ref_name }},enable=${{ startsWith(env.REF, 'refs/tags/v') }}
+            type=semver,pattern=v{{major}},value=${{ github.event.inputs.tag || github.ref_name }},enable=${{ startsWith(env.REF, 'refs/tags/v') }}
             type=raw,value=latest,enable=${{ github.event_name == 'push' || github.event.inputs.latest == 'true' }}
+            type=raw,value=master,enable=${{ env.REF == 'refs/heads/master' }}
       - name: Build and push Docker images
         uses: docker/build-push-action@f9f3042f7e2789586610d6e8b85c8f03e5195baf  # v7.2.0
         with:
@@ -496,10 +499,11 @@ jobs:
           images: |
             ghcr.io/cdxgen/cdxgen-ppc64
           tags: |
-            type=semver,pattern={{version}}
-            type=semver,pattern=v{{major}}.{{minor}}
-            type=semver,pattern=v{{major}}
+            type=semver,pattern={{version}},value=${{ github.event.inputs.tag || github.ref_name }},enable=${{ startsWith(env.REF, 'refs/tags/v') }}
+            type=semver,pattern=v{{major}}.{{minor}},value=${{ github.event.inputs.tag || github.ref_name }},enable=${{ startsWith(env.REF, 'refs/tags/v') }}
+            type=semver,pattern=v{{major}},value=${{ github.event.inputs.tag || github.ref_name }},enable=${{ startsWith(env.REF, 'refs/tags/v') }}
             type=raw,value=latest,enable=${{ github.event_name == 'push' || github.event.inputs.latest == 'true' }}
+            type=raw,value=master,enable=${{ env.REF == 'refs/heads/master' }}
       - name: Build and push Docker images
         uses: docker/build-push-action@f9f3042f7e2789586610d6e8b85c8f03e5195baf  # v7.2.0
         with:
@@ -558,10 +562,11 @@ jobs:
           images: |
             ghcr.io/cdxgen/cdxgen-bun
           tags: |
-            type=semver,pattern={{version}}
-            type=semver,pattern=v{{major}}.{{minor}}
-            type=semver,pattern=v{{major}}
+            type=semver,pattern={{version}},value=${{ github.event.inputs.tag || github.ref_name }},enable=${{ startsWith(env.REF, 'refs/tags/v') }}
+            type=semver,pattern=v{{major}}.{{minor}},value=${{ github.event.inputs.tag || github.ref_name }},enable=${{ startsWith(env.REF, 'refs/tags/v') }}
+            type=semver,pattern=v{{major}},value=${{ github.event.inputs.tag || github.ref_name }},enable=${{ startsWith(env.REF, 'refs/tags/v') }}
             type=raw,value=latest,enable=${{ github.event_name == 'push' || github.event.inputs.latest == 'true' }}
+            type=raw,value=master,enable=${{ env.REF == 'refs/heads/master' }}
       - name: Build and push Docker images
         uses: docker/build-push-action@f9f3042f7e2789586610d6e8b85c8f03e5195baf  # v7.2.0
         with:
