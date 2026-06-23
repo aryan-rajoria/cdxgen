@@ -16,6 +16,15 @@ wheels = [
 ]
 
 [[package]]
+name = "apkinspector"
+version = "1.3.6"
+source = { registry = "https://pypi.org/simple" }
+sdist = { url = "https://files.pythonhosted.org/packages/43/c2/56a1cb01ca64549633fa39b799861b226cda600412b62e9c6e4e4acb2f71/apkinspector-1.3.6.tar.gz", hash = "sha256:d39bee400906d28a6b1b09e1a70e4a87d69a044fb5d1890faae9917677651a04", size = 28042, upload-time = "2025-10-26T14:13:23.691Z" }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/fa/c4/36e95a50fed012832b7ea012644f753391c43322a4d0d1e421459cd22e22/apkinspector-1.3.6-py3-none-any.whl", hash = "sha256:811540c7ca2ee517c0d7ab47355cae593cd02f0699400134547a60940ac07ce7", size = 30348, upload-time = "2025-10-26T14:13:22.753Z" },
+]
+
+[[package]]
 name = "appdirs"
 version = "1.4.4"
 source = { registry = "https://pypi.org/simple" }
@@ -121,17 +130,18 @@ wheels = [
 
 [[package]]
 name = "atom-tools"
-version = "0.8.5"
+version = "0.9.1"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
     { name = "cleo" },
     { name = "jmespath" },
     { name = "json-flatten" },
+    { name = "rich" },
     { name = "thefuzz" },
 ]
-sdist = { url = "https://files.pythonhosted.org/packages/fe/b0/5e3d61eb689f02ebf88e4b9b8df11881989e137c551a7e6ae192b89276d4/atom_tools-0.8.5.tar.gz", hash = "sha256:ed8f3d9bd09488f555c071ec76f69f0f6bd26ef3e029fd0bf3d16b44ece77c02", size = 65919, upload-time = "2026-03-05T12:50:32.084Z" }
+sdist = { url = "https://files.pythonhosted.org/packages/a6/ac/ab6dc3f9c9ff71888d08184650d83a05fca792b73dbd6aa47d7d0a456270/atom_tools-0.9.1.tar.gz", hash = "sha256:a546286dfe1d1d960abc8767c0b271f370b053ae0fcaa301f155da82528ced5e", size = 94311, upload-time = "2026-06-18T08:43:04.205Z" }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/34/e1/7fd0fc40248ab2865b8e93f640cce750f6ce0cc68952f4b5c13848629774/atom_tools-0.8.5-py3-none-any.whl", hash = "sha256:77ffcd8876361e8c5fbadd0d3d70dd4bdbc137e39125dfdb99a6c7fa9db3d361", size = 47977, upload-time = "2026-03-05T12:50:30.28Z" },
+    { url = "https://files.pythonhosted.org/packages/09/80/a1e56b5f6ec662e0069071c697c8fda80eb2ce95972f3a42d2828171f7ff/atom_tools-0.9.1-py3-none-any.whl", hash = "sha256:17792fa7f3b7554bddee130ca06799fdf96ec25153250e793e110efeb32a7873", size = 72123, upload-time = "2026-06-18T08:43:02.731Z" },
 ]
 
 [[package]]
@@ -145,9 +155,10 @@ wheels = [
 
 [[package]]
 name = "blint"
-version = "3.1.2"
+version = "3.2.3"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
+    { name = "apkinspector" },
     { name = "appdirs" },
     { name = "apsw" },
     { name = "ar" },
@@ -161,15 +172,16 @@ dependencies = [
     { name = "pydantic", extra = ["email"] },
     { name = "pyyaml" },
     { name = "rich" },
+    { name = "wasm-tools" },
 ]
-sdist = { url = "https://files.pythonhosted.org/packages/e5/b5/8966595b8c3d8548dd614d7d88a6c94f29eb46bc160ee85a141eda5d38c4/blint-3.1.2.tar.gz", hash = "sha256:9deac9c8419233fe558c0479ba1789dba900d8d3045e052af90c28f3d3cc2c13", size = 177637, upload-time = "2026-04-13T23:19:16.351Z" }
+sdist = { url = "https://files.pythonhosted.org/packages/1d/be/cca6e2996d96c7b35a496e8aa12f9312aa7d3ca08d837672d8a9660a6687/blint-3.2.3.tar.gz", hash = "sha256:a3a76700b988ee0be9849b9a4fd4d8cb14e508c4e387ebdae637659c2441fd85", size = 304613, upload-time = "2026-06-22T00:52:43.592Z" }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/19/93/4c7dacd39d664b32bef72b3ba10831ddb0a87ebc4710922718f81e118a99/blint-3.1.2-py3-none-any.whl", hash = "sha256:e3586c12394c2fae3e92583217bb5f52792f477aeb0218c3a0bbbb1d5bc93ee2", size = 189494, upload-time = "2026-04-13T23:19:14.73Z" },
+    { url = "https://files.pythonhosted.org/packages/22/d3/562c1b9a8bcf38bb1fbb7597f5989b1243600b8ea6567858815a4958371b/blint-3.2.3-py3-none-any.whl", hash = "sha256:985df2722f99e1549be85506a771ea02ebd02e69ab62cfa259af151d1826f48f", size = 331680, upload-time = "2026-06-22T00:52:41.754Z" },
 ]
 
 [[package]]
 name = "cdxgen"
-version = "12.6.0"
+version = "12.7.0"
 source = { virtual = "." }
 dependencies = [
     { name = "atom-tools" },
@@ -186,11 +198,11 @@ requires-dist = [
 
 [[package]]
 name = "certifi"
-version = "2026.5.20"
+version = "2026.6.17"
 source = { registry = "https://pypi.org/simple" }
-sdist = { url = "https://files.pythonhosted.org/packages/f3/ce/ee2ecad540810a79593028e88299baeae54d346cc7a0d94b6199988b89b1/certifi-2026.5.20.tar.gz", hash = "sha256:69dea482ab64caa7b9f6aba1c6bf48bb6a5448d1c0f1b17ab42ad8c763a5344d", size = 135422, upload-time = "2026-05-20T11:46:50.073Z" }
+sdist = { url = "https://files.pythonhosted.org/packages/c9/c7/424b75da314c1045981bd9777432fad05a9e0c69daa4ed7e308bbaffe405/certifi-2026.6.17.tar.gz", hash = "sha256:024c88eeec92ca068db80f02b8b07c9cef7b9fe261d1d535abfd5abd6f6af432", size = 134594, upload-time = "2026-06-17T10:31:07.894Z" }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/59/8c/57e832b7af6d7c5abe66eb3fbe3a3a32f4d11ea23a1aa7131371035be991/certifi-2026.5.20-py3-none-any.whl", hash = "sha256:3c52e209ba0a4ad7aebe60436a4ab349c39e1e602e8c134221e546902ad25897", size = 134134, upload-time = "2026-05-20T11:46:48.578Z" },
+    { url = "https://files.pythonhosted.org/packages/ef/2f/c5464532e965badff2f4c4c1a3a83f5697f0d7c407ed0cda44aaa99bb451/certifi-2026.6.17-py3-none-any.whl", hash = "sha256:2227dcbaafe0d2f59279d1762ddddc37783ed4354594f194ffc31d20f41fc3db", size = 133289, upload-time = "2026-06-17T10:31:06.348Z" },
 ]
 
 [[package]]
@@ -1436,4 +1448,13 @@ source = { registry = "https://pypi.org/simple" }
 sdist = { url = "https://files.pythonhosted.org/packages/53/0c/06f8b233b8fd13b9e5ee11424ef85419ba0d8ba0b3138bf360be2ff56953/urllib3-2.7.0.tar.gz", hash = "sha256:231e0ec3b63ceb14667c67be60f2f2c40a518cb38b03af60abc813da26505f4c", size = 433602, upload-time = "2026-05-07T16:13:18.596Z" }
 wheels = [
     { url = "https://files.pythonhosted.org/packages/7f/3e/5db95bcf282c52709639744ca2a8b149baccf648e39c8cc87553df9eae0c/urllib3-2.7.0-py3-none-any.whl", hash = "sha256:9fb4c81ebbb1ce9531cce37674bbc6f1360472bc18ca9a553ede278ef7276897", size = 131087, upload-time = "2026-05-07T16:13:17.151Z" },
+]
+
+[[package]]
+name = "wasm-tools"
+version = "1.0.3"
+source = { registry = "https://pypi.org/simple" }
+sdist = { url = "https://files.pythonhosted.org/packages/46/cd/7553ad8f2ef6d6fb3c48fc6f6e4850b14d6ee0cc5161f03b3155166b14f6/wasm_tools-1.0.3.tar.gz", hash = "sha256:ea042f436198350068960feb5a8915e61bdaf7a36f7d9e0a80443da5c12ef7b1", size = 42473, upload-time = "2026-04-22T00:40:04.121Z" }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/21/a4/38960e88dd16334a019b990524219b1b7f216d539c11d749dc5921d5b236/wasm_tools-1.0.3-py3-none-any.whl", hash = "sha256:8d4cbd8c7025bedb394d33076517a5e4a5427e6cf35fecaf8b9a5793cd930378", size = 36316, upload-time = "2026-04-22T00:40:02.869Z" },
 ]

@@ -18,24 +18,19 @@ jobs:
       tags: ${{ steps.determine-tags.outputs.tags }}
       latest-tag: ${{ steps.determine-tags.outputs.latest-tag }}
     steps:
+      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+        with:
+          persist-credentials: false
       - name: Determine which tags to rebuild
         id: determine-tags
         run: |
-          # Fetch latest 2 releases from API
-          TAGS_ARRAY=$(gh api -H 'Accept: application/vnd.github+json' \
+          # Fetch releases from API
+          gh api -H 'Accept: application/vnd.github+json' \
             -H 'X-GitHub-Api-Version: 2022-11-28' \
-            /repos/${{ github.repository }}/releases \
-            --jq '[.[] | select(.prerelease == false) | .tag_name][0:2]')
-          # Validate we have at least one tag
-          if [[ -z "$TAGS_ARRAY" || "$TAGS_ARRAY" == "[]" ]]; then
-            echo "No valid release tags found to rebuild"
-            exit 1
-          fi
-          # Extract latest tag for 'latest' flag logic
-          LATEST_TAG=$(echo "$TAGS_ARRAY" | jq -r '.[0]')
-          echo "tags=$TAGS_ARRAY" >> "$GITHUB_OUTPUT"
-          echo "latest-tag=$LATEST_TAG" >> "$GITHUB_OUTPUT"
-          echo "Will rebuild tags: $TAGS_ARRAY"
+            /repos/${{ github.repository }}/releases > releases.json
+          
+          # Run the script to extract tags and write to $GITHUB_OUTPUT
+          node .github/workflows/determine-rebuild-tags.js releases.json
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
