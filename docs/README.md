@@ -4,8 +4,24 @@ cdxgen is available as an npm package, container image, and single executable bi
 
 ## Installation
 
+Install the npm package when you want the full multi-command CLI surface.
+
+**npm**:
+
 ```shell
-npm install -g @cyclonedx/cdxgen
+npm install -g @cyclonedx/cdxgen --omit=optional --ignore-scripts --min-release-age=2
+```
+
+**pnpm**:
+
+```shell
+pnpm add -g @cyclonedx/cdxgen --omit=optional --ignore-scripts --minimum-release-age=2880
+```
+
+**bun**:
+
+```shell
+bun install -g @cyclonedx/cdxgen --ignore-scripts
 ```
 
 If you are a [Homebrew](https://brew.sh/) user, you can also install [cdxgen](https://formulae.brew.sh/formula/cdxgen) via:
@@ -350,7 +366,7 @@ To generate test public/private key pairs, you can run cdxgen by passing the arg
 Use the bundled `cdx-verify` command, which supports verifying a single signature added at the bom level.
 
 ```shell
-npm install -g @cyclonedx/cdxgen
+npm install -g @cyclonedx/cdxgen --omit=optional --ignore-scripts --min-release-age=2
 cdx-verify -i bom.json --public-key public.key
 ```
 

@@ -129,8 +129,22 @@ Sections include:
 
 Install the npm package when you want the full multi-command CLI surface.
 
+**npm**:
+
 ```shell
-npm install -g @cyclonedx/cdxgen
+npm install -g @cyclonedx/cdxgen --omit=optional --ignore-scripts --min-release-age=2
+```
+
+**pnpm**:
+
+```shell
+pnpm add -g @cyclonedx/cdxgen --omit=optional --ignore-scripts --minimum-release-age=2880
+```
+
+**bun**:
+
+```shell
+bun install -g @cyclonedx/cdxgen --ignore-scripts
 ```
 
 Installing `@cyclonedx/cdxgen` exposes these commands:
@@ -682,7 +696,7 @@ Use the bundled `cdx-validate` command to validate CycloneDX BOMs against **stru
 Use the bundled `cdx-verify` command to validate BOM signatures. By default, `cdx-verify` performs a **strict deep verification**, meaning it mathematically validates the top-level BOM signature _and_ the signatures of every nested component, service, and annotation against the provided public key. Refer to this [lesson](./docs/LESSON6.md) for the usage of sign and verify commands.
 
 ```shell
-npm install -g @cyclonedx/cdxgen
+npm install -g @cyclonedx/cdxgen --omit=optional --ignore-scripts --min-release-age=2
 
 # Perform strict deep verification (default)
 cdx-verify -i bom.json --public-key public.key

@@ -99,12 +99,10 @@ Current practical scope limits:
 - clean source does not guarantee clean release artifacts
 - some malicious behavior that lives only in runtime, registry, or maintainer infrastructure may be outside the tool's line of sight
 
-## Installing `cdx-audit`
-
-`cdx-audit` ships with the main npm package:
+`cdx-audit` ships with the main npm package.
 
 ```bash
-npm install -g @cyclonedx/cdxgen
+npm install -g @cyclonedx/cdxgen --omit=optional --ignore-scripts --min-release-age=2
 cdx-audit --help
 ```
 

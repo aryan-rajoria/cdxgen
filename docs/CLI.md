@@ -120,10 +120,24 @@ flowchart LR
 
 ## Installing
 
-Install the npm package when you want the full multi-command CLI surface:
+Install the npm package when you want the full multi-command CLI surface.
+
+**npm**:
 
 ```shell
-sudo npm install -g @cyclonedx/cdxgen
+npm install -g @cyclonedx/cdxgen --omit=optional --ignore-scripts --min-release-age=2
+```
+
+**pnpm**:
+
+```shell
+pnpm add -g @cyclonedx/cdxgen --omit=optional --ignore-scripts --minimum-release-age=2880
+```
+
+**bun**:
+
+```shell
+bun install -g @cyclonedx/cdxgen --ignore-scripts
 ```
 
 You can also invoke any packaged command without a global install:
