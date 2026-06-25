@@ -91,19 +91,9 @@ Most SBOM tools are like simple barcode scanners. For easy applications, they ca
 - _Machine Learning:_ Optimize the generated data for Machine Learning (ML) purposes by considering the various model properties.
 - _Safety:_ Execute external build tools and handle untrusted inputs defensively, with hardened defaults, a [secure mode](docs/PERMISSIONS.md) for sensitive environments, and a read-only `--dry-run` mode for review-first workflows.
 
-### Review-first dry runs
-
-When you want to inspect what cdxgen would do before allowing side effects, use `--dry-run`.
-
-```shell
-cdxgen --dry-run -p -t js .
-```
-
-Dry-run mode keeps cdxgen read-only: it reads local files, blocks writes/exec/temp creation/cloning/submission, and prints an activity summary table for both beginners and power users. When available, the recorded activity data also captures archive extraction intent, command I/O volume, and followed symlink-resolution traces.
-
 ## Documentation
 
-Please visit our [GPT app][cdxgen-gpt] or the [documentation site][docs-homepage] for detailed usage, tutorials, and support documentation.
+Please visit our [documentation site][docs-homepage] for detailed usage, tutorials, and support documentation.
 
 Sections include:
 
@@ -127,12 +117,18 @@ Sections include:
 
 ## Installing
 
-Install the npm package when you want the full multi-command CLI surface.
+Install the npm package without the optional binary plugins for basic SBOM generation.
 
 **npm**:
 
 ```shell
 npm install -g @cyclonedx/cdxgen --omit=optional --ignore-scripts --min-release-age=2
+```
+
+For a full and rich experience with support for multiple BOM types, remove `--omit=optional`.
+
+```shell
+npm install -g @cyclonedx/cdxgen --ignore-scripts --min-release-age=2
 ```
 
 **pnpm**:
@@ -510,6 +506,16 @@ You can POST the arguments.
 curl -H "Content-Type: application/json" http://localhost:9090/sbom -XPOST -d $'{"url": "https://github.com/HooliCorp/vulnerable-aws-koa-app.git", "type": "nodejs", "multiProject": "true"}'
 ```
 
+### Review-first dry runs
+
+When you want to inspect what cdxgen would do before allowing side effects, use `--dry-run`.
+
+```shell
+cdxgen --dry-run -p -t js .
+```
+
+Dry-run mode keeps cdxgen read-only: it reads local files, blocks writes/exec/temp creation/cloning/submission, and prints an activity summary table for both beginners and power users. When available, the recorded activity data also captures archive extraction intent, command I/O volume, and followed symlink-resolution traces.
+
 ### Docker compose
 
 ```shell
@@ -525,16 +531,6 @@ cdxgen can generate a BOM file from a given war file.
 # cdxgen -t java app.war
 cdxgen app.war
 ```
-
-## Resolving class names
-
-Sometimes, it is necessary to resolve class names contained in jar files. By passing an optional argument `--resolve-class`, it is possible to get cdxgen to create a separate mapping file with the jar name (including the version) as the key and class names list as a value.
-
-```shell
-cdxgen -t java --resolve-class -o bom.json
-```
-
-This would create a bom.json.map file with the jar - class name mapping. Refer to [these](test/data/bom-maven.json.map) [examples](test/data/bom-gradle.json.map) to learn about the structure.
 
 ## Resolving licenses
 
