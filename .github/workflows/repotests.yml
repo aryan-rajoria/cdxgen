@@ -68,6 +68,7 @@ jobs:
           node-version-file: .nvmrc
           package-manager-cache: false
       - name: Setup Nexus usage
+        if: github.repository == 'cdxgen/cdxgen'
         run: echo "registry=$NEXUS_URL" > .npmrc
       - name: pnpm install
         run: |
@@ -398,6 +399,7 @@ jobs:
           node-version-file: .nvmrc
           package-manager-cache: false
       - name: Setup Nexus usage
+        if: github.repository == 'cdxgen/cdxgen'
         run: echo "registry=$NEXUS_URL" > .npmrc
       - name: pnpm install
         run: |
@@ -500,7 +502,7 @@ jobs:
         if: matrix.os == 'windows-latest'
         run: choco install -y bazel
       - name: Setup Nexus usage
-        if: matrix.os == 'self-hosted-ubuntu'
+        if: github.repository == 'cdxgen/cdxgen' && matrix.os == 'self-hosted-ubuntu'
         run: echo "registry=$NEXUS_URL" > .npmrc
       - name: pnpm install
         run: |
