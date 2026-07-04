@@ -116,6 +116,32 @@ attribution data, the following properties are additionally emitted:
 - `cdx:ai:codegen:sessionCount` — total number of AI sessions referenced across all git-ai notes.
 - `cdx:ai:codegen:attributionCount` — total number of AI-attributed line+range entries across all git-ai notes.
 
+> **Governance limitation — forge squash merges drop git-ai notes.** git-ai stores this
+> attribution in git notes (default ref `refs/notes/ai`) keyed by **commit SHA**, and the
+> cdxgen collector only reads notes on commits reachable from the current branch
+> (`git log --notes=refs/notes/ai`). A **local** `git merge --squash` preserves attribution
+> (the git-ai daemon rewrites the note onto the new commit), but a **forge-side "Squash and
+> Merge" / "Rebase and Merge"** (GitHub, GitLab, Bitbucket, Azure DevOps) mints a brand-new
+> commit on the server where no git-ai daemon runs. That squash commit therefore has **no
+> note**, and the original per-commit notes stay attached to the now-unreachable pre-squash
+> SHAs. The result: `cdx:ai:codegen:models/agents`, `sessionCount`, `attributionCount`, and the
+> entire `cdx:ai:oversight:*` layer collapse to their config-file-only fallback (you keep tool
+> detection from `.claude`/`AGENTS.md` etc., but lose model names and line-level attribution).
+> This is git-ai's documented behavior — forge squash/rebase merges require _Git AI for Teams_
+> or the _Open Source CI Action_ to preserve attribution.
+>
+> **Workarounds:**
+>
+> 1. Prefer a merge commit (or rebase that preserves commits) for AI-provenance-relevant
+>    branches; run cdxgen against a branch whose history still carries the original SHAs.
+> 2. Wire the git-ai CI Action into the merge workflow so attribution is written to the squash
+>    commit server-side.
+> 3. After the fact, reconstruct a spec-compliant N→1 squash note with
+>    [`contrib/git-ai-notes/copy-squashed-notes.mjs`](../contrib/git-ai-notes/README.md), which
+>    merges every orphaned note's sessions/prompts onto the squash commit. Note that this
+>    recovers agents, models, and sessions but not per-commit granularity (line ranges reflect
+>    each original commit's diff, not the final squashed state).
+
 ### Pseudo-tools
 
 Some signals indicate AI involvement that cannot be attributed to a specific product:
