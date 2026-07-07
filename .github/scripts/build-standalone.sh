@@ -32,7 +32,7 @@ COMMON_SBOM_ARGS=(
   --no-install-deps
 )
 
-CAXA_PACKAGE="${CAXA_PACKAGE:-@cdxgen/caxa@^3.0.3}"
+CAXA_PACKAGE="${CAXA_PACKAGE:-@cdxgen/caxa@^3.1.0}"
 
 cleanup_staging_dirs() {
   for staging_dir in "${STAGING_DIRS[@]:-}"; do
