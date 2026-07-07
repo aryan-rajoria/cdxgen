@@ -659,6 +659,19 @@ jobs:
           images: |
             ${{ env.REPO }}/${{ env.TEAM }}/${{ fromJSON(inputs.image).base-image.name || fromJSON(inputs.image).distro || 'bci' }}-${{ fromJSON(inputs.image).base-image.lang || needs.prepare.outputs.lang-tag }}
             ${{ fromJSON(inputs.image).base-image.additional-image && format('{0}/{1}/{2}', env.REPO, env.TEAM, fromJSON(inputs.image).base-image.additional-image) || '' }}
+          # Reproduce the docker/metadata-action defaults (nightly on schedule,
+          # branch/tag refs, PRs) and additionally publish the rolling ${{ env.TAG }}
+          # alias on master/nightly builds so the base images carry an SBOM under
+          # the stable major-version tag. Release tag pushes already emit v* via
+          # the semver rules below.
+          tags: |
+            type=schedule,pattern=nightly
+            type=ref,event=branch
+            type=ref,event=pr
+            type=semver,pattern={{version}}
+            type=semver,pattern=v{{major}}.{{minor}}
+            type=semver,pattern=v{{major}}
+            type=raw,value=${{ env.TAG }},enable=${{ startsWith(github.ref, 'refs/heads/') }}
           labels: |
             org.opencontainers.image.authors=Team AppThreat <cloud@appthreat.com>
             org.opencontainers.image.vendor=CycloneDX
@@ -693,6 +706,16 @@ jobs:
           images: |
             ${{ env.REPO }}/${{ env.TEAM }}/${{ fromJSON(inputs.image).base-image.name || fromJSON(inputs.image).distro || 'bci' }}-${{ fromJSON(inputs.image).base-image.lang || needs.prepare.outputs.lang-tag }}-slim
             ${{ fromJSON(inputs.image).base-image.additional-image && format('{0}/{1}/{2}-slim', env.REPO, env.TEAM, fromJSON(inputs.image).base-image.additional-image) || '' }}
+          # See the base image metadata step: keep the defaults and add the
+          # rolling ${{ env.TAG }} alias on master/nightly builds.
+          tags: |
+            type=schedule,pattern=nightly
+            type=ref,event=branch
+            type=ref,event=pr
+            type=semver,pattern={{version}}
+            type=semver,pattern=v{{major}}.{{minor}}
+            type=semver,pattern=v{{major}}
+            type=raw,value=${{ env.TAG }},enable=${{ startsWith(github.ref, 'refs/heads/') }}
           labels: |
             org.opencontainers.image.authors=Team AppThreat <cloud@appthreat.com>
             org.opencontainers.image.vendor=CycloneDX
