@@ -5,8 +5,9 @@
  * `cdx:ai:oversight:*` CycloneDX properties.
  *
  * When git-ai notes carry AI attribution data, the result also includes
- * `cdx:ai:codegen:gi:*` properties: model names, agent tool names, note/session
- * counts, and total AI-attributed entry counts.
+ * `cdx:ai:codegen:models`, `cdx:ai:codegen:agents`, and related properties:
+ * model names, agent tool names, note/session counts, and total AI-attributed
+ * entry counts.
  *
  * Honesty first: local git cannot observe pull-request reviews/approvals, so
  * review-dependent metrics (reviewCoverage, reviewLatencyVsSize, selfMergeRate,
