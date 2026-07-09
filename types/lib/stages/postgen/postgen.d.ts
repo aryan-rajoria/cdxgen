@@ -7,7 +7,7 @@
  *
  * @returns {Object} Modified bomNSData
  */
-export function postProcess(bomNSData: Object, options: Object, filePath?: string): Object;
+export declare function postProcess(bomNSData: Object, options: Object, filePath?: string): Object;
 /**
  * Apply additional metadata based on components
  *
@@ -16,7 +16,7 @@ export function postProcess(bomNSData: Object, options: Object, filePath?: strin
  *
  * @returns {Object} Filtered BOM JSON
  */
-export function applyMetadata(bomJson: Object, options: Object): Object;
+export declare function applyMetadata(bomJson: Object, options: Object): Object;
 /**
  * Apply definitions.standards based on options
  *
@@ -25,7 +25,7 @@ export function applyMetadata(bomJson: Object, options: Object): Object;
  *
  * @returns {Object} Filtered BOM JSON
  */
-export function applyStandards(bomJson: Object, options: Object): Object;
+export declare function applyStandards(bomJson: Object, options: Object): Object;
 /**
  * Filter BOM based on options
  *
@@ -34,11 +34,11 @@ export function applyStandards(bomJson: Object, options: Object): Object;
  *
  * @returns {Object} Filtered BOM JSON
  */
-export function filterBom(bomJson: Object, options: Object): Object;
+export declare function filterBom(bomJson: Object, options: Object): Object;
 /**
  * Clean up
  */
-export function cleanupEnv(_options: any): void;
+export declare function cleanupEnv(_options: any): void;
 /**
  * Removes the cdxgen temporary directory if it was created inside the system
  * temp directory (as indicated by `CDXGEN_TMP_DIR`). No-ops when the variable
@@ -46,7 +46,7 @@ export function cleanupEnv(_options: any): void;
  *
  * @returns {void}
  */
-export function cleanupTmpDir(): void;
+export declare function cleanupTmpDir(): void;
 /**
  * Annotate the document with annotator
  *
@@ -55,5 +55,5 @@ export function cleanupTmpDir(): void;
  *
  * @returns {Object} Annotated BOM JSON
  */
-export function annotate(bomJson: Object, options: Object): Object;
+export declare function annotate(bomJson: Object, options: Object): Object;
 //# sourceMappingURL=postgen.d.ts.map

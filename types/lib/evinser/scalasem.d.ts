@@ -1,4 +1,4 @@
-export function findPurlLocations(components: any, semanticsSlice: any): {
+export declare function findPurlLocations(components: any, semanticsSlice: any): {
     purlLocationMap?: undefined;
 } | {
     purlLocationMap: {};

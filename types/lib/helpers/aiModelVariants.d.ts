@@ -4,7 +4,7 @@
  * @param {unknown[]} [variants=[]] detected variant candidates
  * @returns {string[]} normalized variant labels
  */
-export function normalizeDetectedVariants(variants?: unknown[]): string[];
+export declare function normalizeDetectedVariants(variants?: unknown[]): string[];
 /**
  * Detect normalized AI model variant labels from names, metadata, and notes.
  *
@@ -19,7 +19,7 @@ export function normalizeDetectedVariants(variants?: unknown[]): string[];
  * }} [signals] variant detection signals
  * @returns {string[]} normalized variant labels
  */
-export function detectAiModelVariants(signals?: {
+export declare function detectAiModelVariants(signals?: {
     description?: string;
     metadata?: unknown[];
     modelName?: string;

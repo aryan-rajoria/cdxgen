@@ -18,7 +18,7 @@
  * @param {Object} [traceOptions] - Additional sandbox options forwarded to executeAndTrace
  * @returns {Promise<{components: Array<Object>, services: Array<Object>}>} Components and services
  */
-export function buildDynamicComponents(commandStr: string, workingDir: string, traceOptions?: Object): Promise<{
+export declare function buildDynamicComponents(commandStr: string, workingDir: string, traceOptions?: Object): Promise<{
     components: Array<Object>;
     services: Array<Object>;
 }>;

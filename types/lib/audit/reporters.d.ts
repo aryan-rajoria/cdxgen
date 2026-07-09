@@ -1,11 +1,11 @@
-export function renderSarifReport(report: any, options?: {}): string;
+export declare function renderSarifReport(report: any, options?: {}): string;
 /**
  * Render an audit report as pretty JSON.
  *
  * @param {object} report aggregate report
  * @returns {string} JSON output
  */
-export function renderJsonReport(report: object): string;
+export declare function renderJsonReport(report: object): string;
 /**
  * Render a direct BOM audit report for terminal output.
  *
@@ -13,7 +13,7 @@ export function renderJsonReport(report: object): string;
  * @param {object} options render options
  * @returns {string} console report text
  */
-export function renderDirectBomConsoleReport(report: object, options?: object): string;
+export declare function renderDirectBomConsoleReport(report: object, options?: object): string;
 /**
  * Render a direct BOM audit report as SARIF 2.1.0 output.
  *
@@ -21,7 +21,7 @@ export function renderDirectBomConsoleReport(report: object, options?: object): 
  * @param {object} [options] render options
  * @returns {string} SARIF output
  */
-export function renderDirectBomSarifReport(report: object, options?: object): string;
+export declare function renderDirectBomSarifReport(report: object, options?: object): string;
 /**
  * Render an audit report for terminal output.
  *
@@ -29,7 +29,7 @@ export function renderDirectBomSarifReport(report: object, options?: object): st
  * @param {object} options render options
  * @returns {string} console report text
  */
-export function renderConsoleReport(report: object, options?: object): string;
+export declare function renderConsoleReport(report: object, options?: object): string;
 /**
  * Render the requested report format.
  *
@@ -38,7 +38,7 @@ export function renderConsoleReport(report: object, options?: object): string;
  * @param {object} options render options
  * @returns {string} rendered report
  */
-export function renderAuditReport(reportType: string, report: object, options?: object): string;
+export declare function renderAuditReport(reportType: string, report: object, options?: object): string;
 /**
  * Convert predictive audit results into CycloneDX annotations.
  *
@@ -47,5 +47,5 @@ export function renderAuditReport(reportType: string, report: object, options?: 
  * @param {object} [options] annotation options
  * @returns {object[]} annotations
  */
-export function formatPredictiveAnnotations(report: object, bomJson: object, options?: object): object[];
+export declare function formatPredictiveAnnotations(report: object, bomJson: object, options?: object): object[];
 //# sourceMappingURL=reporters.d.ts.map

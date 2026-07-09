@@ -1,59 +1,90 @@
-export function analyzeSuspiciousJsSource(source: any): {
+export declare const CHROMIUM_EXTENSION_CAPABILITY_CATEGORIES: string[];
+export declare const JS_CAPABILITY_CATEGORIES: string[];
+export declare function analyzeSuspiciousJsSource(source: any): {
     executionIndicators: any[];
     indicators: any[];
     networkIndicators: any[];
     obfuscationIndicators: any[];
 };
-export function analyzeJsCapabilitiesSource(source: any): {
-    capabilities: string[];
-    hasDynamicFetch: boolean;
-    hasDynamicImport: boolean;
-    hasEval: boolean;
-    indicatorMap: {};
-};
-export function analyzeJsCryptoSource(source: any): {
-    algorithms: any[];
-    libraries: any[];
-};
-export const CHROMIUM_EXTENSION_CAPABILITY_CATEGORIES: string[];
-export const JS_CAPABILITY_CATEGORIES: string[];
-export function findJSImportsExports(src: any, deep: any): Promise<{
+/**
+ * Find all imports and exports
+ */
+export declare const findJSImportsExports: (src: any, deep: any) => Promise<{
     allImports: {};
     allExports: {};
 }>;
-export function analyzeSuspiciousJsFile(filePath: string): {
+/**
+ * Detect suspicious obfuscation, execution, and network indicators in a single
+ * JavaScript/TypeScript source file using Babel AST analysis.
+ *
+ * @param {string} filePath Source file path
+ * @returns {{executionIndicators: string[], indicators: string[], networkIndicators: string[], obfuscationIndicators: string[]}}
+ */
+export declare const analyzeSuspiciousJsFile: (filePath: string) => {
     executionIndicators: string[];
     indicators: string[];
     networkIndicators: string[];
     obfuscationIndicators: string[];
 };
-export function analyzeJsCapabilitiesFile(filePath: any): {
+export declare function analyzeJsCapabilitiesSource(source: any): {
     capabilities: string[];
     hasDynamicFetch: boolean;
     hasDynamicImport: boolean;
     hasEval: boolean;
     indicatorMap: {};
 };
-export function analyzeJsCryptoFile(filePath: any): {
+export declare const analyzeJsCapabilitiesFile: (filePath: any) => {
+    capabilities: string[];
+    hasDynamicFetch: boolean;
+    hasDynamicImport: boolean;
+    hasEval: boolean;
+    indicatorMap: {};
+};
+export declare function analyzeJsCryptoSource(source: any): {
     algorithms: any[];
     libraries: any[];
 };
-export function detectJsCryptoInventory(src: any, deep?: boolean): Promise<{
+export declare const analyzeJsCryptoFile: (filePath: any) => {
+    algorithms: any[];
+    libraries: any[];
+};
+export declare const detectJsCryptoInventory: (src: any, deep?: boolean) => Promise<{
     algorithms: any[];
     libraries: any[];
 }>;
-export function detectExtensionCapabilities(src: string, deep?: boolean): {
+/**
+ * Detect browser-extension capability signals from source code using Babel AST analysis.
+ *
+ * @param {string} src Path to the extension source directory
+ * @param {boolean} deep When true, includes node_modules and nested directories
+ * @returns {{capabilities: string[], indicators: Object<string, string[]>}}
+ * `indicators` is keyed by capability category name and contains arrays of
+ * detected signal strings (for example property chains and call names).
+ */
+export declare const detectExtensionCapabilities: (src: string, deep?: boolean) => {
     capabilities: string[];
-    indicators: {
-        [x: string]: string[];
-    };
+    indicators: Record<string, string[]>;
 };
-export function detectPythonMcpInventory(src: string, deep?: boolean): {
+/**
+ * Detect MCP server inventory from Python source using import and decorator heuristics.
+ *
+ * @param {string} src Absolute or relative path to the project source directory
+ * @param {boolean} deep When true, also scans nested paths more aggressively
+ * @returns {{components: Object[], dependencies: Object[], services: Object[]}}
+ */
+export declare const detectPythonMcpInventory: (src: string, deep?: boolean) => {
     components: Object[];
     dependencies: Object[];
     services: Object[];
 };
-export function detectMcpInventory(src: string, deep?: boolean): {
+/**
+ * Detect MCP server inventory from JavaScript/TypeScript source using AST analysis.
+ *
+ * @param {string} src Absolute or relative path to the project source directory
+ * @param {boolean} deep When true, also scans nested paths more aggressively
+ * @returns {{components: Object[], dependencies: Object[], services: Object[]}}
+ */
+export declare const detectMcpInventory: (src: string, deep?: boolean) => {
     components: Object[];
     dependencies: Object[];
     services: Object[];

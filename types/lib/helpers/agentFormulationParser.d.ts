@@ -1,7 +1,11 @@
-export namespace agentFormulationParser {
-    export let id: string;
-    export { AGENT_FILE_PATTERNS as patterns };
-    export function parse(files: any, _options?: {}): {
+/**
+ * Discover AI agent instruction and skill files that can hide MCP/runtime
+ * surfaces from package-only inventory.
+ */
+export declare const agentFormulationParser: {
+    id: string;
+    patterns: string[];
+    parse(files: any, _options?: {}): {
         components: {
             "bom-ref": string;
             name: any;
@@ -13,7 +17,5 @@ export namespace agentFormulationParser {
         }[];
         services: any[];
     };
-}
-declare const AGENT_FILE_PATTERNS: string[];
-export {};
+};
 //# sourceMappingURL=agentFormulationParser.d.ts.map

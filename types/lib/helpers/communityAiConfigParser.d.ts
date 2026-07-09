@@ -1,7 +1,7 @@
-export namespace communityAiConfigParser {
-    export let id: string;
-    export { COMMUNITY_AI_PATTERNS as patterns };
-    export function parse(files: any, _options?: {}): {
+export declare const communityAiConfigParser: {
+    id: string;
+    patterns: string[];
+    parse(files: any, _options?: {}): {
         components: {
             "bom-ref": string;
             name: any;
@@ -23,7 +23,5 @@ export namespace communityAiConfigParser {
             version: string;
         }[];
     };
-}
-declare const COMMUNITY_AI_PATTERNS: string[];
-export {};
+};
 //# sourceMappingURL=communityAiConfigParser.d.ts.map

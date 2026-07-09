@@ -1,1 +1,1 @@
-{"version":3,"file":"lolbas.d.ts","sourceRoot":"","sources":["../../../lib/helpers/lolbas.js"],"names":[],"mappings":"AA2JA;;;;;GAKG;AACH,6CAHW,MAAM,GACJ,MAAM,GAAC,SAAS,CAqB5B;AAED;;;;;;GAMG;AACH,sDAJW,MAAM,OACN,MAAM,GACJ,KAAK,CAAC,MAAM,CAAC,CAiGzB"}
+{"version":3,"file":"lolbas.d.ts","sourceRoot":"","sources":["../../../lib/helpers/lolbas.js"],"names":[],"mappings":"AA2JA;;;;;GAKG;AACH,wBAAgB,iBAAiB,CAAC,SAAS,EAHhC,MAGgC,GAF9B,MAAM,GAAC,SAAS,CAqB5B;AAED;;;;;;GAMG;AACH,wBAAgB,sBAAsB,CAAC,aAAa,EAJzC,MAIyC,EAAE,GAAG,EAH9C,MAG8C,GAF5C,KAAK,CAAC,MAAM,CAAC,CAiGzB"}

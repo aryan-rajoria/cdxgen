@@ -1,34 +1,4 @@
 /**
- * Resolve the default HTTP request timeout, honoring the validated
- * CDXGEN_HTTP_TIMEOUT_MS environment variable when set to a positive integer.
- *
- * @returns {number} Timeout in milliseconds
- */
-export function getDefaultHttpTimeoutMs(): number;
-export function resolveTimeout(timeout: any): any;
-/**
- * Determine whether the in-memory HTTP response cache is disabled via the
- * CDXGEN_NO_CACHE environment variable. Evaluated per request so tests and
- * callers can toggle it at runtime.
- *
- * @returns {boolean} True when caching should be skipped.
- */
-export function isCacheDisabled(): boolean;
-/**
- * Clear the in-memory HTTP response cache. Primarily useful for tests.
- *
- * @returns {void}
- */
-export function clearHttpCache(): void;
-/**
- * Create a `got`-compatible HTTP client bound to the supplied defaults.
- *
- * @param {Object} [defaults] Default request options merged into every call.
- * @returns {Function} Callable client exposing `get`/`post`/`put`/`head`,
- *   `extend`, `defaults` and `hooks`.
- */
-export function createHttpClient(defaults?: Object): Function;
-/**
  * A tiny, `got`-compatible HTTP client built on top of undici.
  *
  * cdxgen historically relied on the `got` library. `got` keeps a per-request
@@ -67,29 +37,59 @@ export function createHttpClient(defaults?: Object): Function;
  * that existing `error.response.statusCode` and `error.options.context` checks
  * keep working.
  */
-export class HTTPError extends Error {
+export declare class HTTPError extends Error {
+    response: Object;
+    options: Object;
+    code: string;
     /**
      * @param {Object} response Response object produced by this client.
      * @param {Object} options Merged request options for the failed request.
      */
     constructor(response: Object, options: Object);
-    response: Object;
-    options: Object;
-    code: string;
 }
 /**
  * Error thrown for transport-level failures (DNS, connection reset, timeouts).
  * Carries the merged request `options` so `beforeError` hooks can inspect the
  * request context.
  */
-export class RequestError extends Error {
+export declare class RequestError extends Error {
+    options: Object;
+    code: any;
+    cause: Error;
     /**
      * @param {Error} cause Underlying error thrown by undici.
      * @param {Object} options Merged request options for the failed request.
      */
     constructor(cause: Error, options: Object);
-    options: Object;
-    code: any;
-    cause: Error;
 }
+/**
+ * Resolve the default HTTP request timeout, honoring the validated
+ * CDXGEN_HTTP_TIMEOUT_MS environment variable when set to a positive integer.
+ *
+ * @returns {number} Timeout in milliseconds
+ */
+export declare function getDefaultHttpTimeoutMs(): number;
+export declare function resolveTimeout(timeout: any): any;
+/**
+ * Determine whether the in-memory HTTP response cache is disabled via the
+ * CDXGEN_NO_CACHE environment variable. Evaluated per request so tests and
+ * callers can toggle it at runtime.
+ *
+ * @returns {boolean} True when caching should be skipped.
+ */
+export declare function isCacheDisabled(): boolean;
+/**
+ * Clear the in-memory HTTP response cache. Primarily useful for tests.
+ *
+ * @returns {void}
+ */
+export declare function clearHttpCache(): void;
+/**
+ * Create a `got`-compatible HTTP client bound to the supplied defaults.
+ *
+ * @param {Object} [defaults] Default request options merged into every call.
+ * @returns {Function} Callable client exposing `get`/`post`/`put`/`head`,
+ *   `extend`, `defaults` and `hooks`.
+ */
+export declare function createHttpClient(defaults?: Object): Function;
 //# sourceMappingURL=httpClient.d.ts.map

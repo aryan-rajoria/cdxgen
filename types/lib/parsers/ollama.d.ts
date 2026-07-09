@@ -11,7 +11,7 @@
  *   template?: string,
  * }} parsed model metadata
  */
-export function parseOllamaModelfile(raw: string): {
+export declare function parseOllamaModelfile(raw: string): {
     adapters: string[];
     from?: string;
     license?: string;

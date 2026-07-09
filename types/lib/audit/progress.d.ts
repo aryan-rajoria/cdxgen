@@ -4,14 +4,14 @@
  * @param {object} target audit target
  * @returns {string} formatted target label
  */
-export function formatTargetLabel(target: object): string;
+export declare function formatTargetLabel(target: object): string;
 /**
  * Decide if interactive progress should be shown.
  *
  * @param {object} [options] progress options
  * @returns {boolean} true when spinner-style progress is appropriate
  */
-export function shouldRenderProgress(options?: object): boolean;
+export declare function shouldRenderProgress(options?: object): boolean;
 /**
  * Create a dependency-free progress renderer for cdx-audit.
  *
@@ -20,7 +20,7 @@ export function shouldRenderProgress(options?: object): boolean;
  * @param {object} [options] progress options
  * @returns {{ onProgress: Function, stop: Function }} progress controller
  */
-export function createProgressTracker(options?: object): {
+export declare function createProgressTracker(options?: object): {
     onProgress: Function;
     stop: Function;
 };

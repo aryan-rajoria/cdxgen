@@ -1,16 +1,25 @@
 /**
+ * Orchestrates evaluation of internal compliance rule packs (SCVS + CRA) and
+ * aggregates results into per-benchmark scorecards.
+ *
+ * This module is deliberately independent of the CycloneDX BOM audit engine
+ * (lib/stages/postgen/auditBom.js). The two engines share similar *Finding*
+ * output shape so reporters can consume either source uniformly.
+ */
+import { getAllComplianceRules, getCraRules, getScvsRules } from "./complianceRules.js";
+/**
  * Resolve a benchmark alias (case-insensitive). Returns null when unknown.
  *
  * @param {string} alias
  * @returns {object | null}
  */
-export function resolveBenchmark(alias: string): object | null;
+export declare function resolveBenchmark(alias: string): object | null;
 /**
  * List all known benchmark aliases in a stable display order.
  *
  * @returns {Array<object>}
  */
-export function listBenchmarks(): Array<object>;
+export declare function listBenchmarks(): Array<object>;
 /**
  * Evaluate one rule against the BOM and return a Finding-shaped object.
  *
@@ -21,7 +30,7 @@ export function listBenchmarks(): Array<object>;
  * @param {object} bomJson
  * @returns {object} Finding
  */
-export function evaluateRule(rule: object, bomJson: object): object;
+export declare function evaluateRule(rule: object, bomJson: object): object;
 /**
  * Evaluate every rule in the catalog, or a filtered subset.
  *
@@ -31,9 +40,9 @@ export function evaluateRule(rule: object, bomJson: object): object;
  * @param {Array<string>} [opts.benchmarks] Only run rules from these benchmark aliases.
  * @returns {Array<object>} Findings (one per rule)
  */
-export function evaluateAll(bomJson: object, opts?: {
-    categories?: string[] | undefined;
-    benchmarks?: string[] | undefined;
+export declare function evaluateAll(bomJson: object, opts?: {
+    categories?: Array<string>;
+    benchmarks?: Array<string>;
 }): Array<object>;
 /**
  * Produce a scorecard for a single benchmark against a set of already-evaluated
@@ -49,7 +58,7 @@ export function evaluateAll(bomJson: object, opts?: {
  * @param {Array<object>} findings Full set of findings from evaluateAll
  * @returns {object}
  */
-export function scoreBenchmark(benchmark: object, findings: Array<object>): object;
+export declare function scoreBenchmark(benchmark: object, findings: Array<object>): object;
 /**
  * Build scorecards for each requested benchmark. When no benchmarks are
  * specified, returns scorecards for every built-in benchmark alias.
@@ -58,9 +67,6 @@ export function scoreBenchmark(benchmark: object, findings: Array<object>): obje
  * @param {Array<string>} [requestedAliases]
  * @returns {Array<object>}
  */
-export function buildBenchmarkReports(findings: Array<object>, requestedAliases?: Array<string>): Array<object>;
-import { getAllComplianceRules } from "./complianceRules.js";
-import { getCraRules } from "./complianceRules.js";
-import { getScvsRules } from "./complianceRules.js";
+export declare function buildBenchmarkReports(findings: Array<object>, requestedAliases?: Array<string>): Array<object>;
 export { getAllComplianceRules, getCraRules, getScvsRules };
 //# sourceMappingURL=complianceEngine.d.ts.map

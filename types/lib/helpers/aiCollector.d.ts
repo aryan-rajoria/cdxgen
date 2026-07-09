@@ -5,7 +5,7 @@
  * @param {Object} [options={}] collection options
  * @returns {{ components: Object[], dependencies: Object[], services: Object[] }} AI inventory
  */
-export function collectJsAiInventory(discoveryPath: string, options?: Object): {
+export declare function collectJsAiInventory(discoveryPath: string, options?: Object): {
     components: Object[];
     dependencies: Object[];
     services: Object[];
@@ -17,7 +17,7 @@ export function collectJsAiInventory(discoveryPath: string, options?: Object): {
  * @param {Object} [options={}] collection options
  * @returns {{ components: Object[], dependencies: Object[], services: Object[] }} AI inventory
  */
-export function collectHuggingFaceRepoAiInventory(discoveryPath: string, options?: Object): {
+export declare function collectHuggingFaceRepoAiInventory(discoveryPath: string, options?: Object): {
     components: Object[];
     dependencies: Object[];
     services: Object[];
@@ -29,7 +29,7 @@ export function collectHuggingFaceRepoAiInventory(discoveryPath: string, options
  * @param {Object} [options={}] collection options
  * @returns {{ components: Object[], dependencies: Object[], services: Object[] }} AI inventory
  */
-export function collectPythonAiInventory(discoveryPath: string, options?: Object): {
+export declare function collectPythonAiInventory(discoveryPath: string, options?: Object): {
     components: Object[];
     dependencies: Object[];
     services: Object[];
@@ -41,7 +41,7 @@ export function collectPythonAiInventory(discoveryPath: string, options?: Object
  * @param {Object} [options={}] collection options
  * @returns {{ components: Object[], dependencies: Object[], services: Object[] }} AI inventory
  */
-export function collectNotebookAiInventory(discoveryPath: string, options?: Object): {
+export declare function collectNotebookAiInventory(discoveryPath: string, options?: Object): {
     components: Object[];
     dependencies: Object[];
     services: Object[];
@@ -53,7 +53,7 @@ export function collectNotebookAiInventory(discoveryPath: string, options?: Obje
  * @param {Object} [options={}] collection options
  * @returns {{ components: Object[], dependencies: Object[], services: Object[] }} AI inventory
  */
-export function collectPromptConfigAiInventory(discoveryPath: string, options?: Object): {
+export declare function collectPromptConfigAiInventory(discoveryPath: string, options?: Object): {
     components: Object[];
     dependencies: Object[];
     services: Object[];

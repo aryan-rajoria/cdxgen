@@ -7,5 +7,5 @@
  * @param {object} [_options] Unused
  * @returns {string}
  */
-export function render(report: object, _options?: object): string;
+export declare function render(report: object, _options?: object): string;
 //# sourceMappingURL=json.d.ts.map

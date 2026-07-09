@@ -5,7 +5,7 @@
  * @param {string | undefined} version package version
  * @returns {object[]} custom properties
  */
-export function collectNpmRegistryProvenanceProperties(packument: object, version: string | undefined): object[];
+export declare function collectNpmRegistryProvenanceProperties(packument: object, version: string | undefined): object[];
 /**
  * Extract advanced PyPI provenance and publishing properties from registry metadata.
  *
@@ -13,7 +13,7 @@ export function collectNpmRegistryProvenanceProperties(packument: object, versio
  * @param {string | undefined} version package version
  * @returns {object[]} custom properties
  */
-export function collectPypiRegistryProvenanceProperties(projectBody: object, version: string | undefined): object[];
+export declare function collectPypiRegistryProvenanceProperties(projectBody: object, version: string | undefined): object[];
 /**
  * Extract Cargo/crates.io release, publisher, and provenance-adjacent properties.
  *
@@ -22,5 +22,5 @@ export function collectPypiRegistryProvenanceProperties(projectBody: object, ver
  * @param {object} [ownersBody] crates.io `/api/v1/crates/{name}/owners` response body
  * @returns {object[]} custom properties
  */
-export function collectCargoRegistryProvenanceProperties(crateBody: object, version: string | undefined, ownersBody?: object): object[];
+export declare function collectCargoRegistryProvenanceProperties(crateBody: object, version: string | undefined, ownersBody?: object): object[];
 //# sourceMappingURL=registryProvenance.d.ts.map

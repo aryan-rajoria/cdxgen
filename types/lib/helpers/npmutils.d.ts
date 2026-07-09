@@ -4,21 +4,21 @@
  * @param {object} pkg Component object to annotate
  * @returns {void}
  */
-export function setNpmDevelopmentProperty(pkg: object): void;
+export declare function setNpmDevelopmentProperty(pkg: object): void;
 /**
  * Marks an npm component as optional.
  *
  * @param {object} pkg Component object to annotate
  * @returns {void}
  */
-export function setNpmOptionalProperty(pkg: object): void;
+export declare function setNpmOptionalProperty(pkg: object): void;
 /**
  * Marks an npm component as a peer dependency.
  *
  * @param {object} pkg Component object to annotate
  * @returns {void}
  */
-export function setNpmPeerProperty(pkg: object): void;
+export declare function setNpmPeerProperty(pkg: object): void;
 /**
  * Helper function to create a properly encoded workspace PURL
  *
@@ -26,7 +26,7 @@ export function setNpmPeerProperty(pkg: object): void;
  * @param {string} version - Package version
  * @returns {string} Encoded PURL string
  */
-export function createNpmWorkspacePurl(packageName: string, version: string): string;
+export declare function createNpmWorkspacePurl(packageName: string, version: string): string;
 /**
  * Finds a matching npm workspace PURL for the supplied package name.
  *
@@ -34,14 +34,14 @@ export function createNpmWorkspacePurl(packageName: string, version: string): st
  * @param {string} packageName Package name to match against
  * @returns {string | undefined} Matching workspace package PURL, if any
  */
-export function findMatchingNpmWorkspace(workspacePackages: string[] | undefined, packageName: string): string | undefined;
+export declare function findMatchingNpmWorkspace(workspacePackages: string[] | undefined, packageName: string): string | undefined;
 /**
  * Classifies an npm dependency specifier by source type.
  *
  * @param {string | undefined | null} spec npm dependency specifier
  * @returns {{ type: string, value: string } | undefined} Classified manifest source, if supported
  */
-export function classifyNpmManifestSource(spec: string | undefined | null): {
+export declare function classifyNpmManifestSource(spec: string | undefined | null): {
     type: string;
     value: string;
 } | undefined;
@@ -51,7 +51,7 @@ export function classifyNpmManifestSource(spec: string | undefined | null): {
  * @param {object} node Arborist node
  * @returns {{ type: string, value: string }[]} Unique manifest source entries
  */
-export function collectNpmManifestSources(node: object): {
+export declare function collectNpmManifestSources(node: object): {
     type: string;
     value: string;
 }[];
@@ -63,7 +63,7 @@ export function collectNpmManifestSources(node: object): {
  * @param {object} [options={}] CLI options
  * @returns {{ nodePackage: object, diskPkg: object | undefined, packageJsonPath: string | undefined }} Hydrated package metadata and the source package.json context
  */
-export function hydrateNpmNodePackage(node: object, options?: object): {
+export declare function hydrateNpmNodePackage(node: object, options?: object): {
     nodePackage: object;
     diskPkg: object | undefined;
     packageJsonPath: string | undefined;
@@ -71,10 +71,10 @@ export function hydrateNpmNodePackage(node: object, options?: object): {
 /**
  * Helper to check if a package is imported only for TypeScript types.
  */
-export function isPkgTypeOnlyImport(allImports: any, group: any, name: any): boolean;
-export function normalizePnpmLockKey(lockKey: any): any;
-export function normalizeNpmRegistryUrl(registryUrl: any): any;
-export function loadNpmrcConfig(projectRoot: any): {
+export declare function isPkgTypeOnlyImport(allImports: any, group: any, name: any): boolean;
+export declare function normalizePnpmLockKey(lockKey: any): any;
+export declare function normalizeNpmRegistryUrl(registryUrl: any): any;
+export declare function loadNpmrcConfig(projectRoot: any): {
     constructor: Function;
     toString(): string;
     toLocaleString(): string;
@@ -83,24 +83,24 @@ export function loadNpmrcConfig(projectRoot: any): {
     isPrototypeOf(v: Object): boolean;
     propertyIsEnumerable(v: PropertyKey): boolean;
 };
-export function normalizeNpmScopeGroup(group: any): any;
-export function resolveNpmRegistryUrlForGitPackage(group: any, npmrcConfig?: {}): any;
-export function buildNpmGitPurlQualifiers(vcsUrl: any, group: any, npmrcConfig: any): {
+export declare function normalizeNpmScopeGroup(group: any): any;
+export declare function resolveNpmRegistryUrlForGitPackage(group: any, npmrcConfig?: {}): any;
+export declare function buildNpmGitPurlQualifiers(vcsUrl: any, group: any, npmrcConfig: any): {
     vcs_url: any;
     repository_url: any;
 } | null;
-export function buildNpmRegistryTarballUrl(registryUrl: any, group: any, name: any, version: any): string | undefined;
-export function buildNpmGitDistributionIntakeRefs(group: any, name: any, version: any, npmrcConfig: any): {
+export declare function buildNpmRegistryTarballUrl(registryUrl: any, group: any, name: any, version: any): string | undefined;
+export declare function buildNpmGitDistributionIntakeRefs(group: any, name: any, version: any, npmrcConfig: any): {
     type: string;
     url: string;
 }[] | undefined;
-export function parsePnpmGitLockKey(lockKey: any): {
+export declare function parsePnpmGitLockKey(lockKey: any): {
     group: any;
     name: any;
     gitSpec: any;
     fullName: any;
     packageName: any;
 } | null;
-export function buildPnpmGitPkgRefs(packages: any, snapshots: any, npmrcConfig?: {}): {};
-export function getPnpmDepPurl(depPkg: any, packageName: any, gitPkgRefs: any, relativePath: any, githubServerHost: any, npmrcConfig?: {}): Promise<string>;
+export declare function buildPnpmGitPkgRefs(packages: any, snapshots: any, npmrcConfig?: {}): {};
+export declare function getPnpmDepPurl(depPkg: any, packageName: any, gitPkgRefs: any, relativePath: any, githubServerHost: any, npmrcConfig?: {}): Promise<string>;
 //# sourceMappingURL=npmutils.d.ts.map

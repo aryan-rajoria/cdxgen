@@ -4,7 +4,7 @@
  * @param {string} srcPath Path to look for gradlew wrapper
  * @param {string|null} rootPath Root directory to look for gradlew wrapper
  */
-export function getGradleCommand(srcPath: string, rootPath: string | null): string;
+export declare function getGradleCommand(srcPath: string, rootPath: string | null): string;
 /**
  * Method to combine the general gradle arguments, the sub-commands and the sub-commands' arguments in the correct way
  *
@@ -15,7 +15,7 @@ export function getGradleCommand(srcPath: string, rootPath: string | null): stri
  *
  * @returns {string[]} Array of arrays of arguments to be added to the gradle command
  */
-export function buildGradleCommandArguments(gradleArguments: string[], gradleSubCommands: string[], gradleSubCommandArguments: string[], gradleCommandLength: int): string[];
+export declare function buildGradleCommandArguments(gradleArguments: string[], gradleSubCommands: string[], gradleSubCommandArguments: string[], gradleCommandLength: int): string[];
 /**
  * Method to split the output produced by Gradle using parallel processing by project
  *
@@ -23,13 +23,13 @@ export function buildGradleCommandArguments(gradleArguments: string[], gradleSub
  * @param {string[]} relevantTasks The list of gradle tasks whose output need to be considered.
  * @returns {map} Map with subProject names as keys and corresponding dependency task outputs as values.
  */
-export function splitOutputByGradleProjects(rawOutput: string, relevantTasks: string[]): map;
+export declare function splitOutputByGradleProjects(rawOutput: string, relevantTasks: string[]): map;
 /**
  * Parse gradle projects output
  *
  * @param {string} rawOutput Raw string output
  */
-export function parseGradleProjects(rawOutput: string): {
+export declare function parseGradleProjects(rawOutput: string): {
     rootProject: string;
     projects: any[];
 };
@@ -39,7 +39,7 @@ export function parseGradleProjects(rawOutput: string): {
  * @param {string} rawOutput Raw string output
  * @param {string} gradleModuleName The name (or 'path') of the module as seen from the root of the project
  */
-export function parseGradleProperties(rawOutput: string, gradleModuleName?: string): {
+export declare function parseGradleProperties(rawOutput: string, gradleModuleName?: string): {
     rootProject: string;
     projects: any[];
     metadata: {
@@ -57,7 +57,7 @@ export function parseGradleProperties(rawOutput: string, gradleModuleName?: stri
  *
  * @returns {string} The combined output for all subprojects of the Gradle properties task
  */
-export function executeParallelGradleProperties(dir: string, allProjectsStr: array, extraArgs?: array): string;
+export declare function executeParallelGradleProperties(dir: string, allProjectsStr: array, extraArgs?: array): string;
 /**
  * Method to resolve dependencies from a gradle output
  *
@@ -66,7 +66,7 @@ export function executeParallelGradleProperties(dir: string, allProjectsStr: arr
  * @param {map} gradleModules Cache with all gradle modules that have already been read
  * @param {string} gradleRootPath Root path where Gradle is to be run when getting module information
  */
-export function parseGradleDep(rawOutput: string, rootProjectName?: string, gradleModules?: map, gradleRootPath?: string): Promise<{
+export declare function parseGradleDep(rawOutput: string, rootProjectName?: string, gradleModules?: map, gradleRootPath?: string): Promise<{
     pkgList: any[];
     dependenciesList: {
         ref: string;
@@ -83,14 +83,14 @@ export function parseGradleDep(rawOutput: string, rootProjectName?: string, grad
  * @param {object} metadata Object with all other parsed data for the gradle module
  * @returns {object} An object representing the gradle module in SBOM-format
  */
-export function buildObjectForGradleModule(name: string, metadata: object): object;
+export declare function buildObjectForGradleModule(name: string, metadata: object): object;
 /**
  * Extract Gradle repository URLs from the evaluation output properties.
  *
  * @param {string} propertiesOutput Properties command output containing repository lines
  * @returns {Object} Map of repository names to their URLs
  */
-export function extractGradleRepositoryUrls(propertiesOutput: string): Object;
+export declare function extractGradleRepositoryUrls(propertiesOutput: string): Object;
 /**
  * Parse the distribution URLs resolved by the init script when the
  * `resolve-gradle-distribution` feature flag is enabled. The init script emits lines of
@@ -99,14 +99,14 @@ export function extractGradleRepositoryUrls(propertiesOutput: string): Object;
  * @param {string} stdout Gradle stdout logs containing the distribution markers
  * @returns {Object} Map of `group:name:version` keys to their resolved distribution URLs
  */
-export function parseGradleResolvedDistributions(stdout: string): Object;
+export declare function parseGradleResolvedDistributions(stdout: string): Object;
 /**
  * Parse Gradle info logs to capture HTTP URLs of resolved dependency artifacts.
  *
  * @param {string} stdout Gradle stdout logs under --info
  * @returns {Object} Map of filenames to their resolved distribution URLs
  */
-export function parseGradleInfoLogsForUrls(stdout: string): Object;
+export declare function parseGradleInfoLogsForUrls(stdout: string): Object;
 /**
  * Collect Gradle project dependencies by scanning the Gradle cache directory for JAR files
  * and their associated POM files.
@@ -121,5 +121,6 @@ export function parseGradleInfoLogsForUrls(stdout: string): Object;
  * @param {boolean} _includeCacheDir Whether to include cache directory (unused; reserved for future use)
  * @returns {Promise<Object>} JAR namespace mapping object returned by collectJarNS
  */
-export function collectGradleDependencies(_gradleCmd: string, _basePath: string, _cleanup?: boolean, _includeCacheDir?: boolean): Promise<Object>;
+export declare function collectGradleDependencies(_gradleCmd: string, _basePath: string, _cleanup?: boolean, // eslint-disable-line no-unused-vars
+_includeCacheDir?: boolean): Promise<Object>;
 //# sourceMappingURL=gradleutils.d.ts.map

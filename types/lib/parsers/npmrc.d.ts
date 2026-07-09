@@ -1,10 +1,11 @@
+export declare const DEFAULT_NPMRC_BLOCKLIST: Set<string>;
 /**
  * Parse .npmrc content into a plain key-value object.
  *
  * @param {string} content - Raw .npmrc file content
  * @returns {Object} Parsed key-value pairs
  */
-export function parseNpmrc(content: string): Object;
+export declare function parseNpmrc(content: string): Object;
 /**
  * Extract npm/pnpm configuration values from environment variables.
  * See https://docs.npmjs.com/cli/v11/using-npm/config
@@ -21,6 +22,5 @@ export function parseNpmrc(content: string): Object;
  * @param {Object} env - Environment variables object (defaults to process.env)
  * @returns {Object} Parsed npm config key-value pairs
  */
-export function parseNpmrcFromEnv(env?: Object): Object;
-export const DEFAULT_NPMRC_BLOCKLIST: Set<string>;
+export declare function parseNpmrcFromEnv(env?: Object): Object;
 //# sourceMappingURL=npmrc.d.ts.map

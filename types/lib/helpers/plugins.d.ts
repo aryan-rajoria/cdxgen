@@ -3,7 +3,7 @@
  *
  * @returns {{arch: string, extn: string, platform: string, pluginsBinSuffix: string}}
  */
-export function getPluginsBinTarget(): {
+export declare function getPluginsBinTarget(): {
     arch: string;
     extn: string;
     platform: string;
@@ -23,7 +23,7 @@ export function getPluginsBinTarget(): {
  *   pluginsDir: string,
  * }}
  */
-export function resolveCdxgenPlugins(): {
+export declare function resolveCdxgenPlugins(): {
     arch: string;
     extn: string;
     extraNMBinPath: string | undefined;
@@ -39,14 +39,14 @@ export function resolveCdxgenPlugins(): {
  *
  * @returns {ReturnType<typeof resolveCdxgenPlugins>} The resolved plugin runtime.
  */
-export function getDefaultPluginRuntime(): ReturnType<typeof resolveCdxgenPlugins>;
+export declare function getDefaultPluginRuntime(): ReturnType<typeof resolveCdxgenPlugins>;
 /**
  * Add the detected node_modules binary directory to PATH when present.
  *
  * @param {ReturnType<typeof resolveCdxgenPlugins>} [pluginRuntime] Detected plugin runtime.
  * @returns {ReturnType<typeof resolveCdxgenPlugins>} The resolved plugin runtime.
  */
-export function setPluginsPathEnv(pluginRuntime?: ReturnType<typeof resolveCdxgenPlugins>): ReturnType<typeof resolveCdxgenPlugins>;
+export declare function setPluginsPathEnv(pluginRuntime?: ReturnType<typeof resolveCdxgenPlugins>): ReturnType<typeof resolveCdxgenPlugins>;
 /**
  * Resolve a known plugin binary path, honoring explicit environment overrides.
  *
@@ -54,5 +54,5 @@ export function setPluginsPathEnv(pluginRuntime?: ReturnType<typeof resolveCdxge
  * @param {ReturnType<typeof resolveCdxgenPlugins>} [pluginRuntime] Detected plugin runtime.
  * @returns {string|undefined} Resolved binary path or configured override.
  */
-export function resolvePluginBinary(toolName: string, pluginRuntime?: ReturnType<typeof resolveCdxgenPlugins>): string | undefined;
+export declare function resolvePluginBinary(toolName: string, pluginRuntime?: ReturnType<typeof resolveCdxgenPlugins>): string | undefined;
 //# sourceMappingURL=plugins.d.ts.map

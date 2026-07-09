@@ -1,12 +1,12 @@
-export function getPluginToolComponents(toolNames?: any[]): any[];
-export function getCargoAuditableInfo(src: any): any;
+export declare function getPluginToolComponents(toolNames?: any[]): any[];
+export declare function getCargoAuditableInfo(src: any): any;
 /**
  * Execute sourcekitten plugin with the given arguments
  *
  * @param args {Array} Arguments
  * @returns {undefined|Object} Command output
  */
-export function executeSourcekitten(args: any[]): undefined | Object;
+export declare function executeSourcekitten(args: any[]): undefined | Object;
 /**
  * Get the packages installed in the container image filesystem.
  *
@@ -16,12 +16,12 @@ export function executeSourcekitten(args: any[]): undefined | Object;
  *
  * @returns {Object} Metadata containing packages, dependencies, etc
  */
-export function getOSPackages(src: string, imageConfig: Object, options?: {}): Object;
-export function enrichOSComponentsWithTrustData(components?: any[]): {
+export declare function getOSPackages(src: string, imageConfig: Object, options?: {}): Object;
+export declare function enrichOSComponentsWithTrustData(components?: any[]): {
     components: any[];
     tools: any[];
 };
-export function executeOsQuery(query: any): any;
+export declare function executeOsQuery(query: any): any;
 /**
  * Method to execute dosai to create slices for dotnet
  *
@@ -29,7 +29,7 @@ export function executeOsQuery(query: any): any;
  * @param {string} slicesFile Slices file name
  * @returns boolean
  */
-export function getDotnetSlices(src: string, slicesFile: string): boolean;
+export declare function getDotnetSlices(src: string, slicesFile: string): boolean;
 /**
  * Method to generate binary SBOM using blint
  *
@@ -39,5 +39,5 @@ export function getDotnetSlices(src: string, slicesFile: string): boolean;
  *
  * @return {boolean} Result of the generation
  */
-export function getBinaryBom(src: string, binaryBomFile: string, deepMode: boolean): boolean;
+export declare function getBinaryBom(src: string, binaryBomFile: string, deepMode: boolean): boolean;
 //# sourceMappingURL=binary.d.ts.map

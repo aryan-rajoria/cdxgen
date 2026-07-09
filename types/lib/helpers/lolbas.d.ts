@@ -4,7 +4,7 @@
  * @param {string} candidate Binary or script path/name
  * @returns {object|undefined} Matched LOLBAS metadata
  */
-export function getLolbasMetadata(candidate: string): object | undefined;
+export declare function getLolbasMetadata(candidate: string): object | undefined;
 /**
  * Resolve LOLBAS properties for an osquery row.
  *
@@ -12,5 +12,5 @@ export function getLolbasMetadata(candidate: string): object | undefined;
  * @param {object} row Osquery row
  * @returns {Array<object>} CycloneDX custom properties
  */
-export function createLolbasProperties(queryCategory: string, row: object): Array<object>;
+export declare function createLolbasProperties(queryCategory: string, row: object): Array<object>;
 //# sourceMappingURL=lolbas.d.ts.map

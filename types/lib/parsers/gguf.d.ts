@@ -8,7 +8,7 @@
  * @param {number|string|undefined} fileType numeric GGUF file type value
  * @returns {string|undefined} encoding label such as `Q5_K_M` or `BF16`
  */
-export function ggufFileTypeName(fileType: number | string | undefined): string | undefined;
+export declare function ggufFileTypeName(fileType: number | string | undefined): string | undefined;
 /**
  * Parse a GGUF filename using the upstream naming convention documented by the
  * GGUF specification.
@@ -21,19 +21,19 @@ export function ggufFileTypeName(fileType: number | string | undefined): string 
  * @param {string} filePathOrName absolute path or bare filename
  * @returns {Object|undefined} parsed filename details when recognized
  */
-export function parseGgufFilename(filePathOrName: string): Object | undefined;
+export declare function parseGgufFilename(filePathOrName: string): Object | undefined;
 /**
  * Parse GGUF metadata from an in-memory header buffer.
  *
  * @param {Uint8Array|Buffer} buffer GGUF header buffer
  * @returns {Object} parsed metadata map
  */
-export function parseGgufMetadataBuffer(buffer: Uint8Array | Buffer): Object;
+export declare function parseGgufMetadataBuffer(buffer: Uint8Array | Buffer): Object;
 /**
  * Read selected GGUF metadata keys from a model artifact without loading the whole file.
  *
  * @param {string} filePath GGUF file path
  * @returns {Object|undefined} parsed GGUF metadata
  */
-export function readGgufMetadata(filePath: string): Object | undefined;
+export declare function readGgufMetadata(filePath: string): Object | undefined;
 //# sourceMappingURL=gguf.d.ts.map

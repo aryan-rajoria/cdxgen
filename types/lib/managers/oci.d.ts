@@ -6,6 +6,6 @@
  * @param {string} [platform] OCI platform string (e.g. `"linux/amd64"`); no-op for JS implementation
  * @returns {Promise<Object|undefined>} Parsed CycloneDX BOM JSON object, or `undefined` if not found
  */
-export function getBomWithOras(image: string, _platform?: undefined): Promise<Object | undefined>;
-export function attachBomNative(image: any, bomJson: any): Promise<string>;
+export declare function getBomWithOras(image: string, _platform?: undefined): Promise<Object | undefined>;
+export declare function attachBomNative(image: any, bomJson: any): Promise<string>;
 //# sourceMappingURL=oci.d.ts.map

@@ -1,7 +1,7 @@
-export namespace mcpConfigParser {
-    export let id: string;
-    export { MCP_CONFIG_PATTERNS as patterns };
-    export function parse(files: any, _options?: {}): {
+export declare const mcpConfigParser: {
+    id: string;
+    patterns: string[];
+    parse(files: any, _options?: {}): {
         components: {
             "bom-ref": string;
             name: any;
@@ -24,7 +24,5 @@ export namespace mcpConfigParser {
             version: string;
         }[];
     };
-}
-declare const MCP_CONFIG_PATTERNS: string[];
-export {};
+};
 //# sourceMappingURL=mcpConfigParser.d.ts.map

@@ -11,7 +11,7 @@
  *   packageName: string
  * }}
  */
-export function classifyMcpReference(ref: Object | string): {
+export declare function classifyMcpReference(ref: Object | string): {
     isMcp: boolean;
     isOfficial: boolean;
     isKnownIntegration: boolean;
@@ -25,5 +25,5 @@ export function classifyMcpReference(ref: Object | string): {
  * @param {Object} component CycloneDX component
  * @returns {Object} Same component reference
  */
-export function enrichComponentWithMcpMetadata(component: Object): Object;
+export declare function enrichComponentWithMcpMetadata(component: Object): Object;
 //# sourceMappingURL=mcp.d.ts.map

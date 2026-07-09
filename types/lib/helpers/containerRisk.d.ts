@@ -1,4 +1,4 @@
-export function getContainerRiskMetadata(name: any, linkedName: any): {
+export declare function getContainerRiskMetadata(name: any, linkedName: any): {
     attackTactics: any[];
     attackTechniques: any[];
     canonicalName: any;
@@ -10,7 +10,7 @@ export function getContainerRiskMetadata(name: any, linkedName: any): {
     seccompBlockedSyscalls: any[];
     seccompProfile: any;
 } | undefined;
-export function createContainerRiskProperties(name: any, linkedName: any): {
+export declare function createContainerRiskProperties(name: any, linkedName: any): {
     name: string;
     value: any;
 }[];

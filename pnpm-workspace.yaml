@@ -5,6 +5,8 @@ minimumReleaseAge: '4320'
 minimumReleaseAgeExclude:
   - '@cdxgen/*'
   - '@appthreat/*'
+  - 'typescript'
+  - '@typescript/*'
 optimisticRepeatInstall: true
 preferSymlinkedExecutables: false
 strictDepBuilds: true

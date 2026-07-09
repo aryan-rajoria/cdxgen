@@ -1,3 +1,7 @@
+export declare const AI_INVENTORY_PROJECT_TYPES: string[];
+export declare const AI_INSTRUCTION_FILE_KINDS: Set<string>;
+export declare const AI_SKILL_FILE_KIND = "skill-file";
+export declare const MCP_CONFIG_FILE_KIND = "mcp-config";
 /**
  * Read a property value from an inventory subject.
  *
@@ -5,7 +9,7 @@
  * @param {string} name property name
  * @returns {string|undefined} matching property value
  */
-export function inventoryPropertyValue(subject: Object, name: string): string | undefined;
+export declare function inventoryPropertyValue(subject: Object, name: string): string | undefined;
 /**
  * Determine whether CLI project type options include an AI inventory selector.
  *
@@ -13,14 +17,14 @@ export function inventoryPropertyValue(subject: Object, name: string): string | 
  * @param {string} type AI inventory type
  * @returns {boolean} true when the requested type is enabled
  */
-export function optionIncludesAiInventoryProjectType(optionValue: string | string[] | undefined, type: string): boolean;
+export declare function optionIncludesAiInventoryProjectType(optionValue: string | string[] | undefined, type: string): boolean;
 /**
  * Classify an inventory subject into AI inventory types.
  *
  * @param {Object} subject component or service
  * @returns {string[]} matching inventory types
  */
-export function inventoryTypesForSubject(subject: Object): string[];
+export declare function inventoryTypesForSubject(subject: Object): string[];
 /**
  * Check whether a subject belongs to a specific AI inventory type.
  *
@@ -28,7 +32,7 @@ export function inventoryTypesForSubject(subject: Object): string[];
  * @param {string} type AI inventory type
  * @returns {boolean} true when the subject matches
  */
-export function matchesAiInventoryType(subject: Object, type: string): boolean;
+export declare function matchesAiInventoryType(subject: Object, type: string): boolean;
 /**
  * Check whether a subject should be excluded by an AI inventory type filter.
  *
@@ -36,7 +40,7 @@ export function matchesAiInventoryType(subject: Object, type: string): boolean;
  * @param {string} type AI inventory type
  * @returns {boolean} true when the subject matches the exclusion
  */
-export function matchesAiInventoryExcludeType(subject: Object, type: string): boolean;
+export declare function matchesAiInventoryExcludeType(subject: Object, type: string): boolean;
 /**
  * Filter components or services by requested AI inventory types.
  *
@@ -44,7 +48,7 @@ export function matchesAiInventoryExcludeType(subject: Object, type: string): bo
  * @param {string[]} types allowed AI inventory types
  * @returns {Object[]} filtered subjects
  */
-export function filterInventorySubjectsByTypes(subjects: Object[], types: string[]): Object[];
+export declare function filterInventorySubjectsByTypes(subjects: Object[], types: string[]): Object[];
 /**
  * Filter dependency edges to include only retained AI inventory subjects.
  *
@@ -53,7 +57,7 @@ export function filterInventorySubjectsByTypes(subjects: Object[], types: string
  * @param {Object[]} services retained services
  * @returns {Object[]} filtered dependency edges
  */
-export function filterInventoryDependencies(dependencies: Object[], components: Object[], services: Object[]): Object[];
+export declare function filterInventoryDependencies(dependencies: Object[], components: Object[], services: Object[]): Object[];
 /**
  * Collect AI inventory subjects and dependency edges for the requested types.
  *
@@ -62,7 +66,7 @@ export function filterInventoryDependencies(dependencies: Object[], components: 
  * @param {string[]} types requested inventory types
  * @returns {{ components: Object[], dependencies: Object[], services: Object[] }} AI inventory
  */
-export function collectAiInventory(discoveryPath: string, options: Object, types: string[]): {
+export declare function collectAiInventory(discoveryPath: string, options: Object, types: string[]): {
     components: Object[];
     dependencies: Object[];
     services: Object[];
@@ -79,7 +83,7 @@ export function collectAiInventory(discoveryPath: string, options: Object, types
  *   skillComponentCount: number,
  * }} summary counts
  */
-export function summarizeAiInventory(inventory: {
+export declare function summarizeAiInventory(inventory: {
     components?: Object[];
     services?: Object[];
 }): {
@@ -89,8 +93,4 @@ export function summarizeAiInventory(inventory: {
     mcpConfigCount: number;
     skillComponentCount: number;
 };
-export const AI_INVENTORY_PROJECT_TYPES: string[];
-export const AI_INSTRUCTION_FILE_KINDS: Set<string>;
-export const AI_SKILL_FILE_KIND: "skill-file";
-export const MCP_CONFIG_FILE_KIND: "mcp-config";
 //# sourceMappingURL=aiInventory.d.ts.map
