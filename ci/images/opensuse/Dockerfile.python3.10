@@ -169,15 +169,15 @@ RUN set -e; \
         --allow-downgrade \
         -l \
         --no-recommends \
-          clang15 \
+          clang \
           graphviz-devel \
           lapacke-devel \
           libjpeg62-devel \
           libmariadb-devel \
           libopenblas_pthreads-devel \
           libopenssl-devel \
-          llvm15 \
-          llvm15-devel \
+          llvm \
+          llvm-devel \
           postgresql-devel \
           postgresql-server-devel \
           readline-devel \
