@@ -4,21 +4,21 @@
  * @param {object} bomJson CycloneDX BOM
  * @returns {boolean} True when the BOM appears to represent hardware inventory
  */
-export function isHbomLikeBom(bomJson: object): boolean;
+export declare function isHbomLikeBom(bomJson: object): boolean;
 /**
  * Detect whether a BOM looks like an OBOM/runtime inventory.
  *
  * @param {object} bomJson CycloneDX BOM
  * @returns {boolean} True when the BOM appears to represent operations/runtime data
  */
-export function isObomLikeBom(bomJson: object): boolean;
+export declare function isObomLikeBom(bomJson: object): boolean;
 /**
  * Summarize dry-run support across active BOM audit rules.
  *
  * @param {Object} [options={}] audit configuration options
  * @returns {Promise<{ fullCount: number, noCount: number, partialCount: number, totalRules: number }>} dry-run summary
  */
-export function getBomAuditDryRunSupportSummary(options?: Object): Promise<{
+export declare function getBomAuditDryRunSupportSummary(options?: Object): Promise<{
     fullCount: number;
     noCount: number;
     partialCount: number;
@@ -30,7 +30,7 @@ export function getBomAuditDryRunSupportSummary(options?: Object): Promise<{
  * @param {{ fullCount: number, noCount: number, partialCount: number, totalRules: number }} summary dry-run support summary
  * @returns {string} formatted summary text
  */
-export function formatDryRunSupportSummary(summary: {
+export declare function formatDryRunSupportSummary(summary: {
     fullCount: number;
     noCount: number;
     partialCount: number;
@@ -46,7 +46,7 @@ export function formatDryRunSupportSummary(summary: {
  * @param {Object} bomJson Generated CycloneDX BOM (mutated in place)
  * @param {Object} options CLI options
  */
-export function ensureAiProvenanceProperties(bomJson: Object, options?: Object): void;
+export declare function ensureAiProvenanceProperties(bomJson: Object, options?: Object): void;
 /**
  * Ensure the BOM carries cdx:ai:oversight properties at the document root
  * (`bomJson.properties`). If they are already present or AI codegen was not
@@ -55,28 +55,28 @@ export function ensureAiProvenanceProperties(bomJson: Object, options?: Object):
  * @param {Object} bomJson Generated CycloneDX BOM (mutated in place)
  * @param {Object} options CLI options
  */
-export function ensureAiOversightProperties(bomJson: Object, options?: Object): Promise<void>;
+export declare function ensureAiOversightProperties(bomJson: Object, options?: Object): Promise<void>;
 /**
  * Audit BOM formulation section using JSONata-powered rule engine
  * @param {Object} bomJson - Generated CycloneDX BOM
  * @param {Object} options - CLI options
  * @returns {Promise<Array>} Array of audit findings
  */
-export function auditBom(bomJson: Object, options: Object): Promise<any[]>;
+export declare function auditBom(bomJson: Object, options: Object): Promise<any[]>;
 /**
  * Format findings into a console report table.
  *
  * @param {Array} findings audit findings
  * @returns {string} console report table
  */
-export function renderBomAuditConsoleReport(findings: any[]): string;
+export declare function renderBomAuditConsoleReport(findings: any[]): string;
 /**
  * Print BOM audit findings to the console.
  *
  * @param {Array} findings audit findings
  * @returns {string} rendered console output
  */
-export function formatConsoleOutput(findings: any[]): string;
+export declare function formatConsoleOutput(findings: any[]): string;
 /**
  * Convert BOM audit findings to CycloneDX annotations.
  *
@@ -84,9 +84,9 @@ export function formatConsoleOutput(findings: any[]): string;
  * @param {Object} bomJson generated CycloneDX BOM
  * @returns {Array} CycloneDX annotations
  */
-export function formatAnnotations(findings: any[], bomJson: Object): any[];
+export declare function formatAnnotations(findings: any[], bomJson: Object): any[];
 /**
  * Check if any findings meet the severity threshold for secure mode failure
  */
-export function hasCriticalFindings(findings: any, options: any): any;
+export declare function hasCriticalFindings(findings: any, options: any): any;
 //# sourceMappingURL=auditBom.d.ts.map

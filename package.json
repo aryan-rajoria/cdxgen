@@ -1,6 +1,6 @@
 {
   "name": "@cyclonedx/cdxgen",
-  "version": "12.7.1",
+  "version": "12.8.0",
   "description": "Creates CycloneDX Software Bill of Materials (SBOM) from source or container image",
   "keywords": [
     "sbom",
@@ -154,7 +154,7 @@
     "esmock": "2.7.6",
     "poku": "4.5.0",
     "sinon": "22.0.0",
-    "typescript": "6.0.3"
+    "typescript": "^7.0.2"
   },
   "optionalDependencies": {
     "@appthreat/atom": "2.5.6",

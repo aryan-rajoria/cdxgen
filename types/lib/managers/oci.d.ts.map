@@ -1,1 +1,1 @@
-{"version":3,"file":"oci.d.ts","sourceRoot":"","sources":["../../../lib/managers/oci.js"],"names":[],"mappings":"AA+WA;;;;;;;GAOG;AACH,sCAJW,MAAM,0BAEJ,OAAO,CAAC,MAAM,GAAC,SAAS,CAAC,CA4GrC;AAmFD,2EAgIC"}
+{"version":3,"file":"oci.d.ts","sourceRoot":"","sources":["../../../lib/managers/oci.js"],"names":[],"mappings":"AA+WA;;;;;;;GAOG;AACH,wBAAsB,cAAc,CAAC,KAAK,EAJ/B,MAI+B,EAAE,SAAS,YAAY,GAFpD,OAAO,CAAC,MAAM,GAAC,SAAS,CAAC,CA4GrC;AAmFD,wBAAsB,eAAe,CAAC,KAAK,KAAA,EAAE,OAAO,KAAA,mBAgInD"}

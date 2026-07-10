@@ -9,14 +9,14 @@
  * @param {Object} parentComponent Parent component whose bom-ref is used to filter self-references
  * @returns {Object[]} Merged and deduplicated array of dependency objects
  */
-export function mergeDependencies(dependencies: Object[], newDependencies: Object[], parentComponent?: Object): Object[];
+export declare function mergeDependencies(dependencies: Object[], newDependencies: Object[], parentComponent?: Object): Object[];
 /**
  * Marks npm @types packages as excluded from runtime scope.
  *
  * @param {Object[]} components CycloneDX component objects
  * @returns {Object[]} The same component array with scopes updated in place
  */
-export function markNpmTypesPackagesAsExcluded(components?: Object[]): Object[];
+export declare function markNpmTypesPackagesAsExcluded(components?: Object[]): Object[];
 /**
  * Propagates required scope through a dependency graph.
  *
@@ -28,7 +28,7 @@ export function markNpmTypesPackagesAsExcluded(components?: Object[]): Object[];
  * @param {Object[]} dependencies CycloneDX dependency entries
  * @returns {Object[]} The same component array with scopes updated in place
  */
-export function propagateRequiredScopeFromDependencies(components?: Object[], dependencies?: Object[]): Object[];
+export declare function propagateRequiredScopeFromDependencies(components?: Object[], dependencies?: Object[]): Object[];
 /**
  * Merge CycloneDX services using bom-ref or group/name/version identity.
  *
@@ -36,7 +36,7 @@ export function propagateRequiredScopeFromDependencies(components?: Object[], de
  * @param {Object[]|Object} newServices New service list
  * @returns {Object[]} Merged and deduplicated services
  */
-export function mergeServices(services: Object[] | Object, newServices: Object[] | Object): Object[];
+export declare function mergeServices(services: Object[] | Object, newServices: Object[] | Object): Object[];
 /**
  * Trim duplicate components by retaining all the properties
  *
@@ -44,7 +44,7 @@ export function mergeServices(services: Object[] | Object, newServices: Object[]
  *
  * @returns {Array} Filtered components
  */
-export function trimComponents(components: any[]): any[];
+export declare function trimComponents(components: any[]): any[];
 /**
  * Filter out invalid cryptographic-asset components from a component list.
  * Removes algorithm components without a valid cryptoProperties.oid and
@@ -53,5 +53,5 @@ export function trimComponents(components: any[]): any[];
  * @param {Object[] | undefined | null} components Array of CycloneDX components
  * @returns {Object[]} Filtered array with invalid crypto components removed
  */
-export function filterInvalidCryptoComponents(components: Object[] | undefined | null): Object[];
+export declare function filterInvalidCryptoComponents(components: Object[] | undefined | null): Object[];
 //# sourceMappingURL=depsUtils.d.ts.map

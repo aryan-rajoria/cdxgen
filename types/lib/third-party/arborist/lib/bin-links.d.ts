@@ -12,7 +12,7 @@
 export default function getPaths({ path, pkg, global, top }: {
     path: string;
     pkg: Object;
-    global?: boolean | undefined;
-    top?: boolean | undefined;
+    global?: boolean;
+    top?: boolean;
 }): string[];
 //# sourceMappingURL=bin-links.d.ts.map

@@ -4,7 +4,7 @@
  * @param {string} [explicitPath] - Optional explicit venv path to inspect
  * @returns {Object} Structured environment metadata
  */
-export function getVenvMetadata(env?: Object, explicitPath?: string): Object;
+export declare function getVenvMetadata(env?: Object, explicitPath?: string): Object;
 /**
  * Determines the appropriate Python executable path from a virtual environment.
  * Inspects the virtual environment metadata to detect the Python type (system,
@@ -14,5 +14,5 @@ export function getVenvMetadata(env?: Object, explicitPath?: string): Object;
  * @param {string} env Path to the Python virtual environment directory
  * @returns {string} Path to the Python executable or the fallback command name
  */
-export function get_python_command_from_env(env: string): string;
+export declare function get_python_command_from_env(env: string): string;
 //# sourceMappingURL=pythonutils.d.ts.map

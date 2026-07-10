@@ -11,5 +11,5 @@
  * @param {string} raw Raw git note content
  * @returns {Object} Extracted fields { agent, model, session, prompt, lines, ranges, sessions, prompts, agents, models, aiAttributionCount }
  */
-export function parseGitAiNote(raw: string): Object;
+export declare function parseGitAiNote(raw: string): Object;
 //# sourceMappingURL=gitAiNotes.d.ts.map

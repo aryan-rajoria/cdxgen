@@ -1,9 +1,8 @@
-export default Arborist;
-declare const Arborist_base: any;
-declare class Arborist extends Arborist_base {
-    [x: string]: any;
-    constructor(options?: {});
+declare const _setWorkspaces: unique symbol;
+declare const Base: any;
+declare class Arborist extends Base {
     options: {
+        nodeVersion: any;
         Arborist: Function;
         binLinks: boolean;
         cache: any;
@@ -22,17 +21,17 @@ declare class Arborist extends Arborist_base {
         scriptShell: any;
         workspaces: any;
         workspacesEnabled: boolean;
-        nodeVersion: any;
     };
     replaceRegistryHost: any;
     cache: any;
     diff: any;
     path: any;
+    constructor(options?: {});
     workspaceNodes(tree: any, workspaces: any): any[];
     workspaceDependencySet(tree: any, workspaces: any, includeWorkspaceRoot: any): Set<any>;
     excludeWorkspacesDependencySet(tree: any): Set<any>;
-    dedupe(options?: {}): Promise<any>;
     [_setWorkspaces](node: any): Promise<any>;
+    dedupe(options?: {}): Promise<any>;
 }
-declare const _setWorkspaces: unique symbol;
+export default Arborist;
 //# sourceMappingURL=index.d.ts.map

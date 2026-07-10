@@ -3,7 +3,7 @@
  * @param {string} cmdStr - Command string to parse
  * @returns {{cmd: string, args: string[]}} Parsed command and arguments
  */
-export function parseCommand(cmdStr: string): {
+export declare function parseCommand(cmdStr: string): {
     cmd: string;
     args: string[];
 };
@@ -13,7 +13,7 @@ export function parseCommand(cmdStr: string): {
  *
  * @returns {string|undefined} Path to the resolved binary or undefined if not found
  */
-export function resolveSaferExecBinary(): string | undefined;
+export declare function resolveSaferExecBinary(): string | undefined;
 /**
  * Executes a command under safer-exec tracing and returns an array of loaded library paths
  * and collected HTTP access entries.
@@ -42,26 +42,26 @@ export function resolveSaferExecBinary(): string | undefined;
  * @param {string[]} [options.blockExec] - Executables to block from running
  * @returns {Promise<{libPaths: string[], httpAccessEntries: Object[]}>} Collected libraries and HTTP URLs
  */
-export function executeAndTrace(commandStr: string, workingDir?: string, options?: {
-    readPaths?: string[] | undefined;
-    writePaths?: string[] | undefined;
-    maxMemoryMB?: number | undefined;
-    maxCPUCores?: number | undefined;
-    maxProcesses?: number | undefined;
-    timeoutMs?: number | undefined;
-    disableNetwork?: boolean | undefined;
-    traceHTTPURLs?: boolean | undefined;
-    tracePeriod?: number | undefined;
-    sanitizeEnv?: boolean | undefined;
-    enableDiff?: boolean | undefined;
-    strict?: boolean | undefined;
-    allowHosts?: string[] | undefined;
-    allowPorts?: number[] | undefined;
-    allowUrls?: string[] | undefined;
-    blockFork?: boolean | undefined;
-    traceExec?: boolean | undefined;
-    allowExec?: string[] | undefined;
-    blockExec?: string[] | undefined;
+export declare function executeAndTrace(commandStr: string, workingDir?: string, options?: {
+    readPaths?: string[];
+    writePaths?: string[];
+    maxMemoryMB?: number;
+    maxCPUCores?: number;
+    maxProcesses?: number;
+    timeoutMs?: number;
+    disableNetwork?: boolean;
+    traceHTTPURLs?: boolean;
+    tracePeriod?: number;
+    sanitizeEnv?: boolean;
+    enableDiff?: boolean;
+    strict?: boolean;
+    allowHosts?: string[];
+    allowPorts?: number[];
+    allowUrls?: string[];
+    blockFork?: boolean;
+    traceExec?: boolean;
+    allowExec?: string[];
+    blockExec?: string[];
 }): Promise<{
     libPaths: string[];
     httpAccessEntries: Object[];
@@ -73,10 +73,8 @@ export function executeAndTrace(commandStr: string, workingDir?: string, options
  * @param {Object[]} httpAccessEntries - Collected HTTP access entries
  * @returns {Object.<string, { endpoints: Set<string>, properties: Object[] }>} Services map
  */
-export function groupHttpEntriesToServices(httpAccessEntries: Object[]): {
-    [x: string]: {
-        endpoints: Set<string>;
-        properties: Object[];
-    };
-};
+export declare function groupHttpEntriesToServices(httpAccessEntries: Object[]): Record<string, {
+    endpoints: Set<string>;
+    properties: Object[];
+}>;
 //# sourceMappingURL=traceRunner.d.ts.map

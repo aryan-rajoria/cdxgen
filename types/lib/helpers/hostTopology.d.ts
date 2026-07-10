@@ -1,5 +1,5 @@
-export function isMergedHostViewBom(bomJson: any): any;
-export function getHostViewSummary(bomJson: any): {
+export declare function isMergedHostViewBom(bomJson: any): any;
+export declare function getHostViewSummary(bomJson: any): {
     linkedHardwareComponentCount: number;
     linkedRuntimeCategories: any;
     mode: any;
@@ -7,6 +7,6 @@ export function getHostViewSummary(bomJson: any): {
     runtimeComponentCount: number;
     topologyLinkCount: number;
 };
-export function applyHostInventoryTopology(bomJson: any): any;
-export function mergeHostInventoryBoms(hbomJson: any, obomData: any): any;
+export declare function applyHostInventoryTopology(bomJson: any): any;
+export declare function mergeHostInventoryBoms(hbomJson: any, obomData: any): any;
 //# sourceMappingURL=hostTopology.d.ts.map

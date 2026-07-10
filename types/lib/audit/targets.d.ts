@@ -1,3 +1,4 @@
+declare const SUPPORTED_PURL_TYPES: Set<string>;
 /**
  * Determine whether a CycloneDX component scope should be treated as required.
  *
@@ -6,7 +7,7 @@
  * @param {string | undefined} scope component scope
  * @returns {boolean} true when the component is required for predictive audit selection
  */
-export function isRequiredComponentScope(scope: string | undefined): boolean;
+export declare function isRequiredComponentScope(scope: string | undefined): boolean;
 /**
  * Enrich input BOM components with registry provenance/trusted-publishing
  * metadata so audit target filtering can exclude trusted packages even when the
@@ -15,7 +16,7 @@ export function isRequiredComponentScope(scope: string | undefined): boolean;
  * @param {{ source: string, bomJson: object }[]} inputBoms loaded input BOMs
  * @returns {Promise<void>}
  */
-export function enrichInputBomsWithRegistryMetadata(inputBoms: {
+export declare function enrichInputBomsWithRegistryMetadata(inputBoms: {
     source: string;
     bomJson: object;
 }[]): Promise<void>;
@@ -25,7 +26,7 @@ export function enrichInputBomsWithRegistryMetadata(inputBoms: {
  * @param {string | undefined} packageName package name
  * @returns {string} normalized package name
  */
-export function normalizePackageName(packageName: string | undefined): string;
+export declare function normalizePackageName(packageName: string | undefined): string;
 /**
  * Extract npm and PyPI package-url targets from a CycloneDX BOM.
  *
@@ -34,7 +35,7 @@ export function normalizePackageName(packageName: string | undefined): string;
  * @param {number | object | undefined} [options] selector options
  * @returns {{ targets: object[], skipped: object[] }} extracted targets and skipped components
  */
-export function extractPurlTargetsFromBom(bomJson: object, sourceName: string, options?: number | object | undefined): {
+export declare function extractPurlTargetsFromBom(bomJson: object, sourceName: string, options?: number | object | undefined): {
     targets: object[];
     skipped: object[];
 };
@@ -56,7 +57,7 @@ export function extractPurlTargetsFromBom(bomJson: object, sourceName: string, o
  *   targets: object[],
  * }} merged targets and skipped components
  */
-export function collectAuditTargets(inputBoms: {
+export declare function collectAuditTargets(inputBoms: {
     source: string;
     bomJson: object;
 }[], options?: number | object | undefined): {
@@ -71,5 +72,5 @@ export function collectAuditTargets(inputBoms: {
     };
     targets: object[];
 };
-export const SUPPORTED_PURL_TYPES: Set<string>;
+export { SUPPORTED_PURL_TYPES };
 //# sourceMappingURL=targets.d.ts.map

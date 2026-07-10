@@ -1,7 +1,7 @@
-export namespace rustFormulationParser {
-    let id: string;
-    let patterns: string[];
-    function parse(files: any): {
+export declare const rustFormulationParser: {
+    id: string;
+    patterns: string[];
+    parse(files: any): {
         components: {
             type: string;
             name: any;
@@ -13,5 +13,5 @@ export namespace rustFormulationParser {
             }[];
         }[];
     };
-}
+};
 //# sourceMappingURL=rustFormulationParser.d.ts.map

@@ -1,17 +1,4 @@
-export default Diff;
 declare class Diff {
-    static calculate({ actual, ideal, filterNodes, shrinkwrapInflated, }: {
-        actual: any;
-        ideal: any;
-        filterNodes?: never[] | undefined;
-        shrinkwrapInflated?: Set<any> | undefined;
-    }): any;
-    constructor({ actual, ideal, filterSet, shrinkwrapInflated }: {
-        actual: any;
-        ideal: any;
-        filterSet: any;
-        shrinkwrapInflated: any;
-    });
     filterSet: any;
     shrinkwrapInflated: any;
     children: any[];
@@ -24,5 +11,18 @@ declare class Diff {
     leaves: any[];
     unchanged: any[];
     removed: any[];
+    constructor({ actual, ideal, filterSet, shrinkwrapInflated }: {
+        actual: any;
+        filterSet: any;
+        ideal: any;
+        shrinkwrapInflated: any;
+    });
+    static calculate({ actual, ideal, filterNodes, shrinkwrapInflated, }: {
+        actual: any;
+        filterNodes?: never[] | undefined;
+        ideal: any;
+        shrinkwrapInflated?: Set<any> | undefined;
+    }): any;
 }
+export default Diff;
 //# sourceMappingURL=diff.d.ts.map

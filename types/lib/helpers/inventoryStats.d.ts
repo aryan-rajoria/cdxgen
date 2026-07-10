@@ -1,8 +1,8 @@
-export function getPropertyValue(propertiesOrObject: any, propertyName: any): any;
-export function getUnpackagedExecutableComponents(components?: any[]): any[];
-export function getUnpackagedSharedLibraryComponents(components?: any[]): any[];
-export function getSourceDerivedCryptoComponents(components?: any[]): any[];
-export function getContainerFileInventoryStats(components?: any[]): {
+export declare function getPropertyValue(propertiesOrObject: any, propertyName: any): any;
+export declare function getUnpackagedExecutableComponents(components?: any[]): any[];
+export declare function getUnpackagedSharedLibraryComponents(components?: any[]): any[];
+export declare function getSourceDerivedCryptoComponents(components?: any[]): any[];
+export declare function getContainerFileInventoryStats(components?: any[]): {
     unpackagedExecutables: any[];
     unpackagedSharedLibraries: any[];
     unpackagedExecutableCount: number;

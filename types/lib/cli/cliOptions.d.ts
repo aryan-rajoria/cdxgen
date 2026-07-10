@@ -1,4 +1,16 @@
 /**
+ * CLI argument → options conversion for cdxgen.
+ *
+ * Extracts the complex arg-to-options mapping from `bin/cdxgen.js` into
+ * pure, testable functions with no side-effects (no process.exit, no
+ * console output).
+ *
+ * Architecture note: This module is a helper and must NOT import from
+ * `lib/cli/index.js` or `lib/stages/`. See AGENTS.md "Module layering
+ * rules".
+ *
+ */
+/**
  * Check whether a value was explicitly provided by the user (i.e., is not
  * the yargs default). Yargs always populates default values, so we cannot
  * simply check for truthiness.
@@ -11,7 +23,7 @@
  * @param {*} yaDefault The default declared in yargs `.option()`
  * @returns {boolean}  True when the user explicitly set this flag
  */
-export function isUserProvided(value: any, yaDefault: any): boolean;
+export declare function isUserProvided(value: any, yaDefault: any): boolean;
 /**
  * Apply command-name-based defaults to the raw parsed args. When cdxgen is
  * invoked via a symlink or alias (e.g. `obom`, `cbom`, `spdxgen`, `aibom`),
@@ -24,7 +36,7 @@ export function isUserProvided(value: any, yaDefault: any): boolean;
  * @param {string} invokedCommandName Binary name without extension
  * @returns {object} A shallow copy of args with alias-based defaults applied
  */
-export function applyCommandNameDefaults(args: object, invokedCommandName: string): object;
+export declare function applyCommandNameDefaults(args: object, invokedCommandName: string): object;
 /**
  * Build the initial `options` object from parsed CLI args. This performs
  * the field renames and derived-value computations that create the shape
@@ -37,10 +49,20 @@ export function applyCommandNameDefaults(args: object, invokedCommandName: strin
  * @param {boolean} context.isRemoteOrPurl   True when source is a URL or purl
  * @returns {object} The initial options object
  */
-export function buildInitialOptions(args: object, { filePath, isRemoteOrPurl }: {
+export declare function buildInitialOptions(args: object, { filePath, isRemoteOrPurl }: {
     filePath: string;
     isRemoteOrPurl: boolean;
 }): object;
+export type OptionsWarning = {
+    /**
+     * Severity level
+     */
+    level: "info" | "warn" | "error";
+    /**
+     * Human-readable description
+     */
+    message: string;
+};
 /**
  * @typedef {object} OptionsWarning
  * @property {"info"|"warn"|"error"} level   Severity level
@@ -68,10 +90,10 @@ export function buildInitialOptions(args: object, { filePath, isRemoteOrPurl }: 
  * @param {boolean} [context.isDryRun=false]   Current dry-run state
  * @returns {OptionsWarning[]} Warnings to surface to the user
  */
-export function applyPostConstructionOverrides(options: object, context: {
+export declare function applyPostConstructionOverrides(options: object, context: {
     invokedCommandName: string;
     userSetSpecVersion: boolean;
-    isDryRun?: boolean | undefined;
+    isDryRun?: boolean;
 }): OptionsWarning[];
 /**
  * Apply advanced option expansion based on `profile`, `lifecycle`, and
@@ -91,8 +113,8 @@ export function applyPostConstructionOverrides(options: object, context: {
  * @param {boolean} [context.isSecureMode]  Whether cdxgen runs in secure mode
  * @returns {OptionsWarning[]} Warnings for the caller
  */
-export function applyAdvancedOptions(options: object, context?: {
-    isSecureMode?: boolean | undefined;
+export declare function applyAdvancedOptions(options: object, context?: {
+    isSecureMode?: boolean;
 }): OptionsWarning[];
 /**
  * Build the complete `options` object from parsed CLI arguments.
@@ -119,25 +141,15 @@ export function applyAdvancedOptions(options: object, context?: {
  * @param {boolean} [context.isSecureMode]     Secure mode
  * @returns {{ options: object, warnings: OptionsWarning[] }}
  */
-export function buildOptionsFromArgs(args: object, context: {
+export declare function buildOptionsFromArgs(args: object, context: {
     invokedCommandName: string;
     filePath: string;
     isRemoteOrPurl: boolean;
     userSetSpecVersion: boolean;
-    isDryRun?: boolean | undefined;
-    isSecureMode?: boolean | undefined;
+    isDryRun?: boolean;
+    isSecureMode?: boolean;
 }): {
     options: object;
     warnings: OptionsWarning[];
-};
-export type OptionsWarning = {
-    /**
-     * Severity level
-     */
-    level: "info" | "warn" | "error";
-    /**
-     * Human-readable description
-     */
-    message: string;
 };
 //# sourceMappingURL=cliOptions.d.ts.map

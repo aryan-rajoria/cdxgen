@@ -1,17 +1,27 @@
-export namespace circleCiParser {
-    let id: string;
-    let patterns: string[];
+/**
+ * CircleCI formulation parser.
+ *
+ * Matches `.circleci/config.yml` and `.circleci/config.yaml` and converts them
+ * into CycloneDX formulation workflow objects. Referenced orbs are captured as
+ * components.
+ *
+ * Parser contract: `parse(files, options)` returns
+ * `{ workflows, components, services, properties, dependencies }`.
+ */
+export declare const circleCiParser: {
+    id: string;
+    patterns: string[];
     /**
      * @param {string[]} files Matched config file paths
      * @param {Object} options CLI options
      * @returns {{ workflows: Object[], components: Object[], services: Object[], properties: Object[], dependencies: Object[] }}
      */
-    function parse(files: string[], options: Object): {
+    parse(files: string[], options: Object): {
         workflows: Object[];
         components: Object[];
         services: Object[];
         properties: Object[];
         dependencies: Object[];
     };
-}
+};
 //# sourceMappingURL=circleCi.d.ts.map

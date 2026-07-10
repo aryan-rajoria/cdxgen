@@ -1,15 +1,7 @@
-export function createOrLoad(): Promise<{
-    sequelize: {
-        close: () => boolean;
-    };
-    Namespaces: Model;
-    Usages: Model;
-    DataFlows: Model;
-}>;
 declare class Model {
-    constructor(tableName: any);
     tableName: any;
     store: Map<any, any>;
+    constructor(tableName: any);
     init(): Promise<void>;
     findByPk(purl: any): Promise<{
         purl: any;
@@ -30,5 +22,13 @@ declare class Model {
         updatedAt: any;
     }[]>;
 }
+export declare const createOrLoad: () => Promise<{
+    sequelize: {
+        close: () => boolean;
+    };
+    Namespaces: Model;
+    Usages: Model;
+    DataFlows: Model;
+}>;
 export {};
 //# sourceMappingURL=db.d.ts.map

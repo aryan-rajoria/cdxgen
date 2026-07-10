@@ -6,7 +6,7 @@
  *
  * @param {{ id: string, patterns: string[], parse: Function }} parser
  */
-export function registerParser(parser: {
+export declare function registerParser(parser: {
     id: string;
     patterns: string[];
     parse: Function;
@@ -16,7 +16,7 @@ export function registerParser(parser: {
  *
  * @returns {Array<{ id: string, patterns: string[], parse: Function }>}
  */
-export function getParsers(): Array<{
+export declare function getParsers(): Array<{
     id: string;
     patterns: string[];
     parse: Function;
@@ -43,7 +43,7 @@ export function getParsers(): Array<{
  *   `dependencies` – dependency objects to be merged into
  *                    `bomJson.dependencies` via `mergeDependencies`
  */
-export function addFormulationSection(filePath: string, options: Object, context?: Object): {
+export declare function addFormulationSection(filePath: string, options: Object, context?: Object): {
     formulation: Object[];
     dependencies: Object[];
 };

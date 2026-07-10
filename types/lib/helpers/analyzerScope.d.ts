@@ -1,11 +1,11 @@
-export function toResolvedValueArray(value: any): any;
-export function resolvedValueKey(value: any): string;
-export function mergeResolvedValues(...values: any[]): any;
-export function filterResolvedValues(value: any, predicate: any): any;
-export function hasOnlyResolvedValues(value: any, predicate: any): any;
-export function getStaticObjectProperty(objectValue: any, propertyName: any): any;
-export function deriveStaticNarrowingsFromCondition(astNode: any, branchTaken: any, getLiteralStringValue: any): any;
-export function resolveStaticValue(astNode: any, staticValueByName: any, getLiteralStringValue: any, getMemberExpressionPropertyName: any, depth?: number): any;
-export function deriveStaticNarrowingsFromSwitchCase(switchCaseNode: any, switchStatementNode: any, staticValueByName: any, getLiteralStringValue: any, getMemberExpressionPropertyName: any): Map<any, any> | undefined;
-export function getScopedStaticValueByName(path: any, staticValueByName: any, getLiteralStringValue: any, getMemberExpressionPropertyName: any): Map<any, any>;
+export declare const toResolvedValueArray: (value: any) => any;
+export declare const resolvedValueKey: (value: any) => string;
+export declare const mergeResolvedValues: (...values: any[]) => any;
+export declare const filterResolvedValues: (value: any, predicate: any) => any;
+export declare const hasOnlyResolvedValues: (value: any, predicate: any) => any;
+export declare const getStaticObjectProperty: (objectValue: any, propertyName: any) => any;
+export declare const deriveStaticNarrowingsFromCondition: (astNode: any, branchTaken: any, getLiteralStringValue: any) => any;
+export declare const resolveStaticValue: (astNode: any, staticValueByName: any, getLiteralStringValue: any, getMemberExpressionPropertyName: any, depth?: number) => any;
+export declare const deriveStaticNarrowingsFromSwitchCase: (switchCaseNode: any, switchStatementNode: any, staticValueByName: any, getLiteralStringValue: any, getMemberExpressionPropertyName: any) => Map<any, any> | undefined;
+export declare const getScopedStaticValueByName: (path: any, staticValueByName: any, getLiteralStringValue: any, getMemberExpressionPropertyName: any) => Map<any, any>;
 //# sourceMappingURL=analyzerScope.d.ts.map

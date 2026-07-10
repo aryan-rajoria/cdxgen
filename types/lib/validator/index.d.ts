@@ -1,4 +1,23 @@
 /**
+ * cdx-validate orchestrator.
+ *
+ * Combines cdxgen's existing structural validation
+ * ({@link ./bomValidator.js}) with the compliance rule packs in
+ * {@link ./complianceEngine.js} and (optionally) signature verification from
+ * {@link ../helpers/bomSigner.js}.
+ *
+ * This module exposes a single high-level function, `validateBomAdvanced`,
+ * and helpers to classify the result. It does *not* perform any I/O: the CLI
+ * wrapper (`bin/validate.js`) is responsible for reading the input BOM.
+ */
+declare const SEVERITY_ORDER: {
+    info: number;
+    low: number;
+    medium: number;
+    high: number;
+    critical: number;
+};
+/**
  * Run structural + compliance validation against a parsed BOM.
  *
  * @param {object} bomJson Parsed CycloneDX JSON BOM.
@@ -22,15 +41,15 @@
  *   summary: object
  * }}
  */
-export function validateBomAdvanced(bomJson: object, options?: {
-    schema?: boolean | undefined;
-    deep?: boolean | undefined;
-    benchmarks?: string[] | undefined;
-    categories?: string[] | undefined;
-    minSeverity?: string | undefined;
-    includeManual?: boolean | undefined;
-    includePass?: boolean | undefined;
-    publicKey?: string | undefined;
+export declare function validateBomAdvanced(bomJson: object, options?: {
+    schema?: boolean;
+    deep?: boolean;
+    benchmarks?: Array<string>;
+    categories?: Array<string>;
+    minSeverity?: string;
+    includeManual?: boolean;
+    includePass?: boolean;
+    publicKey?: string;
 }): {
     schemaValid: boolean;
     deepValid: boolean;
@@ -51,20 +70,14 @@ export function validateBomAdvanced(bomJson: object, options?: {
  * @param {boolean} [opts.requireSignature] Require a valid signature when verification was requested.
  * @returns {{ shouldFail: boolean, reason: string | null }}
  */
-export function shouldFail(report: object, opts?: {
-    failSeverity?: string | undefined;
-    strict?: boolean | undefined;
-    requireSignature?: boolean | undefined;
+export declare function shouldFail(report: object, opts?: {
+    failSeverity?: string;
+    strict?: boolean;
+    requireSignature?: boolean;
 }): {
     shouldFail: boolean;
     reason: string | null;
 };
-export namespace SEVERITY_ORDER {
-    let info: number;
-    let low: number;
-    let medium: number;
-    let high: number;
-    let critical: number;
-}
 export { buildBenchmarkReports, evaluateAll } from "./complianceEngine.js";
+export { SEVERITY_ORDER };
 //# sourceMappingURL=index.d.ts.map

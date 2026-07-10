@@ -1,4 +1,10 @@
 /**
+ * SARIF 2.1.0 reporter — renders findings as a SARIF log suitable for upload
+ * to GitHub code scanning or any other SARIF-aware consumer.
+ *
+ * No external dependencies. Spec: https://docs.oasis-open.org/sarif/sarif/v2.1.0/
+ */
+/**
  * Render a validation report as SARIF.
  *
  * @param {object} report Output of validateBomAdvanced().
@@ -8,9 +14,9 @@
  * @param {boolean} [options.includeManual] Include manual-review findings (default false).
  * @returns {string}
  */
-export function render(report: object, options?: {
-    toolName?: string | undefined;
-    toolVersion?: string | undefined;
-    includeManual?: boolean | undefined;
+export declare function render(report: object, options?: {
+    toolName?: string;
+    toolVersion?: string;
+    includeManual?: boolean;
 }): string;
 //# sourceMappingURL=sarif.d.ts.map

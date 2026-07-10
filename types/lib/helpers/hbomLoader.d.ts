@@ -3,5 +3,5 @@
  *
  * @returns {Promise<object>} Loaded cdx-hbom module namespace.
  */
-export function importHbomModule(): Promise<object>;
+export declare function importHbomModule(): Promise<object>;
 //# sourceMappingURL=hbomLoader.d.ts.map

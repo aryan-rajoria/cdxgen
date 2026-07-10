@@ -3,7 +3,7 @@
  *
  * @param {string} projectPath Path to the SBT project
  */
-export function sbtPluginsPath(projectPath: string): any;
+export declare function sbtPluginsPath(projectPath: string): any;
 /**
  * Determine the version of SBT used in compilation of this project.
  * By default it looks into a standard SBT location i.e.
@@ -12,7 +12,7 @@ export function sbtPluginsPath(projectPath: string): any;
  *
  * @param {string} projectPath Path to the SBT project
  */
-export function determineSbtVersion(projectPath: string): string | null;
+export declare function determineSbtVersion(projectPath: string): string | null;
 /**
  * Adds a new plugin to the SBT project by amending its plugins list.
  * Only recommended for SBT < 1.2.0 or otherwise use `addPluginSbtFile`
@@ -25,7 +25,7 @@ export function determineSbtVersion(projectPath: string): string | null;
  * @param {string} projectPath Path to the SBT project
  * @param {string} plugin Name of the plugin to add
  */
-export function addPlugin(projectPath: string, plugin: string): string | null;
+export declare function addPlugin(projectPath: string, plugin: string): string | null;
 /**
  * Cleans up modifications to the project's plugins' file made by the
  * `addPlugin` function.
@@ -33,7 +33,7 @@ export function addPlugin(projectPath: string, plugin: string): string | null;
  * @param {string} projectPath Path to the SBT project
  * @param {string} originalPluginsFile Location of the original plugins file, if any
  */
-export function cleanupPlugin(projectPath: string, originalPluginsFile: string): boolean;
+export declare function cleanupPlugin(projectPath: string, originalPluginsFile: string): boolean;
 /**
  * Find the repository URL from the local Coursier cache for a given Maven package.
  *
@@ -42,14 +42,14 @@ export function cleanupPlugin(projectPath: string, originalPluginsFile: string):
  * @param {string} version Package version
  * @returns {string|null} The repository URL or null if not found
  */
-export function findCoursierRegistryUrl(group: string, name: string, version: string): string | null;
+export declare function findCoursierRegistryUrl(group: string, name: string, version: string): string | null;
 /**
  * Test if a given URL exists (returns 2xx/3xx for http/https, or exists on disk for file)
  *
  * @param {string} url URL to test
  * @returns {Promise<boolean>} true if URL exists
  */
-export function testUrlExists(url: string): Promise<boolean>;
+export declare function testUrlExists(url: string): Promise<boolean>;
 /**
  * Find the local jar path in Coursier cache if it exists.
  *
@@ -58,7 +58,7 @@ export function testUrlExists(url: string): Promise<boolean>;
  * @param {string} version Package version
  * @returns {string|null} local jar path or null
  */
-export function findLocalJarPath(group: string, name: string, version: string): string | null;
+export declare function findLocalJarPath(group: string, name: string, version: string): string | null;
 /**
  * Resolves the direct download URL for a Maven jar package if found in the local cache,
  * and validates that the URL exists.
@@ -68,7 +68,7 @@ export function findLocalJarPath(group: string, name: string, version: string): 
  * @param {string} version Package version
  * @returns {Promise<{ repoUrl: string, jarUrl: string, hashes?: Array }|null>} resolved URLs or null
  */
-export function resolveJarDistribution(group: string, name: string, version: string): Promise<{
+export declare function resolveJarDistribution(group: string, name: string, version: string): Promise<{
     repoUrl: string;
     jarUrl: string;
     hashes?: any[];
@@ -82,7 +82,7 @@ export function resolveJarDistribution(group: string, name: string, version: str
  * @param {string} sbtTreeFile Path to the sbt dependency tree output file
  * @returns {{ pkgList: Object[], dependenciesList: Object[] }}
  */
-export function parseSbtTree(sbtTreeFile: string): {
+export declare function parseSbtTree(sbtTreeFile: string): {
     pkgList: Object[];
     dependenciesList: Object[];
 };
@@ -91,7 +91,7 @@ export function parseSbtTree(sbtTreeFile: string): {
  *
  * @param {string} pkgLockFile build.sbt.lock file
  */
-export function parseSbtLock(pkgLockFile: string): Promise<{
+export declare function parseSbtLock(pkgLockFile: string): Promise<{
     group: any;
     name: any;
     version: any;
@@ -122,7 +122,7 @@ export function parseSbtLock(pkgLockFile: string): Promise<{
  * @param {string} projectPath Directory path of the project
  * @returns {{ name: string, group: string, version: string }|null}
  */
-export function parseSbtRootProject(projectPath: string): {
+export declare function parseSbtRootProject(projectPath: string): {
     name: string;
     group: string;
     version: string;
@@ -133,12 +133,12 @@ export function parseSbtRootProject(projectPath: string): {
  * @param {string} projectPath Directory path of the project
  * @returns {string[]} List of discovered subproject names
  */
-export function discoverSbtProjects(projectPath: string): string[];
+export declare function discoverSbtProjects(projectPath: string): string[];
 /**
  * Parse plugins.sbt files to extract sbt plugins as development dependencies.
  *
  * @param {string} projectPath Directory path of the project
  * @returns {Object[]} List of parsed dependency components
  */
-export function parseSbtPlugins(projectPath: string): Object[];
+export declare function parseSbtPlugins(projectPath: string): Object[];
 //# sourceMappingURL=sbtutils.d.ts.map

@@ -1,6 +1,5 @@
-export default PlaceDep;
+import CanPlaceDep from "./can-place-dep.js";
 declare class PlaceDep {
-    constructor(options: any);
     auditReport: any;
     dep: any;
     edge: any;
@@ -13,8 +12,8 @@ declare class PlaceDep {
     preferDedupe: any;
     strictPeerDeps: any;
     updateNames: any;
-    canPlace: any;
-    canPlaceSelf: any;
+    canPlace: CanPlaceDep | null;
+    canPlaceSelf: CanPlaceDep | null;
     checks: Map<any, any>;
     children: PlaceDep[];
     needEvaluation: Set<any>;
@@ -25,6 +24,7 @@ declare class PlaceDep {
     name: any;
     top: any;
     oldDep: any;
+    constructor(options: any);
     replaceOldDep(): void;
     pruneForReplacement(node: any, oldDeps: any): void;
     pruneDedupable(node: any, descend?: boolean): void;
@@ -42,4 +42,5 @@ declare class PlaceDep {
     getStartNode(): any;
     get allChildren(): PlaceDep[];
 }
+export default PlaceDep;
 //# sourceMappingURL=place-dep.d.ts.map

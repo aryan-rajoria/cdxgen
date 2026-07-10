@@ -4,35 +4,35 @@
  * @param {string} lockFilePath lock file path
  * @returns {boolean} true if this is a pylock file
  */
-export function isPyLockFile(lockFilePath: string): boolean;
+export declare function isPyLockFile(lockFilePath: string): boolean;
 /**
  * Check whether a parsed toml object follows pylock format.
  *
  * @param {object} lockTomlObj parsed toml object
  * @returns {boolean} true if object appears to be pylock data
  */
-export function isPyLockObject(lockTomlObj: object): boolean;
+export declare function isPyLockObject(lockTomlObj: object): boolean;
 /**
  * Get package entries from py lock data in a format-agnostic way.
  *
  * @param {object} lockTomlObj parsed toml object
  * @returns {Array<object>} package entries
  */
-export function getPyLockPackages(lockTomlObj: object): Array<object>;
+export declare function getPyLockPackages(lockTomlObj: object): Array<object>;
 /**
  * Convert top-level pylock keys to custom cdx properties.
  *
  * @param {object} lockTomlObj parsed toml object
  * @returns {Array<object>} custom properties
  */
-export function collectPyLockTopLevelProperties(lockTomlObj: object): Array<object>;
+export declare function collectPyLockTopLevelProperties(lockTomlObj: object): Array<object>;
 /**
  * Convert package-level pylock keys to custom cdx properties.
  *
  * @param {object} pkg pylock package entry
  * @returns {Array<object>} custom properties
  */
-export function collectPyLockPackageProperties(pkg: object): Array<object>;
+export declare function collectPyLockPackageProperties(pkg: object): Array<object>;
 /**
  * Build file components from pylock source entries.
  *
@@ -40,28 +40,28 @@ export function collectPyLockPackageProperties(pkg: object): Array<object>;
  * @param {string} lockFile lock file path
  * @returns {Array<object>} file components
  */
-export function collectPyLockFileComponents(pkg: object, lockFile: string): Array<object>;
+export declare function collectPyLockFileComponents(pkg: object, lockFile: string): Array<object>;
 /**
  * Check whether index points to the default pypi registry.
  *
  * @param {string} indexUrl index URL from pylock
  * @returns {boolean} true for default pypi
  */
-export function isDefaultPypiRegistry(indexUrl: string): boolean;
+export declare function isDefaultPypiRegistry(indexUrl: string): boolean;
 /**
  * Normalize a pylock package index URL for comparison and reporting.
  *
  * @param {string} indexUrl package index URL
  * @returns {string|undefined} normalized registry URL
  */
-export function normalizePyLockRegistry(indexUrl: string): string | undefined;
+export declare function normalizePyLockRegistry(indexUrl: string): string | undefined;
 /**
  * Collect dependency names and scopes from a pylock package entry.
  *
  * @param {object} pkg pylock package entry
  * @returns {{ name: string, scope: string }[]} dependency relationships
  */
-export function collectPyLockDependencyRelationships(pkg: object): {
+export declare function collectPyLockDependencyRelationships(pkg: object): {
     name: string;
     scope: string;
 }[];

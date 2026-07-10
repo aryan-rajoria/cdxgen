@@ -1,4 +1,4 @@
-export function getGtfoBinsMetadata(name: any, linkedName: any): {
+export declare function getGtfoBinsMetadata(name: any, linkedName: any): {
     canonicalName: any;
     contexts: any;
     functions: any;
@@ -10,7 +10,7 @@ export function getGtfoBinsMetadata(name: any, linkedName: any): {
     source: any;
     sourceRef: any;
 } | undefined;
-export function createGtfoBinsProperties(name: any, linkedName: any): {
+export declare function createGtfoBinsProperties(name: any, linkedName: any): {
     name: string;
     value: any;
 }[];
@@ -21,5 +21,5 @@ export function createGtfoBinsProperties(name: any, linkedName: any): {
  * @param {object} row Osquery row
  * @returns {Array<object>} CycloneDX custom properties
  */
-export function createGtfoBinsPropertiesFromRow(queryCategory: string, row: object): Array<object>;
+export declare function createGtfoBinsPropertiesFromRow(queryCategory: string, row: object): Array<object>;
 //# sourceMappingURL=gtfobins.d.ts.map

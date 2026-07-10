@@ -1,11 +1,23 @@
-export default Edge;
+import util from "node:util";
+declare class ArboristEdge {
+    name: any;
+    spec: any;
+    type: any;
+    from: any;
+    to: any;
+    error: any;
+    peerConflicted: boolean | undefined;
+    overridden: any;
+    constructor(edge: any);
+}
 declare class Edge {
-    [x: number]: () => ArboristEdge;
+    #private;
+    [util.inspect.custom]: () => ArboristEdge;
+    overrides: any;
+    peerConflicted: boolean;
     static types: readonly string[];
     static errors: readonly string[];
     constructor(options: any);
-    overrides: any;
-    peerConflicted: boolean;
     satisfiedBy(node: any): any;
     explain(seen?: any[]): any;
     get bundled(): boolean;
@@ -29,17 +41,6 @@ declare class Edge {
     get from(): any;
     get to(): any;
     toJSON(): ArboristEdge;
-    #private;
 }
-declare class ArboristEdge {
-    constructor(edge: any);
-    name: any;
-    spec: any;
-    type: any;
-    from: any;
-    to: any;
-    error: any;
-    peerConflicted: boolean | undefined;
-    overridden: any;
-}
+export default Edge;
 //# sourceMappingURL=edge.d.ts.map

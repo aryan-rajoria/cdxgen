@@ -1,1 +1,1 @@
-{"version":3,"file":"npmrc.d.ts","sourceRoot":"","sources":["../../../lib/parsers/npmrc.js"],"names":[],"mappings":"AAkBA;;;;;GAKG;AACH,oCAHW,MAAM,GACJ,MAAM,CAiClB;AAED;;;;;;;;;;;;;;;GAeG;AACH,wCAHW,MAAM,GACJ,MAAM,CAoBlB;AA3FD,kDAgBG"}
+{"version":3,"file":"npmrc.d.ts","sourceRoot":"","sources":["../../../lib/parsers/npmrc.js"],"names":[],"mappings":"AAAA,eAAO,MAAM,uBAAuB,aAgBlC,CAAC;AAEH;;;;;GAKG;AACH,wBAAgB,UAAU,CAAC,OAAO,EAHvB,MAGuB,GAFrB,MAAM,CAiClB;AAED;;;;;;;;;;;;;;;GAeG;AACH,wBAAgB,iBAAiB,CAAC,GAAG,GAH1B,MAGwC,GAFtC,MAAM,CAoBlB"}

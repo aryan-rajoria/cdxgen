@@ -7,7 +7,7 @@
  *
  * @returns {Object} The evaluation result containing overall status, tool breakdowns, and properties
  */
-export function collectAiProvenance(dir: string, options?: {
-    gitMaxCount?: number | undefined;
+export declare function collectAiProvenance(dir: string, options?: {
+    gitMaxCount?: number;
 }): Object;
 //# sourceMappingURL=aiProvenanceCollector.d.ts.map

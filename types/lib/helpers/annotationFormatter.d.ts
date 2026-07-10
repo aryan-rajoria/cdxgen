@@ -4,7 +4,7 @@
  * @param {{ name: string, value: string }[]} properties annotation properties
  * @returns {string} markdown table text
  */
-export function propertiesToMarkdownTable(properties: {
+export declare function propertiesToMarkdownTable(properties: {
     name: string;
     value: string;
 }[]): string;
@@ -16,7 +16,7 @@ export function propertiesToMarkdownTable(properties: {
  * @param {string[]} [details] optional detail lines shown before the table
  * @returns {string} annotation text
  */
-export function buildAnnotationText(message: string, properties: {
+export declare function buildAnnotationText(message: string, properties: {
     name: string;
     value: string;
 }[], details?: string[]): string;

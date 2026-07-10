@@ -12,7 +12,7 @@
  * extractVersionFromHintPath('../packages/MyLib.1.0.0+build.123/lib/net48/MyLib.dll')
  * // returns '1.0.0+build.123'
  */
-export function extractVersionFromHintPath(hintPath: string | null | undefined): string | null;
+export declare function extractVersionFromHintPath(hintPath: string | null | undefined): string | null;
 /**
  * Validates if a string is a valid semantic version
  * Supports versions with pre-release identifiers and build metadata
@@ -26,7 +26,7 @@ export function extractVersionFromHintPath(hintPath: string | null | undefined):
  * isValidVersion('1.0.0-') // false
  * isValidVersion('invalid') // false
  */
-export function isValidVersion(version: string | null | undefined): boolean;
+export declare function isValidVersion(version: string | null | undefined): boolean;
 /**
  * Extracts both package name and version from a HintPath in .NET project files
  * @param {string|null|undefined} hintPath - The HintPath string to extract package info from
@@ -38,7 +38,7 @@ export function isValidVersion(version: string | null | undefined): boolean;
  * extractPackageInfoFromHintPath('C:\\Users\\user\\.nuget\\packages\\microsoft.entityframeworkcore\\7.0.10\\lib\\net6.0\\Microsoft.EntityFrameworkCore.dll')
  * // returns { name: 'microsoft.entityframeworkcore', version: '7.0.10' }
  */
-export function extractPackageInfoFromHintPath(hintPath: string | null | undefined): {
+export declare function extractPackageInfoFromHintPath(hintPath: string | null | undefined): {
     name: string | null;
     version: string | null;
 };

@@ -1,4 +1,4 @@
-export function auditEnvironment(env?: any, options?: {}): {
+export declare function auditEnvironment(env?: any, options?: {}): {
     type: string;
     variable: string;
     severity: string;

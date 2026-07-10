@@ -1,8 +1,8 @@
-export function createOccurrenceEvidence(location: any, details?: {}): {
+export declare function createOccurrenceEvidence(location: any, details?: {}): {
     location: string;
 } | undefined;
-export function parseOccurrenceEvidenceLocation(location: any, details?: {}): {
+export declare function parseOccurrenceEvidenceLocation(location: any, details?: {}): {
     location: string;
 } | undefined;
-export function formatOccurrenceEvidence(occurrence: any): any;
+export declare function formatOccurrenceEvidence(occurrence: any): any;
 //# sourceMappingURL=evidenceUtils.d.ts.map

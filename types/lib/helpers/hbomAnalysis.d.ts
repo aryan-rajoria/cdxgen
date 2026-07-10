@@ -1,5 +1,5 @@
-export function getHbomCommandDiagnostics(bomJson: any): any;
-export function getHbomCommandDiagnosticSummary(bomJson: any): {
+export declare function getHbomCommandDiagnostics(bomJson: any): any;
+export declare function getHbomCommandDiagnosticSummary(bomJson: any): {
     actionableDiagnosticCount: any;
     commandDiagnosticCount: any;
     commandDiagnostics: any;
@@ -22,14 +22,14 @@ export function getHbomCommandDiagnosticSummary(bomJson: any): {
     timeoutIds: string[];
     timeoutCount: any;
 };
-export function isHbomLikeBom(bomJson: any): any;
-export function getHbomHardwareClass(component: any): any;
-export function getHbomHardwareClassCounts(components?: any[]): {
+export declare function isHbomLikeBom(bomJson: any): any;
+export declare function getHbomHardwareClass(component: any): any;
+export declare function getHbomHardwareClassCounts(components?: any[]): {
     hardwareClass: any;
     count: any;
 }[];
-export function formatHbomHardwareClassSummary(hardwareClassCounts?: any[]): string;
-export function getHbomSummary(bomJson: any): {
+export declare function formatHbomHardwareClassSummary(hardwareClassCounts?: any[]): string;
+export declare function getHbomSummary(bomJson: any): {
     actionableDiagnosticCount: any;
     architecture: any;
     collectorProfile: any;

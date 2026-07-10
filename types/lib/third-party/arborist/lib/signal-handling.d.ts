@@ -1,6 +1,6 @@
-export default signalHandler;
 declare function signalHandler(fn: any): () => void;
 declare namespace signalHandler {
-    let process: any;
+    export { process };
 }
+export default signalHandler;
 //# sourceMappingURL=signal-handling.d.ts.map

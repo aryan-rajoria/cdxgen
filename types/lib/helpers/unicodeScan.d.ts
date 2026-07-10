@@ -4,7 +4,7 @@
  * @param {string} text string to inspect
  * @returns {{ char: string, codePoint: string, index: number, kind: string }[]} matches
  */
-export function findDangerousUnicodeMatches(text: string): {
+export declare function findDangerousUnicodeMatches(text: string): {
     char: string;
     codePoint: string;
     index: number;
@@ -25,7 +25,7 @@ export function findDangerousUnicodeMatches(text: string): {
  *   matches: { char: string, codePoint: string, index: number, kind: string, lineNumber: number, inComment: boolean }[],
  * }} scan result
  */
-export function scanTextForHiddenUnicode(text: string, options?: {
+export declare function scanTextForHiddenUnicode(text: string, options?: {
     syntax?: "markdown" | "text" | "yaml";
 }): {
     codePoints: string[];

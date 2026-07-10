@@ -7,5 +7,5 @@
  * @param {Object[]} steps
  * @returns {Object[]|undefined}
  */
-export function disambiguateSteps(steps: Object[]): Object[] | undefined;
+export declare function disambiguateSteps(steps: Object[]): Object[] | undefined;
 //# sourceMappingURL=common.d.ts.map

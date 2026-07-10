@@ -21,8 +21,8 @@
  * @param {string} [options.gitAiNotesRef] Git notes ref (defaults to refs/notes/ai)
  * @returns {Promise<Object>} Oversight metrics, score, band, and properties
  */
-export function collectAiOversight(dir: string, options?: {
-    gitMaxCount?: number | undefined;
-    gitAiNotesRef?: string | undefined;
+export declare function collectAiOversight(dir: string, options?: {
+    gitMaxCount?: number;
+    gitAiNotesRef?: string;
 }): Promise<Object>;
 //# sourceMappingURL=aiOversightCollector.d.ts.map

@@ -1,40 +1,8 @@
 /**
- * Parse an os-release file from an arbitrary root path and return a plain
- * key→value object.  Results are cached per root path so the file is read
- * at most once per process per distinct root.
- *
- * @param {string} [root="/"] - Root of the filesystem to search (e.g. a
- *   container rootfs extracted to a temp directory, or "/" for the live host).
- * @returns {Object} Raw key/value pairs from the os-release file.
- */
-export function readOsRelease(root?: string): Object;
-export function _resetOsReleaseCache(): void;
-/**
- * Derive structured distro information from an os-release file.
- *
- * Returns an object with:
- *   - purlType    {string}  "deb" | "apk" | "rpm"
- *   - namespace   {string}  purl namespace (e.g. "ubuntu", "alpine", "fedora")
- *   - distroId    {string}  ID + "-" + VERSION_ID  (e.g. "ubuntu-22.04")
- *   - distroName  {string}  codename/alias          (e.g. "jammy")
- *
- * Mirrors the logic in lib/managers/binary.js getOSPackages() so that both
- * callers share a single implementation.
- *
- * @param {string} [root="/"] - Filesystem root to look for os-release.
- * @returns {{ purlType: string, namespace: string, distroId: string, distroName: string }}
- */
-export function getDistroInfo(root?: string): {
-    purlType: string;
-    namespace: string;
-    distroId: string;
-    distroName: string;
-};
-/**
  * Ubuntu / Debian codename map and RHEL display-name aliases.
  * Keep this list updated every year.
  */
-export const OS_DISTRO_ALIAS: {
+export declare const OS_DISTRO_ALIAS: {
     "ubuntu-4.10": string;
     "ubuntu-5.04": string;
     "ubuntu-5.10": string;
@@ -113,5 +81,37 @@ export const OS_DISTRO_ALIAS: {
     "red hat enterprise linux 8": string;
     "red hat enterprise linux 9": string;
     "red hat enterprise linux 10": string;
+};
+/**
+ * Parse an os-release file from an arbitrary root path and return a plain
+ * key→value object.  Results are cached per root path so the file is read
+ * at most once per process per distinct root.
+ *
+ * @param {string} [root="/"] - Root of the filesystem to search (e.g. a
+ *   container rootfs extracted to a temp directory, or "/" for the live host).
+ * @returns {Object} Raw key/value pairs from the os-release file.
+ */
+export declare function readOsRelease(root?: string): Object;
+export declare function _resetOsReleaseCache(): void;
+/**
+ * Derive structured distro information from an os-release file.
+ *
+ * Returns an object with:
+ *   - purlType    {string}  "deb" | "apk" | "rpm"
+ *   - namespace   {string}  purl namespace (e.g. "ubuntu", "alpine", "fedora")
+ *   - distroId    {string}  ID + "-" + VERSION_ID  (e.g. "ubuntu-22.04")
+ *   - distroName  {string}  codename/alias          (e.g. "jammy")
+ *
+ * Mirrors the logic in lib/managers/binary.js getOSPackages() so that both
+ * callers share a single implementation.
+ *
+ * @param {string} [root="/"] - Filesystem root to look for os-release.
+ * @returns {{ purlType: string, namespace: string, distroId: string, distroName: string }}
+ */
+export declare function getDistroInfo(root?: string): {
+    purlType: string;
+    namespace: string;
+    distroId: string;
+    distroName: string;
 };
 //# sourceMappingURL=osinfo.d.ts.map

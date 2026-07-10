@@ -1,28 +1,29 @@
+export declare const DEFAULT_AUDIT_CATEGORIES: string[];
 /**
  * Read and validate a CycloneDX BOM file.
  *
  * @param {string} bomPath BOM file path
  * @returns {object} parsed CycloneDX BOM
  */
-export function loadBomFile(bomPath: string): object;
+export declare function loadBomFile(bomPath: string): object;
 /**
  * Recursively list JSON files under a BOM directory.
  *
  * @param {string} bomDir directory path
  * @returns {string[]} discovered file paths
  */
-export function listBomFiles(bomDir: string): string[];
+export declare function listBomFiles(bomDir: string): string[];
 /**
  * Load input BOM files from either a single file or a directory.
  *
  * @param {object} options CLI options
  * @returns {{ source: string, bomJson: object }[]} loaded input BOMs
  */
-export function loadInputBoms(options: object): {
+export declare function loadInputBoms(options: object): {
     source: string;
     bomJson: object;
 }[];
-export function runDirectBomAuditFromBoms(inputBoms: any, options?: {}): Promise<{
+export declare function runDirectBomAuditFromBoms(inputBoms: any, options?: {}): Promise<{
     auditMode: string;
     generatedAt: string;
     inputs: any;
@@ -77,7 +78,7 @@ export function runDirectBomAuditFromBoms(inputBoms: any, options?: {}): Promise
  * @param {object} target audit target
  * @returns {object[]} contextual findings
  */
-export function buildTargetContextFindings(target: object): object[];
+export declare function buildTargetContextFindings(target: object): object[];
 /**
  * Resolve the most specific Python package directory inside a cloned repo.
  *
@@ -85,7 +86,7 @@ export function buildTargetContextFindings(target: object): object[];
  * @param {object} target audit target
  * @returns {{ confidence: string, scanDir: string }} selected directory and confidence
  */
-export function resolvePythonSourceDirectory(cloneDir: string, target: object): {
+export declare function resolvePythonSourceDirectory(cloneDir: string, target: object): {
     confidence: string;
     scanDir: string;
 };
@@ -97,7 +98,7 @@ export function resolvePythonSourceDirectory(cloneDir: string, target: object): 
  * @param {object} resolution repository resolution metadata
  * @returns {{ confidence: string, scanDir: string }} selected directory and confidence
  */
-export function resolveTargetSourceDirectory(cloneDir: string, target: object, resolution: object): {
+export declare function resolveTargetSourceDirectory(cloneDir: string, target: object, resolution: object): {
     confidence: string;
     scanDir: string;
 };
@@ -111,7 +112,7 @@ export function resolveTargetSourceDirectory(cloneDir: string, target: object, r
  * @param {object} target audit target
  * @returns {object[]} predictive findings
  */
-export function buildPythonSourceHeuristicFindings(scanDir: string, target: object): object[];
+export declare function buildPythonSourceHeuristicFindings(scanDir: string, target: object): object[];
 /**
  * Analyze a single purl target by generating a child SBOM and auditing it.
  *
@@ -119,8 +120,8 @@ export function buildPythonSourceHeuristicFindings(scanDir: string, target: obje
  * @param {object} options CLI options
  * @returns {Promise<object>} analyzed target result
  */
-export function auditTarget(target: object, options: object): Promise<object>;
-export function groupAuditResults(results: any): any[];
+export declare function auditTarget(target: object, options: object): Promise<object>;
+export declare function groupAuditResults(results: any): any[];
 /**
  * Run the predictive audit flow from one or more already-loaded CycloneDX BOM inputs.
  *
@@ -128,7 +129,7 @@ export function groupAuditResults(results: any): any[];
  * @param {object} options CLI options
  * @returns {Promise<object>} aggregate audit report
  */
-export function runAuditFromBoms(inputBoms: {
+export declare function runAuditFromBoms(inputBoms: {
     source: string;
     bomJson: object;
 }[], options: object): Promise<object>;
@@ -138,7 +139,7 @@ export function runAuditFromBoms(inputBoms: {
  * @param {object} options CLI options
  * @returns {Promise<object>} aggregate audit report
  */
-export function runAudit(options: object): Promise<object>;
+export declare function runAudit(options: object): Promise<object>;
 /**
  * Aggregates license compliance violations onto the report. Violations come
  * from two sources: the input BOM(s) directly, and — in predictive mode — the
@@ -151,7 +152,7 @@ export function runAudit(options: object): Promise<object>;
  * @param {object|null} policy preloaded compliance policy
  * @returns {void}
  */
-export function attachLicenseViolations(report: object, inputBoms: object[], policy: object | null): void;
+export declare function attachLicenseViolations(report: object, inputBoms: object[], policy: object | null): void;
 /**
  * Render a report and compute the proper process exit code.
  *
@@ -159,7 +160,7 @@ export function attachLicenseViolations(report: object, inputBoms: object[], pol
  * @param {object} options CLI options
  * @returns {{ exitCode: number, output: string }} rendered output and exit code
  */
-export function finalizeAuditReport(report: object, options: object): {
+export declare function finalizeAuditReport(report: object, options: object): {
     exitCode: number;
     output: string;
 };
@@ -169,6 +170,5 @@ export function finalizeAuditReport(report: object, options: object): {
  * @param {object} options CLI options
  * @returns {string | undefined} output file path
  */
-export function defaultOutputFile(options: object): string | undefined;
-export const DEFAULT_AUDIT_CATEGORIES: string[];
+export declare function defaultOutputFile(options: object): string | undefined;
 //# sourceMappingURL=index.d.ts.map
