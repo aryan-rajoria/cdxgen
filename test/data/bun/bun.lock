@@ -1,0 +1,31 @@
+{
+  "lockfileVersion": 1,
+  "configVersion": 1,
+  "workspaces": {
+    "": {
+      "name": "bun-fixture",
+      "version": "1.0.0",
+      "dependencies": {
+        "left-pad": "1.3.0",
+        "@babel/parser": "7.29.7",
+      },
+      "devDependencies": {
+        "typescript": "6.0.3",
+      },
+      "optionalDependencies": {
+        "fsevents": "2.3.3",
+      },
+    },
+  },
+  "packages": {
+    "@babel/parser": ["@babel/parser@7.29.7", "", { "dependencies": { "@babel/types": "7.29.7" }, "bin": "./bin/babel-parser.js" }, "sha512-QZHAq+x2cn+vGDRe9qfH9OwFz8IGBVhP3uWgD1CN4cx9CiPmlycdS4QhmU/ZdQ+i7/JCE0/JAmnOYp82Vdzr8Q=="],
+
+    "@babel/types": ["@babel/types@7.29.7", "", {}, "sha512-EgtRbvz6w6lnUUf0PNQbkEccmfyr+BT6qUXufurTZ/AQVwuklK44yF7B2CulPEskyopZF76Vm+3GWsBTNsTcEg=="],
+
+    "fsevents": ["fsevents@2.3.3", "", { "os": ["darwin"] }, "sha512-FIpySHQ2wNjMpiXe3VTrsuPy4AWCfpl5DqFcLStyy2kcEYPFO+3itjdTSNaivoEQ2sUfR8n+hj24vkeCippEMw=="],
+
+    "left-pad": ["left-pad@1.3.0", "", {}, "sha512-XRcglhh3p2lHAu4gFg75i5owZ3/uttIZh11iKj+W2fqc4Iu8OvwIHkDSftaw4gURo0WA2fT2oguwTa4HChLwJw=="],
+
+    "typescript": ["typescript@6.0.3", "", { "bin": { "tsc": "bin/tsc", "tsserver": "bin/tsserver" } }, "sha512-nKRw+mH0XgZ7iRLENCo0AO8KcrpAzCPCwLMo/iITvh8UXDVoUlL2FLcIAi3vbIY4C2awdobPNt0zLKro2EkTbw=="],
+  }
+}
