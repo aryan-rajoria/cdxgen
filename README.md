@@ -295,7 +295,13 @@ steps:
       ./cdx-audit-linux-amd64 --help
 ```
 
-Deno and bun runtime can be used with limited support.
+cdxgen also runs under the [bun](https://bun.sh) runtime, including `bunx --bun @cyclonedx/cdxgen`. Bun projects using a text lockfile (`bun.lock`) are supported as an SBOM target via the `bun` project type (`-t bun`); the legacy binary lockfile (`bun.lockb`) is not parsed, so regenerate a text lockfile with `bun install --save-text-lockfile`.
+
+```shell
+bun install -g @cyclonedx/cdxgen --ignore-scripts
+```
+
+Deno runtime can be used with limited support.
 
 ```shell
 deno install --allow-read --allow-env --allow-run --allow-sys=uid,systemMemoryInfo,gid,homedir --allow-write --allow-net -n cdxgen "npm:@cyclonedx/cdxgen/cdxgen"
