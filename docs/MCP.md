@@ -4,9 +4,9 @@ cdxgen can catalog Model Context Protocol (MCP) server surfaces from JavaScript 
 
 By default, `-t js` now also reports shipped MCP configuration files and AI instruction/skill files that can influence build and post-build lifecycles. Use:
 
-- `--exclude-type mcp` to drop MCP config components and services from the final BOM
+- `--exclude-type mcp` to drop the MCP inventory overlay — config file components, discovered services, and MCP primitives (tools/prompts/resources) — from the final BOM. Genuine MCP **SDK dependency packages** (for example `@modelcontextprotocol/*`, PyPI `mcp`, `io.modelcontextprotocol.sdk`) are real supply-chain components and are always retained.
 - `--exclude-type ai-skill` to drop AI skill / instruction inventory from the final BOM
-- `-t mcp` for an exact MCP-focused BOM
+- `-t mcp` for an exact MCP-focused BOM. This includes the SDK packages, discovered services, primitives, and MCP config files (for example `.vscode/mcp.json`); `--type mcp` and `--exclude-type mcp` cover the same set of subjects so the two flags stay in lockstep.
 - `-t ai-skill` for an exact AI skill / instruction BOM
 
 ## What cdxgen detects
