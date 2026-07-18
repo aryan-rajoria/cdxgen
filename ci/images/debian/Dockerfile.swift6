@@ -1,5 +1,5 @@
 # Base-image
-FROM debian:12.14@sha256:30482e873082e906a4908c10529180aefb6f77620aea7404b909829fadc5d168 AS base
+FROM debian:12.15@sha256:9344f8b8992482f80cba753f323adeaf17690076c095ccff6cc9536be98185dc AS base
 
 ARG DEBIAN_REPO
 ARG GITHUB_RAW_URL=https://raw.githubusercontent.com
