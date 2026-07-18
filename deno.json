@@ -1,6 +1,6 @@
 {
   "name": "@cyclonedx/cdxgen",
-  "version": "12.7.1",
+  "version": "12.8.0",
   "exports": "./lib/cli/index.js",
   "compilerOptions": {
     "lib": ["deno.window"],
@@ -50,11 +50,12 @@
   "nodeModulesDir": "auto",
   "unstable": [],
   "test": {
-    "include": ["*.poku.js"]
+    "include": ["test/deno/*.poku.js"]
   },
   "tasks": {
     "start": "deno run --allow-read --allow-env --allow-run --allow-sys=uid,systemMemoryInfo,gid,homedir --allow-write --allow-net bin/cdxgen.js",
     "exe": "deno compile --allow-read --allow-env --allow-run --allow-sys=uid,systemMemoryInfo,gid,homedir --allow-write --allow-net --output build/cdxgenx-devel bin/cdxgen.js",
+    "test": "deno run --allow-read --allow-env --allow-run --allow-net --allow-write --allow-sys npm:poku@4.5.0 --denoAllow=read,run,env,net,write,sys test/deno",
     "lint:check": "biome check *",
     "lint": "biome check --apply-unsafe *",
     "gen-types": "npx -p typescript tsc"
@@ -79,6 +80,7 @@
     "treeverse": "npm:treeverse@3.0.0",
     "walk-up-path": "npm:walk-up-path@4.0.0",
     "@appthreat/atom": "npm:@appthreat/atom@2.5.6",
+    "@cdxgen/cdx-hbom": "npm:@cdxgen/cdx-hbom@0.5.1",
     "@cdxgen/cdx-proto": "npm:@cdxgen/cdx-proto@2.0.3",
     "@bufbuild/protobuf": "npm:@bufbuild/protobuf@2.12.0",
     "@babel/parser": "npm:@babel/parser@^7.29.7",
@@ -86,7 +88,7 @@
     "ajv": "npm:ajv@^8.20.0",
     "ajv-formats": "npm:ajv-formats@^3.0.1",
     "cheerio": "npm:cheerio@^1.2.0",
-    "edn-data": "npm:edn-data@1.1.2",
+    "edn-data": "npm:edn-data@1.2.0",
     "glob": "npm:glob@^13.0.6",
     "got": "npm:got@^14.6.6",
     "node-stream-zip": "npm:node-stream-zip@^1.15.0",
@@ -94,13 +96,13 @@
     "prettify-xml": "npm:prettify-xml@^1.2.0",
     "semver": "npm:semver@^7.8.5",
     "ssri": "npm:ssri@^13.0.1",
-    "tar": "npm:tar@^7.5.17",
+    "tar": "npm:tar@^7.5.20",
     "xml-js": "npm:xml-js@^1.6.11",
     "yargs": "npm:yargs@^18.0.0",
     "body-parser": "npm:body-parser@^2.3.0",
     "compression": "npm:compression@^1.8.1",
     "connect": "npm:connect@^3.7.0",
-    "jsonata": "npm:jsonata@^2.2.1",
+    "jsonata": "npm:jsonata@^2.2.2",
     "@iarna/toml": "npm:@iarna/toml@2.2.5",
     "@cdxgen/safer-exec": "npm:@cdxgen/safer-exec@0.15.0"
   }
