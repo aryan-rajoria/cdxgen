@@ -301,7 +301,7 @@ cdxgen also runs under the [bun](https://bun.sh) runtime, including `bunx --bun 
 bun install -g @cyclonedx/cdxgen --ignore-scripts
 ```
 
-Deno runtime can be used with limited support.
+cdxgen also runs under the [deno](https://deno.com) runtime. Deno projects with a lockfile (`deno.lock`, versions 2 - 5) are supported as an SBOM target via the `deno` project type (`-t deno`); `jsr:` imports are recorded under the `@jsr` npm-compat scope, `npm:` imports as regular npm components and remote `https://` imports as generic components.
 
 ```shell
 deno install --allow-read --allow-env --allow-run --allow-sys=uid,systemMemoryInfo,gid,homedir --allow-write --allow-net -n cdxgen "npm:@cyclonedx/cdxgen/cdxgen"

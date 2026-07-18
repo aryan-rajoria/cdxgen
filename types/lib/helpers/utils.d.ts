@@ -310,7 +310,7 @@ export declare function getSwiftPackageMetadata(pkgList: Object[]): Promise<Obje
  *
  * @param {Array} pkgList Package list
  */
-export declare function getNpmMetadata(pkgList: any[]): Promise<any[]>;
+export declare function getNpmMetadata(pkgList: any[], registryUrl: any): Promise<any[]>;
 export declare function parsePkgJson(pkgJsonFile: any, simple?: boolean, securityProps?: boolean): Promise<any[]>;
 /**
  * Parse nodejs package lock file
