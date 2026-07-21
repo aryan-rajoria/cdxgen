@@ -43,6 +43,7 @@
     "pkg:npm/%40electron",
     "pkg:npm/%40protobufjs",
     "pkg:npm/express",
+    "pkg:npm/connect",
     "pkg:npm/knex",
     "pkg:npm/vue",
     "pkg:pypi/aiohttp",
