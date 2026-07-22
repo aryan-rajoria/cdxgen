@@ -59,20 +59,7 @@ export declare function testUrlExists(url: string): Promise<boolean>;
  * @returns {string|null} local jar path or null
  */
 export declare function findLocalJarPath(group: string, name: string, version: string): string | null;
-/**
- * Resolves the direct download URL for a Maven jar package if found in the local cache,
- * and validates that the URL exists.
- *
- * @param {string} group Maven groupId
- * @param {string} name Maven artifactId (original name with suffix)
- * @param {string} version Package version
- * @returns {Promise<{ repoUrl: string, jarUrl: string, hashes?: Array }|null>} resolved URLs or null
- */
-export declare function resolveJarDistribution(group: string, name: string, version: string): Promise<{
-    repoUrl: string;
-    jarUrl: string;
-    hashes?: any[];
-} | null>;
+export declare function resolveJarDistribution(group: any, name: any, version: any): Promise<any>;
 /**
  * Parse an sbt dependency tree output file and return the package list and dependency tree.
  *
@@ -134,6 +121,34 @@ export declare function parseSbtRootProject(projectPath: string): {
  * @returns {string[]} List of discovered subproject names
  */
 export declare function discoverSbtProjects(projectPath: string): string[];
+/**
+ * Parse the output of the sbt `projects` command to extract the real project
+ * identifiers as understood by sbt. This is more accurate than scraping the
+ * build files with a regex (see {@link discoverSbtProjects}), since it relies
+ * on sbt's own project resolution and therefore avoids false positives from
+ * commented-out code, examples or values that merely look like project
+ * definitions.
+ *
+ * A typical `sbt projects` output looks like:
+ *
+ * ```
+ * [info] In file:/path/to/build/
+ * [info] 	   * chen
+ * [info] 	     platform
+ * [info] 	     dataflowengineoss
+ * ```
+ *
+ * The project marked with `*` is the currently selected (usually the
+ * aggregating root) project.
+ *
+ * @param {string} stdout Raw stdout captured from `sbt projects`
+ * @returns {{projects: string[], root: string | undefined}} The discovered
+ *  project ids and the currently selected (root) project id, if any.
+ */
+export declare function parseSbtProjects(stdout: string): {
+    projects: string[];
+    root: string | undefined;
+};
 /**
  * Parse plugins.sbt files to extract sbt plugins as development dependencies.
  *

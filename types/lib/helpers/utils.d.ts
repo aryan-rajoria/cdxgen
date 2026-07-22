@@ -22,6 +22,18 @@ export declare function readEnvironmentVariable(varName: any, options?: {}): any
 export declare function setDryRunMode(enabled: any): void;
 export declare function createDryRunError(action: any, target: any, reason: any): Error;
 export declare function isDryRunError(error: any): boolean;
+export declare const BLOCKED_HOST_ERROR_CODE = "CDXGEN_HOST_BLOCKED";
+/**
+ * Create an error used to abort a request to a host that policy disallows
+ * (CDXGEN_ALLOWED_HOSTS or the secure-mode https-only restriction). The
+ * beforeRequest hook must throw this so the request is actually aborted;
+ * returning does not stop the request.
+ *
+ * @param {string} target The blocked request URL.
+ * @param {string} reason Human readable reason for the block.
+ * @returns {Error} Error carrying the blocked-host code.
+ */
+export declare function createBlockedHostError(target: string, reason: string): Error;
 export declare function setActivityContext(context?: {}): void;
 export declare function resetActivityContext(): void;
 export declare function recordActivity(activity: any): any;
