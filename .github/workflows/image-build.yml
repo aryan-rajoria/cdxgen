@@ -65,7 +65,7 @@ jobs:
       runner: ${{ steps.image.outputs.runner }}
       slim: ${{ steps.image.outputs.slim }}
     steps:
-      - uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0  # v7.0.0
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1  # v7.0.1
         with:
           persist-credentials: false
       - name: Parse image configuration
@@ -163,7 +163,7 @@ jobs:
       slim-cdxgen-master-image-uri: ${{ steps.image_uris.outputs.slim-cdxgen-master-image-uri }}
       slim-cdxgen-tag-image-uri: ${{ steps.image_uris.outputs.slim-cdxgen-tag-image-uri }}
     steps:
-      - uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0  # v7.0.0
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1  # v7.0.1
         with:
           persist-credentials: false
       - name: Free disk space
@@ -177,7 +177,7 @@ jobs:
       - name: Set up Docker BuildX
         uses: docker/setup-buildx-action@bb05f3f5519dd87d3ba754cc423b652a5edd6d2c  # v4.2.0
       - name: Login to the Container registry
-        uses: docker/login-action@af1e73f918a031802d376d3c8bbc3fe56130a9b0  # v4.4.0
+        uses: docker/login-action@06fb636fac595d6fb4b28a5dfcb21a6f5091859c  # v4.5.0
         with:
           registry: ghcr.io
           username: ${{ github.actor }}
@@ -400,7 +400,7 @@ jobs:
       slim-cdxgen-master-image-uri: ${{ steps.image_uris.outputs.slim-cdxgen-master-image-uri }}
       slim-cdxgen-tag-image-uri: ${{ steps.image_uris.outputs.slim-cdxgen-tag-image-uri }}
     steps:
-      - uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0  # v7.0.0
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1  # v7.0.1
         with:
           persist-credentials: false
       - name: Free disk space
@@ -414,7 +414,7 @@ jobs:
       - name: Set up Docker BuildX
         uses: docker/setup-buildx-action@bb05f3f5519dd87d3ba754cc423b652a5edd6d2c  # v4.2.0
       - name: Login to the Container registry
-        uses: docker/login-action@af1e73f918a031802d376d3c8bbc3fe56130a9b0  # v4.4.0
+        uses: docker/login-action@06fb636fac595d6fb4b28a5dfcb21a6f5091859c  # v4.5.0
         with:
           registry: ghcr.io
           username: ${{ github.actor }}
@@ -640,12 +640,12 @@ jobs:
       slim-cdxgen-master-tags: ${{ steps.final_tags.outputs.slim-cdxgen-master-tags }}
       slim-cdxgen-tag-tags: ${{ steps.final_tags.outputs.slim-cdxgen-tag-tags }}
     steps:
-      - uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0  # v7.0.0
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1  # v7.0.1
         with:
           persist-credentials: false
           fetch-depth: 0
       - name: Login to the Container registry
-        uses: docker/login-action@af1e73f918a031802d376d3c8bbc3fe56130a9b0  # v4.4.0
+        uses: docker/login-action@06fb636fac595d6fb4b28a5dfcb21a6f5091859c  # v4.5.0
         with:
           registry: ghcr.io
           username: ${{ github.actor }}
@@ -957,7 +957,7 @@ jobs:
     permissions:
       packages: write
     steps:
-      - uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0  # v7.0.0
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1  # v7.0.1
         with:
           persist-credentials: false
       - name: Free disk space
@@ -971,7 +971,7 @@ jobs:
       - name: Set up Docker BuildX
         uses: docker/setup-buildx-action@bb05f3f5519dd87d3ba754cc423b652a5edd6d2c  # v4.2.0
       - name: Set up Python
-        uses: actions/setup-python@ece7cb06caefa5fff74198d8649806c4678c61a1  # v6.3.0
+        uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97  # v7.0.0
         with:
           python-version: '3.13'
       - name: Setup pnpm
@@ -986,7 +986,7 @@ jobs:
           pnpm install:frozen
           mkdir -p $RUNNER_TEMP/cdxgen-sboms
       - name: Login to the Container registry
-        uses: docker/login-action@af1e73f918a031802d376d3c8bbc3fe56130a9b0  # v4.4.0
+        uses: docker/login-action@06fb636fac595d6fb4b28a5dfcb21a6f5091859c  # v4.5.0
         with:
           registry: ghcr.io
           username: ${{ github.actor }}
@@ -1067,7 +1067,7 @@ jobs:
     permissions:
       packages: write
     steps:
-      - uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0  # v7.0.0
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1  # v7.0.1
         with:
           persist-credentials: false
       - name: Free disk space
@@ -1081,7 +1081,7 @@ jobs:
       - name: Set up Docker BuildX
         uses: docker/setup-buildx-action@bb05f3f5519dd87d3ba754cc423b652a5edd6d2c  # v4.2.0
       - name: Set up Python
-        uses: actions/setup-python@ece7cb06caefa5fff74198d8649806c4678c61a1  # v6.3.0
+        uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97  # v7.0.0
         with:
           python-version: '3.13'
       - name: Setup pnpm
@@ -1096,7 +1096,7 @@ jobs:
           pnpm install:frozen
           mkdir -p $RUNNER_TEMP/cdxgen-sboms
       - name: Login to the Container registry
-        uses: docker/login-action@af1e73f918a031802d376d3c8bbc3fe56130a9b0  # v4.4.0
+        uses: docker/login-action@06fb636fac595d6fb4b28a5dfcb21a6f5091859c  # v4.5.0
         with:
           registry: ghcr.io
           username: ${{ github.actor }}
