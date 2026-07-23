@@ -153,4 +153,4 @@ test/data/mcp-repotest/js-openapi.json
 .chen/
 *.atom
 *.cdx.json
-
+test/data/rust-dataflow-repotest/target

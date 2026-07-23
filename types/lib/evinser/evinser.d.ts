@@ -150,11 +150,11 @@ export declare function analyzeProject(dbObjMap: Object, options: Object): Promi
 } | {
     atomFile?: undefined;
     openapiSpecFile?: undefined;
-    semanticsSlicesFile?: undefined;
     componentPropertiesMap?: undefined;
     metadataProperties?: undefined;
     usagesSlicesFile: any;
     dataFlowSlicesFile: any;
+    semanticsSlicesFile: any;
     purlLocationMap: {};
     servicesMap: {};
     dataFlowFrames: {};
