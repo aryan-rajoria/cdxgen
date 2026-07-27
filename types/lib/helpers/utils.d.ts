@@ -888,52 +888,6 @@ export declare function parseGopkgData(gopkgData: string): Promise<Object[]>;
  * @returns {Promise<Object[]>} List of Go package component objects
  */
 export declare function parseGoVersionData(buildInfoData: string): Promise<Object[]>;
-export declare const RUBY_PLATFORM_PREFIXES: string[];
-/**
- * Method to query rubygems api for gems details
- *
- * @param {Array} pkgList List of packages with metadata
- */
-export declare function getRubyGemsMetadata(pkgList: any[]): Promise<any[]>;
-/**
- * Utility method to convert a gem package name to a CamelCased module name. Low accuracy.
- *
- * @param name Package name
- */
-export declare function toGemModuleNames(name: any): string[];
-/**
- * Collect all namespaces for a given gem present at the given gemHome
- *
- * @param {String} rubyCommand Ruby command to use if bundle is not available
- * @param {String} bundleCommand Bundle command to use
- * @param {String} gemHome Value to use as GEM_HOME env variable
- * @param {String} gemName Name of the gem
- * @param {String} filePath File path to the directory containing the Gemfile or .bundle directory
- *
- * @returns {Array<string>} List of module names
- */
-export declare function collectGemModuleNames(rubyCommand: string, bundleCommand: string, gemHome: string, gemName: string, filePath: string): Array<string>;
-/**
- * Method to parse Gemspec file contents
- *
- * @param {string} gemspecData Gemspec data
- * @param {string} gemspecFile File name for evidence.
- */
-export declare function parseGemspecData(gemspecData: string, gemspecFile: string): Promise<any[]>;
-/**
- * Method to parse Gemfile.lock
- *
- * @param {object} gemLockData Gemfile.lock data
- * @param {string} lockFile Lock file
- */
-export declare function parseGemfileLockData(gemLockData: object, lockFile: string): Promise<any[] | {
-    pkgList: any[];
-    dependenciesList: {
-        ref: string;
-        dependsOn: any[];
-    }[];
-    rootList: any[];
-}>;
 /**
  * Method to retrieve metadata for rust packages by querying crates
  *

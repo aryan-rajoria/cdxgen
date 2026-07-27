@@ -89,7 +89,7 @@
     }
 - id: PKG-005
   name: "Ruby gem tracks mutable branch"
-  description: "Ruby gems sourced from git branches (without revision pin) can change unexpectedly"
+  description: "Ruby gems sourced from a git branch move whenever the branch moves. Bundler records the currently resolved revision in Gemfile.lock, but the Gemfile still asks for a branch, so the next bundle update will silently pull different code"
   severity: medium
   category: dependency-source
   dry-run-support: full
@@ -100,12 +100,13 @@
     ]
   location: |
     { "bomRef": $."bom-ref", "purl": purl }
-  message: "Ruby gem '{{ name }}' tracks mutable branch '{{ $prop($, 'cdx:gem:remoteBranch') }}' without commit pin"
-  mitigation: "Pin to specific revision: gem 'foo', git: '...', ref: '<commit-sha>'"
+  message: "Ruby gem '{{ name }}' tracks the mutable branch '{{ $prop($, 'cdx:gem:remoteBranch') }}', currently resolved to revision {{ $prop($, 'cdx:gem:remoteRevision') }}"
+  mitigation: "Pin to a specific revision in the Gemfile: gem 'foo', git: '...', ref: '<commit-sha>'"
   evidence: |
     {
       "remote": $prop($, 'cdx:gem:remote'),
       "branch": $prop($, 'cdx:gem:remoteBranch'),
+      "revision": $prop($, 'cdx:gem:remoteRevision'),
       "tag": $prop($, 'cdx:gem:remoteTag')
     }
 - id: PKG-006

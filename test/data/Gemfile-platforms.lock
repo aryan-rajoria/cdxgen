@@ -1,0 +1,82 @@
+GIT
+  remote: https://github.com/rails/rails.git
+  revision: 8f8b1f0dbf5a1e39b0e1bdbdd7a1e3d0e9c8f0aa
+  branch: main
+  specs:
+    rails (7.2.0.alpha)
+      activesupport (= 7.2.0.alpha)
+
+PATH
+  remote: vendor/local-gem
+  specs:
+    local-gem (0.1.0-x86_64-linux)
+      ffi
+
+GEM
+  remote: https://rubygems.org/
+  specs:
+    activesupport (7.2.0.alpha)
+      concurrent-ruby (~> 1.0)
+    concurrent-ruby (1.3.4)
+    ffi (1.17.0)
+    ffi (1.17.0-aarch64-linux-gnu)
+    ffi (1.17.0-arm64-darwin)
+    ffi (1.17.0-java)
+    ffi (1.17.0-x64-mingw-ucrt)
+    ffi (1.17.0-x86_64-linux-gnu)
+    ffi (1.17.0-x86_64-linux-musl)
+    google-protobuf (3.25.1)
+    google-protobuf (3.25.1-x86_64-linux)
+    grpc (1.64.0-universal-darwin)
+      google-protobuf (>= 3.25, < 5.0)
+    jar-dependencies (0.4.1)
+    mini_portile2 (2.8.7)
+    nokogiri (1.16.7-java)
+      racc (~> 1.4)
+    nokogiri (1.16.7-x86_64-linux)
+      racc (~> 1.4)
+    json (1.8.6-x86-mswin32-60)
+    libv8-node (16.10.0.0-universal-darwin-20)
+    prerelease-gem (2.0.0.pre.beta1)
+    racc (1.8.1)
+    racc (1.8.1-java)
+    sqlite3 (2.0.4-x86_64-linux-gnu)
+      mini_portile2 (~> 2.8.0)
+    wasmtime (25.0.0-wasm32-wasi)
+    win32-api (1.5.3-universal-mingw32)
+    win32ole (0.0.1-x86-mswin32)
+
+PLATFORMS
+  aarch64-linux-gnu
+  arm64-darwin
+  java
+  universal-darwin
+  x64-mingw-ucrt
+  x86-mswin32
+  x86_64-linux-gnu
+  x86_64-linux-musl
+
+DEPENDENCIES
+  ffi
+  google-protobuf
+  grpc
+  json
+  libv8-node
+  local-gem!
+  nokogiri (~> 1.16)
+  prerelease-gem
+  rails!
+  sqlite3 (~> 2.0)
+  wasmtime
+  win32-api
+  win32ole
+
+CHECKSUMS
+  concurrent-ruby (1.3.4) sha256=1a1bb9b4ea9e94d8b8b0a8ea2a4d0a5e9e0a1a5d3f5cb1a3f2b0e8b7a6c5d4e3
+  ffi (1.17.0) sha256=2b2cc0c5fbaf0a5e9c9c1b9fb3b5e1b6f0b2b6e4a06dc2b4a3c1f9c8b7d6e5f4
+
+RUBY VERSION
+   ruby 3.3.4p94
+
+BUNDLED WITH
+   2.5.18
