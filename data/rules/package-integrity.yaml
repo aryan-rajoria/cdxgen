@@ -79,7 +79,7 @@
   mitigation: "Update to a non-yanked version immediately. Yanked gems are typically removed due to security or correctness issues"
   evidence: |
     {
-      "platform": $prop($, 'cdx:gem:platform'),
+      "platform": $contains(purl, 'platform=') ? $substringAfter(purl, 'platform=') : 'ruby',
       "isPrerelease": $prop($, 'cdx:gem:prerelease')
     }
 
@@ -340,4 +340,25 @@
       "wrapHashInvalid": $prop($, 'cdx:collider:wrapHashInvalid'),
       "origin": $prop($, 'cdx:collider:origin'),
       "dependencyKind": $prop($, 'cdx:collider:dependencyKind')
+    }
+
+- id: INT-015
+  name: "Ruby gem compiles native extensions at install time"
+  description: "A gem that declares extensions runs extconf.rb and a compiler on the install host, so installing it executes arbitrary code from the gem author. This is the RubyGems equivalent of an npm install script"
+  severity: low
+  category: package-integrity
+  dry-run-support: full
+  condition: |
+    components[
+      $hasProp($, 'cdx:gem:extensions')
+    ]
+  location: |
+    { "bomRef": $."bom-ref", "purl": purl }
+  message: "Ruby gem '{{ name }}@{{ version }}' compiles native extensions at install time ({{ $prop($, 'cdx:gem:extensions') }})"
+  mitigation: "Prefer the precompiled native gem for your platform so that no compiler runs at install time, and review the extconf.rb of gems you build from source"
+  evidence: |
+    {
+      "extensions": $prop($, 'cdx:gem:extensions'),
+      "platform": $contains(purl, 'platform=') ? $substringAfter(purl, 'platform=') : 'ruby',
+      "requiredRubyVersion": $prop($, 'cdx:gem:rubyVersionSpecifiers')
     }

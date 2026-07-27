@@ -1,0 +1,6 @@
+---
+BUNDLE_PATH: "vendor/bundle"
+BUNDLE_WITHOUT: "development:test"
+BUNDLE_JOBS: "4"
+# a comment
+NOT_A_BUNDLE_SETTING: "ignored"
