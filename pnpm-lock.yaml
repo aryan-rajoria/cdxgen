@@ -184,6 +184,98 @@ importers:
         specifier: 2.2.1
         version: 2.2.1
 
+  packages/audit:
+    dependencies:
+      '@cdxgen/internal-cli':
+        specifier: workspace:*
+        version: link:../cli
+      '@cdxgen/internal-helpers':
+        specifier: workspace:*
+        version: link:../helpers
+      '@cdxgen/internal-stages':
+        specifier: workspace:*
+        version: link:../stages
+
+  packages/cli:
+    dependencies:
+      '@cdxgen/internal-helpers':
+        specifier: workspace:*
+        version: link:../helpers
+      '@cdxgen/internal-managers':
+        specifier: workspace:*
+        version: link:../managers
+      '@cdxgen/internal-parsers':
+        specifier: workspace:*
+        version: link:../parsers
+
+  packages/evinser:
+    dependencies:
+      '@cdxgen/internal-helpers':
+        specifier: workspace:*
+        version: link:../helpers
+      '@cdxgen/internal-managers':
+        specifier: workspace:*
+        version: link:../managers
+      '@cdxgen/internal-stages':
+        specifier: workspace:*
+        version: link:../stages
+
+  packages/helpers:
+    dependencies:
+      '@cdxgen/internal-managers':
+        specifier: workspace:*
+        version: link:../managers
+      '@cdxgen/internal-parsers':
+        specifier: workspace:*
+        version: link:../parsers
+      '@cdxgen/internal-third-party':
+        specifier: workspace:*
+        version: link:../third-party
+
+  packages/managers:
+    dependencies:
+      '@cdxgen/internal-helpers':
+        specifier: workspace:*
+        version: link:../helpers
+
+  packages/parsers:
+    dependencies:
+      '@cdxgen/internal-helpers':
+        specifier: workspace:*
+        version: link:../helpers
+
+  packages/server:
+    dependencies:
+      '@cdxgen/internal-cli':
+        specifier: workspace:*
+        version: link:../cli
+      '@cdxgen/internal-helpers':
+        specifier: workspace:*
+        version: link:../helpers
+      '@cdxgen/internal-stages':
+        specifier: workspace:*
+        version: link:../stages
+
+  packages/stages:
+    dependencies:
+      '@cdxgen/internal-helpers':
+        specifier: workspace:*
+        version: link:../helpers
+      '@cdxgen/internal-managers':
+        specifier: workspace:*
+        version: link:../managers
+
+  packages/third-party: {}
+
+  packages/validator:
+    dependencies:
+      '@cdxgen/internal-helpers':
+        specifier: workspace:*
+        version: link:../helpers
+      '@cdxgen/internal-stages':
+        specifier: workspace:*
+        version: link:../stages
+
 packages:
 
   '@appthreat/atom-common@1.1.0':

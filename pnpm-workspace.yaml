@@ -8,6 +8,8 @@ minimumReleaseAgeExclude:
   - 'typescript'
   - '@typescript/*'
 optimisticRepeatInstall: true
+packages:
+  - 'packages/*'
 preferSymlinkedExecutables: false
 strictDepBuilds: true
 trustPolicy: no-downgrade

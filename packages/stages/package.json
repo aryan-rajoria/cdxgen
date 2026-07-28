@@ -1,0 +1,15 @@
+{
+  "name": "@cdxgen/internal-stages",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "description": "Internal workspace package: lib/stages/** — pre-generation env setup and post-generation processing. Must not import from cli/.",
+  "libPath": "../../lib/stages",
+  "dependencies": {
+    "@cdxgen/internal-helpers": "workspace:*",
+    "@cdxgen/internal-managers": "workspace:*"
+  },
+  "scripts": {
+    "test": "pnpm -w exec poku lib/stages/"
+  }
+}

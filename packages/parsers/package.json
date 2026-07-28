@@ -1,0 +1,14 @@
+{
+  "name": "@cdxgen/internal-parsers",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "description": "Internal workspace package: lib/parsers/** — lockfile and manifest parsers. Must not depend on managers or orchestration layers.",
+  "libPath": "../../lib/parsers",
+  "dependencies": {
+    "@cdxgen/internal-helpers": "workspace:*"
+  },
+  "scripts": {
+    "test": "pnpm -w exec poku lib/parsers/"
+  }
+}

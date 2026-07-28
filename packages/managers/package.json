@@ -1,0 +1,14 @@
+{
+  "name": "@cdxgen/internal-managers",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "description": "Internal workspace package: lib/managers/** — package-manager and container invocation (docker, oci, piptree).",
+  "libPath": "../../lib/managers",
+  "dependencies": {
+    "@cdxgen/internal-helpers": "workspace:*"
+  },
+  "scripts": {
+    "test": "pnpm -w exec poku lib/managers/"
+  }
+}
