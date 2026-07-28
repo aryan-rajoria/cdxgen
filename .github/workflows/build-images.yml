@@ -152,15 +152,10 @@ jobs:
             distro: temurin
             fix-qemu: true
 
-          - lang: node20
-            cdxgen-image:
-              additional-image: cdxgen-node
-
-          - lang: node20
-            distro: alpine
-
           - lang: node24
             distro: alpine
+            cdxgen-image:
+              additional-image: cdxgen-node
           - lang: node25
             distro: alpine
           - lang: node26

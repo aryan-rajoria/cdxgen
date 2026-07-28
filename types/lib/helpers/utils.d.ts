@@ -1543,7 +1543,7 @@ export declare function extractJarArchive(jarFile: string, tempDir: string, jarN
  * @param {string} filePattern File pattern
  * @param {string} contentEncoding Encoding. Defaults to utf-8
  *
- * @returns File contents
+ * @returns {Promise<string|undefined>} File contents
  */
 export declare function readZipEntry(zipFile: string, filePattern: string, contentEncoding?: string): Promise<string | undefined>;
 /**

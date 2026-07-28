@@ -22,6 +22,7 @@ import {
   applyAdvancedOptions as applyAdvancedOptionsImpl,
   buildOptionsFromArgs,
   isUserProvided,
+  validateSpecVersion,
 } from "../lib/cli/cliOptions.js";
 import { createBom, submitBom } from "../lib/cli/index.js";
 import { signBom, verifyBom } from "../lib/helpers/bomSigner.js";
@@ -359,10 +360,10 @@ const args = _yargs
     hidden: true,
   })
   .option("spec-version", {
-    description: "CycloneDX Specification version to use. Defaults to 1.7",
+    description:
+      "CycloneDX Specification version to use. Defaults to 1.7. Accepted generation targets: 1.6, 1.7, 2.0. (1.4 and 1.5 are rejected as generation targets; downgrade the serialized output if a legacy document is required.)",
     default: DEFAULT_CDX_SPEC_VERSION,
     type: "number",
-    choices: [1.4, 1.5, 1.6, 1.7, 2.0],
   })
   .option("filter", {
     description:
@@ -617,6 +618,16 @@ const args = _yargs
   .array("feature-flags")
   .array("technique")
   .array("componentType")
+  .check((argv) => {
+    const specVersionError = validateSpecVersion(
+      argv.specVersion,
+      invokedCommandName,
+    );
+    if (specVersionError) {
+      throw new Error(specVersionError);
+    }
+    return true;
+  })
   .check((argv) => {
     const requestedComponentTypes = normalizeCycloneDxComponentTypeFilter(
       argv.componentType,
@@ -959,7 +970,7 @@ if (options.envAudit) {
 }
 
 /**
- * Check for node >= 20 permissions
+ * Check for node permission model
  *
  * @param {string} filePath File path
  * @param {Object} options CLI Options

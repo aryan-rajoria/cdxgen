@@ -8,7 +8,7 @@ In this lesson, we will learn about signing and attaching a signed SBOM to a con
 
 Ensure the following tools are installed.
 
-- Node.js > 20
+- Node.js >= 24
 - docker or podman
 
 Additionally, you need to have access to a container registry to push the image.

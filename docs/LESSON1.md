@@ -11,7 +11,7 @@ Ensure the following tools are installed.
 ```
 Java >= 21
 Maven
-Node.js > 20
+Node.js >= 24
 ```
 
 ## Getting started

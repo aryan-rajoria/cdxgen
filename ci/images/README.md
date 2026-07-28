@@ -36,8 +36,7 @@ Below table summarizes all available container image versions. These images incl
 | Python     | 3.11                         | ghcr.io/cyclonedx/cdxgen-python311:v12                                                                                                                                                                                    | Python 3.11 version.                                                                                   |
 | Python     | 3.12                         | ghcr.io/cyclonedx/cdxgen-python312:v12, ghcr.io/cyclonedx/cdxgen-python:v12                                                                                                                                               | Python 3.12 version. Includes rolling alias `cdxgen-python`.                                           |
 | Python     | 3.13                         | ghcr.io/cyclonedx/cdxgen-python313:v12, ghcr.io/cyclonedx/cdxgen-alpine-python313:v12                                                                                                                                     | Python 3.13 version. Includes standard and Alpine-based variants.                                      |
-| Node.js    | 20                           | ghcr.io/cyclonedx/cdxgen-node20:v12, ghcr.io/cyclonedx/cdxgen-node:v12, ghcr.io/cyclonedx/cdxgen-alpine-node20:v12                                                                                                        | Node.js 20 version. Use `--platform=linux/amd64` in case of npm install errors.                        |
-| Node.js    | 24                           | ghcr.io/cyclonedx/cdxgen-alpine-node24:v12                                                                                                                                                                                | Node.js 24 Alpine version. Note: Default all-in-one uses Node 24 runtime.                              |
+| Node.js    | 24                           | ghcr.io/cyclonedx/cdxgen-alpine-node24:v12, ghcr.io/cyclonedx/cdxgen-node:v12                                                                                                                                              | Node.js 24 Alpine version. Includes rolling alias `cdxgen-node`. Default all-in-one uses Node 24 runtime. |
 | Node.js    | 25                           | ghcr.io/cyclonedx/cdxgen-alpine-node25:v12                                                                                                                                                                                | Node.js 25 Alpine version.                                                                             |
 | Node.js    | 26                           | ghcr.io/cyclonedx/cdxgen-alpine-node26:v12                                                                                                                                                                                | Node.js 26 Alpine version.                                                                             |
 | Ruby       | 4.0.x                        | ghcr.io/cyclonedx/cdxgen-debian-ruby4:v12, ghcr.io/cyclonedx/cdxgen-alpine-ruby4:v12                                                                                                                                      | Ruby 4.0.x. Supports automatic installation for other Ruby versions.                                   |
@@ -255,13 +254,17 @@ docker run --rm -e CDXGEN_DEBUG_MODE=verbose -v /tmp:/tmp -v $(pwd):/app:rw -t g
 
 ### Node.js applications
 
-Use the custom image `ghcr.io/cyclonedx/cdxgen-node20:v12`.
+Use the custom image `ghcr.io/cyclonedx/cdxgen-alpine-node24:v12`.
 
-Node.js 20
+Node.js 24
 
 ```shell
-docker run --rm -e CDXGEN_DEBUG_MODE=verbose -v /tmp:/tmp -v $(pwd):/app:rw -t ghcr.io/cyclonedx/cdxgen-node20:v12 -r /app -o /app/bom.json -t js
+docker run --rm -e CDXGEN_DEBUG_MODE=verbose -v /tmp:/tmp -v $(pwd):/app:rw -t ghcr.io/cyclonedx/cdxgen-alpine-node24:v12 -r /app -o /app/bom.json -t js
 ```
+
+Applications that only build on an older Node.js runtime can pass an install-version
+type such as `-t node20` to the default image, which installs that Node.js for the
+target application only.
 
 ### Ruby applications
 
@@ -410,7 +413,7 @@ Include the below argument with the `nerdctl run` command.
 Example:
 
 ```shell
-nerdctl run --rm --platform=linux/arm64 -e CDXGEN_DEBUG_MODE=verbose -v /tmp:/tmp -v $(pwd):/app:rw -t ghcr.io/cyclonedx/cdxgen-node20:v12 -r /app -o /app/bom.json -t js
+nerdctl run --rm --platform=linux/arm64 -e CDXGEN_DEBUG_MODE=verbose -v /tmp:/tmp -v $(pwd):/app:rw -t ghcr.io/cyclonedx/cdxgen-alpine-node24:v12 -r /app -o /app/bom.json -t js
 ```
 
 ## License

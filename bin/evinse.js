@@ -207,11 +207,6 @@ const args = yargs(hideBin(process.argv))
   .option("rusi-patterns", {
     description: "Custom Rusi data-flow pattern JSON file.",
   })
-  .option("db-path", {
-    description: "Atom slices DB path. Unused",
-    default: undefined,
-    hidden: true,
-  })
   .option("force", {
     description: "Force creation of the database",
     default: false,

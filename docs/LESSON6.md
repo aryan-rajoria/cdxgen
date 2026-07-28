@@ -11,7 +11,7 @@ In this lesson, we will learn how to apply multiple signatures (co-signing) and 
 
 Ensure the following tools are installed:
 
-- Node.js > 20
+- Node.js >= 24
 - OpenSSL (to generate cryptographic keys)
 - `@cyclonedx/cdxgen` installed globally (provides `cdxgen`, `cdx-sign`, and `cdx-verify`)
 

@@ -8,7 +8,7 @@ In this lesson, we will learn about generating SBOM based on a security standard
 
 Ensure the following tools are installed.
 
-- Node.js > 20
+- Node.js >= 24
 
 ## Getting started
 
