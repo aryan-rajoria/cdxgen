@@ -73,8 +73,8 @@ export declare function parseGradleDep(rawOutput: string, rootProjectName?: stri
         dependsOn: any[];
     }[];
 } | {
-    pkgList?: undefined;
     dependenciesList?: undefined;
+    pkgList?: undefined;
 }>;
 /**
  * Method that handles object creation for gradle modules.

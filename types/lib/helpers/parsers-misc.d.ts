@@ -1,0 +1,376 @@
+/**
+ * Method to parse pubspec.lock files.
+ *
+ * @param pubLockData Contents of lock data
+ * @param lockFile Filename for setting evidence
+ *
+ * @returns {Object}
+ */
+export declare function parsePubLockData(pubLockData: any, lockFile: any): Object;
+/**
+ * Parses a Dart pub package's pubspec.yaml content and returns a list containing
+ * a single component object with name, description, version, homepage, and purl.
+ *
+ * @param {string} pubYamlData Raw YAML string contents of a pubspec.yaml file
+ * @returns {Object[]} List containing a single Dart package component object
+ */
+export declare function parsePubYamlData(pubYamlData: string): Object[];
+/**
+ * Parses Helm chart YAML data (Chart.yaml or repository index.yaml) and returns
+ * a list of Helm chart component objects including the chart itself and any
+ * declared dependencies or index entries.
+ *
+ * @param {string} helmData Raw YAML string contents of a Helm Chart.yaml or index.yaml file
+ * @returns {Object[]} List of Helm chart component objects with name, version, and optional homepage/repository
+ */
+export declare function parseHelmYamlData(helmData: string): Object[];
+/**
+ * Recursively walks a parsed YAML/JSON object structure to find container image
+ * references stored under common keys (image, repository, dockerImage, etc.) and
+ * appends discovered image and service entries to pkgList while tracking seen
+ * images in imgList to avoid duplicates.
+ *
+ * @param {Object|Array|string} keyValueObj The object, array, or string node to inspect
+ * @param {Object[]} pkgList Accumulator array that receives {image} and {service} entries
+ * @param {string[]} imgList Accumulator array of image name strings already seen
+ * @returns {string[]} The updated imgList
+ */
+export declare function recurseImageNameLookup(keyValueObj: Object | any[] | string, pkgList: Object[], imgList: string[]): string[];
+/**
+ * Parses the contents of a Dockerfile or Containerfile and returns a list of
+ * base image objects referenced by FROM instructions, substituting ARG default
+ * values where possible and skipping multi-stage build alias references.
+ *
+ * @param {string} fileContents Raw string contents of the Dockerfile/Containerfile
+ * @returns {Object[]} Array of objects with an image property for each unique base image
+ */
+export declare function parseContainerFile(fileContents: string): Object[];
+/**
+ * Parses a Bitbucket Pipelines YAML file and extracts all Docker image references
+ * used as build environments and pipe references (docker:// pipes are normalized).
+ *
+ * @param {string} fileContents Raw string contents of the bitbucket-pipelines.yml file
+ * @returns {Object[]} Array of objects with an image property for each referenced image or pipe
+ */
+export declare function parseBitbucketPipelinesFile(fileContents: string): Object[];
+/**
+ * Parses container specification data such as Docker Compose files, Kubernetes
+ * manifests, Tekton tasks, Skaffold configs, or Kustomize overlays (YAML, possibly
+ * multi-document) and returns a list of image, service, and OCI spec entries.
+ *
+ * @param {string} dcData Raw YAML string contents of the container spec file
+ * @returns {Object[]} Array of objects with image, service, or ociSpec properties
+ */
+export declare function parseContainerSpecData(dcData: string): Object[];
+/**
+ * Identifies the data flow direction of a Privado processing object based on its
+ * sinkId value: "write" sinks map to "inbound", "read" sinks to "outbound", and
+ * HTTP/gRPC sinks to "bi-directional".
+ *
+ * @param {Object} processingObj Privado processing object, expected to have a sinkId property
+ * @returns {string} Flow direction string: "inbound", "outbound", "bi-directional", or "unknown"
+ */
+export declare function identifyFlow(processingObj: Object): string;
+/**
+ * Parses a Privado data flow JSON file and returns a list of service objects
+ * enriched with data classifications, endpoints, trust-boundary flag, violations,
+ * and git metadata properties extracted from the scan result.
+ *
+ * @param {string} f Path to the Privado scan result JSON file
+ * @returns {Object[]} List of service component objects suitable for a SaaSBOM
+ */
+export declare function parsePrivadoFile(f: string): Object[];
+/**
+ * Parses an OpenAPI specification (JSON or YAML string) and returns a list
+ * containing a single service object with name, version, endpoints, and
+ * authentication flag derived from the spec's info, servers, paths, and
+ * securitySchemes sections.
+ *
+ * @param {string} oaData Raw JSON or YAML string contents of an OpenAPI specification
+ * @returns {Object[]} List containing a single service component object
+ */
+export declare function parseOpenapiSpecData(oaData: string): Object[];
+/**
+ * Parses Haskell Cabal freeze file content and extracts package name and version
+ * pairs from constraint lines (lines containing " ==").
+ *
+ * @param {string} cabalData Raw string contents of a Cabal freeze file
+ * @returns {Object[]} List of package objects with name and version fields
+ */
+export declare function parseCabalData(cabalData: string): Object[];
+/**
+ * Parses an Elixir mix.lock file and extracts Hex package name and version pairs
+ * from lines containing ":hex".
+ *
+ * @param {string} mixData Raw string contents of a mix.lock file
+ * @returns {Object[]} List of package objects with name and version fields
+ */
+export declare function parseMixLockData(mixData: string): Object[];
+/**
+ * Parses a GitHub Actions workflow YAML file and returns a list of action
+ * components for each step that uses an external action (steps with a "uses"
+ * field). Each component captures the action name, group, version/commit SHA,
+ * version pinning type, job context (runner, permissions, environment), and
+ * workflow-level metadata (triggers, concurrency, write permissions).
+ *
+ * @param {string} f Path to the GitHub Actions workflow YAML file
+ * @returns {Object[]} List of action component objects with purl, properties, and evidence
+ */
+export declare function parseGitHubWorkflowData(f: string): Object[];
+/**
+ * Parse Google Cloud Build YAML data and extract container image steps as packages.
+ *
+ * @param {string} cbwData Raw YAML string of a Cloud Build configuration file
+ * @returns {Object[]} Array of package objects parsed from the build steps
+ */
+export declare function parseCloudBuildData(cbwData: string): Object[];
+/**
+ * Parse Conan lock file data (conan.lock) and return the package list, dependency map,
+ * and parent component dependencies.
+ *
+ * Supports both the legacy `graph_lock.nodes` format (Conan 1.x) and the newer
+ * `requires` format (Conan 2.x).
+ *
+ * @param {string} conanLockData Raw JSON string of the Conan lock file
+ * @returns {{ pkgList: Object[], dependencies: Object, parentComponentDependencies: string[] }}
+ */
+export declare function parseConanLockData(conanLockData: string): {
+    pkgList: Object[];
+    dependencies: Object;
+    parentComponentDependencies: string[];
+};
+/**
+ * Parse a Conan conanfile.txt and extract required and optional packages.
+ *
+ * @param {string} conanData Raw text contents of a conanfile.txt
+ * @returns {Object[]} Array of package objects with purl, name, version, and scope
+ */
+export declare function parseConanData(conanData: string): Object[];
+/**
+ * Parse Collider lock file data (collider.lock) and return the package list and
+ * parent component dependencies.
+ *
+ * @param {string} colliderLockData Raw JSON string of the Collider lock file
+ * @param {string} lockFile Source lock file path
+ * @returns {{ pkgList: Object[], dependencies: Object, parentComponentDependencies: string[] }}
+ */
+export declare function parseColliderLockData(colliderLockData: string, lockFile: string): {
+    pkgList: Object[];
+    dependencies: Object;
+    parentComponentDependencies: string[];
+};
+/**
+ * Method to parse flake.nix files
+ *
+ * @param {String} flakeNixFile flake.nix file to parse
+ * @returns {Object} Object containing package information
+ */
+export declare function parseFlakeNix(flakeNixFile: string): Object;
+/**
+ * Method to parse flake.lock files
+ *
+ * @param {String} flakeLockFile flake.lock file to parse
+ * @returns {Object} Object containing locked dependency information
+ */
+export declare function parseFlakeLock(flakeLockFile: string): Object;
+/**
+ * Parse composer.json file
+ *
+ * @param {string} composerJsonFile composer.json file
+ *
+ * @returns {Object} Object with rootRequires and parent component
+ */
+export declare function parseComposerJson(composerJsonFile: string): Object;
+/**
+ * Parse composer lock file
+ *
+ * @param {string} pkgLockFile composer.lock file
+ * @param {array} rootRequires require section from composer.json
+ */
+export declare function parseComposerLock(pkgLockFile: string, rootRequires: array): never[] | {
+    pkgList: {
+        group: any;
+        name: any;
+        purl: string;
+        "bom-ref": string;
+        version: any;
+        repository: any;
+        license: any;
+        description: any;
+        scope: string;
+        properties: {
+            name: string;
+            value: string;
+        }[];
+        evidence: {
+            identity: {
+                field: string;
+                confidence: number;
+                methods: {
+                    technique: string;
+                    confidence: number;
+                    value: string;
+                }[];
+            };
+        };
+    }[];
+    dependenciesList: {
+        ref: string;
+        dependsOn: any[];
+    }[];
+    rootList: {
+        group: any;
+        name: any;
+        purl: string;
+        "bom-ref": string;
+        version: any;
+        repository: any;
+        license: any;
+        description: any;
+        scope: string;
+        properties: {
+            name: string;
+            value: string;
+        }[];
+        evidence: {
+            identity: {
+                field: string;
+                confidence: number;
+                methods: {
+                    technique: string;
+                    confidence: number;
+                    value: string;
+                }[];
+            };
+        };
+    }[];
+};
+/**
+ * Method to execute dpkg --listfiles to determine the files provided by a given package
+ *
+ * @param {string} pkgName deb package name
+ * @returns
+ */
+export declare function executeDpkgList(pkgName: string): any;
+/**
+ * Method to execute dnf repoquery to determine the files provided by a given package
+ *
+ * @param {string} pkgName deb package name
+ * @returns
+ */
+export declare function executeRpmList(pkgName: string): any;
+/**
+ * Method to execute apk -L info to determine the files provided by a given package
+ *
+ * @param {string} pkgName deb package name
+ * @returns
+ */
+export declare function executeApkList(pkgName: string): any;
+/**
+ * Method to execute alpm -Ql to determine the files provided by a given package
+ *
+ * @param {string} pkgName deb package name
+ * @returns
+ */
+export declare function executeAlpmList(pkgName: string): any;
+/**
+ * Method to execute equery files to determine the files provided by a given package
+ *
+ * @param {string} pkgName deb package name
+ * @returns
+ */
+export declare function executeEqueryList(pkgName: string): any;
+/**
+ * Parse swift dependency tree output json object
+ *
+ * @param {Array} pkgList Package list
+ * @param {Array} dependenciesList Dependencies
+ * @param {string} jsonObject Swift dependencies json object
+ * @param {string} pkgFile Package.swift file
+ */
+export declare function parseSwiftJsonTreeObject(pkgList: any[], dependenciesList: any[], jsonObject: string, pkgFile: string): string;
+/**
+ * Parse swift dependency tree output
+ * @param {string} rawOutput Swift dependencies json output
+ * @param {string} pkgFile Package.swift file
+ */
+export declare function parseSwiftJsonTree(rawOutput: string, pkgFile: string): {
+    rootList?: undefined;
+    pkgList?: undefined;
+    dependenciesList?: undefined;
+} | {
+    rootList: any[];
+    pkgList: any[];
+    dependenciesList: any[];
+};
+/**
+ * Parse swift package resolved file
+ * @param {string} resolvedFile Package.resolved file
+ */
+export declare function parseSwiftResolved(resolvedFile: string): {
+    name: string;
+    group: string | null | undefined;
+    version: string | null | undefined;
+    purl: string;
+    "bom-ref": string;
+    properties: {
+        name: string;
+        value: string;
+    }[];
+    evidence: {
+        identity: {
+            field: string;
+            confidence: number;
+            methods: {
+                technique: string;
+                confidence: number;
+                value: string;
+            }[];
+        };
+    };
+}[];
+/**
+ * Parse a CMake-generated dot/graphviz file and extract components and their dependency
+ * relationships.
+ *
+ * The first `digraph` entry becomes the parent component. Subsequent `node` entries
+ * with a `label` attribute are treated as direct dependencies, while commented
+ * `node -> node` relationships are used to construct the dependency graph.
+ *
+ * @param {string} dotFile Path to the CMake-generated dot file
+ * @param {string} pkgType PackageURL type to assign to extracted packages (e.g. `"generic"`)
+ * @param {Object} options CLI options; may contain `projectGroup`, `projectName`, and `projectVersion`
+ * @returns {{ parentComponent: Object, pkgList: Object[], dependenciesList: Object[] }}
+ */
+export declare function parseCmakeDotFile(dotFile: string, pkgType: string, options?: Object): {
+    parentComponent: Object;
+    pkgList: Object[];
+    dependenciesList: Object[];
+};
+/**
+ * Parse a CMake-like build file (CMakeLists.txt, meson.build, etc.) and extract the
+ * parent component and list of dependency packages.
+ *
+ * Handles `set`, `project`, `find_package`, `find_library`, `find_dependency`,
+ * `find_file`, `FetchContent_MakeAvailable`, and `dependency()` directives.
+ * Uses the MesonWrapDB to improve name resolution confidence.
+ *
+ * @param {string} cmakeListFile Path to the CMake-like build file
+ * @param {string} pkgType PackageURL type to assign to extracted packages (e.g. `"generic"`)
+ * @param {Object} options CLI options; may contain `projectGroup`, `projectName`, and `projectVersion`
+ * @returns {{ parentComponent: Object, pkgList: Object[] }}
+ */
+export declare function parseCmakeLikeFile(cmakeListFile: string, pkgType: string, options?: Object): {
+    parentComponent: Object;
+    pkgList: Object[];
+};
+export declare function parseCUsageSlice(sliceData: any): {} | undefined;
+/**
+ * Function to parse the .d make files
+ *
+ * @param {String} dfile .d file path
+ *
+ * @returns {Object} pkgFilesMap Object with package name and list of files
+ */
+export declare function parseMakeDFile(dfile: string): Object;
+//# sourceMappingURL=parsers-misc.d.ts.map

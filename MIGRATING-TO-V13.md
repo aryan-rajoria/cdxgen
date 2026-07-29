@@ -53,6 +53,35 @@ The spec floor is enforced on the `cdxgen` CLI, the `tracebom` CLI, and the
 
 No environment variables were formally deprecated in v12, so none are removed.
 
+## `lib/helpers/utils.js` barrel deprecation
+
+`lib/helpers/utils.js` has been decomposed into focused leaf modules. The file
+remains as a re-export barrel that preserves all **261** public export names for
+one major version, so existing `import { X } from "@cyclonedx/cdxgen/helpers/utils"`
+(or relative `"./utils.js"`) imports keep working unchanged.
+
+The barrel is **deprecated as of v13**. Consumers should import from the
+specific leaf module instead:
+
+| New module | Theme |
+|---|---|
+| `helpers/purl` | purl build/parse, version compare, conan/nix purl helpers |
+| `helpers/spdx` | license-id normalisation, SPDX expressions, license data lookup |
+| `helpers/state` | eval-time data constants (frameworks, version, module tables) |
+| `helpers/paths` | path/OS detection helpers |
+| `helpers/core-activity` | activity/dry-run/host-allowlist, `cdxgenAgent`, feature flags |
+| `helpers/core-fs` | safe wrappers, `safeSpawnSync`, file discovery, checksums |
+| `helpers/core-env` | runtime detection, env flags, command resolution, alias tables |
+| `helpers/deps` | dependency-tree assembly, component merge/dedupe, JAR namespace collection |
+| `helpers/ecosystems` | the `get*Metadata` family + registry fetch helpers |
+| `helpers/parsers-go` | Go ecosystem parsers (`parseGoMod*`, `parseGosum*`, etc.) |
+| `helpers/parsers-dotnet` | .NET ecosystem parsers (`parseCsProj*`, `parseNuspec*`, etc.) |
+| `helpers/parsers-rust` | Rust/cargo parsers (`parseCargo*`, cargo workspace internals) |
+| `helpers/parsers-jvm` | JVM parsers (`parsePom`, `parseMavenTree*`, `parseBazel*`, etc.) |
+| `helpers/parsers-python` | Python parsers (`parsePy*`, `parseReq*`, `parsePixi*`, etc.) |
+| `helpers/parsers-js` | JS/npm parsers (`parsePkgJson`, `parsePkgLock`, `parsePnpm*`, etc.) |
+| `helpers/parsers-misc` | All other parsers (`parseComposer*`, `parseConan*`, `parseSwift*`, etc.) |
+
 ## Removed container images
 
 The Node.js 20 images are removed, since cdxgen itself now requires Node.js >= 24:

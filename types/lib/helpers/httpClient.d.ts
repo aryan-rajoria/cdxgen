@@ -90,6 +90,45 @@ export declare function isCacheDisabled(): boolean;
  */
 export declare function clearHttpCache(): void;
 /**
+ * Error thrown when a cassette replay session encounters a request with no
+ * matching recorded interaction.  This is loud-by-design: a silent fall-
+ * through to the live network would make offline golden tests meaningless.
+ */
+export declare class CassetteMissError extends Error {
+    method: string;
+    url: string;
+    /**
+     * @param {string} method HTTP method.
+     * @param {string} url Request URL.
+     */
+    constructor(method: string, url: string);
+}
+/**
+ * Install an HTTP interceptor that acts as the single network seam for test
+ * cassettes.  The interceptor receives a request descriptor and must return
+ * either a `got`-like response object (replay hit) or `null` (pass-through /
+ * record mode).
+ *
+ * @param {(req: { method: string, url: URL, headers: Object, body: *, responseType?: string, options: Object }) => Promise<Object|null>} fn
+ *   Interceptor function.
+ * @returns {void}
+ */
+export declare function setHttpInterceptor(fn: (req: {
+    method: string;
+    url: URL;
+    headers: Object;
+    body: any;
+    responseType?: string;
+    options: Object;
+}) => Promise<Object | null>): void;
+/**
+ * Remove the currently-installed HTTP interceptor, restoring normal network
+ * behaviour.
+ *
+ * @returns {void}
+ */
+export declare function clearHttpInterceptor(): void;
+/**
  * Create a `got`-compatible HTTP client bound to the supplied defaults.
  *
  * @param {Object} [defaults] Default request options merged into every call.
