@@ -1,0 +1,10 @@
+{
+  "description": "Ruby Gemfile.lock parse coverage. Lockfile-backed: pinned gem versions.",
+  "scenarios": [
+    {
+      "name": "default",
+      "projectType": ["ruby"],
+      "options": {}
+    }
+  ]
+}

@@ -1,0 +1,690 @@
+{
+  "bomFormat": "CycloneDX",
+  "components": [
+    {
+      "bom-ref": "pkg:cocoapods/ARAnalytics@5.0.1",
+      "group": "",
+      "name": "ARAnalytics",
+      "properties": [
+        {
+          "name": "cdx:pods:Subspec",
+          "value": "CoreIOS"
+        },
+        {
+          "name": "cdx:pods:Subspec",
+          "value": "HockeyApp"
+        },
+        {
+          "name": "cdx:pods:Subspec",
+          "value": "Segmentio"
+        }
+      ],
+      "purl": "pkg:cocoapods/ARAnalytics@5.0.1",
+      "type": "library",
+      "version": "5.0.1"
+    },
+    {
+      "bom-ref": "pkg:cocoapods/ARCollectionViewMasonryLayout@2.0.0",
+      "group": "",
+      "name": "ARCollectionViewMasonryLayout",
+      "purl": "pkg:cocoapods/ARCollectionViewMasonryLayout@2.0.0",
+      "type": "library",
+      "version": "2.0.0"
+    },
+    {
+      "bom-ref": "pkg:cocoapods/ARTiledImageView@1.1.1",
+      "group": "",
+      "name": "ARTiledImageView",
+      "purl": "pkg:cocoapods/ARTiledImageView@1.1.1",
+      "type": "library",
+      "version": "1.1.1"
+    },
+    {
+      "bom-ref": "pkg:cocoapods/Action@3.5.0",
+      "group": "",
+      "name": "Action",
+      "purl": "pkg:cocoapods/Action@3.5.0",
+      "type": "library",
+      "version": "3.5.0"
+    },
+    {
+      "bom-ref": "pkg:cocoapods/Alamofire@4.6.0",
+      "group": "",
+      "name": "Alamofire",
+      "purl": "pkg:cocoapods/Alamofire@4.6.0",
+      "type": "library",
+      "version": "4.6.0"
+    },
+    {
+      "bom-ref": "pkg:cocoapods/Analytics@3.6.9",
+      "group": "",
+      "name": "Analytics",
+      "purl": "pkg:cocoapods/Analytics@3.6.9",
+      "type": "library",
+      "version": "3.6.9"
+    },
+    {
+      "bom-ref": "pkg:cocoapods/Artsy%2BUIColors@3.1.0",
+      "group": "",
+      "name": "Artsy+UIColors",
+      "purl": "pkg:cocoapods/Artsy%2BUIColors@3.1.0",
+      "type": "library",
+      "version": "3.1.0"
+    },
+    {
+      "bom-ref": "pkg:cocoapods/Artsy%2BUIFonts@3.1.3",
+      "group": "",
+      "name": "Artsy+UIFonts",
+      "purl": "pkg:cocoapods/Artsy%2BUIFonts@3.1.3",
+      "type": "library",
+      "version": "3.1.3"
+    },
+    {
+      "bom-ref": "pkg:cocoapods/Artsy%2BUILabels@2.2.0",
+      "group": "",
+      "name": "Artsy+UILabels",
+      "purl": "pkg:cocoapods/Artsy%2BUILabels@2.2.0",
+      "type": "library",
+      "version": "2.2.0"
+    },
+    {
+      "bom-ref": "pkg:cocoapods/Artsy-UIButtons@2.1.0",
+      "group": "",
+      "name": "Artsy-UIButtons",
+      "purl": "pkg:cocoapods/Artsy-UIButtons@2.1.0",
+      "type": "library",
+      "version": "2.1.0"
+    },
+    {
+      "bom-ref": "pkg:cocoapods/CardFlight-v4@4.3.1",
+      "group": "",
+      "name": "CardFlight-v4",
+      "purl": "pkg:cocoapods/CardFlight-v4@4.3.1",
+      "type": "library",
+      "version": "4.3.1"
+    },
+    {
+      "bom-ref": "pkg:cocoapods/DZNWebViewController@2.0",
+      "group": "",
+      "name": "DZNWebViewController",
+      "properties": [
+        {
+          "name": "cdx:pods:podspecLocation",
+          "value": "https://raw.githubusercontent.com/orta/DZNWebViewController/refs/heads/<DEFAULT>/DZNWebViewController.podspec"
+        }
+      ],
+      "purl": "pkg:cocoapods/DZNWebViewController@2.0",
+      "type": "library",
+      "version": "2.0"
+    },
+    {
+      "bom-ref": "pkg:cocoapods/ECPhoneNumberFormatter@0.1.1",
+      "group": "",
+      "name": "ECPhoneNumberFormatter",
+      "purl": "pkg:cocoapods/ECPhoneNumberFormatter@0.1.1",
+      "type": "library",
+      "version": "0.1.1"
+    },
+    {
+      "bom-ref": "pkg:cocoapods/FBSnapshotTestCase@2.1.4",
+      "group": "",
+      "name": "FBSnapshotTestCase",
+      "properties": [
+        {
+          "name": "cdx:pods:Subspec",
+          "value": "Core"
+        },
+        {
+          "name": "cdx:pods:Subspec",
+          "value": "SwiftSupport"
+        }
+      ],
+      "purl": "pkg:cocoapods/FBSnapshotTestCase@2.1.4",
+      "type": "library",
+      "version": "2.1.4"
+    },
+    {
+      "bom-ref": "pkg:cocoapods/FLKAutoLayout@0.1.1",
+      "group": "",
+      "name": "FLKAutoLayout",
+      "purl": "pkg:cocoapods/FLKAutoLayout@0.1.1",
+      "type": "library",
+      "version": "0.1.1"
+    },
+    {
+      "bom-ref": "pkg:cocoapods/Forgeries@1.0.0",
+      "group": "",
+      "name": "Forgeries",
+      "properties": [
+        {
+          "name": "cdx:pods:Subspec",
+          "value": "Core"
+        }
+      ],
+      "purl": "pkg:cocoapods/Forgeries@1.0.0",
+      "type": "library",
+      "version": "1.0.0"
+    },
+    {
+      "bom-ref": "pkg:cocoapods/HockeySDK-Source@5.1.2",
+      "group": "",
+      "name": "HockeySDK-Source",
+      "properties": [
+        {
+          "name": "cdx:pods:podspecLocation",
+          "value": "https://raw.githubusercontent.com/bitstadium/HockeySDK-iOS/refs/heads/<DEFAULT>/HockeySDK-Source.podspec"
+        }
+      ],
+      "purl": "pkg:cocoapods/HockeySDK-Source@5.1.2",
+      "type": "library",
+      "version": "5.1.2"
+    },
+    {
+      "bom-ref": "pkg:cocoapods/ISO8601DateFormatter@0.8",
+      "group": "",
+      "name": "ISO8601DateFormatter",
+      "purl": "pkg:cocoapods/ISO8601DateFormatter@0.8",
+      "type": "library",
+      "version": "0.8"
+    },
+    {
+      "bom-ref": "pkg:cocoapods/Keys@1.0.1",
+      "group": "",
+      "name": "Keys",
+      "properties": [
+        {
+          "name": "cdx:pods:projectDir",
+          "value": "$ROOT/Pods/CocoaPodsKeys"
+        }
+      ],
+      "purl": "pkg:cocoapods/Keys@1.0.1",
+      "type": "library",
+      "version": "1.0.1"
+    },
+    {
+      "bom-ref": "pkg:cocoapods/Moya@11.0.0",
+      "group": "",
+      "name": "Moya",
+      "properties": [
+        {
+          "name": "cdx:pods:Subspec",
+          "value": "Core"
+        },
+        {
+          "name": "cdx:pods:Subspec",
+          "value": "RxSwift"
+        }
+      ],
+      "purl": "pkg:cocoapods/Moya@11.0.0",
+      "type": "library",
+      "version": "11.0.0"
+    },
+    {
+      "bom-ref": "pkg:cocoapods/NJKWebViewProgress@0.2.3",
+      "group": "",
+      "name": "NJKWebViewProgress",
+      "properties": [
+        {
+          "name": "cdx:pods:Subspec",
+          "value": "Core"
+        },
+        {
+          "name": "cdx:pods:Subspec",
+          "value": "ProgressView"
+        }
+      ],
+      "purl": "pkg:cocoapods/NJKWebViewProgress@0.2.3",
+      "type": "library",
+      "version": "0.2.3"
+    },
+    {
+      "bom-ref": "pkg:cocoapods/NSObject%2BRx@4.2.0",
+      "group": "",
+      "name": "NSObject+Rx",
+      "purl": "pkg:cocoapods/NSObject%2BRx@4.2.0",
+      "type": "library",
+      "version": "4.2.0"
+    },
+    {
+      "bom-ref": "pkg:cocoapods/Nimble-Snapshots@6.3.0",
+      "group": "",
+      "name": "Nimble-Snapshots",
+      "properties": [
+        {
+          "name": "cdx:pods:Subspec",
+          "value": "Core"
+        }
+      ],
+      "purl": "pkg:cocoapods/Nimble-Snapshots@6.3.0",
+      "type": "library",
+      "version": "6.3.0"
+    },
+    {
+      "bom-ref": "pkg:cocoapods/Nimble@7.0.3",
+      "group": "",
+      "name": "Nimble",
+      "purl": "pkg:cocoapods/Nimble@7.0.3",
+      "type": "library",
+      "version": "7.0.3"
+    },
+    {
+      "bom-ref": "pkg:cocoapods/ORStackView@2.0.0",
+      "group": "",
+      "name": "ORStackView",
+      "purl": "pkg:cocoapods/ORStackView@2.0.0",
+      "type": "library",
+      "version": "2.0.0"
+    },
+    {
+      "bom-ref": "pkg:cocoapods/Quick@1.2.0",
+      "group": "",
+      "name": "Quick",
+      "purl": "pkg:cocoapods/Quick@1.2.0",
+      "type": "library",
+      "version": "1.2.0"
+    },
+    {
+      "bom-ref": "pkg:cocoapods/ReachabilitySwift@4.1.0",
+      "group": "",
+      "name": "ReachabilitySwift",
+      "purl": "pkg:cocoapods/ReachabilitySwift@4.1.0",
+      "type": "library",
+      "version": "4.1.0"
+    },
+    {
+      "bom-ref": "pkg:cocoapods/Result@3.2.4",
+      "group": "",
+      "name": "Result",
+      "purl": "pkg:cocoapods/Result@3.2.4",
+      "type": "library",
+      "version": "3.2.4"
+    },
+    {
+      "bom-ref": "pkg:cocoapods/RxBlocking@4.1.2",
+      "group": "",
+      "name": "RxBlocking",
+      "purl": "pkg:cocoapods/RxBlocking@4.1.2",
+      "type": "library",
+      "version": "4.1.2"
+    },
+    {
+      "bom-ref": "pkg:cocoapods/RxCocoa@4.1.2",
+      "group": "",
+      "name": "RxCocoa",
+      "purl": "pkg:cocoapods/RxCocoa@4.1.2",
+      "type": "library",
+      "version": "4.1.2"
+    },
+    {
+      "bom-ref": "pkg:cocoapods/RxNimble@4.1.0",
+      "group": "",
+      "name": "RxNimble",
+      "purl": "pkg:cocoapods/RxNimble@4.1.0",
+      "type": "library",
+      "version": "4.1.0"
+    },
+    {
+      "bom-ref": "pkg:cocoapods/RxOptional@3.3.0",
+      "group": "",
+      "name": "RxOptional",
+      "purl": "pkg:cocoapods/RxOptional@3.3.0",
+      "type": "library",
+      "version": "3.3.0"
+    },
+    {
+      "bom-ref": "pkg:cocoapods/RxSwift@4.1.2",
+      "group": "",
+      "name": "RxSwift",
+      "purl": "pkg:cocoapods/RxSwift@4.1.2",
+      "type": "library",
+      "version": "4.1.2"
+    },
+    {
+      "bom-ref": "pkg:cocoapods/SDWebImage@3.8.2",
+      "group": "",
+      "name": "SDWebImage",
+      "properties": [
+        {
+          "name": "cdx:pods:Subspec",
+          "value": "Core"
+        }
+      ],
+      "purl": "pkg:cocoapods/SDWebImage@3.8.2",
+      "type": "library",
+      "version": "3.8.2"
+    },
+    {
+      "bom-ref": "pkg:cocoapods/SVProgressHUD@2.2.3",
+      "group": "",
+      "name": "SVProgressHUD",
+      "purl": "pkg:cocoapods/SVProgressHUD@2.2.3",
+      "type": "library",
+      "version": "2.2.3"
+    },
+    {
+      "bom-ref": "pkg:cocoapods/Stripe@12.1.0",
+      "group": "",
+      "name": "Stripe",
+      "purl": "pkg:cocoapods/Stripe@12.1.0",
+      "type": "library",
+      "version": "12.1.0"
+    },
+    {
+      "bom-ref": "pkg:cocoapods/SwiftyJSON@4.0.0",
+      "group": "",
+      "name": "SwiftyJSON",
+      "purl": "pkg:cocoapods/SwiftyJSON@4.0.0",
+      "type": "library",
+      "version": "4.0.0"
+    },
+    {
+      "bom-ref": "pkg:cocoapods/UIImageViewAligned@0.0.1",
+      "group": "",
+      "name": "UIImageViewAligned",
+      "properties": [
+        {
+          "name": "cdx:pods:podspecLocation",
+          "value": "https://raw.githubusercontent.com/ashfurrow/UIImageViewAligned/refs/heads/<DEFAULT>/UIImageViewAligned.podspec"
+        }
+      ],
+      "purl": "pkg:cocoapods/UIImageViewAligned@0.0.1",
+      "type": "library",
+      "version": "0.0.1"
+    },
+    {
+      "bom-ref": "pkg:cocoapods/UIView%2BBooleanAnimations@1.0.2",
+      "group": "",
+      "name": "UIView+BooleanAnimations",
+      "purl": "pkg:cocoapods/UIView%2BBooleanAnimations@1.0.2",
+      "type": "library",
+      "version": "1.0.2"
+    },
+    {
+      "bom-ref": "pkg:cocoapods/XNGMarkdownParser@0.3.2",
+      "group": "",
+      "name": "XNGMarkdownParser",
+      "purl": "pkg:cocoapods/XNGMarkdownParser@0.3.2",
+      "type": "library",
+      "version": "0.3.2"
+    }
+  ],
+  "dependencies": [
+    {
+      "dependsOn": [
+        "pkg:cocoapods/Analytics@3.6.9",
+        "pkg:cocoapods/HockeySDK-Source@5.1.2"
+      ],
+      "ref": "pkg:cocoapods/ARAnalytics@5.0.1"
+    },
+    {
+      "dependsOn": [],
+      "ref": "pkg:cocoapods/ARCollectionViewMasonryLayout@2.0.0"
+    },
+    {
+      "dependsOn": [
+        "pkg:cocoapods/SDWebImage@3.8.2"
+      ],
+      "ref": "pkg:cocoapods/ARTiledImageView@1.1.1"
+    },
+    {
+      "dependsOn": [
+        "pkg:cocoapods/RxCocoa@4.1.2",
+        "pkg:cocoapods/RxSwift@4.1.2"
+      ],
+      "ref": "pkg:cocoapods/Action@3.5.0"
+    },
+    {
+      "dependsOn": [],
+      "ref": "pkg:cocoapods/Alamofire@4.6.0"
+    },
+    {
+      "dependsOn": [],
+      "ref": "pkg:cocoapods/Analytics@3.6.9"
+    },
+    {
+      "dependsOn": [],
+      "ref": "pkg:cocoapods/Artsy%2BUIColors@3.1.0"
+    },
+    {
+      "dependsOn": [],
+      "ref": "pkg:cocoapods/Artsy%2BUIFonts@3.1.3"
+    },
+    {
+      "dependsOn": [
+        "pkg:cocoapods/Artsy%2BUIColors@3.1.0",
+        "pkg:cocoapods/Artsy%2BUIFonts@3.1.3"
+      ],
+      "ref": "pkg:cocoapods/Artsy%2BUILabels@2.2.0"
+    },
+    {
+      "dependsOn": [
+        "pkg:cocoapods/Artsy%2BUIColors@3.1.0",
+        "pkg:cocoapods/Artsy%2BUIFonts@3.1.3",
+        "pkg:cocoapods/UIView%2BBooleanAnimations@1.0.2"
+      ],
+      "ref": "pkg:cocoapods/Artsy-UIButtons@2.1.0"
+    },
+    {
+      "dependsOn": [],
+      "ref": "pkg:cocoapods/CardFlight-v4@4.3.1"
+    },
+    {
+      "dependsOn": [
+        "pkg:cocoapods/NJKWebViewProgress@0.2.3"
+      ],
+      "ref": "pkg:cocoapods/DZNWebViewController@2.0"
+    },
+    {
+      "dependsOn": [],
+      "ref": "pkg:cocoapods/ECPhoneNumberFormatter@0.1.1"
+    },
+    {
+      "dependsOn": [],
+      "ref": "pkg:cocoapods/FBSnapshotTestCase@2.1.4"
+    },
+    {
+      "dependsOn": [],
+      "ref": "pkg:cocoapods/FLKAutoLayout@0.1.1"
+    },
+    {
+      "dependsOn": [],
+      "ref": "pkg:cocoapods/Forgeries@1.0.0"
+    },
+    {
+      "dependsOn": [],
+      "ref": "pkg:cocoapods/HockeySDK-Source@5.1.2"
+    },
+    {
+      "dependsOn": [],
+      "ref": "pkg:cocoapods/ISO8601DateFormatter@0.8"
+    },
+    {
+      "dependsOn": [],
+      "ref": "pkg:cocoapods/Keys@1.0.1"
+    },
+    {
+      "dependsOn": [
+        "pkg:cocoapods/Alamofire@4.6.0",
+        "pkg:cocoapods/Result@3.2.4",
+        "pkg:cocoapods/RxSwift@4.1.2"
+      ],
+      "ref": "pkg:cocoapods/Moya@11.0.0"
+    },
+    {
+      "dependsOn": [],
+      "ref": "pkg:cocoapods/NJKWebViewProgress@0.2.3"
+    },
+    {
+      "dependsOn": [
+        "pkg:cocoapods/RxSwift@4.1.2"
+      ],
+      "ref": "pkg:cocoapods/NSObject%2BRx@4.2.0"
+    },
+    {
+      "dependsOn": [
+        "pkg:cocoapods/FBSnapshotTestCase@2.1.4",
+        "pkg:cocoapods/Nimble@7.0.3"
+      ],
+      "ref": "pkg:cocoapods/Nimble-Snapshots@6.3.0"
+    },
+    {
+      "dependsOn": [],
+      "ref": "pkg:cocoapods/Nimble@7.0.3"
+    },
+    {
+      "dependsOn": [
+        "pkg:cocoapods/FLKAutoLayout@0.1.1"
+      ],
+      "ref": "pkg:cocoapods/ORStackView@2.0.0"
+    },
+    {
+      "dependsOn": [],
+      "ref": "pkg:cocoapods/Quick@1.2.0"
+    },
+    {
+      "dependsOn": [],
+      "ref": "pkg:cocoapods/ReachabilitySwift@4.1.0"
+    },
+    {
+      "dependsOn": [],
+      "ref": "pkg:cocoapods/Result@3.2.4"
+    },
+    {
+      "dependsOn": [
+        "pkg:cocoapods/RxSwift@4.1.2"
+      ],
+      "ref": "pkg:cocoapods/RxBlocking@4.1.2"
+    },
+    {
+      "dependsOn": [
+        "pkg:cocoapods/RxSwift@4.1.2"
+      ],
+      "ref": "pkg:cocoapods/RxCocoa@4.1.2"
+    },
+    {
+      "dependsOn": [
+        "pkg:cocoapods/Nimble@7.0.3",
+        "pkg:cocoapods/RxBlocking@4.1.2",
+        "pkg:cocoapods/RxSwift@4.1.2"
+      ],
+      "ref": "pkg:cocoapods/RxNimble@4.1.0"
+    },
+    {
+      "dependsOn": [
+        "pkg:cocoapods/RxCocoa@4.1.2",
+        "pkg:cocoapods/RxSwift@4.1.2"
+      ],
+      "ref": "pkg:cocoapods/RxOptional@3.3.0"
+    },
+    {
+      "dependsOn": [],
+      "ref": "pkg:cocoapods/RxSwift@4.1.2"
+    },
+    {
+      "dependsOn": [],
+      "ref": "pkg:cocoapods/SDWebImage@3.8.2"
+    },
+    {
+      "dependsOn": [],
+      "ref": "pkg:cocoapods/SVProgressHUD@2.2.3"
+    },
+    {
+      "dependsOn": [],
+      "ref": "pkg:cocoapods/Stripe@12.1.0"
+    },
+    {
+      "dependsOn": [],
+      "ref": "pkg:cocoapods/SwiftyJSON@4.0.0"
+    },
+    {
+      "dependsOn": [],
+      "ref": "pkg:cocoapods/UIImageViewAligned@0.0.1"
+    },
+    {
+      "dependsOn": [],
+      "ref": "pkg:cocoapods/UIView%2BBooleanAnimations@1.0.2"
+    },
+    {
+      "dependsOn": [],
+      "ref": "pkg:cocoapods/XNGMarkdownParser@0.3.2"
+    },
+    {
+      "dependsOn": [
+        "pkg:cocoapods/ARAnalytics@5.0.1",
+        "pkg:cocoapods/ARCollectionViewMasonryLayout@2.0.0",
+        "pkg:cocoapods/ARTiledImageView@1.1.1",
+        "pkg:cocoapods/Action@3.5.0",
+        "pkg:cocoapods/Artsy%2BUIColors@3.1.0",
+        "pkg:cocoapods/Artsy%2BUIFonts@3.1.3",
+        "pkg:cocoapods/Artsy%2BUILabels@2.2.0",
+        "pkg:cocoapods/Artsy-UIButtons@2.1.0",
+        "pkg:cocoapods/CardFlight-v4@4.3.1",
+        "pkg:cocoapods/DZNWebViewController@2.0",
+        "pkg:cocoapods/ECPhoneNumberFormatter@0.1.1",
+        "pkg:cocoapods/FBSnapshotTestCase@2.1.4",
+        "pkg:cocoapods/FLKAutoLayout@0.1.1",
+        "pkg:cocoapods/Forgeries@1.0.0",
+        "pkg:cocoapods/HockeySDK-Source@5.1.2",
+        "pkg:cocoapods/ISO8601DateFormatter@0.8",
+        "pkg:cocoapods/Keys@1.0.1",
+        "pkg:cocoapods/Moya@11.0.0",
+        "pkg:cocoapods/NSObject%2BRx@4.2.0",
+        "pkg:cocoapods/Nimble-Snapshots@6.3.0",
+        "pkg:cocoapods/Nimble@7.0.3",
+        "pkg:cocoapods/ORStackView@2.0.0",
+        "pkg:cocoapods/Quick@1.2.0",
+        "pkg:cocoapods/ReachabilitySwift@4.1.0",
+        "pkg:cocoapods/RxBlocking@4.1.2",
+        "pkg:cocoapods/RxCocoa@4.1.2",
+        "pkg:cocoapods/RxNimble@4.1.0",
+        "pkg:cocoapods/RxOptional@3.3.0",
+        "pkg:cocoapods/RxSwift@4.1.2",
+        "pkg:cocoapods/SDWebImage@3.8.2",
+        "pkg:cocoapods/SVProgressHUD@2.2.3",
+        "pkg:cocoapods/Stripe@12.1.0",
+        "pkg:cocoapods/SwiftyJSON@4.0.0",
+        "pkg:cocoapods/UIImageViewAligned@0.0.1",
+        "pkg:cocoapods/UIView%2BBooleanAnimations@1.0.2",
+        "pkg:cocoapods/XNGMarkdownParser@0.3.2"
+      ],
+      "ref": "pkg:cocoapods/cocoapods-smoke@latest"
+    }
+  ],
+  "metadata": {
+    "authors": [],
+    "component": {
+      "bom-ref": "pkg:cocoapods/cocoapods-smoke@latest",
+      "name": "cocoapods-smoke",
+      "purl": "pkg:cocoapods/cocoapods-smoke@latest",
+      "type": "application",
+      "version": "latest"
+    },
+    "lifecycles": [
+      {
+        "phase": "pre-build"
+      }
+    ],
+    "timestamp": "1970-01-01T00:00:00.000Z",
+    "tools": {
+      "components": [
+        {
+          "authors": [
+            {
+              "name": "OWASP Foundation"
+            }
+          ],
+          "bom-ref": "pkg:npm/%40cyclonedx/cdxgen@_normalized_",
+          "group": "@cyclonedx",
+          "name": "cdxgen",
+          "publisher": "OWASP Foundation",
+          "purl": "pkg:npm/%40cyclonedx/cdxgen@<normalized>",
+          "type": "application",
+          "version": "<normalized>"
+        }
+      ]
+    }
+  },
+  "serialNumber": "urn:uuid:00000000-0000-0000-0000-000000000000",
+  "specVersion": "1.7",
+  "version": 1
+}

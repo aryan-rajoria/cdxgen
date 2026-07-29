@@ -1,0 +1,19 @@
+{
+  "scenarios": [
+    {
+      "name": "default",
+      "projectType": ["npm"],
+      "options": {}
+    },
+    {
+      "name": "spec-1.6",
+      "projectType": ["npm"],
+      "options": { "specVersion": "1.6" }
+    },
+    {
+      "name": "spec-1.7",
+      "projectType": ["npm"],
+      "options": { "specVersion": "1.7" }
+    }
+  ]
+}

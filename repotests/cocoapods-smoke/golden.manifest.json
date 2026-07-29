@@ -1,0 +1,10 @@
+{
+  "description": "CocoaPods Podfile.lock parse coverage. Lockfile-backed: pinned pod versions.",
+  "scenarios": [
+    {
+      "name": "default",
+      "projectType": ["cocoapods"],
+      "options": {}
+    }
+  ]
+}

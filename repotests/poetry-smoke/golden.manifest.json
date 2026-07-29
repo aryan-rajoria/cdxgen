@@ -1,0 +1,10 @@
+{
+  "description": "Poetry lockfile parse coverage. Lockfile-backed: pinned resolved graph from poetry.lock.",
+  "scenarios": [
+    {
+      "name": "default",
+      "projectType": ["poetry"],
+      "options": {}
+    }
+  ]
+}

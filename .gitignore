@@ -5,6 +5,10 @@ bom.json
 bomresults
 *.slices.json
 
+# Golden test harness artifacts
+.v12-tmp/
+.bom-output.json
+
 # Logs
 logs
 *.log

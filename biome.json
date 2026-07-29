@@ -30,7 +30,8 @@
       "!data/**",
       "!test/**",
       "!types/**",
-      "!docs/**"
+      "!docs/**",
+      "!repotests/**"
     ],
     "rules": {
       "preset": "recommended",
@@ -99,7 +100,8 @@
       "!data/**",
       "!test/**",
       "!types/**",
-      "!docs/**"
+      "!docs/**",
+      "!repotests/**"
     ],
     "indentStyle": "space",
     "indentWidth": 2
@@ -116,7 +118,8 @@
       "!**/docs",
       "!**/doc",
       "!**/*.html",
-      "!**/*.css"
+      "!**/*.css",
+      "!repotests"
     ]
   }
 }

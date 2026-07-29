@@ -1,0 +1,356 @@
+{
+  "bomFormat": "CycloneDX",
+  "components": [
+    {
+      "bom-ref": "pkg:hex/bandit@1.12.0",
+      "group": "",
+      "name": "bandit",
+      "purl": "pkg:hex/bandit@1.12.0",
+      "type": "library",
+      "version": "1.12.0"
+    },
+    {
+      "bom-ref": "pkg:hex/castore@1.0.19",
+      "group": "",
+      "name": "castore",
+      "purl": "pkg:hex/castore@1.0.19",
+      "type": "library",
+      "version": "1.0.19"
+    },
+    {
+      "bom-ref": "pkg:hex/cowboy@2.16.1",
+      "group": "",
+      "name": "cowboy",
+      "purl": "pkg:hex/cowboy@2.16.1",
+      "type": "library",
+      "version": "2.16.1"
+    },
+    {
+      "bom-ref": "pkg:hex/cowboy_telemetry@0.4.0",
+      "group": "",
+      "name": "cowboy_telemetry",
+      "purl": "pkg:hex/cowboy_telemetry@0.4.0",
+      "type": "library",
+      "version": "0.4.0"
+    },
+    {
+      "bom-ref": "pkg:hex/cowlib@2.17.1",
+      "group": "",
+      "name": "cowlib",
+      "purl": "pkg:hex/cowlib@2.17.1",
+      "type": "library",
+      "version": "2.17.1"
+    },
+    {
+      "bom-ref": "pkg:hex/db_connection@2.10.1",
+      "group": "",
+      "name": "db_connection",
+      "purl": "pkg:hex/db_connection@2.10.1",
+      "type": "library",
+      "version": "2.10.1"
+    },
+    {
+      "bom-ref": "pkg:hex/decimal@3.1.1",
+      "group": "",
+      "name": "decimal",
+      "purl": "pkg:hex/decimal@3.1.1",
+      "type": "library",
+      "version": "3.1.1"
+    },
+    {
+      "bom-ref": "pkg:hex/earmark_parser@1.4.45",
+      "group": "",
+      "name": "earmark_parser",
+      "purl": "pkg:hex/earmark_parser@1.4.45",
+      "type": "library",
+      "version": "1.4.45"
+    },
+    {
+      "bom-ref": "pkg:hex/ecto@3.14.0",
+      "group": "",
+      "name": "ecto",
+      "purl": "pkg:hex/ecto@3.14.0",
+      "type": "library",
+      "version": "3.14.0"
+    },
+    {
+      "bom-ref": "pkg:hex/ecto_sql@3.14.0",
+      "group": "",
+      "name": "ecto_sql",
+      "purl": "pkg:hex/ecto_sql@3.14.0",
+      "type": "library",
+      "version": "3.14.0"
+    },
+    {
+      "bom-ref": "pkg:hex/esbuild@0.10.0",
+      "group": "",
+      "name": "esbuild",
+      "purl": "pkg:hex/esbuild@0.10.0",
+      "type": "library",
+      "version": "0.10.0"
+    },
+    {
+      "bom-ref": "pkg:hex/ex_doc@0.40.3",
+      "group": "",
+      "name": "ex_doc",
+      "purl": "pkg:hex/ex_doc@0.40.3",
+      "type": "library",
+      "version": "0.40.3"
+    },
+    {
+      "bom-ref": "pkg:hex/expo@1.1.1",
+      "group": "",
+      "name": "expo",
+      "purl": "pkg:hex/expo@1.1.1",
+      "type": "library",
+      "version": "1.1.1"
+    },
+    {
+      "bom-ref": "pkg:hex/gettext@1.0.2",
+      "group": "",
+      "name": "gettext",
+      "purl": "pkg:hex/gettext@1.0.2",
+      "type": "library",
+      "version": "1.0.2"
+    },
+    {
+      "bom-ref": "pkg:hex/hpax@1.0.3",
+      "group": "",
+      "name": "hpax",
+      "purl": "pkg:hex/hpax@1.0.3",
+      "type": "library",
+      "version": "1.0.3"
+    },
+    {
+      "bom-ref": "pkg:hex/jason@1.4.5",
+      "group": "",
+      "name": "jason",
+      "purl": "pkg:hex/jason@1.4.5",
+      "type": "library",
+      "version": "1.4.5"
+    },
+    {
+      "bom-ref": "pkg:hex/makeup@1.2.1",
+      "group": "",
+      "name": "makeup",
+      "purl": "pkg:hex/makeup@1.2.1",
+      "type": "library",
+      "version": "1.2.1"
+    },
+    {
+      "bom-ref": "pkg:hex/makeup_eex@2.0.2",
+      "group": "",
+      "name": "makeup_eex",
+      "purl": "pkg:hex/makeup_eex@2.0.2",
+      "type": "library",
+      "version": "2.0.2"
+    },
+    {
+      "bom-ref": "pkg:hex/makeup_elixir@1.0.1",
+      "group": "",
+      "name": "makeup_elixir",
+      "purl": "pkg:hex/makeup_elixir@1.0.1",
+      "type": "library",
+      "version": "1.0.1"
+    },
+    {
+      "bom-ref": "pkg:hex/makeup_erlang@1.1.0",
+      "group": "",
+      "name": "makeup_erlang",
+      "purl": "pkg:hex/makeup_erlang@1.1.0",
+      "type": "library",
+      "version": "1.1.0"
+    },
+    {
+      "bom-ref": "pkg:hex/makeup_syntect@0.1.4",
+      "group": "",
+      "name": "makeup_syntect",
+      "purl": "pkg:hex/makeup_syntect@0.1.4",
+      "type": "library",
+      "version": "0.1.4"
+    },
+    {
+      "bom-ref": "pkg:hex/mime@2.0.7",
+      "group": "",
+      "name": "mime",
+      "purl": "pkg:hex/mime@2.0.7",
+      "type": "library",
+      "version": "2.0.7"
+    },
+    {
+      "bom-ref": "pkg:hex/mint@1.9.0",
+      "group": "",
+      "name": "mint",
+      "purl": "pkg:hex/mint@1.9.0",
+      "type": "library",
+      "version": "1.9.0"
+    },
+    {
+      "bom-ref": "pkg:hex/mint_web_socket@1.0.5",
+      "group": "",
+      "name": "mint_web_socket",
+      "purl": "pkg:hex/mint_web_socket@1.0.5",
+      "type": "library",
+      "version": "1.0.5"
+    },
+    {
+      "bom-ref": "pkg:hex/nimble_parsec@1.4.2",
+      "group": "",
+      "name": "nimble_parsec",
+      "purl": "pkg:hex/nimble_parsec@1.4.2",
+      "type": "library",
+      "version": "1.4.2"
+    },
+    {
+      "bom-ref": "pkg:hex/phoenix_html@4.3.0",
+      "group": "",
+      "name": "phoenix_html",
+      "purl": "pkg:hex/phoenix_html@4.3.0",
+      "type": "library",
+      "version": "4.3.0"
+    },
+    {
+      "bom-ref": "pkg:hex/phoenix_pubsub@2.2.0",
+      "group": "",
+      "name": "phoenix_pubsub",
+      "purl": "pkg:hex/phoenix_pubsub@2.2.0",
+      "type": "library",
+      "version": "2.2.0"
+    },
+    {
+      "bom-ref": "pkg:hex/phoenix_template@1.0.4",
+      "group": "",
+      "name": "phoenix_template",
+      "purl": "pkg:hex/phoenix_template@1.0.4",
+      "type": "library",
+      "version": "1.0.4"
+    },
+    {
+      "bom-ref": "pkg:hex/phoenix_view@2.0.4",
+      "group": "",
+      "name": "phoenix_view",
+      "purl": "pkg:hex/phoenix_view@2.0.4",
+      "type": "library",
+      "version": "2.0.4"
+    },
+    {
+      "bom-ref": "pkg:hex/plug@1.19.2",
+      "group": "",
+      "name": "plug",
+      "purl": "pkg:hex/plug@1.19.2",
+      "type": "library",
+      "version": "1.19.2"
+    },
+    {
+      "bom-ref": "pkg:hex/plug_cowboy@2.8.1",
+      "group": "",
+      "name": "plug_cowboy",
+      "purl": "pkg:hex/plug_cowboy@2.8.1",
+      "type": "library",
+      "version": "2.8.1"
+    },
+    {
+      "bom-ref": "pkg:hex/plug_crypto@2.1.1",
+      "group": "",
+      "name": "plug_crypto",
+      "purl": "pkg:hex/plug_crypto@2.1.1",
+      "type": "library",
+      "version": "2.1.1"
+    },
+    {
+      "bom-ref": "pkg:hex/ranch@2.2.0",
+      "group": "",
+      "name": "ranch",
+      "purl": "pkg:hex/ranch@2.2.0",
+      "type": "library",
+      "version": "2.2.0"
+    },
+    {
+      "bom-ref": "pkg:hex/rustler_precompiled@0.8.4",
+      "group": "",
+      "name": "rustler_precompiled",
+      "purl": "pkg:hex/rustler_precompiled@0.8.4",
+      "type": "library",
+      "version": "0.8.4"
+    },
+    {
+      "bom-ref": "pkg:hex/telemetry@1.4.2",
+      "group": "",
+      "name": "telemetry",
+      "purl": "pkg:hex/telemetry@1.4.2",
+      "type": "library",
+      "version": "1.4.2"
+    },
+    {
+      "bom-ref": "pkg:hex/telemetry_metrics@1.1.0",
+      "group": "",
+      "name": "telemetry_metrics",
+      "purl": "pkg:hex/telemetry_metrics@1.1.0",
+      "type": "library",
+      "version": "1.1.0"
+    },
+    {
+      "bom-ref": "pkg:hex/telemetry_poller@1.3.0",
+      "group": "",
+      "name": "telemetry_poller",
+      "purl": "pkg:hex/telemetry_poller@1.3.0",
+      "type": "library",
+      "version": "1.3.0"
+    },
+    {
+      "bom-ref": "pkg:hex/thousand_island@1.5.0",
+      "group": "",
+      "name": "thousand_island",
+      "purl": "pkg:hex/thousand_island@1.5.0",
+      "type": "library",
+      "version": "1.5.0"
+    },
+    {
+      "bom-ref": "pkg:hex/websock@0.5.3",
+      "group": "",
+      "name": "websock",
+      "purl": "pkg:hex/websock@0.5.3",
+      "type": "library",
+      "version": "0.5.3"
+    },
+    {
+      "bom-ref": "pkg:hex/websock_adapter@0.6.0",
+      "group": "",
+      "name": "websock_adapter",
+      "purl": "pkg:hex/websock_adapter@0.6.0",
+      "type": "library",
+      "version": "0.6.0"
+    }
+  ],
+  "dependencies": [],
+  "metadata": {
+    "authors": [],
+    "lifecycles": [
+      {
+        "phase": "pre-build"
+      }
+    ],
+    "timestamp": "1970-01-01T00:00:00.000Z",
+    "tools": {
+      "components": [
+        {
+          "authors": [
+            {
+              "name": "OWASP Foundation"
+            }
+          ],
+          "bom-ref": "pkg:npm/%40cyclonedx/cdxgen@_normalized_",
+          "group": "@cyclonedx",
+          "name": "cdxgen",
+          "publisher": "OWASP Foundation",
+          "purl": "pkg:npm/%40cyclonedx/cdxgen@<normalized>",
+          "type": "application",
+          "version": "<normalized>"
+        }
+      ]
+    }
+  },
+  "serialNumber": "urn:uuid:00000000-0000-0000-0000-000000000000",
+  "specVersion": "1.7",
+  "version": 1
+}

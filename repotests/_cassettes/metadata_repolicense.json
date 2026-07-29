@@ -1,0 +1,65 @@
+[
+  {
+    "request": {
+      "method": "GET",
+      "url": "https://api.github.com/repos/pallets/flask/license"
+    },
+    "response": {
+      "statusCode": 200,
+      "headers": {
+        "date": "Wed, 29 Jul 2026 00:16:48 GMT",
+        "content-type": "application/json; charset=utf-8",
+        "content-length": "2974",
+        "cache-control": "private, max-age=60, s-maxage=60",
+        "vary": "Accept, Authorization, Cookie, X-GitHub-OTP,Accept-Encoding, Accept, X-Requested-With",
+        "etag": "\"5c51a390a4a1a5440273497fe7097961c7d747e5bd8ffe29c2a7c9c93d268797\"",
+        "last-modified": "Sun, 31 May 2026 14:42:46 GMT",
+        "x-oauth-scopes": "gist, read:org, repo",
+        "x-accepted-oauth-scopes": "",
+        "x-oauth-client-id": "178c6fc778ccc68e1d6a",
+        "x-github-media-type": "github.v3; format=json",
+        "x-github-api-version-selected": "2022-11-28",
+        "access-control-expose-headers": "ETag, Link, Location, Retry-After, X-GitHub-OTP, X-RateLimit-Limit, X-RateLimit-Remaining, X-RateLimit-Used, X-RateLimit-Resource, X-RateLimit-Reset, X-OAuth-Scopes, X-Accepted-OAuth-Scopes, X-Poll-Interval, X-GitHub-Media-Type, X-GitHub-SSO, X-GitHub-Request-Id, Deprecation, Sunset, Warning",
+        "access-control-allow-origin": "*",
+        "strict-transport-security": "max-age=31536000; includeSubdomains; preload",
+        "x-frame-options": "deny",
+        "x-content-type-options": "nosniff",
+        "x-xss-protection": "0",
+        "referrer-policy": "origin-when-cross-origin, strict-origin-when-cross-origin",
+        "content-security-policy": "default-src 'none'",
+        "server": "github.com",
+        "x-ratelimit-limit": "5000",
+        "x-ratelimit-remaining": "4997",
+        "x-ratelimit-reset": "1785287671",
+        "x-ratelimit-used": "3",
+        "x-ratelimit-resource": "core",
+        "x-github-request-id": "D9AC:5E728:2E4CE6:36A338:6A694670"
+      },
+      "body": {
+        "name": "LICENSE.txt",
+        "path": "LICENSE.txt",
+        "sha": "9d227a0cc43c3268d15722b763bd94ad298645a1",
+        "size": 1475,
+        "url": "https://api.github.com/repos/pallets/flask/contents/LICENSE.txt?ref=main",
+        "html_url": "https://github.com/pallets/flask/blob/main/LICENSE.txt",
+        "git_url": "https://api.github.com/repos/pallets/flask/git/blobs/9d227a0cc43c3268d15722b763bd94ad298645a1",
+        "download_url": "https://raw.githubusercontent.com/pallets/flask/main/LICENSE.txt",
+        "type": "file",
+        "content": "Q29weXJpZ2h0IDIwMTAgUGFsbGV0cwoKUmVkaXN0cmlidXRpb24gYW5kIHVz\nZSBpbiBzb3VyY2UgYW5kIGJpbmFyeSBmb3Jtcywgd2l0aCBvciB3aXRob3V0\nCm1vZGlmaWNhdGlvbiwgYXJlIHBlcm1pdHRlZCBwcm92aWRlZCB0aGF0IHRo\nZSBmb2xsb3dpbmcgY29uZGl0aW9ucyBhcmUKbWV0OgoKMS4gIFJlZGlzdHJp\nYnV0aW9ucyBvZiBzb3VyY2UgY29kZSBtdXN0IHJldGFpbiB0aGUgYWJvdmUg\nY29weXJpZ2h0CiAgICBub3RpY2UsIHRoaXMgbGlzdCBvZiBjb25kaXRpb25z\nIGFuZCB0aGUgZm9sbG93aW5nIGRpc2NsYWltZXIuCgoyLiAgUmVkaXN0cmli\ndXRpb25zIGluIGJpbmFyeSBmb3JtIG11c3QgcmVwcm9kdWNlIHRoZSBhYm92\nZSBjb3B5cmlnaHQKICAgIG5vdGljZSwgdGhpcyBsaXN0IG9mIGNvbmRpdGlv\nbnMgYW5kIHRoZSBmb2xsb3dpbmcgZGlzY2xhaW1lciBpbiB0aGUKICAgIGRv\nY3VtZW50YXRpb24gYW5kL29yIG90aGVyIG1hdGVyaWFscyBwcm92aWRlZCB3\naXRoIHRoZSBkaXN0cmlidXRpb24uCgozLiAgTmVpdGhlciB0aGUgbmFtZSBv\nZiB0aGUgY29weXJpZ2h0IGhvbGRlciBub3IgdGhlIG5hbWVzIG9mIGl0cwog\nICAgY29udHJpYnV0b3JzIG1heSBiZSB1c2VkIHRvIGVuZG9yc2Ugb3IgcHJv\nbW90ZSBwcm9kdWN0cyBkZXJpdmVkIGZyb20KICAgIHRoaXMgc29mdHdhcmUg\nd2l0aG91dCBzcGVjaWZpYyBwcmlvciB3cml0dGVuIHBlcm1pc3Npb24uCgpU\nSElTIFNPRlRXQVJFIElTIFBST1ZJREVEIEJZIFRIRSBDT1BZUklHSFQgSE9M\nREVSUyBBTkQgQ09OVFJJQlVUT1JTCiJBUyBJUyIgQU5EIEFOWSBFWFBSRVNT\nIE9SIElNUExJRUQgV0FSUkFOVElFUywgSU5DTFVESU5HLCBCVVQgTk9UCkxJ\nTUlURUQgVE8sIFRIRSBJTVBMSUVEIFdBUlJBTlRJRVMgT0YgTUVSQ0hBTlRB\nQklMSVRZIEFORCBGSVRORVNTIEZPUiBBClBBUlRJQ1VMQVIgUFVSUE9TRSBB\nUkUgRElTQ0xBSU1FRC4gSU4gTk8gRVZFTlQgU0hBTEwgVEhFIENPUFlSSUdI\nVApIT0xERVIgT1IgQ09OVFJJQlVUT1JTIEJFIExJQUJMRSBGT1IgQU5ZIERJ\nUkVDVCwgSU5ESVJFQ1QsIElOQ0lERU5UQUwsClNQRUNJQUwsIEVYRU1QTEFS\nWSwgT1IgQ09OU0VRVUVOVElBTCBEQU1BR0VTIChJTkNMVURJTkcsIEJVVCBO\nT1QgTElNSVRFRApUTywgUFJPQ1VSRU1FTlQgT0YgU1VCU1RJVFVURSBHT09E\nUyBPUiBTRVJWSUNFUzsgTE9TUyBPRiBVU0UsIERBVEEsIE9SClBST0ZJVFM7\nIE9SIEJVU0lORVNTIElOVEVSUlVQVElPTikgSE9XRVZFUiBDQVVTRUQgQU5E\nIE9OIEFOWSBUSEVPUlkgT0YKTElBQklMSVRZLCBXSEVUSEVSIElOIENPTlRS\nQUNULCBTVFJJQ1QgTElBQklMSVRZLCBPUiBUT1JUIChJTkNMVURJTkcKTkVH\nTElHRU5DRSBPUiBPVEhFUldJU0UpIEFSSVNJTkcgSU4gQU5ZIFdBWSBPVVQg\nT0YgVEhFIFVTRSBPRiBUSElTClNPRlRXQVJFLCBFVkVOIElGIEFEVklTRUQg\nT0YgVEhFIFBPU1NJQklMSVRZIE9GIFNVQ0ggREFNQUdFLgo=\n",
+        "encoding": "base64",
+        "_links": {
+          "self": "https://api.github.com/repos/pallets/flask/contents/LICENSE.txt?ref=main",
+          "git": "https://api.github.com/repos/pallets/flask/git/blobs/9d227a0cc43c3268d15722b763bd94ad298645a1",
+          "html": "https://github.com/pallets/flask/blob/main/LICENSE.txt"
+        },
+        "license": {
+          "key": "bsd-3-clause",
+          "name": "BSD 3-Clause \"New\" or \"Revised\" License",
+          "spdx_id": "BSD-3-Clause",
+          "url": "https://api.github.com/licenses/bsd-3-clause",
+          "node_id": "MDc6TGljZW5zZTU="
+        }
+      }
+    }
+  }
+]
