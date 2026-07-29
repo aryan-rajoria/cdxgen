@@ -1,0 +1,7 @@
+{
+  "name": "cbom-js-smoke",
+  "version": "1.0.0",
+  "type": "module",
+  "description": "Golden SBOM smoke fixture for CBOM source crypto extraction (JS AST analyzer)",
+  "main": "src/crypto.js"
+}

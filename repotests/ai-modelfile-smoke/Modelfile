@@ -1,0 +1,9 @@
+# Minimal Ollama Modelfile for AI-BOM golden coverage
+FROM llama3.2:1b
+
+PARAMETER temperature 0.7
+PARAMETER top_p 0.9
+
+SYSTEM "You are a helpful assistant."
+
+LICENSE "MIT"

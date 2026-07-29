@@ -1,0 +1,18 @@
+{
+  "description": "CBOM (source crypto) coverage. A small JS source file exercising node:crypto APIs is scanned by the static AST analyzer (detectJsCryptoInventory -> collectSourceCryptoComponents) and emitted as `cryptographic-asset` algorithm components with OID-backed cryptoProperties. Primary value is normalizer coverage: crypto-asset components carry NO purl and use OID-derived bom-refs. WARNING: the `[\"js\",\"mcp\"]` projectType is synthetic, not a realistic invocation. createBom fast-paths single-projectType runs and returns before createMultiXBom's source-crypto loop, so the real user-facing `cdxgen --include-crypto -t js` collects ZERO crypto components. This scenario therefore pins a path no CLI user reaches and must NOT be read as proof that CLI CBOM works. See the 'source-crypto is unreachable via the CLI' entry in BLOCKERS.md; when that dispatch bug is fixed, re-point this scenario at the single-type invocation.",
+  "fixture": ".",
+  "scenarios": [
+    {
+      "name": "default",
+      "projectType": [
+        "js",
+        "mcp"
+      ],
+      "options": {
+        "includeCrypto": true,
+        "evidence": true,
+        "deep": true
+      }
+    }
+  ]
+}

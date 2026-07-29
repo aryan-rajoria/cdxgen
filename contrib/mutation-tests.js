@@ -659,6 +659,188 @@ function runNormalizerInvariantTests() {
     );
     assert.deepEqual(bom.dependencies[0].dependsOn, ["pkg:npm/s@1"]);
   });
+
+  // `evidence.identity` is an object in CycloneDX 1.5 and an array from 1.6 on.
+  // cdxgen emits both (object form from ~68 call sites in lib/, array from ~8), so
+  // the normalizer must tolerate either. It previously called `.slice()` on the bare
+  // value, which threw `c.evidence.identity.slice is not a function` on every
+  // object-form component and made whole ecosystems (pylock.toml) ungoldenable.
+  // `occurrences` had the same unguarded shape assumption.
+  test("both evidence.identity shapes normalize, and neither is coerced", () => {
+    for (const [label, identity] of [
+      ["array", [{ field: "version", confidence: 1 }, { field: "name", confidence: 1 }]],
+      ["object", { field: "name", confidence: 1 }],
+    ]) {
+      const out = normalizeBom(
+        withComponents([
+          {
+            type: "library",
+            name: "a",
+            version: "1",
+            purl: "pkg:npm/a@1",
+            "bom-ref": "pkg:npm/a@1",
+            evidence: { identity, occurrences: { location: "single" } },
+          },
+        ]),
+        { projectRoot: process.cwd() },
+      );
+      const got = out.components[0].evidence.identity;
+      assert.equal(
+        Array.isArray(got),
+        label === "array",
+        `${label}-form identity shape was changed by normalization`,
+      );
+    }
+  });
+
+  test("array-form identity is still sorted by field", () => {
+    const out = normalizeBom(
+      withComponents([
+        {
+          type: "library",
+          name: "a",
+          version: "1",
+          purl: "pkg:npm/a@1",
+          "bom-ref": "pkg:npm/a@1",
+          evidence: {
+            identity: [{ field: "version" }, { field: "name" }],
+          },
+        },
+      ]),
+      { projectRoot: process.cwd() },
+    );
+    assert.deepEqual(
+      out.components[0].evidence.identity.map((i) => i.field),
+      ["name", "version"],
+    );
+  });
+}
+
+// ---------------------------------------------------------------------------
+// Section 7: End-to-end golden-runner negative tests
+//
+// The in-memory mutations above prove the normalizer+diff catch changes when
+// comparing two in-memory BOMs. They do NOT exercise the runner's real compare
+// path: regenerate-from-fixture -> normalize -> diff against a committed golden
+// read from disk. A regression that only surfaces through that path (e.g. the
+// runner silently re-reading a stale cache, or a golden-compare short-circuit)
+// would be invisible to those tests.
+//
+// These tests corrupt a real committed golden on disk, run the actual
+// runScenario -> readGolden -> diffBoms pipeline, assert the regression is
+// caught AND that the diff names the offending component, then restore the
+// golden in a finally block. This is the permanent form of the manual
+// negative-test evidence the plan requires.
+// ---------------------------------------------------------------------------
+
+async function runGoldenRunnerNegativeTests() {
+  console.log("\n--- Golden-runner end-to-end negative tests ---");
+
+  const { writeFileSync, readFileSync, mkdirSync } = await import("node:fs");
+  const { runScenario, readGolden, writeGolden, goldenFilePath } = await import(
+    "./golden-runner.js"
+  );
+
+  // A scenario with enough structure (components + dependency edges) to exercise
+  // both the purl and the edge mutation paths.
+  const PROJECT = "npm-smoke";
+  const SCENARIO_NAME = "default";
+
+  await testAsync("runner catches a corrupted component purl in a committed golden", async () => {
+    const original = readGolden(PROJECT, SCENARIO_NAME);
+    assert.ok(original, `${PROJECT}/${SCENARIO_NAME} golden must exist`);
+    try {
+      // Corrupt: bump a real component's purl+version in the committed golden.
+      const corrupted = structuredClone(original);
+      const target = (corrupted.components || []).find(
+        (c) => c.purl && c.purl.includes("left-pad"),
+      );
+      assert.ok(target, "npm-smoke golden must contain left-pad");
+      target.purl = target.purl.replace(/@\d+\.\d+\.\d+/, "@99.99.99");
+      target.version = "99.99.99";
+      target["bom-ref"] = target.purl;
+      writeGolden(PROJECT, SCENARIO_NAME, corrupted);
+
+      // Regenerate from the fixture and run the runner's real compare path.
+      const manifest = {
+        fixture: ".",
+        scenarios: [{ name: SCENARIO_NAME, projectType: ["npm"], options: {} }],
+      };
+      const { normalized } = await runScenario(
+        PROJECT,
+        manifest.scenarios[0],
+        manifest,
+      );
+      const expected = readGolden(PROJECT, SCENARIO_NAME);
+      const { isEqual, summary } = diffBoms(normalized, expected);
+
+      assert.ok(!isEqual, `corrupted purl was not caught: ${summary}`);
+      assert.match(
+        summary,
+        /component/i,
+        `diff summary did not name the changed component: ${summary}`,
+      );
+    } finally {
+      writeGolden(PROJECT, SCENARIO_NAME, original);
+    }
+  });
+
+  await testAsync("runner catches a dropped dependency edge in a committed golden", async () => {
+    // cargo-smoke has non-trivial dependency edges.
+    const CARGO_PROJECT = "cargo-smoke";
+    const original = readGolden(CARGO_PROJECT, SCENARIO_NAME);
+    assert.ok(original, `${CARGO_PROJECT}/${SCENARIO_NAME} golden must exist`);
+    try {
+      const corrupted = structuredClone(original);
+      const nodeWithEdges = (corrupted.dependencies || []).find(
+        (d) => d.dependsOn && d.dependsOn.length > 1,
+      );
+      assert.ok(
+        nodeWithEdges,
+        "cargo-smoke golden must have a dependency node with >1 edge",
+      );
+      nodeWithEdges.dependsOn.shift();
+      writeGolden(CARGO_PROJECT, SCENARIO_NAME, corrupted);
+
+      const manifest = {
+        fixture: ".",
+        scenarios: [{ name: SCENARIO_NAME, projectType: ["cargo"], options: {} }],
+      };
+      const { normalized } = await runScenario(
+        CARGO_PROJECT,
+        manifest.scenarios[0],
+        manifest,
+      );
+      const expected = readGolden(CARGO_PROJECT, SCENARIO_NAME);
+      const { isEqual, summary } = diffBoms(normalized, expected);
+
+      assert.ok(!isEqual, `dropped edge was not caught: ${summary}`);
+      assert.match(
+        summary,
+        /dependen|edge/i,
+        `diff summary did not name the changed dependency: ${summary}`,
+      );
+    } finally {
+      writeGolden(CARGO_PROJECT, SCENARIO_NAME, original);
+    }
+  });
+
+  await testAsync("runner agrees when a golden is left intact (control)", async () => {
+    // Control: the unmodified golden must compare equal. Guards against the
+    // negative tests passing simply because runScenario is broken.
+    const manifest = {
+      fixture: ".",
+      scenarios: [{ name: SCENARIO_NAME, projectType: ["npm"], options: {} }],
+    };
+    const { normalized } = await runScenario(
+      PROJECT,
+      manifest.scenarios[0],
+      manifest,
+    );
+    const expected = readGolden(PROJECT, SCENARIO_NAME);
+    const { isEqual, summary } = diffBoms(normalized, expected);
+    assert.ok(isEqual, `unmodified golden did not compare equal: ${summary}`);
+  });
 }
 
 // ---------------------------------------------------------------------------
@@ -674,6 +856,7 @@ export async function main() {
   await runTwoRunDeterminism();
   await runCassetteTests();
   runNormalizerInvariantTests();
+  await runGoldenRunnerNegativeTests();
 
   console.log(`\n${passed} passed, ${failed} failed`);
   process.exit(failed > 0 ? 1 : 0);

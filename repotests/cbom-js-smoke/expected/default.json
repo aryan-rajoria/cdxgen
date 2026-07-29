@@ -1,0 +1,164 @@
+{
+  "bomFormat": "CycloneDX",
+  "components": [
+    {
+      "bom-ref": "cryptographic-asset:sha-256:",
+      "cryptoProperties": {
+        "assetType": "algorithm",
+        "oid": "2.16.840.1.101.3.4.2.1"
+      },
+      "description": "NIST Algorithm",
+      "evidence": {
+        "identity": [
+          {
+            "concludedValue": "sha-256",
+            "confidence": 1,
+            "field": "name",
+            "methods": [
+              {
+                "confidence": 1,
+                "technique": "source-code-analysis",
+                "value": "src/crypto.js#12"
+              },
+              {
+                "confidence": 1,
+                "technique": "source-code-analysis",
+                "value": "src/crypto.js#4"
+              }
+            ]
+          }
+        ],
+        "occurrences": [
+          {
+            "additionalContext": "kdf",
+            "line": 12,
+            "location": "src/crypto.js",
+            "symbol": "node:crypto.pbkdf2Sync"
+          },
+          {
+            "additionalContext": "hmac",
+            "line": 4,
+            "location": "src/crypto.js",
+            "symbol": "node:crypto.createHmac"
+          }
+        ]
+      },
+      "name": "sha-256",
+      "properties": [
+        {
+          "name": "SrcFile",
+          "value": "$ROOT/src/crypto.js"
+        },
+        {
+          "name": "cdx:crypto:primitive",
+          "value": "hmac"
+        },
+        {
+          "name": "cdx:crypto:primitive",
+          "value": "kdf"
+        },
+        {
+          "name": "cdx:crypto:sourceLocation",
+          "value": "src/crypto.js:12:9"
+        },
+        {
+          "name": "cdx:crypto:sourceLocation",
+          "value": "src/crypto.js:4:9"
+        },
+        {
+          "name": "cdx:crypto:sourceType",
+          "value": "js-ast:node:crypto.createHmac"
+        },
+        {
+          "name": "cdx:crypto:sourceType",
+          "value": "js-ast:node:crypto.pbkdf2Sync"
+        }
+      ],
+      "type": "cryptographic-asset"
+    },
+    {
+      "bom-ref": "cryptographic-asset:sha-512:",
+      "cryptoProperties": {
+        "assetType": "algorithm",
+        "oid": "2.16.840.1.101.3.4.2.3"
+      },
+      "description": "NIST Algorithm",
+      "evidence": {
+        "identity": [
+          {
+            "concludedValue": "sha-512",
+            "confidence": 1,
+            "field": "name",
+            "methods": [
+              {
+                "confidence": 1,
+                "technique": "source-code-analysis",
+                "value": "src/crypto.js#8"
+              }
+            ]
+          }
+        ],
+        "occurrences": [
+          {
+            "additionalContext": "hash",
+            "line": 8,
+            "location": "src/crypto.js",
+            "symbol": "node:crypto.createHash"
+          }
+        ]
+      },
+      "name": "sha-512",
+      "properties": [
+        {
+          "name": "SrcFile",
+          "value": "$ROOT/src/crypto.js"
+        },
+        {
+          "name": "cdx:crypto:primitive",
+          "value": "hash"
+        },
+        {
+          "name": "cdx:crypto:sourceLocation",
+          "value": "src/crypto.js:8:9"
+        },
+        {
+          "name": "cdx:crypto:sourceType",
+          "value": "js-ast:node:crypto.createHash"
+        }
+      ],
+      "type": "cryptographic-asset"
+    }
+  ],
+  "dependencies": [],
+  "metadata": {
+    "authors": [],
+    "lifecycles": [
+      {
+        "phase": "pre-build"
+      }
+    ],
+    "timestamp": "1970-01-01T00:00:00.000Z",
+    "tools": {
+      "components": [
+        {
+          "authors": [
+            {
+              "name": "OWASP Foundation"
+            }
+          ],
+          "bom-ref": "pkg:npm/%40cyclonedx/cdxgen@_normalized_",
+          "group": "@cyclonedx",
+          "name": "cdxgen",
+          "publisher": "OWASP Foundation",
+          "purl": "pkg:npm/%40cyclonedx/cdxgen@<normalized>",
+          "type": "application",
+          "version": "<normalized>"
+        }
+      ]
+    }
+  },
+  "serialNumber": "urn:uuid:00000000-0000-0000-0000-000000000000",
+  "services": [],
+  "specVersion": "1.7",
+  "version": 1
+}

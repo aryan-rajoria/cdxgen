@@ -1,0 +1,11 @@
+{
+  "description": "Swift Package.resolved parse coverage. Lockfile-backed: only Package.resolved is committed (no Package.swift) so the scenario stays toolchain-free and never invokes `swift package show-dependencies`.",
+  "fixture": ".",
+  "scenarios": [
+    {
+      "name": "default",
+      "projectType": ["swift"],
+      "options": {}
+    }
+  ]
+}

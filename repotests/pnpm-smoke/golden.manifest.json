@@ -1,0 +1,21 @@
+{
+  "description": "pnpm-lock.yaml parse coverage. Lockfile-backed: pinned resolved graph (lockfile v9). Mirrors npm-smoke to prove the spec-version normalization path is not npm-specific.",
+  "fixture": ".",
+  "scenarios": [
+    {
+      "name": "default",
+      "projectType": ["pnpm"],
+      "options": {}
+    },
+    {
+      "name": "spec-1.6",
+      "projectType": ["pnpm"],
+      "options": { "specVersion": "1.6" }
+    },
+    {
+      "name": "spec-1.7",
+      "projectType": ["pnpm"],
+      "options": { "specVersion": "1.7" }
+    }
+  ]
+}

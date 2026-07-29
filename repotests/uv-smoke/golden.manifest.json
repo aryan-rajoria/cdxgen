@@ -1,0 +1,11 @@
+{
+  "description": "uv.lock (PEP 751-adjacent) parse coverage. Lockfile-backed: fully pinned resolved graph (requests + transitives). Exercises parsePyLockData over uv.lock.",
+  "fixture": ".",
+  "scenarios": [
+    {
+      "name": "default",
+      "projectType": ["uv"],
+      "options": {}
+    }
+  ]
+}
