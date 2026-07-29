@@ -30,7 +30,8 @@
  * Cassettes live at `repotests/_cassettes/<project>_<scenario>.json`.
  */
 
-import { existsSync, readFileSync, writeFileSync, mkdirSync, readdirSync } from "node:fs";
+import { existsSync, readFileSync, writeFileSync, mkdirSync, mkdtempSync, readdirSync } from "node:fs";
+import { tmpdir } from "node:os";
 import path from "node:path";
 import process from "node:process";
 
@@ -53,6 +54,38 @@ const CASSETTES_DIR = path.join(REPOTESTS_DIR, "_cassettes");
 // source in lib/helpers/utils.js, and the scenario now scans cleanly with
 // COCOA_FULL_SCAN=true on a machine with no `pod` binary.
 process.env.COCOA_FULL_SCAN = process.env.COCOA_FULL_SCAN || "false";
+
+// Neutralize every ambient package cache before cdxgen is loaded.
+//
+// Several enrichers read the developer's local caches and add data that is not
+// derivable from the fixture: `findLocalMvnArtifact` hashes jars found in
+// `~/.m2/repository` and the Gradle cache, and `enrichGemsFromLocalCache` globs
+// `GEM_HOME/**/specifications/**/*.gemspec` for licenses and required-version
+// properties. Whether that data appears depends on which artifacts happen to be
+// on the machine, so goldens recorded on a warm cache can never match a cold CI
+// runner — exactly the failure seen in run 30415853843, where maven-smoke and
+// ruby-smoke carried hashes the runner could not reproduce.
+//
+// Pointing every cache at one empty scratch directory makes the fixture the sole
+// input, so the same bytes come out on a warm laptop and a cold runner alike.
+// `homedir()` is resolved from HOME on POSIX and USERPROFILE on Windows, so both
+// are set. The cost is that hash/licence enrichment from local caches is not
+// covered by the golden corpus; covering it would require vendoring real
+// artifacts into a fixture, which is tracked separately.
+const GOLDEN_SCRATCH_HOME = mkdtempSync(path.join(tmpdir(), "cdxgen-golden-home-"));
+for (const cacheVar of [
+  "HOME",
+  "USERPROFILE",
+  "GEM_HOME",
+  "CDXGEN_GEM_HOME",
+  "GEM_PATH",
+  "BUNDLE_PATH",
+  "GRADLE_USER_HOME",
+  "GRADLE_CACHE_DIR",
+  "MAVEN_CACHE_DIR",
+]) {
+  process.env[cacheVar] = GOLDEN_SCRATCH_HOME;
+}
 
 /**
  * Dynamically import createBom lazily so the runner can report discovery
