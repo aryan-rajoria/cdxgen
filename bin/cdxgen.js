@@ -155,6 +155,26 @@ const defaultComponentTypeChoices = getSupportedCycloneDxComponentTypes(
   DEFAULT_CDX_SPEC_VERSION,
 );
 
+// Intercept --version --verbose BEFORE yargs' built-in --version handler exits.
+if (
+  (process.argv.includes("--version") || process.argv.includes("-v")) &&
+  process.argv.includes("--verbose")
+) {
+  console.log(`cdxgen ${retrieveCdxgenVersion()}`);
+  try {
+    const { cdxrsAvailable } = await import("../lib/helpers/cdxrs.js");
+    const rs = cdxrsAvailable("info");
+    if (rs.available) {
+      console.log(`cdxrs ${rs.version} (available)`);
+    } else {
+      console.log(`cdxrs: not available (${rs.reason})`);
+    }
+  } catch {
+    console.log("cdxrs: bridge not loaded");
+  }
+  process.exit(0);
+}
+
 const args = _yargs
   .env("CDXGEN")
   .parserConfiguration({
@@ -685,10 +705,29 @@ const args = _yargs
     type: "boolean",
     description: "Show help",
   })
+  .option("verbose", {
+    type: "boolean",
+    default: false,
+    description: "Show extended version and diagnostic information.",
+  })
+  .option("rust", {
+    type: "boolean",
+    default: true,
+    description:
+      "Use Rust-native (cdxrs) acceleration where available. Pass --no-rust to force the JS path.",
+  })
   .wrap(Math.min(120, yargs().terminalWidth())).argv;
 
 if (process.env?.CDXGEN_NODE_OPTIONS) {
   process.env.NODE_OPTIONS = `${process.env.NODE_OPTIONS || ""} ${process.env.CDXGEN_NODE_OPTIONS}`;
+}
+
+// `--no-rust` is a front-end for CDXGEN_RS_DISABLE=all: the bridge reads only
+// the env var, so every consumer honours the flag without threading an option
+// through each call site. Declared as `rust` (default true) rather than
+// `no-rust` so yargs' own boolean negation produces the flag.
+if (args.rust === false) {
+  process.env.CDXGEN_RS_DISABLE = "all";
 }
 
 if (args.help) {
@@ -1447,6 +1486,17 @@ const writeCycloneDxOutput = (jsonFile, bomJson, options) => {
     prepareEnv(srcDir, options);
   }
   thoughtLog("Getting ready to generate the BOM ⚡️.");
+  if (DEBUG_MODE) {
+    try {
+      const { cdxrsAvailable } = await import("../lib/helpers/cdxrs.js");
+      const rs = cdxrsAvailable("info");
+      console.log(
+        `cdxrs: ${rs.available ? `available (${rs.version})` : `not available (${rs.reason}) — using JS path`}`,
+      );
+    } catch {
+      console.log("cdxrs: bridge not loaded — using JS path");
+    }
+  }
   const originalFetchPackageMetadata = process.env.CDXGEN_FETCH_PKG_METADATA;
   const shouldRunPredictiveAudit = shouldRunPredictiveBomAudit(
     options,

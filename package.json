@@ -120,6 +120,7 @@
     "test": "poku",
     "test:deno": "deno task test",
     "test:golden": "node contrib/golden-runner.js && node contrib/mutation-tests.js && node contrib/shuffle-tests.js && node contrib/cassette-metadata-tests.js",
+    "test:rs-disable": "node contrib/rs-disable-golden-test.js",
     "watch": "poku --watch"
   },
   "dependencies": {

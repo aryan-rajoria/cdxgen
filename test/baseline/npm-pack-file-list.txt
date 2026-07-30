@@ -105,6 +105,7 @@ lib/helpers/bomUtils.js
 lib/helpers/bunutils.js
 lib/helpers/caxa.js
 lib/helpers/cbomutils.js
+lib/helpers/cdxrs.js
 lib/helpers/chromextutils.js
 lib/helpers/ciParsers/azurePipelines.js
 lib/helpers/ciParsers/circleCi.js
@@ -338,6 +339,8 @@ types/lib/helpers/caxa.d.ts
 types/lib/helpers/caxa.d.ts.map
 types/lib/helpers/cbomutils.d.ts
 types/lib/helpers/cbomutils.d.ts.map
+types/lib/helpers/cdxrs.d.ts
+types/lib/helpers/cdxrs.d.ts.map
 types/lib/helpers/chromextutils.d.ts
 types/lib/helpers/chromextutils.d.ts.map
 types/lib/helpers/ciParsers/azurePipelines.d.ts
