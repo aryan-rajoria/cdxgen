@@ -148,7 +148,7 @@ cdxgen --version
 ```
 
 ```bash
-VERSION="v12.4.0"
+VERSION="v13.0.0"
 OS=linux
 ARCH=amd64
 BINARY_NAME="cdxgen-${OS}-${ARCH}"

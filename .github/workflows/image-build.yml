@@ -45,7 +45,7 @@ env:
   NEXUS_SWIFT_PATH: /repository/swift
   NEXUS_UBUNTU_REPO_PATH: /repository/ubuntu
   REPO: ghcr.io
-  TAG: v12
+  TAG: v13
   TEAM: cdxgen
 
 

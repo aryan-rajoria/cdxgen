@@ -92,34 +92,42 @@ the code under test. Check whether the harness's assumption or the library's
 output is the outlier — here a one-line grep (68 object vs 8 array) settled it, and
 would have turned a skipped ecosystem into a two-line fix.
 
-### Pre-existing lib bug (NOT fixed): source-crypto is unreachable via the CLI
+### CORRECTED: there is no CBOM bug — `--include-crypto` requires `--profile research`
 
-Found while building `cbom-js-smoke`, and worth filing separately — the D04 agent
-identified this correctly in passing but did not record it.
+An earlier revision of this file claimed `cdxgen --include-crypto -t js` was broken
+because it collected zero crypto components. **That was wrong** and is retracted.
 
-`createBom` dispatches single-`projectType` invocations down a fast path that
-`return`s before reaching the `for (const path of pathList)` loop in
-`createMultiXBom`, where source-crypto collection
-(`collectSourceCryptoComponents`) lives. The consequence is that the documented
-user-facing invocation collects **nothing**:
+`--include-crypto` is not meant to work standalone. Crypto detection is driven by
+atom-based reachable slicing, which is enabled by `--profile research`
+(`lib/cli/cliOptions.js:337-341` sets `deep`, `evidence` and `includeCrypto`
+together). The detection itself runs *after* `createBom` returns, in the evinser
+pass at `bin/cdxgen.js:1681`. Passing `includeCrypto` into `createBom`
+programmatically therefore yields nothing by design — verified: both
+`{projectType:["js"], includeCrypto:true}` and the same plus `profile:"research"`
+return 0 crypto components, because the profile is resolved by the CLI layer and
+the enrichment happens outside `createBom` entirely.
 
-```
--t js  --include-crypto  ->  0 components,  0 cryptographic-asset
--t js,mcp --include-crypto  ->  2 components, 2 cryptographic-asset
-```
+**Consequence for the golden harness.** `contrib/golden-runner.js` calls
+`createBom` directly, so it structurally cannot reach the supported CBOM path.
+Real CBOM coverage would require driving the `bin/cdxgen.js` CLI end to end plus
+the atom binary and a language-specific slice — a heavyweight, host-dependent flow
+that is out of scope for offline goldens. **CBOM is therefore a skip**, alongside
+Gradle and the container/OS scenarios.
 
-(reproduced directly against `repotests/cbom-js-smoke`). The lightweight
-source-crypto path is effectively dead code for every single-type CLI run; only
-the heavyweight evinser/atom flow (`bin/cdxgen.js:1658-1681`) enriches crypto for
-those. `lib/` was not touched, per the rules.
+`repotests/cbom-js-smoke/` is retained but is **not** CBOM ecosystem coverage, and
+its manifest says so. It exercises `collectSourceCryptoComponents` via
+`createMultiXBom` using a synthetic `["js","mcp"]` projectType (the multi-type
+route is the only one that reaches that loop). Its value is narrower and purely
+about the normalizer: it is the only golden containing `cryptographic-asset`
+components, which carry **no purl** and use OID-derived bom-refs, so it guards
+ref-derivation for purl-less components. Judged worth keeping on that basis alone;
+it should not be cited as evidence that crypto detection works.
 
-Because of this, `cbom-js-smoke` pins a code path no CLI user reaches, via a
-synthetic `["js","mcp"]` routing. It is retained deliberately — it is the only
-golden covering `cryptographic-asset` components, which carry **no purl** and use
-OID-derived bom-refs, an edge case worth locking down in the normalizer — but it
-must not be read as evidence that `cdxgen --include-crypto -t js` works. When the
-dispatch bug is fixed, this scenario should be re-pointed at the single-type
-invocation and its manifest description updated.
+Lesson, and a correction to how this review was conducted: "the obvious invocation
+returns nothing" is not sufficient grounds to call something a bug. The option was
+documented as requiring a companion flag, and checking `cliOptions.js` for how
+`--profile` expands would have shown the intended wiring in under a minute. Two
+options that look independent at the API boundary were a documented pair.
 
 ### Other skips (no toolchain bug, just out of scope for offline goldens)
 
