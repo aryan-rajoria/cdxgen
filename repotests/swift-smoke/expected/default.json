@@ -114,12 +114,11 @@
   "metadata": {
     "authors": [],
     "component": {
-      "bom-ref": "pkg:swift/swift-smoke@undefined",
+      "bom-ref": "application:swift-smoke:latest",
       "group": "",
       "name": "swift-smoke",
-      "purl": "pkg:swift/swift-smoke@undefined",
       "type": "application",
-      "version": "undefined"
+      "version": "latest"
     },
     "lifecycles": [
       {
@@ -135,13 +134,13 @@
               "name": "OWASP Foundation"
             }
           ],
-          "bom-ref": "pkg:npm/%40cyclonedx/cdxgen@_normalized_",
+          "bom-ref": "pkg:npm/%40cyclonedx/cdxgen@0.0.0-normalized",
           "group": "@cyclonedx",
           "name": "cdxgen",
           "publisher": "OWASP Foundation",
-          "purl": "pkg:npm/%40cyclonedx/cdxgen@<normalized>",
+          "purl": "pkg:npm/%40cyclonedx/cdxgen@0.0.0-normalized",
           "type": "application",
-          "version": "<normalized>"
+          "version": "0.0.0-normalized"
         }
       ]
     }

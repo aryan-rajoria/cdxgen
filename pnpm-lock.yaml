@@ -22,6 +22,9 @@ importers:
       '@babel/traverse':
         specifier: 7.29.7
         version: 7.29.7
+      '@cdxgen/cdx-purl':
+        specifier: 0.0.3
+        version: 0.0.3
       '@cdxgen/cdxgen-plugins-bin':
         specifier: 2.5.1
         version: 2.5.1
@@ -70,9 +73,6 @@ importers:
       npm-package-arg:
         specifier: 13.0.2
         version: 13.0.2
-      packageurl-js:
-        specifier: 1.0.2
-        version: 1.0.2
       parse-conflict-json:
         specifier: 5.0.1
         version: 5.0.1
@@ -396,6 +396,10 @@ packages:
   '@cdxgen/cdx-proto@2.0.3':
     resolution: {integrity: sha512-B8OMpVoFB2YECPlrJYf9/FJodcnqPGKEy4qb096Mj6iAuz6QObWjg/WFGXLtpvbHjwVNp175vLwGyEFr8c42Dg==, tarball: https://registry.npmjs.org/@cdxgen/cdx-proto/-/cdx-proto-2.0.3.tgz}
     engines: {node: '>=20'}
+
+  '@cdxgen/cdx-purl@0.0.3':
+    resolution: {integrity: sha512-UZLrJcpvHhMkMxMWBOCC0wxAvUj10BQ4JDoyZP3s303RMusLKKw57kOaehnhT3vCgBdIBNcs1knr30K9nvdyBA==, tarball: https://registry.npmjs.org/@cdxgen/cdx-purl/-/cdx-purl-0.0.3.tgz}
+    engines: {bun: '>=1.0.0', deno: '>=1.40.0', node: '>=20'}
 
   '@cdxgen/cdxgen-plugins-bin-darwin-amd64@2.5.1':
     resolution: {integrity: sha512-f1XFP66ioCOo/xe+gCnZhbCU8DFV+uBPRC+meneQo+lrr325ih8R7QVup86LpSkIhS8fzJP+wVAVEUwWQFblQA==, tarball: https://registry.npmjs.org/@cdxgen/cdxgen-plugins-bin-darwin-amd64/-/cdxgen-plugins-bin-darwin-amd64-2.5.1.tgz}
@@ -1024,9 +1028,6 @@ packages:
     resolution: {integrity: sha512-737ZY3yNnXy37FHkQxPzt4UZ2UWPWiCZWLvFZ4fu5cueciegX0zGPnrlY6bwRg4FdQOe9YU8MkmJwGhoMybl8A==, tarball: https://registry.npmjs.org/on-headers/-/on-headers-1.1.0.tgz}
     engines: {node: '>= 0.8'}
 
-  packageurl-js@1.0.2:
-    resolution: {integrity: sha512-fWC4ZPxo80qlh3xN5FxfIoQD3phVY4+EyzTIqyksjhKNDmaicdpxSvkWwIrYTtv9C1/RcUN6pxaTwGmj2NzS6A==, tarball: https://registry.npmjs.org/packageurl-js/-/packageurl-js-1.0.2.tgz}
-
   parse-conflict-json@5.0.1:
     resolution: {integrity: sha512-ZHEmNKMq1wyJXNwLxyHnluPfRAFSIliBvbK/UiOceROt4Xh9Pz0fq49NytIaeaCUf5VR86hwQ/34FCcNU5/LKQ==, tarball: https://registry.npmjs.org/parse-conflict-json/-/parse-conflict-json-5.0.1.tgz}
     engines: {node: ^20.17.0 || >=22.9.0}
@@ -1349,6 +1350,8 @@ snapshots:
     dependencies:
       '@bufbuild/protobuf': 2.12.0
     optional: true
+
+  '@cdxgen/cdx-purl@0.0.3': {}
 
   '@cdxgen/cdxgen-plugins-bin-darwin-amd64@2.5.1':
     optional: true
@@ -1929,8 +1932,6 @@ snapshots:
 
   on-headers@1.1.0:
     optional: true
-
-  packageurl-js@1.0.2: {}
 
   parse-conflict-json@5.0.1:
     dependencies:

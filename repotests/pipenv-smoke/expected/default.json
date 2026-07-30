@@ -242,26 +242,26 @@
       "version": "2.2.1"
     },
     {
-      "bom-ref": "pkg:pypi/jaraco.classes@3.4.0",
+      "bom-ref": "pkg:pypi/jaraco-classes@3.4.0",
       "group": "",
       "name": "jaraco.classes",
-      "purl": "pkg:pypi/jaraco.classes@3.4.0",
+      "purl": "pkg:pypi/jaraco-classes@3.4.0",
       "type": "library",
       "version": "3.4.0"
     },
     {
-      "bom-ref": "pkg:pypi/jaraco.context@6.1.1",
+      "bom-ref": "pkg:pypi/jaraco-context@6.1.1",
       "group": "",
       "name": "jaraco.context",
-      "purl": "pkg:pypi/jaraco.context@6.1.1",
+      "purl": "pkg:pypi/jaraco-context@6.1.1",
       "type": "library",
       "version": "6.1.1"
     },
     {
-      "bom-ref": "pkg:pypi/jaraco.functools@4.4.0",
+      "bom-ref": "pkg:pypi/jaraco-functools@4.4.0",
       "group": "",
       "name": "jaraco.functools",
-      "purl": "pkg:pypi/jaraco.functools@4.4.0",
+      "purl": "pkg:pypi/jaraco-functools@4.4.0",
       "type": "library",
       "version": "4.4.0"
     },
@@ -864,13 +864,13 @@
               "name": "OWASP Foundation"
             }
           ],
-          "bom-ref": "pkg:npm/%40cyclonedx/cdxgen@_normalized_",
+          "bom-ref": "pkg:npm/%40cyclonedx/cdxgen@0.0.0-normalized",
           "group": "@cyclonedx",
           "name": "cdxgen",
           "publisher": "OWASP Foundation",
-          "purl": "pkg:npm/%40cyclonedx/cdxgen@<normalized>",
+          "purl": "pkg:npm/%40cyclonedx/cdxgen@0.0.0-normalized",
           "type": "application",
-          "version": "<normalized>"
+          "version": "0.0.0-normalized"
         }
       ]
     }

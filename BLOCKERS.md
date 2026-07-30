@@ -68,3 +68,24 @@
    multi-byte UTF-8 in `url_decode` by pushing decoded bytes as `char`
    (`%C3%A9` → `Ã©`). All fixed with tests; the 38-BOM parity harness shows zero
    false positives from the stricter parsing.
+
+## D20
+
+No blockers. All gates pass with and without a staged cdxrs binary.
+
+### Notes
+
+1. **No Rust change needed for purl canonicalization.** The cdxrs validator
+   (`parse_purl` in `semantic.rs`) validates purl syntax but does not
+   normalize names. The JS-produced canonical purls (e.g.
+   `pkg:pypi/jaraco-classes@3.4.0`) are syntactically valid, so the Rust
+   validator accepts them. Parity harness: 38 goldens / 0 false positives,
+   7/7 invalid parity OK.
+
+2. **Typed-builder adoption deferred.** The `encodeForPurl` helper in
+   `lib/helpers/purl.js` is retained because several call sites use it to
+   pre-process names before constructing purls. Retiring it in favor of
+   cdx-purl's `TypedPurlBuilders` would require auditing each call site
+   individually and is not needed for correctness — `build()` already
+   handles canonical percent-encoding. The shim is fully removed; this is
+   the only optional follow-up.

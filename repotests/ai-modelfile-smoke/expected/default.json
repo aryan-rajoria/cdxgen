@@ -116,12 +116,12 @@
   "metadata": {
     "authors": [],
     "component": {
-      "bom-ref": "pkg:generic/ai-modelfile-smoke@undefined",
+      "bom-ref": "pkg:generic/ai-modelfile-smoke@latest",
       "group": "",
       "name": "ai-modelfile-smoke",
-      "purl": "pkg:generic/ai-modelfile-smoke@undefined",
+      "purl": "pkg:generic/ai-modelfile-smoke@latest",
       "type": "application",
-      "version": "undefined"
+      "version": "latest"
     },
     "lifecycles": [
       {
@@ -137,13 +137,13 @@
               "name": "OWASP Foundation"
             }
           ],
-          "bom-ref": "pkg:npm/%40cyclonedx/cdxgen@_normalized_",
+          "bom-ref": "pkg:npm/%40cyclonedx/cdxgen@0.0.0-normalized",
           "group": "@cyclonedx",
           "name": "cdxgen",
           "publisher": "OWASP Foundation",
-          "purl": "pkg:npm/%40cyclonedx/cdxgen@<normalized>",
+          "purl": "pkg:npm/%40cyclonedx/cdxgen@0.0.0-normalized",
           "type": "application",
-          "version": "<normalized>"
+          "version": "0.0.0-normalized"
         }
       ]
     }
