@@ -213,7 +213,7 @@ if (inputIsLocalProtoBom && publicKeyStr) {
   process.exit(args.requireSignature ? 4 : 1);
 }
 
-const report = validateBomAdvanced(bomJson, {
+const report = await validateBomAdvanced(bomJson, {
   schema: args.schema,
   deep: args.deep,
   benchmarks: splitCsv(args.benchmark),

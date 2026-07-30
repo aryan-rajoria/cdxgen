@@ -1,15 +1,18 @@
-# PROGRESS — cdxgen
+## D06
 
-## D05 — cdxrs scaffold, protocol, JS bridge, cross-build
+### cdxgen
 
-- Updated all @cdxgen/cdxgen-plugins-bin pins from 2.5.1 to 3.0.0 (1 dependency + 10 optionalDependencies).
-- Added missing @cdxgen/cdxgen-plugins-bin-linux-riscv64 optionalDependency.
-- Added cdxrs to plugins.js binary resolution (PLUGIN_ENV_COMMAND_NAMES, resolveBundledPluginBinary).
-- Created lib/helpers/cdxrs.js bridge: cdxrsAvailable, runCdxrs, cdxrsDisabled, CDXRS_FALLBACK sentinel. Handles all six failure modes.
-- Created lib/helpers/cdxrs.poku.js: 11 tests covering all six failure modes + success + cdxrsDisabled + sentinel, using fake binary fixtures.
-- Added --verbose and --no-rust CLI flags. Wired cdxrs info into --version --verbose output.
-- Added --debug cdxrs status line reporting availability at BOM generation start.
-- Created contrib/rs-disable-golden-test.js: permanent CDXGEN_RS_DISABLE=all golden-identical safety net. Proven to fail when output changes (injected component → 1 failed → reverted → all pass).
-- Created docs/v13/rust.md: full protocol, exit codes, env vars, and extension specification.
-- Final gates: 27/30/135/8 golden, 134/0 poku, lint clean, rs-disable green.
+- `e50ffe34` v13/06: add schema drift guard test (cdxgen data/ ↔ cdxrs schemas/)
+- `2f726a5e` v13/06: add validation rule registry (docs/v13/validation-rules.md)
+- `7fc88305` v13/06: add differential parity harness (golden false-positive check + invalid BOM parity)
+- `42096ba7` v13/06: wire cdxrs validate bridge with JS fallback + CDXGEN_RS_DISABLE support
+- `34a9529d` v13/06: add reporter parity tests for all four reporters
+- `ea5830a4` v13/06: add perf benchmark (JS vs Rust validation, 120x speedup on 10k components)
+- `2035321a` v13/06: add real-binary validate tests + fix concurrent env-var race in bridge tests
 
+### cdxgen-plugins-bin
+
+- `3f740ec` vendor cyclonedx 1.6/1.7 schemas + drift guard
+- `b5422d3` implement cdxrs validate: schema + semantic rules with findings format
+- `b3521f5` add invalid test fixtures and parity-exceptions.toml
+- `65c3181` add per-rule unit tests, insta snapshots, and fuzz guard

@@ -108,7 +108,8 @@ import { postProcess } from "../lib/stages/postgen/postgen.js";
 import { convertCycloneDxToSpdx } from "../lib/stages/postgen/spdxConverter.js";
 import { auditEnvironment } from "../lib/stages/pregen/envAudit.js";
 import { prepareEnv } from "../lib/stages/pregen/pregen.js";
-import { validateBom, validateSpdx } from "../lib/validator/bomValidator.js";
+import { validateSpdx } from "../lib/validator/bomValidator.js";
+import { validateBomWithRustFallback } from "../lib/validator/index.js";
 
 // Support for config files
 const configPaths = [
@@ -1792,7 +1793,8 @@ const writeCycloneDxOutput = (jsonFile, bomJson, options) => {
   // Perform automatic validation
   if (options.validate && bomNSData?.bomJson) {
     thoughtLog("Wait, let's check the generated BOM file for any issues.");
-    if (!validateBom(bomNSData.bomJson)) {
+    const validation = await validateBomWithRustFallback(bomNSData.bomJson);
+    if (!validation.valid) {
       if (cleanup) {
         cleanupSourceDir(srcDir);
       }

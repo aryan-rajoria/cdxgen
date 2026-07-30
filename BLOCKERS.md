@@ -1,34 +1,70 @@
-# BLOCKERS — cdxgen
+## D06
 
-## D05
+### Skipped / Known divergences
 
-- **DEFERRED (in review): bumping the plugins-bin pins to 3.0.0.** D05 originally
-  raised `@cdxgen/cdxgen-plugins-bin` and its platform optionalDeps from `2.5.1`
-  to `3.0.0` and added the missing `linux-riscv64` entry. Both changes are
-  correct, but `3.0.0` is not published, so the manifest no longer agreed with
-  `pnpm-lock.yaml` and `pnpm install --frozen-lockfile` failed for all 11
-  packages — which is how every CI job installs dependencies. The pins have been
-  reverted to `2.5.1` on this branch so the branch is installable; `pnpm install
-  --frozen-lockfile` is verified green.
+1. **`props.suspicious-native-name` — DROPPED.** The JS check is gated on
+   `DEBUG_MODE` (`if (suspicious.length > 0 && DEBUG_MODE)` at L736 of
+   `bomValidator.js`), so it is silent in production. Porting it as an
+   always-on warning would be a false-positive regression for every cdxgen
+   user with `native` or `bindings` in a package name. The rule is documented
+   as dropped in `docs/v13/validation-rules.md` and
+   `parity-exceptions.toml`.
 
-  Do this as a single follow-up once plugins-bin `3.0.0` is published: set
-  `@cdxgen/cdxgen-plugins-bin` and the 10 platform optionalDeps to `3.0.0`
-  (`package.json` lines ~129 and ~171-180), then regenerate `pnpm-lock.yaml` and
-  confirm `pnpm install --frozen-lockfile` passes. Keep the platform list as-is —
-  `linux-riscv64` is deliberately not pinned by cdxgen.
+2. **RESOLVED (in review): the 1.4/1.5 divergence.** The JS validator accepted
+   spec 1.4/1.5 while cdxrs accepted only 1.6/1.7, so a valid 1.5 BOM passed or
+   failed validation depending on whether a cdxrs binary happened to be
+   installed — and `bin/cdxgen.js` calls `process.exit(1)` on an invalid
+   verdict. Fixed by removing `"1.4"` and `"1.5"` from
+   `SUPPORTED_CYCLONEDX_SCHEMA_VERSIONS`, so both paths now reject them
+   identically. The parity exception has been deleted.
 
-  Local testing does **not** depend on any of this: binary discovery is
-  path-based, so `contrib/link-local-plugins.sh` +`CDXGEN_PLUGINS_DIR` exercises
-  a locally-built `cdxrs` against the real resolver regardless of the pinned
-  version. See docs/v13/rust.md.
+3. **SPDX expression validation — OUT OF SCOPE.** The plan mentions purl
+   type-specific rules and SPDX license expression parsing, but the JS
+   `validateBom` pipeline does not include SPDX expression validation (that
+   is in `validateSpdx`, which is Deliverable 11). Only the five functions
+   in scope were ported.
 
-  Note the pins were already stale before D05: `release/13.0.x` pinned `2.5.1`
-  against a plugins-bin repo at `2.6.0`.
+4. **Pre-existing: `licenseFetchJourney.repo.poku.js` is flaky.** This
+   network-dependent test intermittently fails when run alongside other
+   tests in the full suite. It passes in isolation. Not related to this
+   deliverable; no fix attempted.
 
-- **9 of 11 cdxrs cross-build flavours unverified.** Only `darwin-arm64` and
-  `darwin-amd64` were built and checksummed. The vendored `zig` used as the
-  cross-linker is a Linux ELF binary and cannot execute on macOS, so the Linux,
-  musl and Windows targets need a Linux host (i.e. CI). The `Makefile` and the
-  per-package `build-*.sh` changes are in place for all 11; they are simply
-  unexercised. Binary size is ~0.5 MB against a 250 MB packed budget, so size is
-  not a concern for any flavour.
+5. **Open gap: differential parity is verdict-level, not finding-level.** The
+   plan asks for equality of (severity, path, rule) triples across both
+   validators. That is not achievable today: the JS validator has no findings
+   document — `validateBom` returns a bare boolean and writes prose to
+   `console.log`. `contrib/parity-harness.js` therefore compares verdicts
+   bidirectionally and asserts each `testdata/invalid/` fixture triggers its
+   registered rule. Closing this properly needs a structured-findings mode on
+   the JS side; until then, finding-level divergence can only be caught by the
+   per-rule unit tests.
+
+6. **Open gap: rule coverage is partial.** Of the error-severity rules, review
+   added tests for the three that had none
+   (`crypto.asset-missing-crypto-properties`,
+   `crypto.certificate-missing-algorithm-properties`,
+   `purl.encoded-slash-without-namespace`). Several warning-severity rules
+   (`props.*`, most `ref.*`, several `metadata.*`) still have no positive test.
+   Warnings cannot fail a build, so this was deprioritised over the error rules,
+   but the plan's "one test per rule id" bar is not met yet.
+
+7. **Schema message quality: the jsonschema crate's error messages differ
+   from Ajv's.** The JS validator logs Ajv error objects via
+   `console.log(validate.errors)`, which include `instancePath`,
+   `schemaPath`, `keyword`, `params`, and `message`. The Rust validator maps
+   jsonschema crate errors to the findings format with a `path` field (RFC
+   6901 JSON Pointer) and a `message` field. The messages are different in
+   wording but convey the same information. This is documented as acceptable
+   because the JS validator's raw `console.log` output is not user-facing
+   (it is a debug log); the user-facing output is the boolean return value
+   (valid/invalid).
+
+8. **Note (fixed in review): the purl parser is hand-rolled, not the
+   `packageurl` crate the plan named.** Kept hand-rolled by decision, but
+   hardened against the spec after review found it accepted `pkg:npm`,
+   `pkg:npm/` and `pkg:npm/@1.0.0` (name is required), rejected the
+   case-insensitive `PKG:` scheme, did not ignore empty path segments, left
+   `version` percent-encoded, kept empty-valued qualifiers, and mangled
+   multi-byte UTF-8 in `url_decode` by pushing decoded bytes as `char`
+   (`%C3%A9` → `Ã©`). All fixed with tests; the 38-BOM parity harness shows zero
+   false positives from the stricter parsing.
