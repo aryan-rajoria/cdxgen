@@ -54,6 +54,8 @@ cdxrs <subcommand> [--input <file|->] [--output <file|->] [--max-input-bytes N]
 ```
 
 - `--input -` reads stdin; `--input <path>` reads a file. Default: `-`.
+  `--input` is always a **path**; BOM content is never passed as an argument.
+  The bridge writes content to stdin, spilling to a temp file above 32 MB.
 - `--output -` or omitted writes stdout; `--output <path>` writes a file.
 - `--max-input-bytes` guards against hostile input (default: 2 GB).
 - Inputs over 32 MB should go through a file path, not a pipe (enforced by the
@@ -152,10 +154,42 @@ Prints supported spec versions as JSON:
 7. **Write tests** — unit tests in the `.rs` file, and a bridge test with a
    fake binary fixture covering at least success and one failure mode.
 
+## Testing against a locally-built binary
+
+Until plugins-bin is published, use `contrib/link-local-plugins.sh`:
+
+```bash
+make -C ../cdxgen-plugins-bin/thirdparty/cdxrs darwin   # or: linux
+./contrib/link-local-plugins.sh                          # stages cdxrs
+export CDXGEN_PLUGINS_DIR=/tmp/cdxgen-local-plugins      # path it prints
+node bin/cdxgen.js --version --verbose                   # => cdxrs 3.0.0 (available)
+```
+
+Two notes, because the obvious approaches do not work:
+
+- **`pnpm link` does not help.** Binary discovery is purely path-based —
+  `<pluginsDir>/<tool>/<tool>-<platform>-<arch>` — and the version pinned in
+  `package.json` is only used to construct npx/global-store paths, so aligning it
+  does nothing for local testing. The platform packages' `plugins/` directories
+  are also empty in git (binaries are build artifacts), so linking one yields an
+  empty plugins dir.
+- **Prefer this over a bare `CDXRS_CMD`.** `CDXRS_CMD` short-circuits
+  `resolvePluginBinary`, so it never exercises the filename convention or the
+  plugins-dir layout — the two things most likely to be wrong. The script stages
+  a composite directory (symlinks to your installed plugins, local builds
+  layered on top), so everything else keeps resolving.
+
+Run the bridge tests with a binary present as well as without; they cover both:
+
+```bash
+CDXGEN_PLUGINS_DIR=/tmp/cdxgen-local-plugins npx poku lib/helpers/cdxrs.poku.js
+```
+
 ## Environment variables
 
 | Variable | Purpose |
 |----------|---------|
+| `CDXGEN_PLUGINS_DIR` | Override the plugins directory (see above) |
 | `CDXRS_CMD` | Override the cdxrs binary path |
 | `CDXGEN_RS_DISABLE` | Disable Rust paths: `all` or comma-separated subcommand names |
 | `CDXGEN_NO_RUST` | Set to `true` to disable all Rust paths (same as `CDXGEN_RS_DISABLE=all`) |
@@ -169,12 +203,17 @@ import { cdxrsAvailable, runCdxrs, cdxrsDisabled, CDXRS_FALLBACK } from "./cdxrs
 // Check if the binary is present and version-compatible
 const { available, version, reason } = cdxrsAvailable("info");
 
-// Run a subcommand (async)
+// Run a subcommand (async). Normal case: pass in-memory BOM data as `content`,
+// which is written to the child's stdin with `--input -`.
 const result = await runCdxrs("info", {
-  input: "/path/to/bom.json",  // or "-" for stdin
+  content: bomJsonString,       // fed over stdin
   args: [],                     // extra CLI args
   timeoutMs: 30_000,            // default 30s
 });
+
+// Alternative, when the BOM is already a file on disk:
+const result2 = await runCdxrs("info", { input: "/path/to/bom.json" });
+
 // result: { ok: true, stdout, stderr, exitCode } on success
 // result: { ok: false, reason, stdout: "", exitCode: null } on failure
 

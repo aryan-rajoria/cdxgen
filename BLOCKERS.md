@@ -11,14 +11,16 @@
   reverted to `2.5.1` on this branch so the branch is installable; `pnpm install
   --frozen-lockfile` is verified green.
 
-  Do this as a single follow-up once plugins-bin `3.0.0` is published:
-  - set `@cdxgen/cdxgen-plugins-bin` and the 10 existing platform optionalDeps to
-    `3.0.0` (`package.json` lines ~129 and ~171-180);
-  - add `@cdxgen/cdxgen-plugins-bin-linux-riscv64` at `3.0.0` — plugins-bin ships
-    11 platform packages but cdxgen only ever pinned 10, so riscv64 users get no
-    binary today. This gap predates D05;
-  - regenerate `pnpm-lock.yaml` and confirm `pnpm install --frozen-lockfile`
-    passes.
+  Do this as a single follow-up once plugins-bin `3.0.0` is published: set
+  `@cdxgen/cdxgen-plugins-bin` and the 10 platform optionalDeps to `3.0.0`
+  (`package.json` lines ~129 and ~171-180), then regenerate `pnpm-lock.yaml` and
+  confirm `pnpm install --frozen-lockfile` passes. Keep the platform list as-is —
+  `linux-riscv64` is deliberately not pinned by cdxgen.
+
+  Local testing does **not** depend on any of this: binary discovery is
+  path-based, so `contrib/link-local-plugins.sh` +`CDXGEN_PLUGINS_DIR` exercises
+  a locally-built `cdxrs` against the real resolver regardless of the pinned
+  version. See docs/v13/rust.md.
 
   Note the pins were already stale before D05: `release/13.0.x` pinned `2.5.1`
   against a plugins-bin repo at `2.6.0`.
