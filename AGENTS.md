@@ -6,7 +6,7 @@ This document helps AI coding agents (GitHub Copilot, Claude, Cursor, etc.) unde
 
 ## Project overview
 
-**cdxgen** is a universal, polyglot CycloneDX Bill-of-Materials (BOM) generator. It produces SBOM, CBOM, OBOM, SaaSBOM, CDXA, and VDR documents in CycloneDX JSON format. It is distributed as an npm package (`@cyclonedx/cdxgen`), a container image, and a Deno/Bun-compatible script.
+**cdxgen** is a universal, polyglot CycloneDX Bill-of-Materials (BOM) generator. It produces SBOM, CBOM, OBOM, SaaSBOM, CDXA, and VDR documents in CycloneDX JSON format. It is distributed as an npm package (`@cdxgen/cdxgen`), a container image, and a Deno/Bun-compatible script.
 
 Primary entry points:
 

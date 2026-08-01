@@ -2,7 +2,7 @@
 
 `cdx-convert` converts an existing CycloneDX BOM into SPDX 3.0.1 JSON-LD.
 
-It is distributed with `@cyclonedx/cdxgen` alongside `cdxgen`, `cdx-sign`,
+It is distributed with `@cdxgen/cdxgen` alongside `cdxgen`, `cdx-sign`,
 `cdx-verify`, and `cdx-validate`. It is also published as a standalone binary
 via the `binary-builds` workflow.
 

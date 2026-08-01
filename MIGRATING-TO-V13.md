@@ -3,6 +3,105 @@
 This guide covers user-visible breaking changes introduced by cdxgen v13.
 Additional sections will be appended as later deliverables land.
 
+## Package rename: `@cyclonedx/cdxgen` → `@cdxgen/cdxgen`
+
+The npm package has moved from the `@cyclonedx` scope to the `@cdxgen` scope,
+where it joins `@cdxgen/cdx-purl`, `@cdxgen/cdx-hbom`, `@cdxgen/cdx-proto`, and
+`@cdxgen/safer-exec`.
+
+**The `cdxgen` command name is unchanged.** All 15 bin entries (`cdxgen`,
+`cbom`, `obom`, `evinse`, `cdx-audit`, `cdx-convert`, `cdx-validate`,
+`tracebom`, etc.) install the same command names as before. Only the package
+specifier changes.
+
+### Install
+
+```shell
+# Before (v12)
+npm install -g @cyclonedx/cdxgen
+
+# After (v13)
+npm install -g @cdxgen/cdxgen
+```
+
+### Programmatic imports
+
+```js
+// Before (v12)
+import { createBom, submitBom } from "@cyclonedx/cdxgen";
+
+// After (v13)
+import { createBom, submitBom } from "@cdxgen/cdxgen";
+```
+
+Deep imports change **both scope and path**. For example:
+
+```js
+// Before (v12)
+import { parsePkgLock } from "@cyclonedx/cdxgen/helpers/parsers-js";
+
+// After (v13)
+import { parsePkgLock } from "@cdxgen/cdxgen/helpers/parsers-js";
+```
+
+Some modules moved package as well as scope. The foundational modules now live
+under `core/`, and the HuggingFace manifest readers under `parsers/`:
+
+| v12 path | v13 path |
+|---|---|
+| `helpers/logger` | `core/logger` |
+| `helpers/propertySanitizer` | `core/propertySanitizer` |
+| `helpers/paths` | `core/paths` |
+| `helpers/state` | `core/state` |
+| `helpers/core-activity` | `core/activity` |
+| `helpers/core-fs` | `core/fs` |
+| `helpers/core-env` | `core/env` |
+| `helpers/httpClient` | `core/httpClient` |
+| `helpers/huggingfaceManifest` | `parsers/huggingfaceManifest` |
+| `helpers/huggingfaceUtils` | `parsers/huggingfaceUtils` |
+
+The `helpers/parsers-*.js` modules keep their paths in v13. A later release may
+move them to `parsers/ecosystems/<eco>.js`; check the release notes.
+
+### JSR
+
+```ts
+// Before (v12)
+export { createBom } from "jsr:@cyclonedx/cdxgen";
+
+// After (v13)
+export { createBom } from "jsr:@cdxgen/cdxgen";
+```
+
+### `metadata.tools` change — action required for dep-scan and similar consumers
+
+cdxgen records itself in `metadata.tools.components[].purl`. After the rename:
+
+| Field | Before (v12) | After (v13) |
+|---|---|---|
+| `purl` | `pkg:npm/%40cyclonedx/cdxgen@12.x` | `pkg:npm/%40cdxgen/cdxgen@13.x` |
+| `bom-ref` | `pkg:npm/@cyclonedx/cdxgen@12.x` | `pkg:npm/@cdxgen/cdxgen@13.x` |
+| `group` | `@cyclonedx` | `@cdxgen` |
+
+**dep-scan and other tools that identify the generating tool by purl or
+`bom-ref`** will see the new strings. To handle the transition:
+
+1. **Match on `name`/`group` instead of purl.** The `name` is always `"cdxgen"`;
+   match on that plus `group` to identify cdxgen-generated BOMs regardless of
+   package scope.
+2. **Or accept both purls.** Treat `pkg:npm/%40cyclonedx/cdxgen@*` and
+   `pkg:npm/%40cdxgen/cdxgen@*` as equivalent during the transition.
+
+This is the same class of consumer-side break as the PyPI name canonicalization
+(see [Package URL canonicalization](#package-url-purl-canonicalization) above) —
+both land in v13 as one story.
+
+### Out of scope
+
+Container image names (`ghcr.io/cyclonedx/cdxgen*`), the GitHub organization
+(`@cyclonedx`), and repository URLs are **unchanged** by this rename. Only the
+npm/JSR package identity changes.
+
 ## Node requirement
 
 cdxgen v13 requires **Node.js >= 24.0.0**.
@@ -57,7 +156,7 @@ No environment variables were formally deprecated in v12, so none are removed.
 
 `lib/helpers/utils.js` has been decomposed into focused leaf modules. The file
 remains as a re-export barrel that preserves all **261** public export names for
-one major version, so existing `import { X } from "@cyclonedx/cdxgen/helpers/utils"`
+one major version, so existing `import { X } from "@cdxgen/cdxgen/helpers/utils"`
 (or relative `"./utils.js"`) imports keep working unchanged.
 
 The barrel is **deprecated as of v13**. Consumers should import from the
@@ -67,11 +166,11 @@ specific leaf module instead:
 |---|---|
 | `helpers/purl` | purl build/parse, version compare, conan/nix purl helpers |
 | `helpers/spdx` | license-id normalisation, SPDX expressions, license data lookup |
-| `helpers/state` | eval-time data constants (frameworks, version, module tables) |
-| `helpers/paths` | path/OS detection helpers |
-| `helpers/core-activity` | activity/dry-run/host-allowlist, `cdxgenAgent`, feature flags |
-| `helpers/core-fs` | safe wrappers, `safeSpawnSync`, file discovery, checksums |
-| `helpers/core-env` | runtime detection, env flags, command resolution, alias tables |
+| `core/state` | eval-time data constants (frameworks, version, module tables) |
+| `core/paths` | path/OS detection helpers |
+| `core/activity` | activity/dry-run/host-allowlist, `cdxgenAgent`, feature flags |
+| `core/fs` | safe wrappers, `safeSpawnSync`, file discovery, checksums |
+| `core/env` | runtime detection, env flags, command resolution, alias tables |
 | `helpers/deps` | dependency-tree assembly, component merge/dedupe, JAR namespace collection |
 | `helpers/ecosystems` | the `get*Metadata` family + registry fetch helpers |
 | `helpers/parsers-go` | Go ecosystem parsers (`parseGoMod*`, `parseGosum*`, etc.) |
@@ -105,12 +204,12 @@ docker run --rm -v $(pwd):/app:rw -t ghcr.io/cyclonedx/cdxgen:latest -t node20 -
 ## Install and package size changes
 
 `@cdxgen/cdxgen-plugins-bin` is now a **direct (required) dependency** of
-`@cyclonedx/cdxgen`. In v12 it was an optional dependency that could be
+`@cdxgen/cdxgen`. In v12 it was an optional dependency that could be
 excluded with `--omit=optional` or `--no-optional`.
 
 **What this means for you:**
 
-- `npm install @cyclonedx/cdxgen` will always install the plugins-bin
+- `npm install @cdxgen/cdxgen` will always install the plugins-bin
   meta-package.
 - The per-platform binary packages (e.g.
   `@cdxgen/cdxgen-plugins-bin-darwin-arm64`) remain **optional** and are

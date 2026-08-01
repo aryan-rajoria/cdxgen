@@ -23,7 +23,7 @@ Node.js >= 24  (to run cdxgen itself)
 Install cdxgen
 
 ```shell
-sudo npm install -g @cyclonedx/cdxgen
+sudo npm install -g @cdxgen/cdxgen
 ```
 
 Clone

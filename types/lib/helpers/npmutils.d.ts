@@ -102,5 +102,4 @@ export declare function parsePnpmGitLockKey(lockKey: any): {
     packageName: any;
 } | null;
 export declare function buildPnpmGitPkgRefs(packages: any, snapshots: any, npmrcConfig?: {}): {};
-export declare function getPnpmDepPurl(depPkg: any, packageName: any, gitPkgRefs: any, relativePath: any, githubServerHost: any, npmrcConfig?: {}): Promise<string>;
 //# sourceMappingURL=npmutils.d.ts.map

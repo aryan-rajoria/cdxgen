@@ -1,4 +1,4 @@
-export { normalizeHuggingFaceReference, toHuggingFacePurl, } from "../huggingfaceUtils.js";
+export { normalizeHuggingFaceReference, toHuggingFacePurl, } from "../../parsers/huggingfaceUtils.js";
 /**
  * Clear the in-process Hugging Face caches used for remote metadata lookup.
  */

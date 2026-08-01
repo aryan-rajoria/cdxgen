@@ -13,3 +13,15 @@ packages:
 preferSymlinkedExecutables: false
 strictDepBuilds: true
 trustPolicy: no-downgrade
+
+# pnpm 11 no longer reads the `pnpm` field in package.json; overrides and
+# built-dependency policy live here instead.
+onlyBuiltDependencies:
+  - '@biomejs/biome'
+ignoredBuiltDependencies:
+  - 'unrs-resolver'
+overrides:
+  iconv-lite: '0.7.2'
+  yargs: '18.1.0'
+  type-detect: '4.1.0'
+  on-finished: '2.4.1'

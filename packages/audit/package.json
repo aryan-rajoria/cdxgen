@@ -3,14 +3,10 @@
   "version": "0.0.0",
   "private": true,
   "type": "module",
-  "description": "Internal workspace package: lib/audit/** — predictive supply-chain audit engine, scoring, and reporters.",
+  "description": "Internal workspace package: lib/audit/** \u2014 predictive supply-chain audit engine, scoring, and reporters.",
   "libPath": "../../lib/audit",
-  "dependencies": {
-    "@cdxgen/internal-helpers": "workspace:*",
-    "@cdxgen/internal-cli": "workspace:*",
-    "@cdxgen/internal-stages": "workspace:*"
-  },
   "scripts": {
     "test": "pnpm -w exec poku lib/audit/"
-  }
+  },
+  "layer": 5
 }

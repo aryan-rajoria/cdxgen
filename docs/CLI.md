@@ -39,7 +39,7 @@ Some commands are focused aliases rather than separate implementations.
 | `cdxgen-secure`                               | `cdxgen` with secure mode enabled and dependency installation disabled by default                                           |
 | `aibom`, `cbom`, `obom`, `saasbom`, `spdxgen` | still accept the regular `cdxgen` flags in addition to their alias behavior                                                 |
 
-Installing `@cyclonedx/cdxgen` from npm exposes the commands in the command map plus the aliases in this section. The standalone `aibom`, `cbom`, `obom`, and `saasbom` release binaries preserve the same alias behavior. The `cbom`, `obom`, and `saasbom` binaries also include protobuf export support, so `--export-proto --proto-bin-file <file>` works without installing optional npm dependencies separately.
+Installing `@cdxgen/cdxgen` from npm exposes the commands in the command map plus the aliases in this section. The standalone `aibom`, `cbom`, `obom`, and `saasbom` release binaries preserve the same alias behavior. The `cbom`, `obom`, and `saasbom` binaries also include protobuf export support, so `--export-proto --proto-bin-file <file>` works without installing optional npm dependencies separately.
 
 ## HBOM command
 
@@ -125,33 +125,33 @@ Install the npm package when you want the full multi-command CLI surface.
 **npm**:
 
 ```shell
-npm install -g @cyclonedx/cdxgen --omit=optional --ignore-scripts --min-release-age=2
+npm install -g @cdxgen/cdxgen --omit=optional --ignore-scripts --min-release-age=2
 ```
 
 **pnpm**:
 
 ```shell
-pnpm add -g @cyclonedx/cdxgen --omit=optional --ignore-scripts --minimum-release-age=2880
+pnpm add -g @cdxgen/cdxgen --omit=optional --ignore-scripts --minimum-release-age=2880
 ```
 
 **bun**:
 
 ```shell
-bun install -g @cyclonedx/cdxgen --ignore-scripts
+bun install -g @cdxgen/cdxgen --ignore-scripts
 ```
 
 You can also invoke any packaged command without a global install:
 
 ```shell
-corepack pnpm dlx @cyclonedx/cdxgen --help
-corepack pnpm dlx --package=@cyclonedx/cdxgen hbom --help
-corepack pnpm dlx --package=@cyclonedx/cdxgen cdx-audit --help
-corepack pnpm dlx --package=@cyclonedx/cdxgen cdx-convert --help
-corepack pnpm dlx --package=@cyclonedx/cdxgen cdx-validate --help
-corepack pnpm dlx --package=@cyclonedx/cdxgen cdx-sign --help
-corepack pnpm dlx --package=@cyclonedx/cdxgen cdx-verify --help
-corepack pnpm dlx --package=@cyclonedx/cdxgen evinse --help
-corepack pnpm dlx --package=@cyclonedx/cdxgen cdxi --help
+corepack pnpm dlx @cdxgen/cdxgen --help
+corepack pnpm dlx --package=@cdxgen/cdxgen hbom --help
+corepack pnpm dlx --package=@cdxgen/cdxgen cdx-audit --help
+corepack pnpm dlx --package=@cdxgen/cdxgen cdx-convert --help
+corepack pnpm dlx --package=@cdxgen/cdxgen cdx-validate --help
+corepack pnpm dlx --package=@cdxgen/cdxgen cdx-sign --help
+corepack pnpm dlx --package=@cdxgen/cdxgen cdx-verify --help
+corepack pnpm dlx --package=@cdxgen/cdxgen evinse --help
+corepack pnpm dlx --package=@cdxgen/cdxgen cdxi --help
 ```
 
 If you are a [Homebrew](https://brew.sh/) user, you can also install [cdxgen](https://formulae.brew.sh/formula/cdxgen) via:
@@ -163,7 +163,7 @@ $ brew install cdxgen
 Deno install is also supported.
 
 ```shell
-deno install --allow-read --allow-env --allow-run --allow-sys=uid,systemMemoryInfo,gid,homedir --allow-write --allow-net -n cdxgen "npm:@cyclonedx/cdxgen/cdxgen"
+deno install --allow-read --allow-env --allow-run --allow-sys=uid,systemMemoryInfo,gid,homedir --allow-write --allow-net -n cdxgen "npm:@cdxgen/cdxgen/cdxgen"
 ```
 
 You can also use the cdxgen container image
@@ -256,7 +256,7 @@ docker run --rm -v /tmp:/tmp -v $(pwd):/app:rw -t ghcr.io/cyclonedx/cdxgen-deno 
 In deno applications, cdxgen could be directly imported without any conversion.
 
 ```ts
-import { createBom, submitBom } from "npm:@cyclonedx/cdxgen";
+import { createBom, submitBom } from "npm:@cdxgen/cdxgen";
 ```
 
 ## Getting Help

@@ -41,7 +41,7 @@ Rationale:
 
 1. **Hazard 4 (exports map).** `package.json` publishes `"./helpers/*"` →
    `./lib/helpers/*.js`. A new `lib/helpers/purl.js` is immediately reachable
-   as `@cyclonedx/cdxgen/helpers/purl`. No `exports` additions needed, so
+   as `@cdxgen/cdxgen/helpers/purl`. No `exports` additions needed, so
    `lib/packaging.poku.js` cannot regress. A new top-level `lib/purl/` would
    require explicit `exports` entries and risks an unpublished path.
 2. **Hazard 3 (boundary checker).** `PACKAGE_DIRS` maps `lib/helpers` →

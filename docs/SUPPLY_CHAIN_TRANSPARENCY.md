@@ -143,7 +143,7 @@ The following GitHub Actions pattern keeps permissions explicit and stores the g
 Install cdxgen in the job from npm, or download a verified standalone binary before you run it:
 
 ```bash
-npm install -g @cyclonedx/cdxgen
+npm install -g @cdxgen/cdxgen
 cdxgen --version
 ```
 

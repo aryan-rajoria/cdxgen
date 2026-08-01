@@ -96,11 +96,11 @@
               "name": "OWASP Foundation"
             }
           ],
-          "bom-ref": "pkg:npm/%40cyclonedx/cdxgen@0.0.0-normalized",
-          "group": "@cyclonedx",
+          "bom-ref": "pkg:npm/%40cdxgen/cdxgen@0.0.0-normalized",
+          "group": "@cdxgen",
           "name": "cdxgen",
           "publisher": "OWASP Foundation",
-          "purl": "pkg:npm/%40cyclonedx/cdxgen@0.0.0-normalized",
+          "purl": "pkg:npm/%40cdxgen/cdxgen@0.0.0-normalized",
           "type": "application",
           "version": "0.0.0-normalized"
         }

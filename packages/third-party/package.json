@@ -3,7 +3,7 @@
   "version": "0.0.0",
   "private": true,
   "type": "module",
-  "description": "Internal workspace package: lib/third-party/** — forked npm arborist. Fully self-contained; must not import from any other workspace package. No test script: this directory has no .poku.js tests yet.",
+  "description": "Internal workspace package: lib/third-party/** \u2014 forked npm arborist. Fully self-contained; must not import from any other workspace package. No test script: this directory has no .poku.js tests yet.",
   "libPath": "../../lib/third-party",
   "dependencies": {}
 }

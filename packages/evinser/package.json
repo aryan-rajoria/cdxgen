@@ -3,14 +3,10 @@
   "version": "0.0.0",
   "private": true,
   "type": "module",
-  "description": "Internal workspace package: lib/evinser/** — evidence-based SaaSBOM generation.",
+  "description": "Internal workspace package: lib/evinser/** \u2014 evidence-based SaaSBOM generation.",
   "libPath": "../../lib/evinser",
-  "dependencies": {
-    "@cdxgen/internal-helpers": "workspace:*",
-    "@cdxgen/internal-managers": "workspace:*",
-    "@cdxgen/internal-stages": "workspace:*"
-  },
   "scripts": {
     "test": "pnpm -w exec poku lib/evinser/"
-  }
+  },
+  "layer": 4
 }

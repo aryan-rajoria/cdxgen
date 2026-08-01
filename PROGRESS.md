@@ -1,3 +1,21 @@
+## D23
+
+- v13/23: rewrite check-boundaries.js with cycle/layer/barrel detection + dynamic import support; synthetic-cycle rejection tests pass; checker intentionally fails on current tree (6 file cycles, 2 package cycles, 62 barrel violations)
+- v13/23: break 6 barrel cycles by repointing 22 symbols to leaf modules (file cycles 6→0, getPnpmDepPurl moved to parsers-js to break npmutils↔parsers-js cycle)
+- v13/23: break 4 cross-package edges (package cycles 2→0): huggingfaceManifest moved parsers→helpers, executeOsQuery injected via context from stages, getTreeWithPlugin injected from cli/index.js
+- v13/23: declare layers in packages/*/package.json; remove redundant dependency lists; move SPDX constants to helpers to fix validator->stages edge
+- v13/23 step 5: create lib/core/ (L0) — moved logger, propertySanitizer, paths, state, activity, fs, env, httpClient to lib/core/; renamed core-* to drop prefix; created packages/core
+- v13/23 corrections: moved SPDX constants to lib/core/spdx.js (L0); moved huggingfaceManifest + huggingfaceUtils back to lib/parsers/ (L1)
+- v13/23: repoint all 56 internal utils.js imports to leaf modules (barrel violations 56→0); ratchet lowered to 0
+- v13/23 step 9: fix all 7 layer violations — reclassify stages L4→L3 (inject executeOsQuery/getBomWithOras to eliminate stages→managers edges), cli L5→L4, audit L4→L5; layer violations 7→0; `check-boundaries.js --strict` exits 0
+- v13/23: exports map adds `./core/*`; parity harness 38/0 + 7/7 verified with staged binary; goldens byte-identical throughout
+
+## D22
+
+- v13/22: rename @cyclonedx/cdxgen -> @cdxgen/cdxgen in package.json/jsr.json/deno.json, code self-identification, CI configs, and documentation
+- v13/22: re-record 27 golden expected files -- tool self-purl change (metadata.tools bom-ref, group, purl; 81 lines across 27 files)
+- v13/22: MIGRATING-TO-V13.md package rename section; freeze contrib/fine-tuning/cdxgen-docs/*.jsonl as v12-era training data
+
 ## D06
 
 ### cdxgen

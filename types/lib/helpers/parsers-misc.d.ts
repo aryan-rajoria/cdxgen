@@ -191,7 +191,7 @@ export declare function parseComposerLock(pkgLockFile: string, rootRequires: arr
     pkgList: {
         group: any;
         name: any;
-        purl: string;
+        purl: any;
         "bom-ref": string;
         version: any;
         repository: any;
@@ -221,7 +221,7 @@ export declare function parseComposerLock(pkgLockFile: string, rootRequires: arr
     rootList: {
         group: any;
         name: any;
-        purl: string;
+        purl: any;
         "bom-ref": string;
         version: any;
         repository: any;
@@ -288,7 +288,7 @@ export declare function executeEqueryList(pkgName: string): any;
  * @param {string} jsonObject Swift dependencies json object
  * @param {string} pkgFile Package.swift file
  */
-export declare function parseSwiftJsonTreeObject(pkgList: any[], dependenciesList: any[], jsonObject: string, pkgFile: string): string;
+export declare function parseSwiftJsonTreeObject(pkgList: any[], dependenciesList: any[], jsonObject: string, pkgFile: string): any;
 /**
  * Parse swift dependency tree output
  * @param {string} rawOutput Swift dependencies json output
@@ -308,9 +308,9 @@ export declare function parseSwiftJsonTree(rawOutput: string, pkgFile: string): 
  * @param {string} resolvedFile Package.resolved file
  */
 export declare function parseSwiftResolved(resolvedFile: string): {
-    name: string;
-    group: string | null | undefined;
-    version: string | null | undefined;
+    name: any;
+    group: any;
+    version: any;
     purl: string;
     "bom-ref": string;
     properties: {

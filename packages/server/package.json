@@ -3,14 +3,10 @@
   "version": "0.0.0",
   "private": true,
   "type": "module",
-  "description": "Internal workspace package: lib/server/** — connect-based HTTP server.",
+  "description": "Internal workspace package: lib/server/** \u2014 connect-based HTTP server.",
   "libPath": "../../lib/server",
-  "dependencies": {
-    "@cdxgen/internal-helpers": "workspace:*",
-    "@cdxgen/internal-cli": "workspace:*",
-    "@cdxgen/internal-stages": "workspace:*"
-  },
   "scripts": {
     "test": "pnpm -w exec poku lib/server/"
-  }
+  },
+  "layer": 5
 }

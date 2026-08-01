@@ -184,6 +184,49 @@ export function diffBoms(actual, expected) {
     summaryParts.push(`~metadata.component changed`);
   }
 
+  // --- Everything else ---
+  // Components, dependencies and metadata.component get bespoke, readable
+  // reporting above. Every *other* field is compared generically here, because a
+  // normalized BOM is fully deterministic — sbom-normalize.js pins serialNumber
+  // and metadata.timestamp to constants — so there is no field that legitimately
+  // differs between runs. Anything left uncompared is a blind spot: before this
+  // existed, replacing metadata.tools with a bogus tool still reported
+  // "identical" across all 27 goldens.
+  const otherChanges = [];
+  const skipTopLevel = new Set(["components", "dependencies"]);
+  const topLevelKeys = new Set([
+    ...Object.keys(actual || {}),
+    ...Object.keys(expected || {}),
+  ]);
+  for (const key of topLevelKeys) {
+    if (skipTopLevel.has(key)) {
+      continue;
+    }
+    if (key === "metadata") {
+      const metaKeys = new Set([
+        ...Object.keys(actual?.metadata || {}),
+        ...Object.keys(expected?.metadata || {}),
+      ]);
+      for (const metaKey of metaKeys) {
+        // Reported separately above, with component-aware labels.
+        if (metaKey === "component") {
+          continue;
+        }
+        deepDiff(
+          `metadata.${metaKey}`,
+          actual?.metadata?.[metaKey],
+          expected?.metadata?.[metaKey],
+          otherChanges,
+        );
+      }
+      continue;
+    }
+    deepDiff(key, actual?.[key], expected?.[key], otherChanges);
+  }
+  if (otherChanges.length) {
+    summaryParts.push(`~${otherChanges.length} other field(s) changed`);
+  }
+
   // --- Assemble details (capped) ---
   if (removedComps.length) {
     details.push("Removed components:");
@@ -227,13 +270,23 @@ export function diffBoms(actual, expected) {
       details.push(`  ${m}`);
     }
   }
+  if (otherChanges.length) {
+    details.push("Other field changes:");
+    for (const o of otherChanges.slice(0, MAX_FIELD_DETAILS)) {
+      details.push(`  ${o}`);
+    }
+    if (otherChanges.length > MAX_FIELD_DETAILS) {
+      details.push(`  ... and ${otherChanges.length - MAX_FIELD_DETAILS} more`);
+    }
+  }
 
   const isEqual =
     addedComps.length === 0 &&
     removedComps.length === 0 &&
     changedComps.length === 0 &&
     depChanges.length === 0 &&
-    metaChanges.length === 0;
+    metaChanges.length === 0 &&
+    otherChanges.length === 0;
 
   const summary =
     summaryParts.length > 0

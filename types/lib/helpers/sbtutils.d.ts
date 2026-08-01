@@ -88,13 +88,13 @@ export declare function parseSbtLock(pkgLockFile: string): Promise<{
         name: string;
         value: string;
     }[];
-    purl: string;
+    purl: any;
     "bom-ref": string;
     evidence: {
         identity: {
             field: string;
             confidence: number;
-            concludedValue: string;
+            concludedValue: any;
             methods: {
                 technique: string;
                 confidence: number;

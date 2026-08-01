@@ -116,7 +116,7 @@ export declare function createUVLock(basePath: string, options: Object): void;
  *
  * @returns {Object} List of packages from the virtual env
  */
-export declare function getPipFrozenTree(basePath: string, reqOrSetupFile: string, tempVenvDir: string, parentComponent: Object, projectRoot: any): Object;
+export declare function getPipFrozenTree(basePath: string, reqOrSetupFile: string, tempVenvDir: string, parentComponent: Object, projectRoot: any, getTreeWithPluginFn: any): Object;
 /**
  * The problem: pip installation can fail for a number of reasons such as missing OS dependencies and devel packages.
  * When it fails, we don't get any dependency tree. As a workaroud, this method would attempt to install one package at a time to the same virtual environment and then attempts to obtain a dependency tree.
@@ -129,7 +129,7 @@ export declare function getPipFrozenTree(basePath: string, reqOrSetupFile: strin
  *
  * @returns List of packages from the virtual env
  */
-export declare function getPipTreeForPackages(basePath: string, pkgList: any[], tempVenvDir: string, parentComponent: Object): {
+export declare function getPipTreeForPackages(basePath: string, pkgList: any[], tempVenvDir: string, parentComponent: Object, getTreeWithPluginFn: any): {
     failedPkgList?: undefined;
     rootList?: undefined;
     dependenciesList?: undefined;
@@ -138,7 +138,7 @@ export declare function getPipTreeForPackages(basePath: string, pkgList: any[], 
     rootList: {
         name: any;
         version: any;
-        purl: string;
+        purl: any;
         "bom-ref": string;
     }[];
     dependenciesList: {

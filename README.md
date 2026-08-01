@@ -122,28 +122,28 @@ Install the npm package without the optional binary plugins for basic SBOM gener
 **npm**:
 
 ```shell
-npm install -g @cyclonedx/cdxgen --omit=optional --ignore-scripts --min-release-age=2
+npm install -g @cdxgen/cdxgen --omit=optional --ignore-scripts --min-release-age=2
 ```
 
 For a full and rich experience with support for multiple BOM types, remove `--omit=optional`.
 
 ```shell
-npm install -g @cyclonedx/cdxgen --ignore-scripts --min-release-age=2
+npm install -g @cdxgen/cdxgen --ignore-scripts --min-release-age=2
 ```
 
 **pnpm**:
 
 ```shell
-pnpm add -g @cyclonedx/cdxgen --omit=optional --ignore-scripts --minimum-release-age=2880
+pnpm add -g @cdxgen/cdxgen --omit=optional --ignore-scripts --minimum-release-age=2880
 ```
 
 **bun**:
 
 ```shell
-bun install -g @cyclonedx/cdxgen --ignore-scripts
+bun install -g @cdxgen/cdxgen --ignore-scripts
 ```
 
-Installing `@cyclonedx/cdxgen` exposes these commands:
+Installing `@cdxgen/cdxgen` exposes these commands:
 
 | Command         | Purpose                                                                                                              | Standalone GitHub release binary |
 | --------------- | -------------------------------------------------------------------------------------------------------------------- | -------------------------------- |
@@ -179,21 +179,21 @@ For host inventories, `hbom --include-runtime` produces a merged HBOM + OBOM vie
 To run cdxgen without installing (hotloading), use the [pnpm dlx](https://pnpm.io/cli/dlx) command.
 
 ```shell
-corepack pnpm dlx @cyclonedx/cdxgen --help
+corepack pnpm dlx @cdxgen/cdxgen --help
 ```
 
 You can call any packaged command the same way:
 
 ```shell
-corepack pnpm dlx --package=@cyclonedx/cdxgen cdx-audit --help
-corepack pnpm dlx --package=@cyclonedx/cdxgen cdx-convert --help
-corepack pnpm dlx --package=@cyclonedx/cdxgen cdx-validate --help
-corepack pnpm dlx --package=@cyclonedx/cdxgen cdx-sign --help
-corepack pnpm dlx --package=@cyclonedx/cdxgen cdx-verify --help
-corepack pnpm dlx --package=@cyclonedx/cdxgen hbom --help
-corepack pnpm dlx --package=@cyclonedx/cdxgen hbom diagnostics --help
-corepack pnpm dlx --package=@cyclonedx/cdxgen evinse --help
-corepack pnpm dlx --package=@cyclonedx/cdxgen cdxi --help
+corepack pnpm dlx --package=@cdxgen/cdxgen cdx-audit --help
+corepack pnpm dlx --package=@cdxgen/cdxgen cdx-convert --help
+corepack pnpm dlx --package=@cdxgen/cdxgen cdx-validate --help
+corepack pnpm dlx --package=@cdxgen/cdxgen cdx-sign --help
+corepack pnpm dlx --package=@cdxgen/cdxgen cdx-verify --help
+corepack pnpm dlx --package=@cdxgen/cdxgen hbom --help
+corepack pnpm dlx --package=@cdxgen/cdxgen hbom diagnostics --help
+corepack pnpm dlx --package=@cdxgen/cdxgen evinse --help
+corepack pnpm dlx --package=@cdxgen/cdxgen cdxi --help
 ```
 
 If you are a [Homebrew][homebrew-homepage] user, you can also install [cdxgen][homebrew-cdxgen] via:
@@ -295,16 +295,16 @@ steps:
       ./cdx-audit-linux-amd64 --help
 ```
 
-cdxgen also runs under the [bun](https://bun.sh) runtime, including `bunx --bun @cyclonedx/cdxgen`. Bun projects using a text lockfile (`bun.lock`) are supported as an SBOM target via the `bun` project type (`-t bun`); the legacy binary lockfile (`bun.lockb`) is not parsed, so regenerate a text lockfile with `bun install --save-text-lockfile`.
+cdxgen also runs under the [bun](https://bun.sh) runtime, including `bunx --bun @cdxgen/cdxgen`. Bun projects using a text lockfile (`bun.lock`) are supported as an SBOM target via the `bun` project type (`-t bun`); the legacy binary lockfile (`bun.lockb`) is not parsed, so regenerate a text lockfile with `bun install --save-text-lockfile`.
 
 ```shell
-bun install -g @cyclonedx/cdxgen --ignore-scripts
+bun install -g @cdxgen/cdxgen --ignore-scripts
 ```
 
 cdxgen also runs under the [deno](https://deno.com) runtime. Deno projects with a lockfile (`deno.lock`, versions 2 - 5) are supported as an SBOM target via the `deno` project type (`-t deno`); `jsr:` imports are recorded under the `@jsr` npm-compat scope, `npm:` imports as regular npm components and remote `https://` imports as generic components.
 
 ```shell
-deno install --allow-read --allow-env --allow-run --allow-sys=uid,systemMemoryInfo,gid,homedir --allow-write --allow-net -n cdxgen "npm:@cyclonedx/cdxgen/cdxgen"
+deno install --allow-read --allow-env --allow-run --allow-sys=uid,systemMemoryInfo,gid,homedir --allow-write --allow-net -n cdxgen "npm:@cdxgen/cdxgen/cdxgen"
 ```
 
 You can also use the cdxgen container image with node, deno, or bun runtime versions.
@@ -330,7 +330,7 @@ docker run --rm -e CDXGEN_DEBUG_MODE=debug -v /tmp:/tmp -v $(pwd):/app:rw -t ghc
 In deno applications, cdxgen could be directly imported without any conversion.
 
 ```ts
-import { createBom, submitBom } from "npm:@cyclonedx/cdxgen@^12.2.1";
+import { createBom, submitBom } from "npm:@cdxgen/cdxgen@^12.2.1";
 ```
 
 ## Common workflows
@@ -698,7 +698,7 @@ Use the bundled `cdx-validate` command to validate CycloneDX BOMs against **stru
 Use the bundled `cdx-verify` command to validate BOM signatures. By default, `cdx-verify` performs a **strict deep verification**, meaning it mathematically validates the top-level BOM signature _and_ the signatures of every nested component, service, and annotation against the provided public key. Refer to this [lesson](./docs/LESSON6.md) for the usage of sign and verify commands.
 
 ```shell
-npm install -g @cyclonedx/cdxgen --omit=optional --ignore-scripts --min-release-age=2
+npm install -g @cdxgen/cdxgen --omit=optional --ignore-scripts --min-release-age=2
 
 # Perform strict deep verification (default)
 cdx-verify -i bom.json --public-key public.key
@@ -712,13 +712,13 @@ cdx-verify -i bom.json --public-key auditor_public.key --no-deep
 You can run the verification tools directly using pnpm (no global install needed):
 
 ```shell
-pnpm dlx @cyclonedx/cdxgen cdx-verify -i bom.json --public-key public.key
+pnpm dlx @cdxgen/cdxgen cdx-verify -i bom.json --public-key public.key
 ```
 
 You can also use pnpm to invoke the signing tool:
 
 ```shell
-pnpm dlx @cyclonedx/cdxgen cdx-sign -i bom.json -k private.key
+pnpm dlx @cdxgen/cdxgen cdx-sign -i bom.json -k private.key
 ```
 
 ---
@@ -782,13 +782,13 @@ cdxgen is [ESM only](https://gist.github.com/sindresorhus/a39789f98801d908bbc7ff
 Minimal example:
 
 ```ts
-import { createBom, submitBom } from "npm:@cyclonedx/cdxgen@^9.0.1";
+import { createBom, submitBom } from "npm:@cdxgen/cdxgen@^9.0.1";
 ```
 
 See the [Deno Readme](./contrib/deno/README.md) for detailed instructions.
 
 ```javascript
-import { createBom, submitBom } from "@cyclonedx/cdxgen";
+import { createBom, submitBom } from "@cdxgen/cdxgen";
 // bomNSData would contain bomJson
 const bomNSData = await createBom(filePath, options);
 // Submission to dependency track server
@@ -909,11 +909,11 @@ Copy the below block to your markdown files to show your ❤️ for cdxgen.
 [homebrew-homepage]: https://brew.sh
 [homebrew-cdxgen]: https://formulae.brew.sh/formula/cdxgen
 [winget-homepage]: https://learn.microsoft.com/en-us/windows/package-manager/winget/
-[jsr-cdxgen]: https://jsr.io/@cyclonedx/cdxgen
+[jsr-cdxgen]: https://jsr.io/@cdxgen/cdxgen
 [jwt-homepage]: https://jwt.io
 [jwt-libraries]: https://jwt.io/libraries
 [librariesio]: https://libraries.io/npm/@cyclonedx%2Fcdxgen
-[npmjs-cdxgen]: https://www.npmjs.com/package/@cyclonedx/cdxgen
+[npmjs-cdxgen]: https://www.npmjs.com/package/@cdxgen/cdxgen
 [podman-github-rootless]: https://github.com/containers/podman/blob/master/docs/tutorials/rootless_tutorial.md
 [podman-github-remote]: https://github.com/containers/podman/blob/master/docs/tutorials/mac_win_client.md
 [swh-cdxgen]: https://archive.softwareheritage.org/browse/origin/?origin_url=https://github.com/cdxgen/cdxgen

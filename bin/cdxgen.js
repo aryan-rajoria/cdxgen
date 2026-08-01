@@ -25,6 +25,7 @@ import {
   validateSpecVersion,
 } from "../lib/cli/cliOptions.js";
 import { createBom, submitBom } from "../lib/cli/index.js";
+import { TRACE_MODE, thoughtEnd, thoughtLog } from "../lib/core/logger.js";
 import { signBom, verifyBom } from "../lib/helpers/bomSigner.js";
 import {
   DEFAULT_CDX_SPEC_VERSION,
@@ -58,7 +59,6 @@ import {
   hasHbomProjectType,
   isHbomOnlyProjectTypes,
 } from "../lib/helpers/hbom.js";
-import { TRACE_MODE, thoughtEnd, thoughtLog } from "../lib/helpers/logger.js";
 import { resolvePluginBinary } from "../lib/helpers/plugins.js";
 import { importProtobomModule } from "../lib/helpers/protobomLoader.js";
 import { normalizeHuggingFaceReference } from "../lib/helpers/remote/huggingface.js";
@@ -104,6 +104,8 @@ import {
   shouldRunPredictiveBomAudit,
   toCamel,
 } from "../lib/helpers/utils.js";
+import { executeOsQuery } from "../lib/managers/binary.js";
+import { getBomWithOras } from "../lib/managers/oci.js";
 import { postProcess } from "../lib/stages/postgen/postgen.js";
 import { convertCycloneDxToSpdx } from "../lib/stages/postgen/spdxConverter.js";
 import { auditEnvironment } from "../lib/stages/pregen/envAudit.js";
@@ -1537,7 +1539,7 @@ const writeCycloneDxOutput = (jsonFile, bomJson, options) => {
     await ensureAiOversightProperties(bomNSData.bomJson, options);
   }
   // Add extra metadata and annotations with post processing
-  bomNSData = postProcess(bomNSData, options, srcDir);
+  bomNSData = postProcess(bomNSData, { ...options, executeOsQuery }, srcDir);
   setActivityContext({
     projectType: Array.isArray(options.projectType)
       ? options.projectType.join(",")
@@ -1562,7 +1564,10 @@ const writeCycloneDxOutput = (jsonFile, bomJson, options) => {
       hasCriticalFindings,
     } = await import("../lib/stages/postgen/auditBom.js");
     thoughtLog("Let's run security audit...");
-    const postAuditFindings = await auditBom(bomNSData.bomJson, options);
+    const postAuditFindings = await auditBom(bomNSData.bomJson, {
+      ...options,
+      getBomWithOras,
+    });
     if (postAuditFindings.length) {
       formatConsoleOutput(postAuditFindings);
     } else if (DEBUG_MODE) {

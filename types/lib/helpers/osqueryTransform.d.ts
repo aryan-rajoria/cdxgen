@@ -6,5 +6,5 @@ export declare function sanitizeOsQueryIdentity(value: any): string;
 export declare function sanitizeOsQueryBomRefValue(value: any, fallback?: string): string;
 export declare function createOsQueryFallbackBomRef(queryCategory: any, componentType: any, name: any, version: any, identityField: any, identityValue: any): string;
 export declare function shouldCreateOsQueryPurl(componentType: any): boolean;
-export declare function createOsQueryPurl(purlType: any, group: any, name: any, version: any, qualifiers: any, subpath: any): string;
+export declare function createOsQueryPurl(purlType: any, group: any, name: any, version: any, qualifiers: any, subpath: any): string | null;
 //# sourceMappingURL=osqueryTransform.d.ts.map

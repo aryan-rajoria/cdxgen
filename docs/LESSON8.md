@@ -16,10 +16,10 @@ By the end, you will be able to:
 ## Pre-requisites
 
 - Node.js ≥ 20
-- `@cyclonedx/cdxgen` installed
+- `@cdxgen/cdxgen` installed
 
 ```shell
-npm install -g @cyclonedx/cdxgen
+npm install -g @cdxgen/cdxgen
 ```
 
 ## Step 1: Generate SBOM from a git URL

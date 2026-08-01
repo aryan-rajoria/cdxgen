@@ -63,7 +63,6 @@ export declare function convertOSQueryResults(queryCategory: string, queryObj: O
     description: any;
     publisher: any;
     "bom-ref": string;
-    purl: string | undefined;
     scope: any;
     type: any;
 }[];
@@ -107,14 +106,14 @@ export declare function getCppModules(src: string, options: object, osPkgsList: 
         version: any;
         description: any;
         license: any;
-        purl: string;
+        purl: any;
         type: string;
         "bom-ref": string;
         group?: undefined;
     } | {
+        purl?: undefined;
         description?: undefined;
         license?: undefined;
-        purl?: undefined;
         "bom-ref"?: undefined;
         group: any;
         name: any;

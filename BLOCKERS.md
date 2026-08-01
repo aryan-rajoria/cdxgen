@@ -69,6 +69,36 @@
    (`%C3%A9` → `Ã©`). All fixed with tests; the 38-BOM parity harness shows zero
    false positives from the stricter parsing.
 
+## D22
+
+No blockers. All gates pass.
+
+### Notes
+
+1. **contrib/fine-tuning/cdxgen-docs/*.jsonl — FROZEN.** These 14 JSONL files
+   are v12-era training data mirroring the v12 documentation. They contain 17
+   references to `@cyclonedx/cdxgen`. Decision: freeze, not regenerate. They
+   are a historical record of v12-era docs; updating them would misrepresent
+   the training data's provenance.
+
+2. **ci/diff-v12-v13.js uses both names intentionally.** It installs
+   `@cyclonedx/cdxgen@<v12-version>` for the v12 side of the comparison. The
+   old name is correct there.
+
+3. **Publishing steps not executed (maintainer-only).** The following should
+   be added to DELIVERABLE-19-release.md:
+   - `npm publish` under `@cdxgen/cdxgen`
+   - `npm deprecate @cyclonedx/cdxgen "moved to @cdxgen/cdxgen; see MIGRATING-TO-V13.md"`
+   - Do NOT unpublish `@cyclonedx/cdxgen`; `^12` must keep resolving forever
+   - Container image names, GitHub org, repo URLs are out of scope
+
+4. **Types not regenerated in-loop.** Per plan, `pnpm gen-types` is too slow
+   for the development loop. Types should be regenerated once at the very end
+   as a separate commit. The existing type files under `types/` are slightly
+   stale (the `types/lib/parsers/huggingfaceManifest.d.ts` was moved to
+   `types/lib/helpers/` but its content may not reflect the new exports from
+   D23 step 2-3 changes).
+
 ## D20
 
 No blockers. All gates pass with and without a staged cdxrs binary.

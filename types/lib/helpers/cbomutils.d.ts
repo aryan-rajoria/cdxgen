@@ -4,7 +4,7 @@
  * @param {Object} options
  * @returns osPkgsList Array of OS crypto packages
  */
-export declare function collectOSCryptoLibs(options: Object): any[];
+export declare function collectOSCryptoLibs(options: Object, executeOsQueryFn: any): any[];
 export declare function collectSourceCryptoComponents(src: any, options?: {}): Promise<any[]>;
 export declare function collectDosaiCryptoComponents(src: any, options?: {}): Promise<any[]>;
 /**

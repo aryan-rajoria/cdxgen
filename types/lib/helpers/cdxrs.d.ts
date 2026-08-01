@@ -35,12 +35,19 @@ export declare function cdxrsDisabled(subcommand: string): boolean;
  */
 export declare function cdxrsBinaryPath(): string | undefined;
 /**
- * Check whether the cdxrs binary is present and its major version matches.
+ * Check whether cdxrs may be used for a subcommand: it must not be disabled,
+ * the binary must be present, and its major version must match.
  *
- * @param {string} [_subcommand] Unused for now; future subcommands may probe `--help`.
+ * The disable check comes first and is deliberate. Callers gate on this function
+ * to decide between the Rust and JS paths, so it has to honour
+ * `CDXGEN_RS_DISABLE` / `--no-rust`; otherwise a disabled run still reports (and
+ * would still select) Rust, and `--no-rust` becomes a no-op for every caller
+ * that does not go through `runCdxrs`.
+ *
+ * @param {string} [subcommand] Subcommand to check, e.g. "info".
  * @returns {{ available: boolean, version?: string, reason?: string }}
  */
-export declare function cdxrsAvailable(_subcommand?: string): {
+export declare function cdxrsAvailable(subcommand?: string): {
     available: boolean;
     version?: string;
     reason?: string;
@@ -52,14 +59,25 @@ export declare function cdxrsAvailable(_subcommand?: string): {
  * Every failure mode logs once at `warn` and returns the CDXRS_FALLBACK
  * sentinel so the caller can take the JS path.
  *
+ * Pass BOM data one of two ways:
+ *   - `content`: an in-memory string/Buffer, fed to the child over stdin with
+ *     `--input -`. Content larger than 32 MB is spilled to a temp file and
+ *     passed by path instead, per the protocol; the file is always removed.
+ *   - `input`: a path to a file already on disk.
+ *
+ * Passing `content` is the normal case, since cdxgen holds BOMs in memory.
+ *
  * @param {string} subcommand The subcommand to run (e.g. "info").
  * @param {Object} opts
- * @param {string} [opts.input] Input file path ("-" for stdin, default "-").
+ * @param {string|Buffer} [opts.content] BOM data to feed over stdin.
+ * @param {string} [opts.input] Input file path. Defaults to "-" (stdin), which
+ *   requires `content`.
  * @param {string[]} [opts.args] Extra arguments to pass.
  * @param {number} [opts.timeoutMs] Timeout in milliseconds.
  * @returns {Promise<{ok: boolean, stdout: string, exitCode: number|null, reason?: string}>}
  */
 export declare function runCdxrs(subcommand: string, opts?: {
+    content?: string | Buffer;
     input?: string;
     args?: string[];
     timeoutMs?: number;

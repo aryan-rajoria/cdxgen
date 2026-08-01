@@ -1,0 +1,12 @@
+{
+  "name": "@cdxgen/internal-core",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "description": "Internal workspace package: lib/core/** — foundational modules (logger, fs, env, activity, paths, state, sanitizers). No imports from any higher layer.",
+  "libPath": "../../lib/core",
+  "scripts": {
+    "test": "pnpm -w exec poku lib/core/"
+  },
+  "layer": 0
+}

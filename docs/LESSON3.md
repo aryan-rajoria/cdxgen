@@ -18,7 +18,7 @@ Additionally, you need to have access to a container registry to push the image.
 Install cdxgen
 
 ```shell
-sudo npm install -g @cyclonedx/cdxgen
+sudo npm install -g @cdxgen/cdxgen
 ```
 
 ### Create and Build a container image

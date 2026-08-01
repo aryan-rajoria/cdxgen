@@ -18,8 +18,8 @@ By the end of this lesson you should be able to answer these questions for a Go 
 Install cdxgen with the optional plugin package available. The normal npm package installs `@cdxgen/cdxgen-plugins-bin` as an optional dependency when the platform package is available.
 
 ```bash
-corepack pnpm dlx --package=@cyclonedx/cdxgen cdxgen --version
-corepack pnpm dlx --package=@cyclonedx/cdxgen evinse --help
+corepack pnpm dlx --package=@cdxgen/cdxgen cdxgen --version
+corepack pnpm dlx --package=@cdxgen/cdxgen evinse --help
 ```
 
 If you are working from source, install dependencies first:

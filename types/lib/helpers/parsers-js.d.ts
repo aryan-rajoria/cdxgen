@@ -40,6 +40,21 @@ export declare function parseYarnLock(yarnLockFile: string, parentComponent?: Ob
 export declare function parseNodeShrinkwrap(swFile: string): Promise<any[]>;
 export declare function getVersionNumPnpm(depPkg: any, relativePath: any): Promise<any>;
 /**
+ * Resolve a pnpm dependency to its PURL string.
+ *
+ * Moved here from npmutils.js to break the npmutils ↔ parsers-js cycle.
+ * Only callers are in this file.
+ *
+ * @param {string|object} depPkg Dependency package version or object
+ * @param {string} packageName Package name
+ * @param {object} gitPkgRefs Git package refs map
+ * @param {string} relativePath Relative path for resolution
+ * @param {string} githubServerHost GitHub server host
+ * @param {object} [npmrcConfig={}] npmrc configuration
+ * @returns {Promise<string>} Decoded PURL string
+ */
+export declare function getPnpmDepPurl(depPkg: string | object, packageName: string, gitPkgRefs: object, relativePath: string, githubServerHost: string, npmrcConfig?: object): Promise<string>;
+/**
  * Parse pnpm workspace file
  *
  * @param {string} workspaceFile pnpm-workspace.yaml
@@ -84,9 +99,9 @@ export declare function pnpmMetadata(pkgList: any[], lockFilePath: string): any[
  * @param {string} projectRoot Root path used to relativize pnpm-lock evidence paths
  */
 export declare function parsePnpmLock(pnpmLock: string, parentComponent?: Object, workspacePackages?: any, workspaceSrcFiles?: Object, _workspaceCatalogs?: Object, _workspaceDirectDeps?: Object, depsWorkspaceRefs?: Object, projectRoot?: string): Promise<{
-    parentSubComponents?: undefined;
     pkgList?: undefined;
     dependenciesList?: undefined;
+    parentSubComponents?: undefined;
 } | {
     pkgList: any[];
     dependenciesList: {
@@ -98,7 +113,7 @@ export declare function parsePnpmLock(pnpmLock: string, parentComponent?: Object
         name: any;
         version: any;
         type: string;
-        purl: string;
+        purl: any;
         "bom-ref": string;
     }[];
 }>;

@@ -13,7 +13,7 @@ Ensure the following tools are installed:
 
 - Node.js >= 24
 - OpenSSL (to generate cryptographic keys)
-- `@cyclonedx/cdxgen` installed globally (provides `cdxgen`, `cdx-sign`, and `cdx-verify`)
+- `@cdxgen/cdxgen` installed globally (provides `cdxgen`, `cdx-sign`, and `cdx-verify`)
 
 ## Getting started
 

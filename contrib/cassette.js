@@ -36,7 +36,7 @@ import {
   setHttpInterceptor,
   clearHttpInterceptor,
   CassetteMissError,
-} from "../lib/helpers/httpClient.js";
+} from "../lib/core/httpClient.js";
 
 export { CassetteMissError };
 

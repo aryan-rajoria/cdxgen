@@ -3,13 +3,10 @@
   "version": "0.0.0",
   "private": true,
   "type": "module",
-  "description": "Internal workspace package: lib/validator/** — CycloneDX JSON schema validation and compliance rules.",
+  "description": "Internal workspace package: lib/validator/** \u2014 CycloneDX JSON schema validation and compliance rules.",
   "libPath": "../../lib/validator",
-  "dependencies": {
-    "@cdxgen/internal-helpers": "workspace:*",
-    "@cdxgen/internal-stages": "workspace:*"
-  },
   "scripts": {
     "test": "pnpm -w exec poku lib/validator/"
-  }
+  },
+  "layer": 4
 }

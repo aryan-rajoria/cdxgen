@@ -7,6 +7,7 @@ import yargs from "yargs";
 import { hideBin } from "yargs/helpers";
 
 import { createHBom } from "../lib/cli/index.js";
+import { thoughtLog } from "../lib/core/logger.js";
 import { printActivitySummary } from "../lib/helpers/display.js";
 import { getOutputDirectory } from "../lib/helpers/exportUtils.js";
 import {
@@ -15,7 +16,6 @@ import {
   hasHbomProjectType,
 } from "../lib/helpers/hbom.js";
 import { getHbomSummary } from "../lib/helpers/hbomAnalysis.js";
-import { thoughtLog } from "../lib/helpers/logger.js";
 import {
   importProtobomModule,
   isProtoBomPath,

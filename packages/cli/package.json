@@ -3,14 +3,10 @@
   "version": "0.0.0",
   "private": true,
   "type": "module",
-  "description": "Internal workspace package: lib/cli/** — core BOM generation orchestration. Top of the dependency stack; may import from all lower layers.",
+  "description": "Internal workspace package: lib/cli/** \u2014 core BOM generation orchestration. Top of the dependency stack; may import from all lower layers.",
   "libPath": "../../lib/cli",
-  "dependencies": {
-    "@cdxgen/internal-helpers": "workspace:*",
-    "@cdxgen/internal-parsers": "workspace:*",
-    "@cdxgen/internal-managers": "workspace:*"
-  },
   "scripts": {
     "test": "pnpm -w exec poku lib/cli/"
-  }
+  },
+  "layer": 4
 }

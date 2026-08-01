@@ -15,7 +15,7 @@ Ensure the following tools are installed.
 Install cdxgen
 
 ```shell
-sudo npm install -g @cyclonedx/cdxgen
+sudo npm install -g @cdxgen/cdxgen
 ```
 
 Clone and compile dependency track
