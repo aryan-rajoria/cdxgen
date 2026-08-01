@@ -74,9 +74,6 @@ jobs:
         with:
           node-version-file: .nvmrc
           package-manager-cache: false
-      - name: Setup Nexus usage
-        if: github.repository == 'cdxgen/cdxgen' && (github.event_name != 'pull_request' || github.event.pull_request.head.repo.fork == false)
-        run: echo "registry=$NEXUS_URL" > .npmrc
       - name: pnpm install
         run: |
           pnpm install:frozen
@@ -403,9 +400,6 @@ jobs:
         with:
           node-version-file: .nvmrc
           package-manager-cache: false
-      - name: Setup Nexus usage
-        if: github.repository == 'cdxgen/cdxgen' && (github.event_name != 'pull_request' || github.event.pull_request.head.repo.fork == false)
-        run: echo "registry=$NEXUS_URL" > .npmrc
       - name: pnpm install
         run: |
           pnpm install:frozen
@@ -505,9 +499,6 @@ jobs:
       - name: Install bazelisk - windows
         if: matrix.os == 'windows-latest'
         run: choco install -y bazel
-      - name: Setup Nexus usage
-        if: github.repository == 'cdxgen/cdxgen' && matrix.os == 'self-hosted-ubuntu' && (github.event_name != 'pull_request' || github.event.pull_request.head.repo.fork == false)
-        run: echo "registry=$NEXUS_URL" > .npmrc
       - name: pnpm install
         run: |
           pnpm install:frozen
