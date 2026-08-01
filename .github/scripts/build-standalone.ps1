@@ -1,6 +1,12 @@
 $ErrorActionPreference = "Stop"
 Set-StrictMode -Version Latest
 
+# `$ErrorActionPreference` governs PowerShell errors, not the exit codes of
+# native commands. Without this, a failed `pnpm install` or a binary that
+# crashes on `--version` is ignored and the script carries on to report some
+# later, unrelated symptom. The bash sibling gets this from `set -e`.
+$PSNativeCommandUseErrorActionPreference = $true
+
 $defaultTargets = @(
   "aibom",
   "cdxgen",
@@ -141,6 +147,27 @@ function Copy-RuntimeSources {
   Copy-Item -Path package.json, pnpm-lock.yaml -Destination $StagingDir -Force
   if (Test-Path .pnpmfile.cjs) {
     Copy-Item -Path .pnpmfile.cjs -Destination $StagingDir -Force
+  }
+  # pnpm 11 reads `overrides` from pnpm-workspace.yaml rather than the `pnpm`
+  # field of package.json. Without it here the staging install disagrees with
+  # the lockfile it was given (ERR_PNPM_LOCKFILE_CONFIG_MISMATCH under
+  # --frozen-lockfile) and produces an incomplete node_modules otherwise. The
+  # `packages:` key is dropped because the staging tree has no workspace
+  # members. Kept in step with copy_runtime_sources in build-standalone.sh.
+  if (Test-Path pnpm-workspace.yaml) {
+    $skippingPackages = $false
+    $workspaceLines = foreach ($line in Get-Content -Path pnpm-workspace.yaml) {
+      if ($line -match '^packages:') {
+        $skippingPackages = $true
+        continue
+      }
+      if ($skippingPackages -and $line -match '^\s*-') {
+        continue
+      }
+      $skippingPackages = $false
+      $line
+    }
+    Set-Content -Path (Join-Path $StagingDir "pnpm-workspace.yaml") -Value $workspaceLines -Encoding utf8
   }
   Copy-Item -Path bin, data, lib -Destination $StagingDir -Force -Recurse
   if (Test-Path plugins) {
