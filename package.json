@@ -119,6 +119,7 @@
   ],
   "scripts": {
     "check:boundaries": "node contrib/check-boundaries.js",
+    "check:lib-paths": "node contrib/check-lib-paths.js",
     "gen-types": "pnpm exec tsc",
     "install:frozen": "pnpm install --config.strict-dep-builds=true --frozen-lockfile --package-import-method copy",
     "install:prod": "pnpm install --config.strict-dep-builds=true --frozen-lockfile --package-import-method copy --prod",

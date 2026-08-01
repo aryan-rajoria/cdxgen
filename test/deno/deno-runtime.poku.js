@@ -3,18 +3,16 @@ import { join } from "node:path";
 
 import { describe, test } from "poku";
 
-import { findJSImportsExports } from "../../lib/helpers/analyzer.js";
+import { findJSImportsExports } from "../../lib/ecosystems/analyzer.js";
 import {
   findDenoJson,
   parseDenoJsonFile,
   parseDenoLock,
   stripJsonc,
-} from "../../lib/helpers/denoutils.js";
-import {
-  addEvidenceForImports,
-  getRuntimeInformation,
-  isDeno,
-} from "../../lib/helpers/utils.js";
+} from "../../lib/ecosystems/denoutils.js";
+import { isDeno } from "../../lib/core/env.js";
+import { getRuntimeInformation } from "../../lib/ecosystems/envcontext.js";
+import { addEvidenceForImports } from "../../lib/ecosystems/evidenceUtils.js";
 
 // These tests only make sense under the Deno runtime and are excluded from the
 // default (Node) poku run by living outside the scanned lib/ and bin/ roots.
