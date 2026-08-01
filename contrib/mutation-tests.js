@@ -484,7 +484,7 @@ async function runCassetteTests() {
     const controller = startReplay("/tmp/nonexistent-cassette-test.json");
     try {
       const { cdxgenAgent } = await import(
-        path.join(REPO_ROOT, "lib", "helpers", "utils.js")
+        path.join(REPO_ROOT, "lib", "core", "activity.js")
       );
       await assert.rejects(
         () => cdxgenAgent.get("https://registry.npmjs.org/nonexistent-pkg-test"),

@@ -4,7 +4,7 @@ This page documents the current `cdx:` custom properties emitted by cdxgen, the 
 
 ## Scope
 
-- Source of truth: non-test source files under `lib/**` (including `lib/helpers/utils.js` and `lib/helpers/ciParsers/*`).
+- Source of truth: non-test source files under `lib/**` (including `lib/ecosystems/utils.js` and `lib/helpers/ciParsers/*`).
 - These are cdxgen-specific properties added to CycloneDX objects (components, workflows, tasks, metadata, and services).
 - They are intended to enrich analysis and policy decisions; they are not CycloneDX core fields.
 

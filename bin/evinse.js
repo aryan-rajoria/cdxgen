@@ -8,21 +8,21 @@ import yargs from "yargs";
 import { hideBin } from "yargs/helpers";
 
 import {
-  analyzeProject,
-  createEvinseFile,
-  prepareDB,
-} from "../lib/evinser/evinser.js";
-import {
   getNonCycloneDxErrorMessage,
   isCycloneDxBom,
-} from "../lib/helpers/bomUtils.js";
+} from "../lib/ecosystems/bomUtils.js";
 import {
   printCallStack,
   printOccurrences,
   printReachables,
   printServices,
-} from "../lib/helpers/display.js";
-import { safeExistsSync } from "../lib/helpers/utils.js";
+} from "../lib/ecosystems/display.js";
+import { safeExistsSync } from "../lib/ecosystems/utils.js";
+import {
+  analyzeProject,
+  createEvinseFile,
+  prepareDB,
+} from "../lib/evinser/evinser.js";
 import { validateBom } from "../lib/validator/bomValidator.js";
 
 const args = yargs(hideBin(process.argv))

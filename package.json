@@ -62,6 +62,10 @@
       "import": "./lib/core/*.js",
       "types": "./types/lib/core/*.d.ts"
     },
+    "./ecosystems/*": {
+      "import": "./lib/ecosystems/*.js",
+      "types": "./types/lib/ecosystems/*.d.ts"
+    },
     "./helpers/*": {
       "import": "./lib/helpers/*.js",
       "types": "./types/lib/helpers/*.d.ts"
@@ -190,7 +194,7 @@
   },
   "packageManager": "pnpm@11.18.0",
   "engines": {
-    "node": ">=24.15.0",
+    "node": ">=24",
     "pnpm": ">=11"
   },
   "devEngines": {

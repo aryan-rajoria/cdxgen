@@ -51,7 +51,7 @@ const CASSETTES_DIR = path.join(REPOTESTS_DIR, "_cassettes");
 //
 // This is not hiding a crash. `buildObjectForCocoaPod` used to throw when `pod`
 // was absent (`.stdout.trim()` on an empty spawn result); that is fixed at the
-// source in lib/helpers/utils.js, and the scenario now scans cleanly with
+// source in lib/ecosystems/utils.js, and the scenario now scans cleanly with
 // COCOA_FULL_SCAN=true on a machine with no `pod` binary.
 process.env.COCOA_FULL_SCAN = process.env.COCOA_FULL_SCAN || "false";
 

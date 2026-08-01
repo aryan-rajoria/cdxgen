@@ -94,9 +94,9 @@ if (isSecureMode) return; // skip operations unsafe under --permission
 | What | Where |
 |---|---|
 | Core BOM generation per language | `lib/cli/index.js` (`create<Language>Bom` functions) |
-| Lockfile / manifest parsers | `lib/helpers/utils.js` (`parse*` functions) |
-| Shared utilities, constants, env vars | `lib/helpers/utils.js` |
-| Logging | `lib/helpers/logger.js` |
+| Lockfile / manifest parsers | `lib/ecosystems/utils.js` (`parse*` functions) |
+| Shared utilities, constants, env vars | `lib/ecosystems/utils.js` |
+| Logging | `lib/core/logger.js` |
 | Pre-generation env setup | `lib/stages/pregen/pregen.js` |
 | Post-generation filtering | `lib/stages/postgen/postgen.js` |
 | HTTP server | `lib/server/server.js` |
@@ -105,7 +105,7 @@ if (isSecureMode) return; // skip operations unsafe under --permission
 
 ## Tests
 
-Tests are co-located as **`<module>.poku.js`** files (e.g., `lib/helpers/utils.poku.js`). Use **poku** + **esmock** + **sinon**:
+Tests are co-located as **`<module>.poku.js`** files (e.g., `lib/ecosystems/utils.poku.js`). Use **poku** + **esmock** + **sinon**:
 
 ```js
 import { assert, describe, it } from "poku";

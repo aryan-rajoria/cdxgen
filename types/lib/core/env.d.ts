@@ -104,4 +104,50 @@ export declare const PROJECT_TYPE_ALIASES: {
 export declare const PACKAGE_MANAGER_ALIASES: {
     scala: string[];
 };
+/**
+ * Method to check if a given feature flag is enabled.
+ *
+ * @param {Object} cliOptions CLI options
+ * @param {String} feature Feature flag
+ *
+ * @returns {Boolean} True if the feature is enabled
+ */
+export declare function isFeatureEnabled(cliOptions: Object, feature: string): boolean;
+/**
+ * Method to check if the given project types are allowed by checking against include and exclude types passed from the CLI arguments.
+ *
+ * @param {Array} projectTypes project types to check
+ * @param {Object} options CLI options
+ * @param {Boolean} defaultStatus Default return value if there are no types provided
+ */
+export declare function hasAnyProjectType(projectTypes: any[], options: Object, defaultStatus?: boolean): any;
+/**
+ * Determine whether the predictive dependency audit should run for the current
+ * CLI invocation.
+ *
+ * OBOM-focused runs (`obom` or explicit `-t os` / OS aliases only) should keep
+ * the direct BOM audit findings but skip the predictive dependency audit.
+ *
+ * @param {object} options CLI options
+ * @param {string} [commandPath] Invoked command path or name
+ * @returns {boolean} True when predictive dependency audit should run
+ */
+export declare function shouldRunPredictiveBomAudit(options: object, commandPath?: string): boolean;
+/**
+ * Convenient method to check if the given package manager is allowed.
+ *
+ * @param {String} name Package manager name
+ * @param {Array} conflictingManagers List of package managers
+ * @param {Object} options CLI options
+ *
+ * @returns {Boolean} True if the package manager is allowed
+ */
+export declare function isPackageManagerAllowed(name: string, conflictingManagers: any[], options: Object): boolean;
+/**
+ * Function to parse a list of environment variables to identify the paths containing executable binaries
+ *
+ * @param envValues {Array[String]} Environment variables list
+ * @returns {Array[String]} Binary Paths identified from the environment variables
+ */
+export declare function extractPathEnv(envValues: any): any;
 //# sourceMappingURL=env.d.ts.map

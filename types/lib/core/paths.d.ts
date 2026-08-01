@@ -16,4 +16,6 @@
 export declare const dirNameStr: any;
 export declare const isWin: boolean;
 export declare const isMac: boolean;
+export declare function isValidDriveRoot(root: any): boolean;
+export declare function toCamel(str: any): any;
 //# sourceMappingURL=paths.d.ts.map

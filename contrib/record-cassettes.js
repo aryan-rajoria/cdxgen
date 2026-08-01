@@ -24,7 +24,7 @@ const CASSETTES_DIR = path.join(
 async function main() {
   const { startRecord } = await import("./cassette.js");
   const utils = await import(
-    path.join(path.resolve(import.meta.dirname, ".."), "lib", "helpers", "utils.js")
+    path.join(path.resolve(import.meta.dirname, ".."), "lib", "ecosystems", "utils.js")
   );
 
   const cassettes = [];

@@ -190,6 +190,8 @@ importers:
 
   packages/core: {}
 
+  packages/ecosystems: {}
+
   packages/evinser: {}
 
   packages/helpers: {}

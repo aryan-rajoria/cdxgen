@@ -24,7 +24,10 @@ A good way to think about cdxgen is:
 | `bin/`                | CLI entry points                             | add or change command-line flags, startup flow, or output behavior            |
 | `.github/`            | Repository automation                        | change workflows, templates, issue forms, or release automation               |
 | `lib/cli/index.js`    | Core BOM generation                          | add ecosystems, change detection, or alter BOM assembly                       |
-| `lib/helpers/`        | Shared helpers and parsers                   | add lockfile parsing, metadata helpers, or reusable utilities                 |
+| `lib/core/`           | Lowest-level primitives                      | change logging, fs/env access, paths, activity tracking, or the HTTP client   |
+| `lib/parsers/`        | Standalone parsers                           | add a parser that needs nothing but `node:*` and core                        |
+| `lib/ecosystems/`     | Ecosystem logic and scanning utilities       | add lockfile parsing, registry metadata, or reusable scanning utilities      |
+| `lib/helpers/`        | Output-side modules                          | change BOM signing, export, annotation formatting, or remote integrations    |
 | `contrib/`            | Helper scripts and one-off maintenance tools | document or extend refresh utilities that are not part of the runtime package |
 | `lib/stages/pregen/`  | Environment preparation                      | change SDK installation or preflight behavior                                 |
 | `lib/stages/postgen/` | Final BOM shaping                            | change filtering, standards, metadata, formulation, or annotations            |
@@ -176,21 +179,39 @@ The repository is not only one generator command.
 
 The strongest architectural rule in cdxgen is the layering rule.
 
-| Layer                      | May import from                              | Must not import from                 |
-| -------------------------- | -------------------------------------------- | ------------------------------------ |
-| `lib/helpers/*`            | npm packages, `node:*`, local helper modules | `lib/cli/*`, `lib/stages/*`, `bin/*` |
-| `lib/cli/*`                | helpers, managers, parsers, data             | `bin/*`                              |
-| `lib/stages/postgen/*`     | helpers, data                                | `lib/cli/index.js`                   |
-| `bin/*` and `lib/server/*` | cli, stages, helpers                         | lower layers importing back upward   |
+Every package under `lib/` declares a numeric `layer` in its
+`packages/<name>/package.json`. An import from layer N may only target a package
+at a layer strictly below N, so there are no cycles and no same-layer
+cross-package edges.
 
-If you are about to import `../../cli/index.js` inside a helper or stage file, stop and move the shared logic into `lib/helpers/` first.
+| Layer | Packages                            |
+| ----- | ----------------------------------- |
+| 0     | `core`                              |
+| 1     | `parsers`                           |
+| 2     | `ecosystems`, `helpers`             |
+| 3     | `stages`, `managers`                |
+| 4     | `cli`, `evinser`, `validator`       |
+| 5     | `audit`, `server`                   |
+
+`contrib/check-boundaries.js --strict` enforces this and must exit 0. If you are
+about to import `../../cli/index.js` inside an ecosystem or stage file, stop and
+move the shared logic down a layer first.
+
+Note that `lib/ecosystems/` is not yet a curated package. It is most of the old
+`lib/helpers/` catch-all, so alongside the ecosystem parsers and registry
+metadata it still holds general-purpose modules such as `display`, `table`,
+`analyzer`, `spdx` and `evidenceUtils`. Separating those into their own package
+means first breaking the two-way dependencies between them and the ecosystem
+code (for example `evidenceUtils` imports `parsers-js` and `parsers-misc`, while
+`source` imports `ecosystems`), which is why the two packages currently share
+layer 2 rather than being stacked.
 
 ## Where common changes belong
 
 | Change you want                               | First place to inspect                                        |
 | --------------------------------------------- | ------------------------------------------------------------- |
 | Add a new `--flag` or `--feature-flags` entry | `bin/cdxgen.js`                                               |
-| Add a new ecosystem                           | `lib/cli/index.js` and `lib/helpers/utils.js`                 |
+| Add a new ecosystem                           | `lib/cli/index.js` and `lib/ecosystems/utils.js`                 |
 | Add a new query-pack table                    | `data/queries*.json`                                          |
 | Add a new audit rule                          | `data/rules/*.yaml` and `lib/stages/postgen/auditBom.poku.js` |
 | Change filtering behavior                     | `lib/stages/postgen/postgen.js`                               |

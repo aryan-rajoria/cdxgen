@@ -22,18 +22,18 @@ import { hideBin } from "yargs/helpers";
 import {
   getNonCycloneDxErrorMessage,
   isCycloneDxBom,
-} from "../lib/helpers/bomUtils.js";
+} from "../lib/ecosystems/bomUtils.js";
 import {
   importProtobomModule,
   isProtoBomPath,
-} from "../lib/helpers/protobomLoader.js";
+} from "../lib/ecosystems/protobomLoader.js";
 import {
   dirNameStr,
   retrieveCdxgenVersion,
   safeExistsSync,
   safeMkdirSync,
   safeWriteSync,
-} from "../lib/helpers/utils.js";
+} from "../lib/ecosystems/utils.js";
 import { getBomWithOras } from "../lib/managers/oci.js";
 import { shouldFail, validateBomAdvanced } from "../lib/validator/index.js";
 import { render as renderReport } from "../lib/validator/reporters/index.js";
@@ -71,7 +71,7 @@ const args = _yargs
     type: "boolean",
     default: true,
     description:
-      "Run the deep purl/ref/metadata checks from lib/helpers/bomValidator.js. Pass --no-deep to skip.",
+      "Run the deep purl/ref/metadata checks from lib/validator/bomValidator.js. Pass --no-deep to skip.",
   })
   .option("benchmark", {
     alias: "b",

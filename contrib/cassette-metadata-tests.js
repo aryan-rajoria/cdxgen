@@ -74,7 +74,7 @@ export async function main() {
   console.log("(All HTTP served from cassettes — outbound network blocked)\n");
 
   const utils = await import(
-    path.join(REPO_ROOT, "lib", "helpers", "utils.js")
+    path.join(REPO_ROOT, "lib", "ecosystems", "utils.js")
   );
 
   // Clear the in-memory metadata cache so each test starts fresh.

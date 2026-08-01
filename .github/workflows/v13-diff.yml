@@ -11,7 +11,7 @@ on:
   # No `paths:` filter here on purpose. A paths filter is ANDed with the event,
   # so labelling a PR that only touched lib/** would not have triggered this —
   # and that is the primary case we need it for (Deliverable 03 refactors
-  # lib/helpers/utils.js). The `v13` label is the gate; the job-level `if:`
+  # lib/ecosystems/utils.js). The `v13` label is the gate; the job-level `if:`
   # enforces it.
   pull_request:
     types: [labeled]

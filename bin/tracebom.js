@@ -7,12 +7,12 @@ import { hideBin } from "yargs/helpers";
 
 import { validateSpecVersion } from "../lib/cli/cliOptions.js";
 import { createDynamicBom } from "../lib/cli/index.js";
-import { DEFAULT_CDX_SPEC_VERSION } from "../lib/helpers/bomUtils.js";
+import { DEFAULT_CDX_SPEC_VERSION } from "../lib/ecosystems/bomUtils.js";
 import {
   DEBUG_MODE,
   retrieveCdxgenVersion,
   safeWriteSync,
-} from "../lib/helpers/utils.js";
+} from "../lib/ecosystems/utils.js";
 
 const _yargs = yargs(hideBin(process.argv));
 

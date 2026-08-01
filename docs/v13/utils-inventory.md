@@ -1,11 +1,11 @@
-# `lib/helpers/utils.js` decomposition inventory — Deliverable 03
+# `lib/ecosystems/utils.js` decomposition inventory — Deliverable 03
 
 **Branch:** `v13/03-decompose-utils`
 **Base:** `7ec577b9` (D04 test harness)
 **Status:** INVENTORY — gated for review before any function is moved.
 
 This document inventories every export and internal function in
-`lib/helpers/utils.js`, assigns each a target module, and catalogues the
+`lib/ecosystems/utils.js`, assigns each a target module, and catalogues the
 module-level mutable state that constrains the split. Nothing has been moved
 yet. Per the deliverable process, **this inventory must be reviewed before any
 moves occur.**
@@ -19,7 +19,7 @@ moves occur.**
 | Total lines | 21,913 |
 | Exported names | 261 (217 functions, 30 `const`, 1 re-export, plus class/value exports) |
 | Non-exported functions | 118 |
-| Test file | `lib/helpers/utils.poku.js` — 12,419 lines, 1,521 `assert.*` calls, 250 `it`/`test` blocks |
+| Test file | `lib/ecosystems/utils.poku.js` — 12,419 lines, 1,521 `assert.*` calls, 250 `it`/`test` blocks |
 | Importing files | 79 under `lib/` and `bin/` |
 
 ### Established baselines (all green on `7ec577b9`)
@@ -40,7 +40,7 @@ package directory), not new top-level `lib/` trees.
 Rationale:
 
 1. **Hazard 4 (exports map).** `package.json` publishes `"./helpers/*"` →
-   `./lib/helpers/*.js`. A new `lib/helpers/purl.js` is immediately reachable
+   `./lib/helpers/*.js`. A new `lib/ecosystems/purl.js` is immediately reachable
    as `@cdxgen/cdxgen/helpers/purl`. No `exports` additions needed, so
    `lib/packaging.poku.js` cannot regress. A new top-level `lib/purl/` would
    require explicit `exports` entries and risks an unpublished path.
@@ -74,13 +74,13 @@ checked against the tree **as it will be at that moment**, not the final graph.
 
 | Batch | New file | Theme |
 |---|---|---|
-| 1 | `lib/helpers/purl.js` | purl build/parse, version compare, conan/nix purl helpers |
-| 2 | `lib/helpers/spdx.js` | license-id normalisation, SPDX expressions, license data lookup |
-| 3 | `lib/helpers/core-activity.js/core-fs.js/core-env.js` (+ `core-fs.js`) | path/file/hash/string utils, safe wrappers, activity/dry-run/host-allowlist, env/runtime/command resolution, feature flags |
-| 4 | `lib/helpers/deps.js` | dependency-tree assembly, component merge/dedupe, JAR namespace collection |
-| 5 | `lib/helpers/ecosystems.js` | the `get*Metadata` family + registry fetch helpers |
-| 6 | `lib/helpers/parsers-<ecosystem>.js` | the `parse*` family, grouped per ecosystem (see §6) |
-| 7 | `lib/helpers/core-activity.js/core-fs.js/core-env.js` (cont.) | residual core that resisted earlier classification |
+| 1 | `lib/ecosystems/purl.js` | purl build/parse, version compare, conan/nix purl helpers |
+| 2 | `lib/ecosystems/spdx.js` | license-id normalisation, SPDX expressions, license data lookup |
+| 3 | `lib/core/activity.js` / `lib/core/fs.js` / `lib/core/env.js` | path/file/hash/string utils, safe wrappers, activity/dry-run/host-allowlist, env/runtime/command resolution, feature flags |
+| 4 | `lib/ecosystems/deps.js` | dependency-tree assembly, component merge/dedupe, JAR namespace collection |
+| 5 | `lib/ecosystems/ecosystems.js` | the `get*Metadata` family + registry fetch helpers |
+| 6 | `lib/ecosystems/parsers-<ecosystem>.js` | the `parse*` family, grouped per ecosystem (see §6) |
+| 7 | `lib/core/activity.js` / `lib/core/fs.js` / `lib/core/env.js` (cont.) | residual core that resisted earlier classification |
 
 **Types requirement (round-2 review):** `exports["./helpers/*"]` maps `types` to
 `./types/lib/helpers/*.d.ts`, `types/` is committed, and
@@ -90,7 +90,7 @@ generated `.d.ts` + `.d.ts.map`, regenerate `test/baseline/npm-pack-file-list.tx
 from a clean worktree of the base branch, and run
 `pnpm exec poku lib/packaging.poku.js`.
 
-`lib/helpers/utils.js` becomes a re-export barrel preserving all 261 public
+`lib/ecosystems/utils.js` becomes a re-export barrel preserving all 261 public
 names (kept for one major version; deprecated in `MIGRATING-TO-V13.md`).
 
 ---
@@ -428,7 +428,7 @@ Each batch is one commit, independently green, and a pure move under
 `git diff -w --find-renames`. **Corrected order** (round-2 review):
 `purl → spdx → core → deps → ecosystems → parsers → residual`.
 
-### Batch 1 — `lib/helpers/purl.js` (~305 lines)
+### Batch 1 — `lib/ecosystems/purl.js` (~305 lines)
 
 Exports: `encodeForPurl`, `purlFromUrlString`, `locateGenericPackage`,
 `getVersionNumPnpm`, `createNpmWorkspacePurl` (re-export), plus internal purl
@@ -438,7 +438,7 @@ helpers (`generateNixPurl`, `createConanPurlString`, `createPurlTemplate`,
 No mutable state. Depends only on `PackageURL` + `core-activity.js` / `core-fs.js` / `core-env.js` utilities.
 **Lowest risk; lands first.**
 
-### Batch 2 — `lib/helpers/spdx.js` (~531 lines)
+### Batch 2 — `lib/ecosystems/spdx.js` (~531 lines)
 
 Exports: `isSpdxLicenseExpression`, `adjustLicenseInformation`, `getLicenses`,
 `getKnownLicense`, `addLicenseText`, `readLicenseText`, `findLicenseId`,
@@ -476,7 +476,7 @@ commits (one per sub-file) so each stays independently green:
 > reason: the combined ~2,000 lines exceeds the ~1,500 ceiling). The split
 > boundary is cocoa/pod/python-tree/command-builders vs. osquery/cpp/evidence.
 
-### Batch 4 — `lib/helpers/deps.js` (~501 lines)
+### Batch 4 — `lib/ecosystems/deps.js` (~501 lines)
 
 Exports: `collectJarNS`, `collectMvnDependencies`, `convertJarNSToPackages`,
 `componentSorter`, `flattenDeps`, plus JAR/POM helpers (`parsePomXml`,
@@ -489,7 +489,7 @@ Exports: `collectJarNS`, `collectMvnDependencies`, `convertJarNSToPackages`,
 Lands **before** ecosystems (§4 cycle fix): `deps → ecosystems` is zero edges,
 but `ecosystems → deps` has six.
 
-### Batch 5 — `lib/helpers/ecosystems.js` (~1,566 lines) ⭐ most important
+### Batch 5 — `lib/ecosystems/ecosystems.js` (~1,566 lines) ⭐ most important
 
 Exports: `getNpmMetadata`, `getMvnMetadata`, `getPyMetadata`,
 `getCratesMetadata`, `getDartMetadata`, `getNugetMetadata`,
@@ -511,7 +511,7 @@ left behind they would be back-edges into `utils.js`): `getGoPkgUrl`,
 These are D08's Rust-port targets. D04's seven cassette tests pin their
 behaviour (`hitCount > 0 && missCount === 0`). **No tidying.**
 
-### Batch 6 — `lib/helpers/parsers-<ecosystem>.js` (~9,670 lines, split per ecosystem)
+### Batch 6 — `lib/ecosystems/parsers-<ecosystem>.js` (~9,670 lines, split per ecosystem)
 
 The `parse*` family grouped by ecosystem to keep each file < ~1,500 lines:
 

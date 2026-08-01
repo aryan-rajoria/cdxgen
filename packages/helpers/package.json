@@ -3,7 +3,7 @@
   "version": "0.0.0",
   "private": true,
   "type": "module",
-  "description": "Internal workspace package: lib/helpers/** \u2014 shared utilities, parsers, and ecosystem helpers. Catch-all pending D03 (utils.js decomposition). Files remain at lib/helpers/ on disk; the published tarball layout is unchanged.",
+  "description": "Internal workspace package: lib/helpers/** \u2014 output-side modules: BOM signing, export, annotation formatting, and remote integrations.",
   "libPath": "../../lib/helpers",
   "scripts": {
     "test": "pnpm -w exec poku lib/helpers/"

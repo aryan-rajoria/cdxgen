@@ -441,7 +441,7 @@ Trust boundary 5: cdxgen container ←→ container host
 
 **Residual risk:** Low when secure mode and SBOM signing are enabled.
 
-### 7. Dynamic Process Tracing (`tracebom`, `lib/helpers/traceRunner.js`)
+### 7. Dynamic Process Tracing (`tracebom`, `lib/ecosystems/traceRunner.js`)
 
 #### T7.1 — Sandbox bypass or escape during command execution
 

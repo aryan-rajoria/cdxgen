@@ -209,7 +209,7 @@ jobs:
           node --input-type=module <<'EOF'
           import { writeFileSync } from "node:fs";
 
-          import { collectSourceCryptoComponents } from "./lib/helpers/cbomutils.js";
+          import { collectSourceCryptoComponents } from "./lib/ecosystems/cbomutils.js";
 
           const targets = [
             "./lib/helpers",
@@ -320,7 +320,7 @@ jobs:
           curl -L --fail --silent --show-error https://raw.githubusercontent.com/electron/asar/8388dbd1ed7a290d05d1144ba833d895193d2cb3/test/expected/packthis.asar -o repotests/signed-asar/Signed.app/Contents/Resources/app.asar
           header_hash=$(node --input-type=module <<'EOF'
           import { createHash } from "node:crypto";
-          import { readAsarArchiveHeaderSync } from "./lib/helpers/asarutils.js";
+          import { readAsarArchiveHeaderSync } from "./lib/ecosystems/asarutils.js";
 
           const { headerString } = readAsarArchiveHeaderSync(
             "./repotests/signed-asar/Signed.app/Contents/Resources/app.asar",
@@ -1584,7 +1584,7 @@ jobs:
           cd ../../..
 
           GOLEM_CMD="$(node --input-type=module <<'EOF'
-          import { resolvePluginBinary } from "./lib/helpers/plugins.js";
+          import { resolvePluginBinary } from "./lib/ecosystems/plugins.js";
 
           const cmd = resolvePluginBinary("golem");
           if (cmd) {
@@ -1746,7 +1746,7 @@ jobs:
           fi
 
           RUSI_CMD="$(node --input-type=module <<'EOF'
-          import { resolvePluginBinary } from "./lib/helpers/plugins.js";
+          import { resolvePluginBinary } from "./lib/ecosystems/plugins.js";
 
           const cmd = resolvePluginBinary("rusi");
           if (cmd) {

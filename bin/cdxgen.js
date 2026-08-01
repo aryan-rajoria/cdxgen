@@ -26,7 +26,6 @@ import {
 } from "../lib/cli/cliOptions.js";
 import { createBom, submitBom } from "../lib/cli/index.js";
 import { TRACE_MODE, thoughtEnd, thoughtLog } from "../lib/core/logger.js";
-import { signBom, verifyBom } from "../lib/helpers/bomSigner.js";
 import {
   DEFAULT_CDX_SPEC_VERSION,
   getSupportedCycloneDxComponentTypes,
@@ -34,7 +33,7 @@ import {
   isCycloneDxComponentTypeEnabled,
   normalizeCycloneDxComponentTypeFilter,
   toCycloneDxSpecVersionString,
-} from "../lib/helpers/bomUtils.js";
+} from "../lib/ecosystems/bomUtils.js";
 import {
   displaySelfThreatModel,
   printActivitySummary,
@@ -48,20 +47,16 @@ import {
   printSponsorBanner,
   printSummary,
   printTable,
-} from "../lib/helpers/display.js";
-import {
-  createOutputPlan,
-  getOutputDirectory,
-} from "../lib/helpers/exportUtils.js";
+} from "../lib/ecosystems/display.js";
 import {
   ensureNoMixedHbomProjectTypes,
   ensureSupportedHbomSpecVersion,
   hasHbomProjectType,
   isHbomOnlyProjectTypes,
-} from "../lib/helpers/hbom.js";
-import { resolvePluginBinary } from "../lib/helpers/plugins.js";
-import { importProtobomModule } from "../lib/helpers/protobomLoader.js";
-import { normalizeHuggingFaceReference } from "../lib/helpers/remote/huggingface.js";
+} from "../lib/ecosystems/hbom.js";
+import { resolvePluginBinary } from "../lib/ecosystems/plugins.js";
+import { importProtobomModule } from "../lib/ecosystems/protobomLoader.js";
+import { normalizeHuggingFaceReference } from "../lib/ecosystems/remote/huggingface.js";
 import {
   cleanupSourceDir,
   findGitRefForPurlVersion,
@@ -76,7 +71,7 @@ import {
   sanitizeRemoteUrlForLogs,
   validateAndRejectGitSource,
   validatePurlSource,
-} from "../lib/helpers/source.js";
+} from "../lib/ecosystems/source.js";
 import {
   commandsExecuted,
   DEBUG_MODE,
@@ -103,7 +98,12 @@ import {
   setDryRunMode,
   shouldRunPredictiveBomAudit,
   toCamel,
-} from "../lib/helpers/utils.js";
+} from "../lib/ecosystems/utils.js";
+import { signBom, verifyBom } from "../lib/helpers/bomSigner.js";
+import {
+  createOutputPlan,
+  getOutputDirectory,
+} from "../lib/helpers/exportUtils.js";
 import { executeOsQuery } from "../lib/managers/binary.js";
 import { getBomWithOras } from "../lib/managers/oci.js";
 import { postProcess } from "../lib/stages/postgen/postgen.js";
@@ -165,7 +165,7 @@ if (
 ) {
   console.log(`cdxgen ${retrieveCdxgenVersion()}`);
   try {
-    const { cdxrsAvailable } = await import("../lib/helpers/cdxrs.js");
+    const { cdxrsAvailable } = await import("../lib/ecosystems/cdxrs.js");
     const rs = cdxrsAvailable("info");
     if (rs.available) {
       console.log(`cdxrs ${rs.version} (available)`);
@@ -830,7 +830,7 @@ if (invokedCommandName.includes("aibom") && !args.type) {
 
 /**
  * Command line options — built via the extracted buildOptionsFromArgs
- * function in lib/helpers/cliOptions.js. That function handles:
+ * function in lib/cli/cliOptions.js. That function handles:
  * - Command-name alias expansion (obom, spdxgen, aibom)
  * - Field renames (type→projectType, recurse→multiProject, etc.)
  * - Derived values (deep, noBabel, output path)
@@ -1491,7 +1491,7 @@ const writeCycloneDxOutput = (jsonFile, bomJson, options) => {
   thoughtLog("Getting ready to generate the BOM ⚡️.");
   if (DEBUG_MODE) {
     try {
-      const { cdxrsAvailable } = await import("../lib/helpers/cdxrs.js");
+      const { cdxrsAvailable } = await import("../lib/ecosystems/cdxrs.js");
       const rs = cdxrsAvailable("info");
       console.log(
         `cdxrs: ${rs.available ? `available (${rs.version})` : `not available (${rs.reason}) — using JS path`}`,

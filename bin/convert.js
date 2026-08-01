@@ -11,18 +11,18 @@ import {
   getNonCycloneDxErrorMessage,
   isCycloneDxBom,
   toCycloneDxSpecVersionString,
-} from "../lib/helpers/bomUtils.js";
-import { deriveSpdxOutputPath } from "../lib/helpers/exportUtils.js";
+} from "../lib/ecosystems/bomUtils.js";
 import {
   importProtobomModule,
   isProtoBomPath,
-} from "../lib/helpers/protobomLoader.js";
+} from "../lib/ecosystems/protobomLoader.js";
 import {
   retrieveCdxgenVersion,
   safeExistsSync,
   safeMkdirSync,
   safeWriteSync,
-} from "../lib/helpers/utils.js";
+} from "../lib/ecosystems/utils.js";
+import { deriveSpdxOutputPath } from "../lib/helpers/exportUtils.js";
 import { convertCycloneDxToSpdx } from "../lib/stages/postgen/spdxConverter.js";
 import { validateSpdx } from "../lib/validator/bomValidator.js";
 

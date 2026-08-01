@@ -1,4 +1,4 @@
-export { summarizeAiInventory } from "../helpers/aiInventory.js";
+export { summarizeAiInventory } from "../ecosystems/aiInventory.js";
 /**
  * For all modules in the specified package, creates a list of
  * component objects from each one.

@@ -1,7 +1,7 @@
 /**
  * HTTP cassette record/replay layer for golden SBOM tests.
  *
- * This module installs an interceptor into `lib/helpers/httpClient.js` (the
+ * This module installs an interceptor into `lib/core/httpClient.js` (the
  * single network seam — every outbound HTTP request in cdxgen flows through
  * `createHttpClient()` → `doRequest()`).  See `setHttpInterceptor`.
  *

@@ -60,8 +60,52 @@ under `core/`, and the HuggingFace manifest readers under `parsers/`:
 | `helpers/huggingfaceManifest` | `parsers/huggingfaceManifest` |
 | `helpers/huggingfaceUtils` | `parsers/huggingfaceUtils` |
 
-The `helpers/parsers-*.js` modules keep their paths in v13. A later release may
-move them to `parsers/ecosystems/<eco>.js`; check the release notes.
+Most of what used to be `helpers/` is now `ecosystems/`. Be aware that this was a
+bulk move of the old `helpers/` grab-bag, not a curated extraction: `ecosystems/`
+does hold the ecosystem parsers, registry metadata, and per-ecosystem logic, but
+it also holds plenty of general-purpose modules (`display`, `table`, `analyzer`,
+`spdx`, `evidenceUtils`, and others) that are not tied to any one ecosystem.
+Splitting those back out requires breaking real dependency cycles between them
+and the ecosystem code, so it is deferred rather than done. `helpers/` retains
+only the output-side modules (`bomSigner`, `exportUtils`, `annotationFormatter`,
+`versutils`, `vsixutils`, `remote/`). If a v12 `helpers/x` import is not in the
+table below, try `ecosystems/x` first.
+
+Selected moves:
+
+| v12 path | v13 path |
+|---|---|
+| `helpers/parsers-js` | `ecosystems/parsers-js` |
+| `helpers/parsers-misc` | `ecosystems/parsers-misc` |
+| `helpers/parsers-python` | `ecosystems/parsers-python` |
+| `helpers/parsers-rust` | `ecosystems/parsers-rust` |
+| `helpers/parsers-dotnet` | `ecosystems/parsers-dotnet` |
+| `helpers/parsers-jvm` | `ecosystems/parsers-jvm` |
+| `helpers/parsers-go` | `ecosystems/parsers-go` |
+| `helpers/ecosystems` | `ecosystems/ecosystems` |
+| `helpers/purl` | `ecosystems/purl` |
+| `helpers/spdx` | `ecosystems/spdx` |
+| `helpers/npmutils` | `ecosystems/npmutils` |
+| `helpers/deps` | `ecosystems/deps` |
+| `helpers/utils` (barrel) | `ecosystems/utils` |
+
+Several exports from the retired `core-misc-a.js` and `core-misc-b.js` moved to
+new homes:
+
+| v12 export | v13 module |
+|---|---|
+| `isFeatureEnabled`, `hasAnyProjectType`, `shouldRunPredictiveBomAudit`, `isPackageManagerAllowed`, `extractPathEnv` | `core/env` |
+| `isValidDriveRoot`, `toCamel` | `core/paths` |
+| `isValidIriReference` | `parsers/iri` |
+| `getDefaultBomAuditCategories` | `ecosystems/auditCategories` |
+| `getRuntimeInformation`, `retrieveCdxgenVersion`, `retrieveCdxgenPluginVersion` | `ecosystems/envcontext` |
+| `extractToolRefs`, `attachIdentityTools`, `addEvidenceForImports`, `addEvidenceForDotnet`, `getCppModules`, `convertOSQueryResults` | `ecosystems/evidenceUtils` |
+| `isPartialTree`, `recomputeScope` | `ecosystems/depsUtils` |
+| `getOSPackageForFile`, `collectExecutables`, `collectSharedLibs` | `ecosystems/osPackageResolver` |
+| `getPyModules`, `createUVLock`, `getPipFrozenTree`, `getPipTreeForPackages` | `ecosystems/pythonutils` |
+| `parsePodfileLock`, `parsePodfileTargets`, `parseCocoaDependency`, `executePodCommand`, `buildObjectForCocoaPod` | `ecosystems/parsers-misc` |
+| `getMavenCommand`, `getMillCommand` | `ecosystems/gradleutils` |
+| `getAtomCommand`, `executeAtom`, `findAppModules` | `ecosystems/atomUtils` |
 
 ### JSR
 
@@ -155,31 +199,32 @@ No environment variables were formally deprecated in v12, so none are removed.
 ## `lib/helpers/utils.js` barrel deprecation
 
 `lib/helpers/utils.js` has been decomposed into focused leaf modules. The file
-remains as a re-export barrel that preserves all **261** public export names for
-one major version, so existing `import { X } from "@cdxgen/cdxgen/helpers/utils"`
-(or relative `"./utils.js"`) imports keep working unchanged.
+has moved to `lib/ecosystems/utils.js` and remains as a re-export barrel that
+preserves all **261** public export names for one major version, so existing
+`import { X } from "@cdxgen/cdxgen/ecosystems/utils"` imports keep working
+unchanged. (The old `helpers/utils` path no longer resolves.)
 
 The barrel is **deprecated as of v13**. Consumers should import from the
 specific leaf module instead:
 
 | New module | Theme |
 |---|---|
-| `helpers/purl` | purl build/parse, version compare, conan/nix purl helpers |
-| `helpers/spdx` | license-id normalisation, SPDX expressions, license data lookup |
+| `ecosystems/purl` | purl build/parse, version compare, conan/nix purl helpers |
+| `ecosystems/spdx` | license-id normalisation, SPDX expressions, license data lookup |
 | `core/state` | eval-time data constants (frameworks, version, module tables) |
-| `core/paths` | path/OS detection helpers |
+| `core/paths` | path/OS detection helpers, `isValidDriveRoot`, `toCamel` |
 | `core/activity` | activity/dry-run/host-allowlist, `cdxgenAgent`, feature flags |
 | `core/fs` | safe wrappers, `safeSpawnSync`, file discovery, checksums |
-| `core/env` | runtime detection, env flags, command resolution, alias tables |
-| `helpers/deps` | dependency-tree assembly, component merge/dedupe, JAR namespace collection |
-| `helpers/ecosystems` | the `get*Metadata` family + registry fetch helpers |
-| `helpers/parsers-go` | Go ecosystem parsers (`parseGoMod*`, `parseGosum*`, etc.) |
-| `helpers/parsers-dotnet` | .NET ecosystem parsers (`parseCsProj*`, `parseNuspec*`, etc.) |
-| `helpers/parsers-rust` | Rust/cargo parsers (`parseCargo*`, cargo workspace internals) |
-| `helpers/parsers-jvm` | JVM parsers (`parsePom`, `parseMavenTree*`, `parseBazel*`, etc.) |
-| `helpers/parsers-python` | Python parsers (`parsePy*`, `parseReq*`, `parsePixi*`, etc.) |
-| `helpers/parsers-js` | JS/npm parsers (`parsePkgJson`, `parsePkgLock`, `parsePnpm*`, etc.) |
-| `helpers/parsers-misc` | All other parsers (`parseComposer*`, `parseConan*`, `parseSwift*`, etc.) |
+| `core/env` | runtime detection, env flags, command resolution, alias tables, `isFeatureEnabled`, `hasAnyProjectType` |
+| `ecosystems/deps` | dependency-tree assembly, component merge/dedupe, JAR namespace collection |
+| `ecosystems/ecosystems` | the `get*Metadata` family + registry fetch helpers |
+| `ecosystems/parsers-go` | Go ecosystem parsers (`parseGoMod*`, `parseGosum*`, etc.) |
+| `ecosystems/parsers-dotnet` | .NET ecosystem parsers (`parseCsProj*`, `parseNuspec*`, etc.) |
+| `ecosystems/parsers-rust` | Rust/cargo parsers (`parseCargo*`, cargo workspace internals) |
+| `ecosystems/parsers-jvm` | JVM parsers (`parsePom`, `parseMavenTree*`, `parseBazel*`, etc.) |
+| `ecosystems/parsers-python` | Python parsers (`parsePy*`, `parseReq*`, `parsePixi*`, etc.) |
+| `ecosystems/parsers-js` | JS/npm parsers (`parsePkgJson`, `parsePkgLock`, `parsePnpm*`, etc.) |
+| `ecosystems/parsers-misc` | All other parsers (`parseComposer*`, `parseConan*`, `parseSwift*`, etc.) |
 
 ## Removed container images
 

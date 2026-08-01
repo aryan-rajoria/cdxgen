@@ -9,7 +9,7 @@ cdxgen uses poku for unit and integration tests, with test files co-located next
 ```text
 source file                         nearby test file
 -----------                         ----------------
-lib/helpers/utils.js       <---->   lib/helpers/utils.poku.js
+lib/ecosystems/utils.js       <---->   lib/ecosystems/utils.poku.js
 lib/cli/index.js           <---->   lib/cli/index.poku.js
 lib/server/server.js       <---->   lib/server/server.poku.js
 ```
@@ -35,7 +35,7 @@ That means new tests should normally live next to the source module they exercis
 | -------------------------- | -------------------------------- |
 | run the full suite         | `pnpm test`                      |
 | run in watch mode          | `pnpm run watch`                 |
-| run a single file directly | `node lib/helpers/utils.poku.js` |
+| run a single file directly | `node lib/ecosystems/utils.poku.js` |
 
 ## The three most common test shapes
 

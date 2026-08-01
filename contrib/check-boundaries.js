@@ -8,7 +8,7 @@
 //   3. Layer rule — each package declares "layer": 0..5; an edge from layer N
 //      to layer M is legal only when M < N. Replaces per-package dependency lists.
 //   4. Barrel ban — no file under lib/ may import a designated compat shim
-//      (lib/helpers/utils.js).
+//      (lib/ecosystems/utils.js).
 //
 // Usage:
 //   node contrib/check-boundaries.js             // check, exit 1 on any cycle
@@ -35,12 +35,13 @@ const REPO_ROOT = path.resolve(__dirname, "..");
 // utils.js is a pure re-export barrel; importing it internally creates cycles
 // and hides the real dependency on the leaf module.
 const DESIGNATED_BARRELS = new Set([
-  "lib/helpers/utils.js",
+  "lib/ecosystems/utils.js",
 ]);
 
 // Package → directory mapping.
 const PACKAGE_DIRS = {
   core: ["lib/core"],
+  ecosystems: ["lib/ecosystems"],
   helpers: ["lib/helpers"],
   parsers: ["lib/parsers"],
   managers: ["lib/managers"],

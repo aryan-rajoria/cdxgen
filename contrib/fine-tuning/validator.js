@@ -1,6 +1,7 @@
 import { readFileSync } from "node:fs";
 
-import { dirNameStr, getAllFiles } from "../../lib/helpers/utils.js";
+import { getAllFiles } from "../../lib/core/fs.js";
+import { dirNameStr } from "../../lib/core/paths.js";
 
 let datasetDir = dirNameStr;
 const argv = process.argv.slice(2);

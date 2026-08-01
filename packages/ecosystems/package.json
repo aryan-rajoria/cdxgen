@@ -1,0 +1,12 @@
+{
+  "name": "@cdxgen/internal-ecosystems",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "description": "Internal workspace package: lib/ecosystems/** — ecosystem parsers, registry metadata, dependency trees, and shared scanning utilities.",
+  "libPath": "../../lib/ecosystems",
+  "scripts": {
+    "test": "pnpm -w exec poku lib/ecosystems/"
+  },
+  "layer": 2
+}

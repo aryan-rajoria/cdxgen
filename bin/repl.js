@@ -9,7 +9,7 @@ import repl from "node:repl";
 import jsonata from "jsonata";
 
 import { createBom } from "../lib/cli/index.js";
-import { isSpdxJsonLd } from "../lib/helpers/bomUtils.js";
+import { isSpdxJsonLd } from "../lib/ecosystems/bomUtils.js";
 import {
   printAiBomDatasets,
   printAiBomInsights,
@@ -24,28 +24,28 @@ import {
   printSummary,
   printTable,
   printVulnerabilities,
-} from "../lib/helpers/display.js";
+} from "../lib/ecosystems/display.js";
 import {
   formatHbomHardwareClassSummary,
   getHbomSummary,
   isHbomLikeBom,
-} from "../lib/helpers/hbomAnalysis.js";
+} from "../lib/ecosystems/hbomAnalysis.js";
 import {
   getPropertyValue,
   getSourceDerivedCryptoComponents,
   getUnpackagedExecutableComponents,
   getUnpackagedSharedLibraryComponents,
-} from "../lib/helpers/inventoryStats.js";
+} from "../lib/ecosystems/inventoryStats.js";
 import {
   importProtobomModule,
   isProtoBomPath,
-} from "../lib/helpers/protobomLoader.js";
+} from "../lib/ecosystems/protobomLoader.js";
 import {
   getProvenanceComponents,
   getTrustedComponents,
-} from "../lib/helpers/provenanceUtils.js";
-import { toCycloneDxLikeBom } from "../lib/helpers/spdxUtils.js";
-import { table } from "../lib/helpers/table.js";
+} from "../lib/ecosystems/provenanceUtils.js";
+import { toCycloneDxLikeBom } from "../lib/ecosystems/spdxUtils.js";
+import { table } from "../lib/ecosystems/table.js";
 import {
   getTmpDir,
   isDryRun,
@@ -53,7 +53,7 @@ import {
   safeMkdirSync,
   safeMkdtempSync,
   safeWriteSync,
-} from "../lib/helpers/utils.js";
+} from "../lib/ecosystems/utils.js";
 import { getBomWithOras } from "../lib/managers/oci.js";
 import { validateBom } from "../lib/validator/bomValidator.js";
 

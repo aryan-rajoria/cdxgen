@@ -10,14 +10,14 @@ that ports JS logic to Rust must follow this specification.
 `thirdparty/cdxrs/`. It is a single crate with a single binary, following the
 same shape as `thirdparty/cdxui/` (not the `rusi` workspace).
 
-The JS bridge is at `lib/helpers/cdxrs.js` in the cdxgen repository. It is the
+The JS bridge is at `lib/ecosystems/cdxrs.js` in the cdxgen repository. It is the
 **only** module that spawns the `cdxrs` binary.
 
 ## Architecture
 
 ```
 cdxgen (JS)
-  └── lib/helpers/cdxrs.js     ← bridge: spawns binary, handles failure modes
+  └── lib/ecosystems/cdxrs.js     ← bridge: spawns binary, handles failure modes
         └── cdxrs binary       ← Rust crate in cdxgen-plugins-bin
               ├── src/main.rs   ← clap parsing + dispatch ONLY
               ├── src/lib.rs    ← library: all logic
@@ -38,7 +38,7 @@ move cheap.
 
 ## Binary resolution
 
-The bridge reuses `lib/helpers/plugins.js` conventions:
+The bridge reuses `lib/ecosystems/plugins.js` conventions:
 
 - `CDXRS_CMD` environment variable overrides the binary path.
 - Otherwise, the binary is resolved from the platform-specific plugins-bin
@@ -145,7 +145,7 @@ Prints supported spec versions as JSON:
    Some(Command::<Name>) => cdxrs::cmd::<name>::run(&cli.input, &cli.output, cli.max_input_bytes),
    ```
 
-5. **Register in the JS bridge** (`lib/helpers/cdxrs.js`):
+5. **Register in the JS bridge** (`lib/ecosystems/cdxrs.js`):
    Add the subcommand name to `KNOWN_SUBCOMMANDS`.
 
 6. **Add the subcommand to `cdxrsDisabled` coverage** if it should be
@@ -182,7 +182,7 @@ Two notes, because the obvious approaches do not work:
 Run the bridge tests with a binary present as well as without; they cover both:
 
 ```bash
-CDXGEN_PLUGINS_DIR=/tmp/cdxgen-local-plugins npx poku lib/helpers/cdxrs.poku.js
+CDXGEN_PLUGINS_DIR=/tmp/cdxgen-local-plugins npx poku lib/ecosystems/cdxrs.poku.js
 ```
 
 ## Environment variables
@@ -333,7 +333,7 @@ cdxrs release binaries are ~440 KB (unstripped ~480 KB), well within budget.
 | `cargo test` (9 tests) | `info`, round-trip incl. unsorted BOM, typed-model, fuzz guard |
 | `cargo clippy -- -D warnings` | No lint warnings |
 | `cargo fmt --check` | Code formatting |
-| `lib/helpers/cdxrs.poku.js` (11 tests) | Six bridge failure modes + success + cdxrsDisabled + sentinel |
+| `lib/ecosystems/cdxrs.poku.js` (11 tests) | Six bridge failure modes + success + cdxrsDisabled + sentinel |
 | `contrib/rs-disable-golden-test.js` | Default and `CDXGEN_RS_DISABLE=all` runs are byte-identical |
 
 ### CI integration

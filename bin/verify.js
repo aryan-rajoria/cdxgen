@@ -7,17 +7,17 @@ import process from "node:process";
 import yargs from "yargs";
 import { hideBin } from "yargs/helpers";
 
-import { verifyNode } from "../lib/helpers/bomSigner.js";
 import {
   getNonCycloneDxErrorMessage,
   isCycloneDxBom,
-} from "../lib/helpers/bomUtils.js";
-import { isProtoBomPath } from "../lib/helpers/protobomLoader.js";
+} from "../lib/ecosystems/bomUtils.js";
+import { isProtoBomPath } from "../lib/ecosystems/protobomLoader.js";
 import {
   dirNameStr,
   retrieveCdxgenVersion,
   safeExistsSync,
-} from "../lib/helpers/utils.js";
+} from "../lib/ecosystems/utils.js";
+import { verifyNode } from "../lib/helpers/bomSigner.js";
 import { getBomWithOras } from "../lib/managers/oci.js";
 
 const dirName = dirNameStr;
