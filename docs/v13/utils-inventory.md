@@ -40,7 +40,7 @@ package directory), not new top-level `lib/` trees.
 Rationale:
 
 1. **Hazard 4 (exports map).** `package.json` publishes `"./helpers/*"` →
-   `./lib/helpers/*.js`. A new `lib/ecosystems/purl.js` is immediately reachable
+   `./lib/helpers/*.js`. A new `lib/inventory/purl.js` is immediately reachable
    as `@cdxgen/cdxgen/helpers/purl`. No `exports` additions needed, so
    `lib/packaging.poku.js` cannot regress. A new top-level `lib/purl/` would
    require explicit `exports` entries and risks an unpublished path.
@@ -74,10 +74,10 @@ checked against the tree **as it will be at that moment**, not the final graph.
 
 | Batch | New file | Theme |
 |---|---|---|
-| 1 | `lib/ecosystems/purl.js` | purl build/parse, version compare, conan/nix purl helpers |
-| 2 | `lib/ecosystems/spdx.js` | license-id normalisation, SPDX expressions, license data lookup |
+| 1 | `lib/inventory/purl.js` | purl build/parse, version compare, conan/nix purl helpers |
+| 2 | `lib/inventory/spdx.js` | license-id normalisation, SPDX expressions, license data lookup |
 | 3 | `lib/core/activity.js` / `lib/core/fs.js` / `lib/core/env.js` | path/file/hash/string utils, safe wrappers, activity/dry-run/host-allowlist, env/runtime/command resolution, feature flags |
-| 4 | `lib/ecosystems/deps.js` | dependency-tree assembly, component merge/dedupe, JAR namespace collection |
+| 4 | `lib/inventory/deps.js` | dependency-tree assembly, component merge/dedupe, JAR namespace collection |
 | 5 | `lib/ecosystems/ecosystems.js` | the `get*Metadata` family + registry fetch helpers |
 | 6 | `lib/ecosystems/parsers-<ecosystem>.js` | the `parse*` family, grouped per ecosystem (see §6) |
 | 7 | `lib/core/activity.js` / `lib/core/fs.js` / `lib/core/env.js` (cont.) | residual core that resisted earlier classification |
@@ -428,7 +428,7 @@ Each batch is one commit, independently green, and a pure move under
 `git diff -w --find-renames`. **Corrected order** (round-2 review):
 `purl → spdx → core → deps → ecosystems → parsers → residual`.
 
-### Batch 1 — `lib/ecosystems/purl.js` (~305 lines)
+### Batch 1 — `lib/inventory/purl.js` (~305 lines)
 
 Exports: `encodeForPurl`, `purlFromUrlString`, `locateGenericPackage`,
 `getVersionNumPnpm`, `createNpmWorkspacePurl` (re-export), plus internal purl
@@ -438,7 +438,7 @@ helpers (`generateNixPurl`, `createConanPurlString`, `createPurlTemplate`,
 No mutable state. Depends only on `PackageURL` + `core-activity.js` / `core-fs.js` / `core-env.js` utilities.
 **Lowest risk; lands first.**
 
-### Batch 2 — `lib/ecosystems/spdx.js` (~531 lines)
+### Batch 2 — `lib/inventory/spdx.js` (~531 lines)
 
 Exports: `isSpdxLicenseExpression`, `adjustLicenseInformation`, `getLicenses`,
 `getKnownLicense`, `addLicenseText`, `readLicenseText`, `findLicenseId`,
@@ -476,7 +476,7 @@ commits (one per sub-file) so each stays independently green:
 > reason: the combined ~2,000 lines exceeds the ~1,500 ceiling). The split
 > boundary is cocoa/pod/python-tree/command-builders vs. osquery/cpp/evidence.
 
-### Batch 4 — `lib/ecosystems/deps.js` (~501 lines)
+### Batch 4 — `lib/inventory/deps.js` (~501 lines)
 
 Exports: `collectJarNS`, `collectMvnDependencies`, `convertJarNSToPackages`,
 `componentSorter`, `flattenDeps`, plus JAR/POM helpers (`parsePomXml`,

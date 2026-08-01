@@ -184,27 +184,40 @@ Every package under `lib/` declares a numeric `layer` in its
 at a layer strictly below N, so there are no cycles and no same-layer
 cross-package edges.
 
-| Layer | Packages                            |
-| ----- | ----------------------------------- |
-| 0     | `core`                              |
-| 1     | `parsers`                           |
-| 2     | `ecosystems`, `helpers`             |
-| 3     | `stages`, `managers`                |
-| 4     | `cli`, `evinser`, `validator`       |
-| 5     | `audit`, `server`                   |
+| Layer | Packages                                    |
+| ----- | ------------------------------------------- |
+| 0     | `core`                                      |
+| 1     | `parsers`                                   |
+| 2     | `inventory`, `helpers`                      |
+| 3     | `ecosystems`                                |
+| 4     | `stages`, `managers`                        |
+| 5     | `cli`, `evinser`, `validator`               |
+| 6     | `audit`, `server`                           |
 
 `contrib/check-boundaries.js --strict` enforces this and must exit 0. If you are
 about to import `../../cli/index.js` inside an ecosystem or stage file, stop and
 move the shared logic down a layer first.
 
-Note that `lib/ecosystems/` is not yet a curated package. It is most of the old
-`lib/helpers/` catch-all, so alongside the ecosystem parsers and registry
-metadata it still holds general-purpose modules such as `display`, `table`,
-`analyzer`, `spdx` and `evidenceUtils`. Separating those into their own package
-means first breaking the two-way dependencies between them and the ecosystem
-code (for example `evidenceUtils` imports `parsers-js` and `parsers-misc`, while
-`source` imports `ecosystems`), which is why the two packages currently share
-layer 2 rather than being stacked.
+`lib/inventory/` holds the general-purpose BOM-construction utilities (purl,
+SPDX, evidence, deps, display, analyzers, AI/MCP/HBOM, formulation parsers, CI
+parsers, crypto, OS/osquery, source resolution, and related tooling) that are
+shared across all ecosystems. `lib/ecosystems/` holds the
+ecosystem-specific parsers and registry metadata. The barrel
+`lib/ecosystems/utils.js` re-exports across both packages for backward
+compatibility.
+
+The split is enforced by dependency direction, not by judgement: `inventory`
+sits below `ecosystems`, so nothing in `inventory/` may import from
+`ecosystems/`. When a general-purpose module turns out to need
+ecosystem-specific code, the fix is almost always that the code was misfiled —
+`getCppModules` and `addEvidenceForImports` moved out to
+`ecosystems/cppEvidence.js` and `ecosystems/jsEvidence.js` for exactly this
+reason. Injecting the dependency through a parameter is the fallback, not the
+default, and where it is unavoidable (`fetchPomXmlAsJson` in
+`inventory/source.js`, the OS package listers in
+`inventory/evidenceUtils.js`) the receiver throws when the caller omits it.
+Silently degrading is not acceptable: it turns a wiring bug into a quietly
+incomplete SBOM.
 
 ## Where common changes belong
 

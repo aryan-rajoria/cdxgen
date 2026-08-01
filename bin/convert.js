@@ -8,21 +8,21 @@ import yargs from "yargs";
 import { hideBin } from "yargs/helpers";
 
 import {
-  getNonCycloneDxErrorMessage,
-  isCycloneDxBom,
-  toCycloneDxSpecVersionString,
-} from "../lib/ecosystems/bomUtils.js";
-import {
-  importProtobomModule,
-  isProtoBomPath,
-} from "../lib/ecosystems/protobomLoader.js";
-import {
   retrieveCdxgenVersion,
   safeExistsSync,
   safeMkdirSync,
   safeWriteSync,
 } from "../lib/ecosystems/utils.js";
 import { deriveSpdxOutputPath } from "../lib/helpers/exportUtils.js";
+import {
+  getNonCycloneDxErrorMessage,
+  isCycloneDxBom,
+  toCycloneDxSpecVersionString,
+} from "../lib/inventory/bomUtils.js";
+import {
+  importProtobomModule,
+  isProtoBomPath,
+} from "../lib/inventory/protobomLoader.js";
 import { convertCycloneDxToSpdx } from "../lib/stages/postgen/spdxConverter.js";
 import { validateSpdx } from "../lib/validator/bomValidator.js";
 

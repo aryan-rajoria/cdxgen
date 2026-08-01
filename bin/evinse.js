@@ -7,22 +7,22 @@ import process from "node:process";
 import yargs from "yargs";
 import { hideBin } from "yargs/helpers";
 
-import {
-  getNonCycloneDxErrorMessage,
-  isCycloneDxBom,
-} from "../lib/ecosystems/bomUtils.js";
-import {
-  printCallStack,
-  printOccurrences,
-  printReachables,
-  printServices,
-} from "../lib/ecosystems/display.js";
 import { safeExistsSync } from "../lib/ecosystems/utils.js";
 import {
   analyzeProject,
   createEvinseFile,
   prepareDB,
 } from "../lib/evinser/evinser.js";
+import {
+  getNonCycloneDxErrorMessage,
+  isCycloneDxBom,
+} from "../lib/inventory/bomUtils.js";
+import {
+  printCallStack,
+  printOccurrences,
+  printReachables,
+  printServices,
+} from "../lib/inventory/display.js";
 import { validateBom } from "../lib/validator/bomValidator.js";
 
 const args = yargs(hideBin(process.argv))

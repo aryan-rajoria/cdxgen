@@ -8,17 +8,6 @@ import { hideBin } from "yargs/helpers";
 
 import { createHBom } from "../lib/cli/index.js";
 import { thoughtLog } from "../lib/core/logger.js";
-import { printActivitySummary } from "../lib/ecosystems/display.js";
-import {
-  ensureNoMixedHbomProjectTypes,
-  ensureSupportedHbomSpecVersion,
-  hasHbomProjectType,
-} from "../lib/ecosystems/hbom.js";
-import { getHbomSummary } from "../lib/ecosystems/hbomAnalysis.js";
-import {
-  importProtobomModule,
-  isProtoBomPath,
-} from "../lib/ecosystems/protobomLoader.js";
 import {
   DEBUG_MODE,
   isDryRun,
@@ -30,6 +19,17 @@ import {
   setDryRunMode,
 } from "../lib/ecosystems/utils.js";
 import { getOutputDirectory } from "../lib/helpers/exportUtils.js";
+import { printActivitySummary } from "../lib/inventory/display.js";
+import {
+  ensureNoMixedHbomProjectTypes,
+  ensureSupportedHbomSpecVersion,
+  hasHbomProjectType,
+} from "../lib/inventory/hbom.js";
+import { getHbomSummary } from "../lib/inventory/hbomAnalysis.js";
+import {
+  importProtobomModule,
+  isProtoBomPath,
+} from "../lib/inventory/protobomLoader.js";
 import { validateBom } from "../lib/validator/bomValidator.js";
 
 function determineHbomCommandName() {

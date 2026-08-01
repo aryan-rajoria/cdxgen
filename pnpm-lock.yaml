@@ -196,6 +196,8 @@ importers:
 
   packages/helpers: {}
 
+  packages/inventory: {}
+
   packages/managers: {}
 
   packages/parsers: {}

@@ -7,15 +7,15 @@ import yargs from "yargs";
 import { hideBin } from "yargs/helpers";
 
 import {
-  getNonCycloneDxErrorMessage,
-  isCycloneDxBom,
-} from "../lib/ecosystems/bomUtils.js";
-import {
   readEnvironmentVariable,
   retrieveCdxgenVersion,
   safeExistsSync,
 } from "../lib/ecosystems/utils.js";
 import { signBom } from "../lib/helpers/bomSigner.js";
+import {
+  getNonCycloneDxErrorMessage,
+  isCycloneDxBom,
+} from "../lib/inventory/bomUtils.js";
 
 const _yargs = yargs(hideBin(process.argv));
 

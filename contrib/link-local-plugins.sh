@@ -3,7 +3,7 @@
 # Stage locally-built cdxgen-plugins-bin binaries so this cdxgen checkout uses
 # them, without publishing to npm and without touching package.json.
 #
-# Why not `pnpm link`? Binary discovery in lib/ecosystems/plugins.js is entirely
+# Why not `pnpm link`? Binary discovery in lib/inventory/plugins.js is entirely
 # path-based: cdxgen looks for
 #   <pluginsDir>/<tool>/<tool>-<platform>-<arch>
 # and `pluginsDir` is either $CDXGEN_PLUGINS_DIR or a node_modules lookup. The

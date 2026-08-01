@@ -66,6 +66,10 @@
       "import": "./lib/ecosystems/*.js",
       "types": "./types/lib/ecosystems/*.d.ts"
     },
+    "./inventory/*": {
+      "import": "./lib/inventory/*.js",
+      "types": "./types/lib/inventory/*.d.ts"
+    },
     "./helpers/*": {
       "import": "./lib/helpers/*.js",
       "types": "./types/lib/helpers/*.d.ts"

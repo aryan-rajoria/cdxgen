@@ -26,52 +26,8 @@ import {
 } from "../lib/cli/cliOptions.js";
 import { createBom, submitBom } from "../lib/cli/index.js";
 import { TRACE_MODE, thoughtEnd, thoughtLog } from "../lib/core/logger.js";
-import {
-  DEFAULT_CDX_SPEC_VERSION,
-  getSupportedCycloneDxComponentTypes,
-  isCycloneDxBom,
-  isCycloneDxComponentTypeEnabled,
-  normalizeCycloneDxComponentTypeFilter,
-  toCycloneDxSpecVersionString,
-} from "../lib/ecosystems/bomUtils.js";
-import {
-  displaySelfThreatModel,
-  printActivitySummary,
-  printCallStack,
-  printDependencyTree,
-  printEnvironmentAuditFindings,
-  printFormulation,
-  printOccurrences,
-  printReachables,
-  printServices,
-  printSponsorBanner,
-  printSummary,
-  printTable,
-} from "../lib/ecosystems/display.js";
-import {
-  ensureNoMixedHbomProjectTypes,
-  ensureSupportedHbomSpecVersion,
-  hasHbomProjectType,
-  isHbomOnlyProjectTypes,
-} from "../lib/ecosystems/hbom.js";
-import { resolvePluginBinary } from "../lib/ecosystems/plugins.js";
-import { importProtobomModule } from "../lib/ecosystems/protobomLoader.js";
+import { fetchPomXmlAsJson } from "../lib/ecosystems/ecosystems.js";
 import { normalizeHuggingFaceReference } from "../lib/ecosystems/remote/huggingface.js";
-import {
-  cleanupSourceDir,
-  findGitRefForPurlVersion,
-  gitClone,
-  isAllowedPath,
-  isAllowedWinPath,
-  maybePurlSource,
-  maybeRemotePath,
-  PURL_REGISTRY_LOOKUP_WARNING,
-  resolveGitUrlFromPurl,
-  resolvePurlSourceDirectory,
-  sanitizeRemoteUrlForLogs,
-  validateAndRejectGitSource,
-  validatePurlSource,
-} from "../lib/ecosystems/source.js";
 import {
   commandsExecuted,
   DEBUG_MODE,
@@ -104,6 +60,51 @@ import {
   createOutputPlan,
   getOutputDirectory,
 } from "../lib/helpers/exportUtils.js";
+import {
+  DEFAULT_CDX_SPEC_VERSION,
+  getSupportedCycloneDxComponentTypes,
+  isCycloneDxBom,
+  isCycloneDxComponentTypeEnabled,
+  normalizeCycloneDxComponentTypeFilter,
+  toCycloneDxSpecVersionString,
+} from "../lib/inventory/bomUtils.js";
+import {
+  displaySelfThreatModel,
+  printActivitySummary,
+  printCallStack,
+  printDependencyTree,
+  printEnvironmentAuditFindings,
+  printFormulation,
+  printOccurrences,
+  printReachables,
+  printServices,
+  printSponsorBanner,
+  printSummary,
+  printTable,
+} from "../lib/inventory/display.js";
+import {
+  ensureNoMixedHbomProjectTypes,
+  ensureSupportedHbomSpecVersion,
+  hasHbomProjectType,
+  isHbomOnlyProjectTypes,
+} from "../lib/inventory/hbom.js";
+import { resolvePluginBinary } from "../lib/inventory/plugins.js";
+import { importProtobomModule } from "../lib/inventory/protobomLoader.js";
+import {
+  cleanupSourceDir,
+  findGitRefForPurlVersion,
+  gitClone,
+  isAllowedPath,
+  isAllowedWinPath,
+  maybePurlSource,
+  maybeRemotePath,
+  PURL_REGISTRY_LOOKUP_WARNING,
+  resolveGitUrlFromPurl,
+  resolvePurlSourceDirectory,
+  sanitizeRemoteUrlForLogs,
+  validateAndRejectGitSource,
+  validatePurlSource,
+} from "../lib/inventory/source.js";
 import { executeOsQuery } from "../lib/managers/binary.js";
 import { getBomWithOras } from "../lib/managers/oci.js";
 import { postProcess } from "../lib/stages/postgen/postgen.js";
@@ -165,7 +166,7 @@ if (
 ) {
   console.log(`cdxgen ${retrieveCdxgenVersion()}`);
   try {
-    const { cdxrsAvailable } = await import("../lib/ecosystems/cdxrs.js");
+    const { cdxrsAvailable } = await import("../lib/inventory/cdxrs.js");
     const rs = cdxrsAvailable("info");
     if (rs.available) {
       console.log(`cdxrs ${rs.version} (available)`);
@@ -1384,7 +1385,9 @@ const writeCycloneDxOutput = (jsonFile, bomJson, options) => {
       console.error(purlValidationError.error, purlValidationError.details);
       process.exit(1);
     }
-    purlResolution = await resolveGitUrlFromPurl(sourcePath);
+    purlResolution = await resolveGitUrlFromPurl(sourcePath, {
+      fetchPomXmlAsJson,
+    });
     if (!purlResolution?.repoUrl) {
       console.error(
         "Unable to resolve the provided package URL to a repository URL.",
@@ -1491,7 +1494,7 @@ const writeCycloneDxOutput = (jsonFile, bomJson, options) => {
   thoughtLog("Getting ready to generate the BOM ⚡️.");
   if (DEBUG_MODE) {
     try {
-      const { cdxrsAvailable } = await import("../lib/ecosystems/cdxrs.js");
+      const { cdxrsAvailable } = await import("../lib/inventory/cdxrs.js");
       const rs = cdxrsAvailable("info");
       console.log(
         `cdxrs: ${rs.available ? `available (${rs.version})` : `not available (${rs.reason}) — using JS path`}`,

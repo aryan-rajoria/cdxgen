@@ -41,9 +41,10 @@ const DESIGNATED_BARRELS = new Set([
 // Package → directory mapping.
 const PACKAGE_DIRS = {
   core: ["lib/core"],
+  parsers: ["lib/parsers"],
+  inventory: ["lib/inventory"],
   ecosystems: ["lib/ecosystems"],
   helpers: ["lib/helpers"],
-  parsers: ["lib/parsers"],
   managers: ["lib/managers"],
   stages: ["lib/stages/postgen", "lib/stages/pregen"],
   cli: ["lib/cli"],

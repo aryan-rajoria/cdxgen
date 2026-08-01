@@ -20,20 +20,20 @@ import yargs from "yargs";
 import { hideBin } from "yargs/helpers";
 
 import {
-  getNonCycloneDxErrorMessage,
-  isCycloneDxBom,
-} from "../lib/ecosystems/bomUtils.js";
-import {
-  importProtobomModule,
-  isProtoBomPath,
-} from "../lib/ecosystems/protobomLoader.js";
-import {
   dirNameStr,
   retrieveCdxgenVersion,
   safeExistsSync,
   safeMkdirSync,
   safeWriteSync,
 } from "../lib/ecosystems/utils.js";
+import {
+  getNonCycloneDxErrorMessage,
+  isCycloneDxBom,
+} from "../lib/inventory/bomUtils.js";
+import {
+  importProtobomModule,
+  isProtoBomPath,
+} from "../lib/inventory/protobomLoader.js";
 import { getBomWithOras } from "../lib/managers/oci.js";
 import { shouldFail, validateBomAdvanced } from "../lib/validator/index.js";
 import { render as renderReport } from "../lib/validator/reporters/index.js";

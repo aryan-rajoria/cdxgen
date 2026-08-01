@@ -8,16 +8,16 @@ import yargs from "yargs";
 import { hideBin } from "yargs/helpers";
 
 import {
-  getNonCycloneDxErrorMessage,
-  isCycloneDxBom,
-} from "../lib/ecosystems/bomUtils.js";
-import { isProtoBomPath } from "../lib/ecosystems/protobomLoader.js";
-import {
   dirNameStr,
   retrieveCdxgenVersion,
   safeExistsSync,
 } from "../lib/ecosystems/utils.js";
 import { verifyNode } from "../lib/helpers/bomSigner.js";
+import {
+  getNonCycloneDxErrorMessage,
+  isCycloneDxBom,
+} from "../lib/inventory/bomUtils.js";
+import { isProtoBomPath } from "../lib/inventory/protobomLoader.js";
 import { getBomWithOras } from "../lib/managers/oci.js";
 
 const dirName = dirNameStr;

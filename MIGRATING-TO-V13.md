@@ -60,16 +60,16 @@ under `core/`, and the HuggingFace manifest readers under `parsers/`:
 | `helpers/huggingfaceManifest` | `parsers/huggingfaceManifest` |
 | `helpers/huggingfaceUtils` | `parsers/huggingfaceUtils` |
 
-Most of what used to be `helpers/` is now `ecosystems/`. Be aware that this was a
-bulk move of the old `helpers/` grab-bag, not a curated extraction: `ecosystems/`
-does hold the ecosystem parsers, registry metadata, and per-ecosystem logic, but
-it also holds plenty of general-purpose modules (`display`, `table`, `analyzer`,
-`spdx`, `evidenceUtils`, and others) that are not tied to any one ecosystem.
-Splitting those back out requires breaking real dependency cycles between them
-and the ecosystem code, so it is deferred rather than done. `helpers/` retains
-only the output-side modules (`bomSigner`, `exportUtils`, `annotationFormatter`,
-`versutils`, `vsixutils`, `remote/`). If a v12 `helpers/x` import is not in the
-table below, try `ecosystems/x` first.
+Most of what used to be `helpers/` is now split across `ecosystems/` and
+`inventory/`. The ecosystem-specific parsers, registry metadata, and
+per-ecosystem logic live in `ecosystems/`; the general-purpose BOM-construction
+utilities (purl, SPDX, evidence, deps, display, analyzers, AI/MCP/HBOM,
+formulation parsers, CI parsers, crypto, OS/osquery, source resolution) live in
+`inventory/`. The barrel `ecosystems/utils` re-exports across both packages for
+backward compatibility. `helpers/` retains only the output-side modules
+(`bomSigner`, `exportUtils`, `annotationFormatter`, `versutils`, `vsixutils`,
+`remote/`). If a v12 `helpers/x` import is not in the table below, try
+`inventory/x` first, then `ecosystems/x`.
 
 Selected moves:
 
@@ -83,11 +83,11 @@ Selected moves:
 | `helpers/parsers-jvm` | `ecosystems/parsers-jvm` |
 | `helpers/parsers-go` | `ecosystems/parsers-go` |
 | `helpers/ecosystems` | `ecosystems/ecosystems` |
-| `helpers/purl` | `ecosystems/purl` |
-| `helpers/spdx` | `ecosystems/spdx` |
+| `helpers/purl` | `inventory/purl` |
+| `helpers/spdx` | `inventory/spdx` |
 | `helpers/npmutils` | `ecosystems/npmutils` |
-| `helpers/deps` | `ecosystems/deps` |
-| `helpers/utils` (barrel) | `ecosystems/utils` |
+| `helpers/deps` | `inventory/deps` |
+| `helpers/utils` (barrel) | `ecosystems/utils` (re-exports from both `ecosystems/` and `inventory/`) |
 
 Several exports from the retired `core-misc-a.js` and `core-misc-b.js` moved to
 new homes:
@@ -99,7 +99,11 @@ new homes:
 | `isValidIriReference` | `parsers/iri` |
 | `getDefaultBomAuditCategories` | `ecosystems/auditCategories` |
 | `getRuntimeInformation`, `retrieveCdxgenVersion`, `retrieveCdxgenPluginVersion` | `ecosystems/envcontext` |
-| `extractToolRefs`, `attachIdentityTools`, `addEvidenceForImports`, `addEvidenceForDotnet`, `getCppModules`, `convertOSQueryResults` | `ecosystems/evidenceUtils` |
+| `extractToolRefs`, `attachIdentityTools`, `addEvidenceForDotnet`, `convertOSQueryResults` | `inventory/evidenceUtils` |
+| `addEvidenceForImports` | `ecosystems/jsEvidence` |
+| `getCppModules` | `ecosystems/cppEvidence` |
+| `parseCaxaMetadata` | `ecosystems/caxa` |
+| `analyzeDosaiCrypto`, `runDosaiCommand` | `inventory/dosai` |
 | `isPartialTree`, `recomputeScope` | `ecosystems/depsUtils` |
 | `getOSPackageForFile`, `collectExecutables`, `collectSharedLibs` | `ecosystems/osPackageResolver` |
 | `getPyModules`, `createUVLock`, `getPipFrozenTree`, `getPipTreeForPackages` | `ecosystems/pythonutils` |
