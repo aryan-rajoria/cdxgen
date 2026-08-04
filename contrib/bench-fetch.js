@@ -1,12 +1,23 @@
 /**
- * Measured comparison of the serial JS registry fetch against the batched Rust
- * one.
+ * Measured comparison of the serial JS registry fetch against the batched JS
+ * and Rust transports.
  *
- * No extrapolation: both paths are run against the same local registry double
+ * No extrapolation: every path is run against the same local registry double
  * with the same injected per-response latency, and the wall clock is reported.
  * Latency is injected rather than borrowed from a real registry because the
  * numbers have to be reproducible on a laptop and in CI — and because the thing
  * being measured is the serialisation, not npm's CDN.
+ *
+ * Three rows are measured when the cdxrs binary is available (two when it is
+ * not):
+ *
+ *   JS serial  — `CDXGEN_CASSETTE_REPLAY` forces `prefetchEnabled()` off, so
+ *                every `cdxgenAgent.get` is awaited in a for-loop body. This is
+ *                what every cdxgen user gets today when the binary is absent.
+ *   JS batched — the JS pool from `lib/inventory/fetchBatch.js`, concurrency
+ *                bounded by the shared per-host policy. This is what this round
+ *                ships as the no-binary path.
+ *   Rust batched — `cdxrs fetch`, cold and warm cache, for comparison.
  *
  * Usage:
  *   node contrib/bench-fetch.js                 # default: 200 pkgs, 50ms RTT
@@ -82,12 +93,13 @@ async function startRegistry(latencyMs) {
   };
 }
 
-async function timeRun({ packages, registryUrl, rustDisabled, cacheDir }) {
+async function timeRun({ packages, registryUrl, rustDisabled, cacheDir, forceSerial }) {
   const previous = {
     NPM_URL: process.env.NPM_URL,
     CDXGEN_RS_DISABLE: process.env.CDXGEN_RS_DISABLE,
     CDXGEN_CACHE_DIR: process.env.CDXGEN_CACHE_DIR,
     CDXGEN_CACHE_LOOPBACK: process.env.CDXGEN_CACHE_LOOPBACK,
+    CDXGEN_CASSETTE_REPLAY: process.env.CDXGEN_CASSETTE_REPLAY,
   };
   process.env.NPM_URL = registryUrl;
   process.env.CDXGEN_CACHE_DIR = cacheDir;
@@ -95,6 +107,16 @@ async function timeRun({ packages, registryUrl, rustDisabled, cacheDir }) {
   // Loopback hosts are excluded from the cache by default; the override
   // re-enables caching so the warm-cache row is a real measurement.
   process.env.CDXGEN_CACHE_LOOPBACK = "1";
+  if (forceSerial) {
+    // `CDXGEN_CASSETTE_REPLAY` is the single switch `prefetchEnabled()` checks
+    // to decide whether batching runs at all. Setting it without installing a
+    // cassette interceptor leaves HTTP untouched — the only effect is that
+    // every caller falls back to its own serial `cdxgenAgent.get`. That is the
+    // pre-D27 no-binary path, measured here as the baseline.
+    process.env.CDXGEN_CASSETTE_REPLAY = "true";
+  } else {
+    delete process.env.CDXGEN_CASSETTE_REPLAY;
+  }
   if (rustDisabled) {
     process.env.CDXGEN_RS_DISABLE = "fetch";
   } else {
@@ -155,24 +177,55 @@ async function main() {
   const rows = [];
 
   if (!args.skipJs) {
-    const server = await startRegistry(args.latency);
-    const cache = path.join(process.cwd(), `.bench-cache-js-${process.pid}`);
+    // JS serial: the baseline that every no-binary user pays today. Forced by
+    // telling `prefetchEnabled()` to stay off, so getNpmMetadata awaits every
+    // cdxgenAgent.get in a for-loop body.
+    const serialServer = await startRegistry(args.latency);
+    const serialCache = path.join(
+      process.cwd(),
+      `.bench-cache-serial-${process.pid}`,
+    );
     try {
       const run = await timeRun({
         packages: args.packages,
-        registryUrl: server.url,
+        registryUrl: serialServer.url,
         rustDisabled: true,
-        cacheDir: cache,
+        cacheDir: serialCache,
+        forceSerial: true,
       });
       rows.push({
-        path: "JS serial (v12 shape)",
+        path: "JS serial (no batch)",
         ms: run.elapsedMs,
-        requests: server.served,
+        requests: serialServer.served,
         enriched: run.enriched,
       });
     } finally {
-      await server.stop();
-      rmSync(cache, { recursive: true, force: true });
+      await serialServer.stop();
+      rmSync(serialCache, { recursive: true, force: true });
+    }
+
+    // JS batched: the pool this round ships. Rust is disabled; the JS batcher
+    // runs every request through cdxgenAgent with the shared per-host policy.
+    const jsServer = await startRegistry(args.latency);
+    const jsCache = path.join(process.cwd(), `.bench-cache-js-${process.pid}`);
+    try {
+      const run = await timeRun({
+        packages: args.packages,
+        registryUrl: jsServer.url,
+        rustDisabled: true,
+        cacheDir: jsCache,
+        forceSerial: false,
+      });
+      rows.push({
+        path: "JS batched (pool)",
+        ms: run.elapsedMs,
+        requests: jsServer.served,
+        enriched: run.enriched,
+        peak: run.stats?.peakConcurrency,
+      });
+    } finally {
+      await jsServer.stop();
+      rmSync(jsCache, { recursive: true, force: true });
     }
   }
 
@@ -232,11 +285,26 @@ async function main() {
     );
   }
 
-  const js = rows.find((r) => r.path.startsWith("JS"));
+  const serial = rows.find((r) => r.path.includes("serial"));
+  const jsBatched = rows.find((r) => r.path === "JS batched (pool)");
   const rust = rows.find((r) => r.path.includes("cold"));
-  if (js && rust) {
+  if (serial && jsBatched) {
     console.log(
-      `\nspeedup (cold cache): ${(js.ms / rust.ms).toFixed(1)}x  (${js.ms.toFixed(
+      `\nspeedup JS batched vs serial: ${(serial.ms / jsBatched.ms).toFixed(
+        1,
+      )}x  (${serial.ms.toFixed(0)} ms -> ${jsBatched.ms.toFixed(0)} ms)`,
+    );
+  }
+  if (jsBatched && rust) {
+    console.log(
+      `speedup Rust cold vs JS batched: ${(jsBatched.ms / rust.ms).toFixed(
+        1,
+      )}x  (${jsBatched.ms.toFixed(0)} ms -> ${rust.ms.toFixed(0)} ms)`,
+    );
+  }
+  if (serial && rust) {
+    console.log(
+      `speedup Rust cold vs JS serial: ${(serial.ms / rust.ms).toFixed(1)}x  (${serial.ms.toFixed(
         0,
       )} ms -> ${rust.ms.toFixed(0)} ms)`,
     );

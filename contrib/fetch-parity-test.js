@@ -533,13 +533,17 @@ export async function main() {
     }
   });
 
-  await test("CDXGEN_RS_DISABLE=fetch takes the JS path", async () => {
-    const { prefetchEnabled, resetBatchFetchAvailability } = await import(
+  await test("CDXGEN_RS_DISABLE=fetch disables the Rust subprocess but not the JS batcher", async () => {
+    const { batchFetchAvailable, prefetchEnabled, resetBatchFetchAvailability } = await import(
       `${path.join(REPO_ROOT, "lib", "inventory", "fetchBatch.js")}?t=${Math.random()}`
     );
     await withEnv({ CDXGEN_RS_DISABLE: "fetch" }, async () => {
       resetBatchFetchAvailability();
-      assert.equal(prefetchEnabled(), false);
+      // The Rust subprocess is disabled, but prefetching as a whole is still
+      // on: the JS pool runs every request through cdxgenAgent. This is the
+      // core contract of D27 — removing the serial path from the common case.
+      assert.equal(batchFetchAvailable(), false);
+      assert.equal(prefetchEnabled(), true);
     });
   });
 
