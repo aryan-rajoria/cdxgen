@@ -194,6 +194,41 @@ CDXGEN_PLUGINS_DIR=/tmp/cdxgen-local-plugins npx poku lib/inventory/cdxrs.poku.j
 | `CDXGEN_RS_DISABLE` | Disable Rust paths: `all` or comma-separated subcommand names |
 | `CDXGEN_NO_RUST` | Set to `true` to disable all Rust paths (same as `CDXGEN_RS_DISABLE=all`) |
 | `--no-rust` | CLI flag alias for `CDXGEN_NO_RUST=true` |
+| `CDXGEN_CACHE_DIR` | Override the metadata cache directory. Default: platform cache dir (`~/.cache/cdxgen` on Linux, `~/Library/Caches/cdxgen` on macOS, `%LOCALAPPDATA%\cdxgen\cache` on Windows). |
+| `CDXGEN_NO_CACHE` | Set to `true` or `1` to bypass the metadata cache for this run. |
+| `CDXGEN_CACHE_TTL` | Override the cache TTL in seconds. `0` means never expire. Default: 86400 (24h). |
+| `CDXGEN_CACHE_LOOPBACK` | Set to `1` to allow caching loopback hosts (`127.0.0.1`, `::1`, `localhost`). Loopback is excluded by default because test-double entries are keyed by ephemeral ports. Used by `contrib/bench-fetch.js`. |
+| `--no-cache` | CLI flag alias for `CDXGEN_NO_CACHE=true` |
+| `--cache-ttl <secs>` | CLI flag alias for `CDXGEN_CACHE_TTL=<secs>` |
+
+## Metadata cache
+
+`cdxrs fetch` writes an on-disk conditional cache under
+`<cacheDir>/cdxrs-fetch/<host>/<hash>.json`. The cache is bounded by both a
+TTL (default 24h, opportunistic sweep per host directory) and an LRU byte
+ceiling (default 256 MB).
+
+Enforcing the ceiling means walking the whole cache, so it is not done on every
+write: a run may add an eighth of the ceiling (at least 8 MB) before a pass is
+due. A cache can therefore sit that much over the ceiling between passes, and
+one left oversized by a run that exited early is reclaimed by the next run that
+writes enough, or immediately by `cdxgen cache clear`.
+
+Entries are not fsynced. Every byte in the cache is re-derivable from the
+network and atomicity comes from `rename`, so a torn entry left by a crash is
+simply discarded on read and refetched.
+
+Inspect or purge the cache:
+
+```bash
+cdxgen cache info    # resolved directory, entry count, total bytes, per-host breakdown
+cdxgen cache clear   # purge all entries
+```
+
+The cache directory is resolved by JS and passed to Rust via `--cache-dir` on
+every invocation, so both sides agree on the location. When `CDXGEN_CACHE_DIR`
+is unset, the platform cache directory is used. If no home directory can be
+resolved, the cache is disabled — it never falls back to the working directory.
 
 ## JS bridge API
 

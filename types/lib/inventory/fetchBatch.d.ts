@@ -62,16 +62,6 @@ export type BatchEntry = {
     definite?: boolean;
 };
 /**
- * The outcome recorded for a single URL in a batch.
- *
- * @typedef {Object} BatchEntry
- * @property {boolean} ok Whether a body was obtained.
- * @property {*} [body] Parsed response body when `ok`.
- * @property {number} [status] HTTP status, when the server produced one.
- * @property {boolean} [definite] True when the status is a final answer (a 4xx
- *   other than 429) and re-requesting it in JS would be pointless.
- */
-/**
  * Fetch a batch of registry URLs concurrently.
  *
  * @param {Array<{url: string, accept?: string, authRealm?: string}>} requests

@@ -87,9 +87,14 @@ async function timeRun({ packages, registryUrl, rustDisabled, cacheDir }) {
     NPM_URL: process.env.NPM_URL,
     CDXGEN_RS_DISABLE: process.env.CDXGEN_RS_DISABLE,
     CDXGEN_CACHE_DIR: process.env.CDXGEN_CACHE_DIR,
+    CDXGEN_CACHE_LOOPBACK: process.env.CDXGEN_CACHE_LOOPBACK,
   };
   process.env.NPM_URL = registryUrl;
   process.env.CDXGEN_CACHE_DIR = cacheDir;
+  // The benchmark measures cache hits against a loopback registry double.
+  // Loopback hosts are excluded from the cache by default; the override
+  // re-enables caching so the warm-cache row is a real measurement.
+  process.env.CDXGEN_CACHE_LOOPBACK = "1";
   if (rustDisabled) {
     process.env.CDXGEN_RS_DISABLE = "fetch";
   } else {
@@ -244,6 +249,18 @@ async function main() {
       `\nWARNING: paths enriched different package counts (${[
         ...enrichedCounts,
       ]}) — the comparison is not like-for-like`,
+    );
+    return 1;
+  }
+  // The warm-cache row must actually have hit the cache. A blanket loopback
+  // exclusion silently reduces it to a second cold run, making the benchmark
+  // that justifies the whole cache measure nothing while printing a plausible
+  // number. Fail loudly if this regresses.
+  const warmRow = rows.find((r) => r.path.includes("warm"));
+  if (warmRow && !(warmRow.cacheHits > 0)) {
+    console.error(
+      `\nFAIL: the warm-cache row reported ${warmRow.cacheHits} cache hits. ` +
+        "The benchmark is not measuring a cached run — check CDXGEN_CACHE_LOOPBACK and the loopback exclusion.",
     );
     return 1;
   }

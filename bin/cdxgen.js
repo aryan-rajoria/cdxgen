@@ -151,6 +151,8 @@ for (const configPattern of configPaths) {
 }
 
 const _yargs = yargs(hideBin(process.argv));
+/** Actions accepted by the `cdxgen cache` subcommand. */
+const CACHE_ACTIONS = ["info", "clear"];
 const invokedCommandName = basename(process.argv[1] || "cdxgen").replace(
   /\.(?:[cm]?js|exe)$/u,
   "",
@@ -698,7 +700,9 @@ const args = _yargs
     ],
     ["$0 --server", "Run cdxgen as a server"],
   ])
-  .epilogue("for documentation, visit https://cdxgen.github.io/cdxgen")
+  .epilogue(
+    `Subcommands:\n  cache <${CACHE_ACTIONS.join("|")}>  Inspect or purge the registry metadata cache.\n\nfor documentation, visit https://cdxgen.github.io/cdxgen`,
+  )
   .config(config)
   .scriptName(invokedCommandName || "cdxgen")
   .version(retrieveCdxgenVersion())
@@ -720,6 +724,17 @@ const args = _yargs
     description:
       "Use Rust-native (cdxrs) acceleration where available. Pass --no-rust to force the JS path.",
   })
+  .option("cache", {
+    type: "boolean",
+    default: true,
+    description:
+      "Use the on-disk metadata cache for registry lookups. Pass --no-cache to bypass it for this run.",
+  })
+  .option("cache-ttl", {
+    type: "number",
+    description:
+      "Override the metadata cache TTL in seconds. 0 means never expire. Default: 86400 (24h).",
+  })
   .wrap(Math.min(120, yargs().terminalWidth())).argv;
 
 if (process.env?.CDXGEN_NODE_OPTIONS) {
@@ -732,6 +747,32 @@ if (process.env?.CDXGEN_NODE_OPTIONS) {
 // `no-rust` so yargs' own boolean negation produces the flag.
 if (args.rust === false) {
   process.env.CDXGEN_RS_DISABLE = "all";
+}
+
+// `--no-cache` and `--cache-ttl` are front-ends for env vars that the fetch
+// bridge reads when constructing cdxrs arguments. Declared as `cache` (default
+// true) so yargs' boolean negation produces `--no-cache`.
+if (args.cache === false) {
+  process.env.CDXGEN_NO_CACHE = "true";
+}
+if (args.cacheTtl != null && Number.isFinite(args.cacheTtl)) {
+  process.env.CDXGEN_CACHE_TTL = String(args.cacheTtl);
+}
+
+// The `cache` subcommand takes its action as a positional word rather than a
+// flag, so an unrecognised action can be rejected instead of silently meaning
+// `info`. A bare `cdxgen cache` is left alone: it is a path, so scanning a
+// directory named `cache` keeps working.
+if (args._[0] === "cache" && args._.length > 1) {
+  const action = String(args._[1]);
+  if (!CACHE_ACTIONS.includes(action)) {
+    console.error(
+      `Unknown cache action "${action}". Expected one of: ${CACHE_ACTIONS.join(", ")}.`,
+    );
+    process.exit(1);
+  }
+  const { runCacheCommand } = await import("../lib/inventory/cacheCommands.js");
+  process.exit(await runCacheCommand(action));
 }
 
 if (args.help) {

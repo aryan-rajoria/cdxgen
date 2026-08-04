@@ -141,6 +141,8 @@ lib/inventory/analyzerScope.js
 lib/inventory/atomUtils.js
 lib/inventory/auditCategories.js
 lib/inventory/bomUtils.js
+lib/inventory/cacheCommands.js
+lib/inventory/cacheDir.js
 lib/inventory/cbomutils.js
 lib/inventory/cdxrs.js
 lib/inventory/ciParsers/azurePipelines.js
@@ -413,6 +415,10 @@ types/lib/inventory/auditCategories.d.ts
 types/lib/inventory/auditCategories.d.ts.map
 types/lib/inventory/bomUtils.d.ts
 types/lib/inventory/bomUtils.d.ts.map
+types/lib/inventory/cacheCommands.d.ts
+types/lib/inventory/cacheCommands.d.ts.map
+types/lib/inventory/cacheDir.d.ts
+types/lib/inventory/cacheDir.d.ts.map
 types/lib/inventory/cbomutils.d.ts
 types/lib/inventory/cbomutils.d.ts.map
 types/lib/inventory/cdxrs.d.ts
