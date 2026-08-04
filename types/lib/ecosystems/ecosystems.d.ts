@@ -140,13 +140,26 @@ export declare function getGithubUrlParts(repoUrl: string): [string];
  */
 export declare function toGitHubApiUrl(repoUrl: string, repoMetadata: Object): string | undefined;
 /**
- * Method to retrieve repo license by querying github api
+ * Prefetch the GitHub licence endpoint for a list of repository URLs.
  *
- * @param {String} repoUrl Repository url
- * @param {Object} repoMetadata Object containing group and package name strings
- * @return {Promise<String>} SPDX license id
+ * The single biggest remaining serialisation: `getRepoLicense` is called once
+ * per component from npm, Maven, Swift and Go, each call a full round trip to
+ * api.github.com. Batching them also makes the authenticated concurrency
+ * allowance worth having — with `GITHUB_TOKEN` set, cdxrs runs eight of these at
+ * a time instead of one.
+ *
+ * @param {Array<string|undefined>} repoUrls Repository URLs (duplicates and
+ *   empties are fine).
+ * @returns {Promise<void>}
  */
-export declare function getRepoLicense(repoUrl: string, repoMetadata: Object): Promise<string>;
+export declare function prefetchRepoLicenses(repoUrls: Array<string | undefined>): Promise<void>;
+/**
+ * Discard prefetched repository licences. Tests only.
+ */
+export declare function resetRepoLicensePrefetch(): void;
+export declare function getRepoLicense(repoUrl: any, repoMetadata: any): Promise<{
+    url: any;
+} | undefined>;
 /**
  * Method to get go pkg license from go.dev site.
  *

@@ -191,8 +191,44 @@ const PUB_SCORE = { tags: ["license:mit", "sdk:dart"] };
 /**
  * Build the routes for one registry double covering all three ecosystems.
  */
+const PYPI_DOC = {
+  info: {
+    name: "Flask",
+    summary: "A simple framework for building complex web applications.",
+    author: "Armin Ronacher",
+    author_email: "armin.ronacher@example.invalid",
+    license: "BSD-3-Clause",
+    home_page: "https://palletsprojects.com/p/flask",
+    classifiers: ["License :: OSI Approved :: BSD License"],
+    version: "3.0.0",
+  },
+  urls: [
+    {
+      packagetype: "sdist",
+      url: "https://files.example.invalid/flask-3.0.0.tar.gz",
+      digests: { sha256: "d".repeat(64) },
+    },
+  ],
+};
+
+const GITHUB_LICENSE_DOC = {
+  html_url: "https://github.com/example/widget/blob/main/LICENSE",
+  license: { spdx_id: "Apache-2.0", name: "Apache License 2.0" },
+};
+
+const JSR_VERSION_DOC = { version: "1.0.2", license: "MIT" };
+const JSR_PACKAGE_DOC = {
+  name: "std",
+  description: "The Deno standard library",
+  githubRepository: { owner: "denoland", name: "std" },
+};
+
 function registryRoutes() {
   return {
+    "/scopes/std/packages/fs/versions/1.0.2": JSR_VERSION_DOC,
+    "/scopes/std/packages/fs": JSR_PACKAGE_DOC,
+    "/pypi/Flask/3.0.0/json": PYPI_DOC,
+    "/repos/example/widget/license": GITHUB_LICENSE_DOC,
     "/left-pad": NPM_DOC,
     "/@scope/pkg": { ...NPM_DOC, name: "@scope/pkg" },
     "/serde": CRATE_DOC,
@@ -359,6 +395,85 @@ export async function main() {
     // The SPDX canonicalisation is JS logic and must survive: pub.dev tags are
     // lowercase, the component must carry the canonical id.
     assert.equal(rust[0].license, "MIT");
+  });
+
+  await test("PyPI metadata is identical through both paths", async () => {
+    const { rust } = await compareBothPaths(
+      "getPyMetadata",
+      (mod) =>
+        mod.getPyMetadata([{ name: "Flask", version: "3.0.0" }], true),
+      (url) => ({ PYPI_URL: `${url}/pypi/` }),
+    );
+    assert.ok(
+      rust[0].license?.length,
+      `PyPI licence was not derived: ${JSON.stringify(rust[0].license)}`,
+    );
+    assert.ok(rust[0].author?.includes("Armin Ronacher"), rust[0].author);
+  });
+
+  await test("Swift repository licences are identical through both paths", async () => {
+    const { rust } = await compareBothPaths(
+      "getSwiftPackageMetadata",
+      async (mod) => {
+        mod.resetRepoLicensePrefetch();
+        return await mod.getSwiftPackageMetadata([
+          {
+            name: "widget",
+            version: "1.0.0",
+            repository: { url: "https://github.com/example/widget" },
+          },
+        ]);
+      },
+      // Both paths resolve the GitHub API base through GITHUB_API_URL, so the
+      // double stands in for api.github.com for both.
+      (url) => ({ GITHUB_API_URL: url, GITHUB_TOKEN: undefined }),
+    );
+    assert.equal(rust[0].license?.id, "Apache-2.0");
+  });
+
+  await test("jsr metadata is identical through both paths", async () => {
+    const jsrComponent = () => ({
+      name: "@std/fs",
+      version: "1.0.2",
+      properties: [{ name: "cdx:deno:jsrKey", value: "@std/fs@1.0.2" }],
+    });
+    const rustServer = await startRegistry(registryRoutes());
+    const jsServer = await startRegistry(registryRoutes());
+    try {
+      const { lastBatchStats, resetBatchFetchAvailability } = await import(
+        path.join(REPO_ROOT, "lib", "inventory", "fetchBatch.js")
+      );
+      const run = async (serverUrl, disable) =>
+        await withEnv(
+          { JSR_API_URL: `${serverUrl}/`, CDXGEN_RS_DISABLE: disable },
+          async () => {
+            resetBatchFetchAvailability();
+            const mod = await import(
+              `${path.join(REPO_ROOT, "lib", "ecosystems", "denoutils.js")}?t=${Math.random()}`
+            );
+            const list = [jsrComponent()];
+            await mod.getJsrMetadata(list);
+            return structuredClone(list);
+          },
+        );
+      const rust = await run(rustServer.url, undefined);
+      const batch = lastBatchStats();
+      assert.ok(
+        batch && batch.requests > 0,
+        `jsr: the Rust batch did not run (stats: ${JSON.stringify(batch)})`,
+      );
+      const js = await run(jsServer.url, "fetch");
+      assert.deepStrictEqual(rust, js, "jsr: the two paths disagree");
+      assert.equal(rust[0].license, "MIT");
+      assert.equal(rust[0].description, "The Deno standard library");
+      assert.deepStrictEqual(
+        [...new Set(rustServer.requests)].sort(),
+        [...new Set(jsServer.requests)].sort(),
+      );
+    } finally {
+      await rustServer.stop();
+      await jsServer.stop();
+    }
   });
 
   await test("a registry 404 is handled identically by both paths", async () => {
