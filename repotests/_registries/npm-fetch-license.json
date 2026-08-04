@@ -37,7 +37,7 @@
         "dist": {
           "tarball": "https://registry.example.invalid/left-pad/-/left-pad-1.3.0.tgz",
           "shasum": "2222222222222222222222222222222222222222",
-          "integrity": "sha512-BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB=="
+          "integrity": "sha512-IiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIg=="
         }
       }
     }
