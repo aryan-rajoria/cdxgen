@@ -159,7 +159,18 @@ jobs:
           fi
           [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh" --no-use
           nvm install
-          npm install --global pnpm
+          # Install the exact pnpm version this repo pins. An unpinned `pnpm`
+          # installs whatever is latest at build time, which then switches
+          # itself to the packageManager version and verifies that release's
+          # platform binary against the npm registry — a network dependency and
+          # a version skew on every build. release/12.0.x hit the failure mode:
+          # its pinned pnpm 10.x published no musl build, so on Alpine the
+          # verification failed with "Cannot verify the identity of the
+          # @pnpm/exe.linux-x64 native binary" and the build aborted. The
+          # version pinned here does ship musl binaries, so this is prevention
+          # rather than repair, and it matches what pnpm/action-setup does for
+          # the other platforms.
+          npm install --global "pnpm@$(node -p "require('./package.json').packageManager.split('pnpm@')[1].split('+')[0]")"
           curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
           
           export TARGET_OS="${{ matrix.os }}"

@@ -1,0 +1,17 @@
+{
+  "description": "FETCH_LICENSE=true against a local registry double. Unlike the cassette-backed scenarios this one is reachable by the cdxrs fetch subprocess, so test:rs-disable actually compares the Rust and JS fetch paths here.",
+  "scenarios": [
+    {
+      "name": "fetch-license",
+      "projectType": ["npm"],
+      "options": {},
+      "env": {
+        "FETCH_LICENSE": "true"
+      },
+      "registry": {
+        "fixture": "npm-fetch-license.json",
+        "env": ["NPM_URL"]
+      }
+    }
+  ]
+}

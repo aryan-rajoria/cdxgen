@@ -159,6 +159,7 @@ lib/inventory/dosaiParsers.js
 lib/inventory/dynamic.js
 lib/inventory/envcontext.js
 lib/inventory/evidenceUtils.js
+lib/inventory/fetchBatch.js
 lib/inventory/forgeEnricher.js
 lib/inventory/formulationParsers.js
 lib/inventory/gtfobins.js
@@ -448,6 +449,8 @@ types/lib/inventory/envcontext.d.ts
 types/lib/inventory/envcontext.d.ts.map
 types/lib/inventory/evidenceUtils.d.ts
 types/lib/inventory/evidenceUtils.d.ts.map
+types/lib/inventory/fetchBatch.d.ts
+types/lib/inventory/fetchBatch.d.ts.map
 types/lib/inventory/forgeEnricher.d.ts
 types/lib/inventory/forgeEnricher.d.ts.map
 types/lib/inventory/formulationParsers.d.ts

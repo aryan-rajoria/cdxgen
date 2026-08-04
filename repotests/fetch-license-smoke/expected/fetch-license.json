@@ -1,0 +1,390 @@
+{
+  "bomFormat": "CycloneDX",
+  "components": [
+    {
+      "bom-ref": "pkg:npm/%40scope/widget@2.1.0",
+      "description": "A scoped widget, present to prove scoped names reach the registry in scoped form",
+      "evidence": {
+        "identity": [
+          {
+            "concludedValue": "$ROOT/package-lock.json",
+            "confidence": 1,
+            "field": "purl",
+            "methods": [
+              {
+                "confidence": 1,
+                "technique": "manifest-analysis",
+                "value": "$ROOT/package-lock.json"
+              }
+            ]
+          }
+        ]
+      },
+      "externalReferences": [
+        {
+          "type": "distribution",
+          "url": "https://registry.example.invalid/@scope/widget/-/widget-2.1.0.tgz"
+        },
+        {
+          "type": "distribution",
+          "url": "https://registry.npmjs.org/@scope/widget/-/widget-2.1.0.tgz"
+        }
+      ],
+      "group": "@scope",
+      "hashes": [
+        {
+          "alg": "SHA-512",
+          "content": "00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000"
+        }
+      ],
+      "licenses": [
+        {
+          "license": {
+            "id": "Apache-2.0",
+            "url": "https://opensource.org/licenses/Apache-2.0"
+          }
+        }
+      ],
+      "name": "widget",
+      "properties": [
+        {
+          "name": "LocalNodeModulesPath",
+          "value": "node_modules/@scope/widget"
+        },
+        {
+          "name": "ResolvedUrl",
+          "value": "https://registry.npmjs.org/@scope/widget/-/widget-2.1.0.tgz"
+        },
+        {
+          "name": "SrcFile",
+          "value": "$ROOT/package-lock.json"
+        },
+        {
+          "name": "cdx:npm:artifactShasum",
+          "value": "3333333333333333333333333333333333333333"
+        },
+        {
+          "name": "cdx:npm:maintainerSet",
+          "value": "widgeteer, widgeteer@example.invalid"
+        },
+        {
+          "name": "cdx:npm:maintainerSetCount",
+          "value": "2"
+        },
+        {
+          "name": "cdx:npm:packageCreatedTime",
+          "value": "2020-01-01T00:00:00.000Z"
+        },
+        {
+          "name": "cdx:npm:priorMaintainerSetCount",
+          "value": "0"
+        },
+        {
+          "name": "cdx:npm:publishTime",
+          "value": "2021-06-15T12:00:00.000Z"
+        },
+        {
+          "name": "cdx:npm:publisher",
+          "value": "widgeteer"
+        },
+        {
+          "name": "cdx:npm:publisherEmail",
+          "value": "widgeteer@example.invalid"
+        },
+        {
+          "name": "cdx:npm:versionCount",
+          "value": "1"
+        }
+      ],
+      "purl": "pkg:npm/%40scope/widget@2.1.0",
+      "type": "library",
+      "version": "2.1.0"
+    },
+    {
+      "bom-ref": "pkg:npm/left-pad@1.3.0",
+      "description": "String left pad",
+      "evidence": {
+        "identity": [
+          {
+            "concludedValue": "$ROOT/package-lock.json",
+            "confidence": 1,
+            "field": "purl",
+            "methods": [
+              {
+                "confidence": 1,
+                "technique": "manifest-analysis",
+                "value": "$ROOT/package-lock.json"
+              }
+            ]
+          }
+        ]
+      },
+      "externalReferences": [
+        {
+          "type": "distribution",
+          "url": "https://registry.example.invalid/left-pad/-/left-pad-1.3.0.tgz"
+        },
+        {
+          "type": "distribution",
+          "url": "https://registry.npmjs.org/left-pad/-/left-pad-1.3.0.tgz"
+        }
+      ],
+      "group": "",
+      "hashes": [
+        {
+          "alg": "SHA-512",
+          "content": "BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB=="
+        }
+      ],
+      "licenses": [
+        {
+          "license": {
+            "id": "WTFPL",
+            "url": "https://opensource.org/licenses/WTFPL"
+          }
+        }
+      ],
+      "name": "left-pad",
+      "properties": [
+        {
+          "name": "LocalNodeModulesPath",
+          "value": "node_modules/left-pad"
+        },
+        {
+          "name": "ResolvedUrl",
+          "value": "https://registry.npmjs.org/left-pad/-/left-pad-1.3.0.tgz"
+        },
+        {
+          "name": "SrcFile",
+          "value": "$ROOT/package-lock.json"
+        },
+        {
+          "name": "cdx:npm:artifactIntegrity",
+          "value": "sha512-BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB=="
+        },
+        {
+          "name": "cdx:npm:artifactShasum",
+          "value": "2222222222222222222222222222222222222222"
+        },
+        {
+          "name": "cdx:npm:maintainerOverlapCount",
+          "value": "2"
+        },
+        {
+          "name": "cdx:npm:maintainerOverlapRatio",
+          "value": "1.00"
+        },
+        {
+          "name": "cdx:npm:maintainerSet",
+          "value": "stevemao, stevemao@example.invalid"
+        },
+        {
+          "name": "cdx:npm:maintainerSetCount",
+          "value": "2"
+        },
+        {
+          "name": "cdx:npm:packageCreatedTime",
+          "value": "2014-02-21T04:41:16.000Z"
+        },
+        {
+          "name": "cdx:npm:priorMaintainerSet",
+          "value": "stevemao, stevemao@example.invalid"
+        },
+        {
+          "name": "cdx:npm:priorMaintainerSetCount",
+          "value": "2"
+        },
+        {
+          "name": "cdx:npm:priorPublishTime",
+          "value": "2018-01-22T08:14:35.000Z"
+        },
+        {
+          "name": "cdx:npm:priorPublisher",
+          "value": "stevemao"
+        },
+        {
+          "name": "cdx:npm:priorVersion",
+          "value": "1.2.0"
+        },
+        {
+          "name": "cdx:npm:publishTime",
+          "value": "2018-03-06T18:14:35.000Z"
+        },
+        {
+          "name": "cdx:npm:publisher",
+          "value": "stevemao"
+        },
+        {
+          "name": "cdx:npm:publisherEmail",
+          "value": "stevemao@example.invalid"
+        },
+        {
+          "name": "cdx:npm:releaseGapDays",
+          "value": "43.42"
+        },
+        {
+          "name": "cdx:npm:releaseGapSampleSize",
+          "value": "0"
+        },
+        {
+          "name": "cdx:npm:versionCount",
+          "value": "2"
+        }
+      ],
+      "purl": "pkg:npm/left-pad@1.3.0",
+      "type": "library",
+      "version": "1.3.0"
+    },
+    {
+      "bom-ref": "pkg:npm/unlicensed-thing@0.4.2",
+      "description": "Deliberately carries no license field, so the absence is covered too",
+      "evidence": {
+        "identity": [
+          {
+            "concludedValue": "$ROOT/package-lock.json",
+            "confidence": 1,
+            "field": "purl",
+            "methods": [
+              {
+                "confidence": 1,
+                "technique": "manifest-analysis",
+                "value": "$ROOT/package-lock.json"
+              }
+            ]
+          }
+        ]
+      },
+      "externalReferences": [
+        {
+          "type": "distribution",
+          "url": "https://registry.example.invalid/unlicensed-thing/-/unlicensed-thing-0.4.2.tgz"
+        },
+        {
+          "type": "distribution",
+          "url": "https://registry.npmjs.org/unlicensed-thing/-/unlicensed-thing-0.4.2.tgz"
+        }
+      ],
+      "group": "",
+      "hashes": [
+        {
+          "alg": "SHA-512",
+          "content": "CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC=="
+        }
+      ],
+      "name": "unlicensed-thing",
+      "properties": [
+        {
+          "name": "LocalNodeModulesPath",
+          "value": "node_modules/unlicensed-thing"
+        },
+        {
+          "name": "ResolvedUrl",
+          "value": "https://registry.npmjs.org/unlicensed-thing/-/unlicensed-thing-0.4.2.tgz"
+        },
+        {
+          "name": "SrcFile",
+          "value": "$ROOT/package-lock.json"
+        },
+        {
+          "name": "cdx:npm:artifactShasum",
+          "value": "4444444444444444444444444444444444444444"
+        },
+        {
+          "name": "cdx:npm:maintainerSetCount",
+          "value": "0"
+        },
+        {
+          "name": "cdx:npm:packageCreatedTime",
+          "value": "2019-03-03T00:00:00.000Z"
+        },
+        {
+          "name": "cdx:npm:priorMaintainerSetCount",
+          "value": "0"
+        },
+        {
+          "name": "cdx:npm:publishTime",
+          "value": "2019-04-04T00:00:00.000Z"
+        },
+        {
+          "name": "cdx:npm:versionCount",
+          "value": "1"
+        }
+      ],
+      "purl": "pkg:npm/unlicensed-thing@0.4.2",
+      "type": "library",
+      "version": "0.4.2"
+    }
+  ],
+  "dependencies": [
+    {
+      "dependsOn": [
+        "pkg:npm/left-pad@1.3.0"
+      ],
+      "ref": "pkg:npm/%40scope/widget@2.1.0"
+    },
+    {
+      "dependsOn": [
+        "pkg:npm/%40scope/widget@2.1.0",
+        "pkg:npm/left-pad@1.3.0",
+        "pkg:npm/unlicensed-thing@0.4.2"
+      ],
+      "ref": "pkg:npm/fetch-license-smoke@1.0.0"
+    },
+    {
+      "dependsOn": [],
+      "ref": "pkg:npm/left-pad@1.3.0"
+    },
+    {
+      "dependsOn": [],
+      "ref": "pkg:npm/unlicensed-thing@0.4.2"
+    }
+  ],
+  "metadata": {
+    "authors": [],
+    "component": {
+      "bom-ref": "pkg:npm/fetch-license-smoke@1.0.0",
+      "description": "Fixture for the FETCH_LICENSE golden scenario",
+      "group": "",
+      "licenses": [
+        {
+          "license": {
+            "id": "MIT",
+            "url": "https://opensource.org/licenses/MIT"
+          }
+        }
+      ],
+      "name": "fetch-license-smoke",
+      "properties": [],
+      "purl": "pkg:npm/fetch-license-smoke@1.0.0",
+      "type": "application",
+      "version": "1.0.0"
+    },
+    "lifecycles": [
+      {
+        "phase": "pre-build"
+      }
+    ],
+    "timestamp": "1970-01-01T00:00:00.000Z",
+    "tools": {
+      "components": [
+        {
+          "authors": [
+            {
+              "name": "OWASP Foundation"
+            }
+          ],
+          "bom-ref": "pkg:npm/%40cdxgen/cdxgen@0.0.0-normalized",
+          "group": "@cdxgen",
+          "name": "cdxgen",
+          "publisher": "OWASP Foundation",
+          "purl": "pkg:npm/%40cdxgen/cdxgen@0.0.0-normalized",
+          "type": "application",
+          "version": "0.0.0-normalized"
+        }
+      ]
+    }
+  },
+  "serialNumber": "urn:uuid:00000000-0000-0000-0000-000000000000",
+  "specVersion": "1.7",
+  "version": 1
+}

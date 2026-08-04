@@ -84,7 +84,14 @@ export async function main() {
 
   await test("getNpmMetadata (cassette: metadata_npm.json)", async () => {
     const result = await withCassette("metadata_npm.json", async (ctrl) => {
-      const r = utils.getNpmMetadata([{ name: "left-pad", version: "1.3.0" }]);
+      // Await before asserting. The count can only be meaningful once the
+      // function has finished: any `await` before its first request — the
+      // batched prefetch, for one — defers the request past this line, so
+      // asserting on the in-flight count tests the implementation's internal
+      // ordering rather than whether the cassette was used.
+      const r = await utils.getNpmMetadata([
+        { name: "left-pad", version: "1.3.0" },
+      ]);
       assert.ok(ctrl.hitCount > 0, "cassette should have recorded hits");
       return r;
     });

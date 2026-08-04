@@ -31,6 +31,7 @@
 
 import { readFileSync, writeFileSync, existsSync, mkdirSync } from "node:fs";
 import path from "node:path";
+import process from "node:process";
 
 import {
   setHttpInterceptor,
@@ -92,6 +93,17 @@ export function startReplay(cassettePath) {
   let hitCount = 0;
   let missCount = 0;
 
+  // Replay works by intercepting undici *inside this process*. A subprocess
+  // cannot participate, so any code path that delegates HTTP to the cdxrs
+  // binary would quietly reach the live network and leave the cassette unused —
+  // which is precisely the rot the hit/miss assertions exist to catch. Disable
+  // the Rust fetch path for the duration of the replay.
+  const previousRsDisable = process.env.CDXGEN_RS_DISABLE;
+  process.env.CDXGEN_CASSETTE_REPLAY = "true";
+  process.env.CDXGEN_RS_DISABLE = previousRsDisable
+    ? `${previousRsDisable},fetch`
+    : "fetch";
+
   setHttpInterceptor(async (req) => {
     const key = cassetteKey(req.method, req.url.toString());
     const recorded = lookup.get(key);
@@ -113,6 +125,12 @@ export function startReplay(cassettePath) {
   return {
     stop() {
       clearHttpInterceptor();
+      delete process.env.CDXGEN_CASSETTE_REPLAY;
+      if (previousRsDisable === undefined) {
+        delete process.env.CDXGEN_RS_DISABLE;
+      } else {
+        process.env.CDXGEN_RS_DISABLE = previousRsDisable;
+      }
     },
     get hitCount() {
       return hitCount;

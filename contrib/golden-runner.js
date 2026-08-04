@@ -20,7 +20,12 @@
  *       "name": "default",        // encodes the flags
  *       "projectType": ["npm"],   // cdxgen project type(s)
  *       "options": {},            // additional createBom options
- *       "network": false          // needs a cassette (default false)
+ *       "network": false,         // needs a cassette (default false)
+ *       "env": {},                // env vars set for the scenario only
+ *       "registry": {             // serve a local registry double instead of a
+ *         "fixture": "npm.json",  //   cassette; see repotests/_registries/
+ *         "env": ["NPM_URL"]      //   env vars pointed at it (trailing slash
+ *       }                         //   added for *_URL vars that need one)
  *     }
  *   ]
  * }
@@ -31,6 +36,7 @@
  */
 
 import { existsSync, readFileSync, writeFileSync, mkdirSync, mkdtempSync, readdirSync } from "node:fs";
+import { createServer } from "node:http";
 import { tmpdir } from "node:os";
 import path from "node:path";
 import process from "node:process";
@@ -123,6 +129,84 @@ export function discoverScenarios() {
   return found;
 }
 
+const REGISTRIES_DIR = path.join(REPOTESTS_DIR, "_registries");
+
+/**
+ * Start a local registry double serving a recorded set of responses.
+ *
+ * A cassette cannot cover a scenario that fetches through the `cdxrs` binary:
+ * replay intercepts undici inside this process, and a subprocess does not
+ * participate. Serving the same recorded bodies over a real socket on localhost
+ * covers both paths with one fixture, which is what makes a `FETCH_LICENSE`
+ * scenario meaningful under `test:rs-disable` — that comparison is the only
+ * thing standing between a Rust fetch regression and a shipped SBOM.
+ *
+ * Unrouted paths answer 404. That is deliberate and deterministic: an enricher
+ * asking for something the fixture does not describe must produce the same
+ * (absent) result on every machine.
+ *
+ * @param {string} fixtureName File under repotests/_registries/.
+ * @returns {Promise<{url: string, requests: string[], stop: () => Promise<void>}>}
+ */
+async function startRegistryDouble(fixtureName) {
+  const fixturePath = path.join(REGISTRIES_DIR, fixtureName);
+  if (!existsSync(fixturePath)) {
+    throw new Error(`registry fixture not found: ${fixturePath}`);
+  }
+  const routes = JSON.parse(readFileSync(fixturePath, "utf-8"));
+  const requests = [];
+  const server = createServer((req, res) => {
+    requests.push(req.url);
+    const body = routes[req.url];
+    if (body === undefined) {
+      res.writeHead(404, { "content-type": "application/json" });
+      res.end("{}");
+      return;
+    }
+    res.writeHead(200, { "content-type": "application/json" });
+    res.end(JSON.stringify(body));
+  });
+  await new Promise((resolve) => server.listen(0, "127.0.0.1", resolve));
+  const { port } = server.address();
+  return {
+    url: `http://127.0.0.1:${port}`,
+    requests,
+    async stop() {
+      await new Promise((resolve) => server.close(resolve));
+    },
+  };
+}
+
+/**
+ * Apply env vars, returning a restore function.
+ *
+ * @param {Object} env Map of variable to value; `undefined` deletes.
+ * @returns {() => void} Restores the previous values.
+ */
+function applyEnv(env) {
+  const previous = {};
+  for (const [key, value] of Object.entries(env)) {
+    previous[key] = process.env[key];
+    if (value === undefined) {
+      delete process.env[key];
+    } else {
+      process.env[key] = value;
+    }
+  }
+  return () => {
+    for (const [key, value] of Object.entries(previous)) {
+      if (value === undefined) {
+        delete process.env[key];
+      } else {
+        process.env[key] = value;
+      }
+    }
+  };
+}
+
+/** Registry env vars that must carry a trailing slash. */
+const TRAILING_SLASH_VARS = new Set(["NPM_URL", "RUST_CRATES_URL", "PYPI_URL"]);
+
 /**
  * Run a single scenario and return the normalized BOM.
  *
@@ -150,6 +234,21 @@ export async function runScenario(project, scenario, manifest) {
   let cassetteController = null;
   let cassetteHits = 0;
   let cassetteMisses = 0;
+
+  // A scenario may declare a local registry double and/or extra env vars. Both
+  // are torn down in the `finally` below so one scenario cannot leak its
+  // configuration into the next.
+  let registry = null;
+  const scenarioEnv = { ...(scenario.env || {}) };
+  if (scenario.registry) {
+    registry = await startRegistryDouble(scenario.registry.fixture);
+    for (const key of scenario.registry.env || []) {
+      scenarioEnv[key] = TRAILING_SLASH_VARS.has(key)
+        ? `${registry.url}/`
+        : registry.url;
+    }
+  }
+  const restoreEnv = applyEnv(scenarioEnv);
 
   if (useCassette) {
     const mode = recordMode ? "record" : "replay";
@@ -184,8 +283,50 @@ export async function runScenario(project, scenario, manifest) {
       cassetteController.stop();
     }
 
+    // When a registry-double scenario runs with the Rust fetch path enabled and
+    // available, that path must actually have been used. Without this check a
+    // silent fallback to the JS agent would make `test:rs-disable` compare the
+    // JS path with itself and report "identical" — which is precisely how an
+    // earlier Rust fetch implementation shipped with an invalid-CycloneDX bug
+    // behind a green 27/27.
+    if (registry) {
+      const { batchFetchAvailable, lastBatchStats } = await import(
+        path.join(REPO_ROOT, "lib", "inventory", "fetchBatch.js")
+      );
+      const disabled = (process.env.CDXGEN_RS_DISABLE || "")
+        .split(",")
+        .map((s) => s.trim())
+        .some((s) => s === "all" || s === "fetch");
+      if (!disabled && !batchFetchAvailable() && process.env.CDXGEN_REQUIRE_CDXRS === "1") {
+        throw new Error(
+          `${project}/${scenario.name}: CDXGEN_REQUIRE_CDXRS=1 but cdxrs fetch is not available; ` +
+            "the Rust path cannot be covered by this run",
+        );
+      }
+      if (!disabled && batchFetchAvailable()) {
+        const stats = lastBatchStats();
+        if (!stats || !(stats.requests > 0)) {
+          throw new Error(
+            `${project}/${scenario.name}: cdxrs fetch is available but no batch ran ` +
+              `(stats: ${JSON.stringify(stats)}); the Rust path was not exercised`,
+          );
+        }
+      }
+    }
+    if (registry && registry.requests.length === 0 && scenario.registry?.expectRequests !== false) {
+      // A registry double that was never asked for anything means the scenario
+      // is not exercising the enrichment it claims to; that would make the
+      // whole comparison vacuous.
+      throw new Error(
+        `${project}/${scenario.name}: the registry double received no requests`,
+      );
+    }
     return { normalized, cassetteHits, cassetteMisses };
   } finally {
+    restoreEnv();
+    if (registry) {
+      await registry.stop();
+    }
     if (cassetteController) {
       // Ensure stop is called even on error (stop is idempotent — it just
       // clears the interceptor).
