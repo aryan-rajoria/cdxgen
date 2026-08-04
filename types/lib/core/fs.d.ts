@@ -45,6 +45,20 @@ export declare const MAX_BUFFER: number;
  */
 export declare function getAllFiles(dirPath: string, pattern: string, options?: Object): any;
 /**
+ * Confine directory-walk caching to one subtree, or switch it off.
+ *
+ * @param {string|undefined} rootDir Subtree whose contents are fixed for the rest of the scan
+ */
+export declare function setDirWalkCacheRoot(rootDir: string | undefined): void;
+/**
+ * Release every cached directory walk.
+ *
+ * Called when a BOM generation cycle starts, so that a long-lived process such
+ * as the server never serves a scan from an earlier scan's view of the
+ * filesystem, and so the retained directory entries are freed.
+ */
+export declare function clearFileDiscoveryCache(): void;
+/**
  * Method to get files matching a pattern
  *
  * @param {string} dirPath Root directory for search
