@@ -224,6 +224,12 @@ jobs:
           cargo fmt --manifest-path .plugins-bin/thirdparty/cdxrs/Cargo.toml --check
       - name: pnpm install
         run: pnpm install:frozen
+      # CDXRS_CMD is exported by the build step above, so the suite exercises
+      # the Rust-backed code paths here instead of their JS fallbacks.
+      - name: Unit tests with the Rust path enabled
+        run: pnpm test
+        env:
+          CI: true
       - name: Golden and byte-identical tests with the Rust path enabled
         run: |
           pnpm run test:golden
