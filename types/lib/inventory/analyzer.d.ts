@@ -1,3 +1,15 @@
+/**
+ * Parse a single file and return its imports/exports as isolated objects,
+ * without mutating shared state. Intended for parallel execution.
+ *
+ * @param {string} src Project root
+ * @param {string} file Absolute file path
+ * @returns {{imports: Object, exports: Object}}
+ */
+export declare const parseFileASTTreeCollected: (src: string, file: string) => {
+    imports: Object;
+    exports: Object;
+};
 export declare const CHROMIUM_EXTENSION_CAPABILITY_CATEGORIES: string[];
 export declare const JS_CAPABILITY_CATEGORIES: string[];
 export declare function analyzeSuspiciousJsSource(source: any): {

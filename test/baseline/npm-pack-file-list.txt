@@ -89,6 +89,7 @@ lib/core/env.js
 lib/core/fs.js
 lib/core/httpClient.js
 lib/core/logger.js
+lib/core/parallel.js
 lib/core/paths.js
 lib/core/propertySanitizer.js
 lib/core/spdx.js
@@ -138,6 +139,7 @@ lib/inventory/aiOversightCollector.js
 lib/inventory/aiProvenanceCollector.js
 lib/inventory/analyzer.js
 lib/inventory/analyzerScope.js
+lib/inventory/astWorker.js
 lib/inventory/atomUtils.js
 lib/inventory/auditCategories.js
 lib/inventory/bomUtils.js
@@ -312,6 +314,8 @@ types/lib/core/httpClient.d.ts
 types/lib/core/httpClient.d.ts.map
 types/lib/core/logger.d.ts
 types/lib/core/logger.d.ts.map
+types/lib/core/parallel.d.ts
+types/lib/core/parallel.d.ts.map
 types/lib/core/paths.d.ts
 types/lib/core/paths.d.ts.map
 types/lib/core/propertySanitizer.d.ts
@@ -410,6 +414,8 @@ types/lib/inventory/analyzer.d.ts
 types/lib/inventory/analyzer.d.ts.map
 types/lib/inventory/analyzerScope.d.ts
 types/lib/inventory/analyzerScope.d.ts.map
+types/lib/inventory/astWorker.d.ts
+types/lib/inventory/astWorker.d.ts.map
 types/lib/inventory/atomUtils.d.ts
 types/lib/inventory/atomUtils.d.ts.map
 types/lib/inventory/auditCategories.d.ts
