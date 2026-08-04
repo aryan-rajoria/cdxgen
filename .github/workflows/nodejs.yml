@@ -41,9 +41,6 @@ concurrency:
   group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
   cancel-in-progress: true
 
-env:
-  NEXUS_URL: ${{ secrets.NEXUS_URL }}
-
 # https://docs.github.com/en/actions/writing-workflows/choosing-what-your-workflow-does/controlling-permissions-for-github_token
 permissions: {}
 
@@ -115,9 +112,6 @@ jobs:
         run: rm -rf /tmp/docker-images-* /tmp/atom-* /tmp/mvn-deps*
       - name: Setup pnpm
         uses: pnpm/action-setup@0ebf47130e4866e96fce0953f49152a61190b271  # v6.0.9
-      - name: Setup Nexus usage
-        if: github.repository == 'cdxgen/cdxgen' && (github.event_name != 'pull_request' || github.event.pull_request.head.repo.fork == false)
-        run: echo "registry=$NEXUS_URL" > .npmrc
       - name: pnpm install
         run: |
           pnpm install:frozen
