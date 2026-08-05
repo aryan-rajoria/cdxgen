@@ -167,28 +167,18 @@ function Promote-OptionalDependencies {
     $packageJson["dependencies"] = [ordered]@{}
   }
   foreach ($packageName in $PackageNames) {
-    if ($packageName -eq "@appthreat/atom") {
-      # atom 3 splits its payload into per-platform sub-packages that are NOT
-      # in cdxgen's own optionalDependencies, so they must be synthesised from
-      # the parent @appthreat/atom version. Mirrors promote_optional_dependencies
-      # in build-standalone.sh and atom's own resolveAtomProvider.
-      $atomVersion = $packageJson["optionalDependencies"]["@appthreat/atom"]
-      if (-not $atomVersion) {
-        throw "Missing optional dependency version for @appthreat/atom"
-      }
-      $subPackage = Resolve-AtomPlatformPackageName
-      $packageJson["dependencies"]["@appthreat/atom"] = $atomVersion
-      $packageJson["dependencies"][$subPackage] = $atomVersion
-      $packageJson["optionalDependencies"].Remove("@appthreat/atom")
-    } else {
-      $packageVersion = $packageJson["optionalDependencies"][$packageName]
-      if (-not $packageVersion) {
-        throw "Missing optional dependency version for $packageName"
-      }
-      $packageJson["dependencies"][$packageName] = $packageVersion
-      $packageJson["optionalDependencies"].Remove($packageName)
+    $packageVersion = $packageJson["optionalDependencies"][$packageName]
+    if (-not $packageVersion) {
+      throw "Missing optional dependency version for $packageName"
     }
+    $packageJson["dependencies"][$packageName] = $packageVersion
+    $packageJson["optionalDependencies"].Remove($packageName)
   }
+  # Everything still in optionalDependencies is not wanted by this profile.
+  # Dropping it here is what lets the install run with optional resolution
+  # enabled; see the comment in promote_optional_dependencies in
+  # build-standalone.sh for why `--no-optional` cannot be used with atom 3.
+  $packageJson.Remove("optionalDependencies")
   $packageJson | ConvertTo-Json -Depth 20 | Set-Content -Path $packageJsonFile -Encoding utf8
 }
 
@@ -355,6 +345,10 @@ function Install-ProfileDependencies {
       "proto-reader" { $selectedOptionalPackages = @("@cdxgen/cdx-proto", "@bufbuild/protobuf") }
       "hbom-runtime" { $selectedOptionalPackages = @("@cdxgen/cdx-hbom", "@cdxgen/cdx-proto", "@bufbuild/protobuf", (Resolve-PlatformPluginPackageName)) }
       "hbom-slim" { $selectedOptionalPackages = @("@cdxgen/cdx-hbom") }
+      # atom 3's payload is a per-platform sub-package of @appthreat/atom, not
+      # named here: pnpm picks the one matching the target's os/cpu/libc once
+      # optional resolution is enabled. Asserted explicitly below. Kept in step
+      # with build-standalone.sh.
       "atom-analysis" { $selectedOptionalPackages = @("@appthreat/atom", "@appthreat/atom-parsetools", "@cdxgen/cdx-proto", "@bufbuild/protobuf") }
       "os-runtime" { $selectedOptionalPackages = @("@cdxgen/cdx-proto", "@bufbuild/protobuf", (Resolve-PlatformPluginPackageName)) }
       { $_ -in @("no-optional", "json-signature") } { }
@@ -362,7 +356,7 @@ function Install-ProfileDependencies {
     }
     if ($selectedOptionalPackages.Count -gt 0) {
       Promote-OptionalDependencies -StagingDir $StagingDir -PackageNames $selectedOptionalPackages
-      pnpm @installArgs --no-optional --no-frozen-lockfile
+      pnpm @installArgs --no-frozen-lockfile
     } else {
       pnpm @installArgs --no-optional --frozen-lockfile
     }

@@ -46,6 +46,10 @@
     "include": ["bin/", "*.js"],
     "exclude": ["test/", "data/", "contrib/"]
   },
+  "minimumDependencyAge": {
+    "age": "P3D",
+    "exclude": ["npm:@cdxgen/*", "npm:@appthreat/*"]
+  },
   "lock": false,
   "nodeModulesDir": "auto",
   "unstable": [],
@@ -79,7 +83,7 @@
     "read-package-json-fast": "npm:read-package-json-fast@6.0.0",
     "treeverse": "npm:treeverse@3.0.0",
     "walk-up-path": "npm:walk-up-path@4.0.0",
-    "@appthreat/atom": "npm:@appthreat/atom@2.5.6",
+    "@appthreat/atom": "npm:@appthreat/atom@3.0.3",
     "@cdxgen/cdx-hbom": "npm:@cdxgen/cdx-hbom@0.5.1",
     "@cdxgen/cdx-proto": "npm:@cdxgen/cdx-proto@2.0.3",
     "@bufbuild/protobuf": "npm:@bufbuild/protobuf@2.12.0",
@@ -92,7 +96,7 @@
     "glob": "npm:glob@^13.0.6",
     "got": "npm:got@^14.6.6",
     "node-stream-zip": "npm:node-stream-zip@^1.15.0",
-    "packageurl-js": "npm:packageurl-js@1.0.2",
+    "@cdxgen/cdx-purl": "npm:@cdxgen/cdx-purl@0.0.5",
     "prettify-xml": "npm:prettify-xml@^1.2.0",
     "semver": "npm:semver@^7.8.5",
     "ssri": "npm:ssri@^14.0.0",

@@ -186,7 +186,6 @@ promote_optional_dependencies() {
     const packageJson = JSON.parse(readFileSync(packageJsonFile, "utf8"));
     packageJson.dependencies ??= {};
 
-    let safeExecMode = false;
     for (const packageName of packageNames) {
       if (packageName.includes("@cdxgen/safer-exec-")) {
         const packageVersion = packageJson.optionalDependencies["@cdxgen/safer-exec"];
@@ -195,26 +194,6 @@ promote_optional_dependencies() {
         packageJson.dependencies["@cdxgen/safer-exec-darwin-amd64"] = packageVersion;
         packageJson.dependencies["@cdxgen/safer-exec-linux-amd64"] = packageVersion;
         packageJson.dependencies["@cdxgen/safer-exec-linux-arm64"] = packageVersion;
-        safeExecMode = true;
-      } else if (packageName === "@appthreat/atom") {
-        const atomVersion = packageJson.optionalDependencies?.["@appthreat/atom"];
-        if (!atomVersion) {
-          console.error("Missing optional dependency version for @appthreat/atom");
-          process.exit(1);
-        }
-        // atom 3 splits its payload into per-platform sub-packages that are NOT
-        // in cdxgen's optionalDependencies, so the version cannot be looked up —
-        // it is the parent's by construction. The sub-package name comes from
-        // resolve_atom_platform_package_name so the platform table lives in
-        // exactly one place in this script.
-        const subPackage = process.env.ATOM_PLATFORM_PACKAGE;
-        if (!subPackage) {
-          console.error("ATOM_PLATFORM_PACKAGE must be set when promoting @appthreat/atom");
-          process.exit(1);
-        }
-        packageJson.dependencies["@appthreat/atom"] = atomVersion;
-        packageJson.dependencies[subPackage] = atomVersion;
-        delete packageJson.optionalDependencies["@appthreat/atom"];
       } else {
         const packageVersion = packageJson.optionalDependencies?.[packageName];
         if (!packageVersion) {
@@ -225,9 +204,15 @@ promote_optional_dependencies() {
         delete packageJson.optionalDependencies[packageName];
       }
     }
-    if (safeExecMode) {
-      delete packageJson.optionalDependencies;
-    }
+    // Everything still sitting in optionalDependencies is, by definition, not
+    // wanted by this profile. Drop it rather than relying on `--no-optional`:
+    // that flag also refuses to resolve the optional dependencies *of* a
+    // promoted package, and atom 3 keeps its per-platform payload exactly
+    // there, so `--no-optional` fails the install with
+    // ERR_PNPM_LOCKFILE_MISSING_DEPENDENCY. With the unwanted entries gone the
+    // install can run with optional resolution enabled, which is also what lets
+    // pnpm pick the atom payload matching the build target's os/cpu/libc.
+    delete packageJson.optionalDependencies;
     writeFileSync(`${packageJsonFile}`, `${JSON.stringify(packageJson, null, 2)}\n`);
 NODE
 }
@@ -476,6 +461,10 @@ install_profile_dependencies() {
         selected_optional_packages=(@cdxgen/cdx-hbom)
         ;;
       atom-analysis)
+        # atom 3's payload is a per-platform sub-package of @appthreat/atom.
+        # It is not named here: with optional resolution enabled, pnpm picks the
+        # one matching the build target's os/cpu/libc on its own. The payload is
+        # then asserted explicitly below, since a missing one is silent.
         selected_optional_packages=(
           @appthreat/atom
           @appthreat/atom-parsetools
@@ -501,13 +490,8 @@ install_profile_dependencies() {
         ;;
     esac
     if [[ "${#selected_optional_packages[@]}" -gt 0 ]]; then
-      if [[ "$profile" == "atom-analysis" ]]; then
-        ATOM_PLATFORM_PACKAGE="$(resolve_atom_platform_package_name)" \
-          promote_optional_dependencies "$staging_dir" "${selected_optional_packages[@]}"
-      else
-        promote_optional_dependencies "$staging_dir" "${selected_optional_packages[@]}"
-      fi
-      pnpm --dir "$staging_dir" "${install_args[@]}" --no-optional --no-frozen-lockfile
+      promote_optional_dependencies "$staging_dir" "${selected_optional_packages[@]}"
+      pnpm --dir "$staging_dir" "${install_args[@]}" --no-frozen-lockfile
     else
       pnpm --dir "$staging_dir" "${install_args[@]}" --no-optional --frozen-lockfile
     fi
