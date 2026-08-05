@@ -105,7 +105,7 @@ function collectRustFindings(bomJson, rustBinary) {
 // JS validator — calls validateBom which returns boolean
 // ---------------------------------------------------------------------------
 
-function jsValidate(bomJson) {
+async function jsValidate(bomJson) {
   // Capture console output to detect schema failures messages
   const captured = [];
   const origLog = console.log;
@@ -118,7 +118,7 @@ function jsValidate(bomJson) {
   };
   let valid;
   try {
-    valid = validateBom(bomJson);
+    valid = await validateBom(bomJson);
   } catch {
     valid = false;
   }
@@ -182,7 +182,7 @@ function collectBoms() {
 // Main
 // ---------------------------------------------------------------------------
 
-function main() {
+async function main() {
   const rustBinary = resolveRustBinary();
   if (!rustBinary) {
     console.log("No cdxrs binary found. Run contrib/link-local-plugins.sh.");
@@ -208,7 +208,7 @@ function main() {
     }
     if (!bomJson?.bomFormat || bomJson.bomFormat !== "CycloneDX") continue;
 
-    const jsResult = jsValidate(bomJson);
+    const jsResult = await jsValidate(bomJson);
     const rustResult = collectRustFindings(bomJson, rustBinary);
 
     if (rustResult?.error) {
@@ -292,4 +292,4 @@ function main() {
   console.log("\nAll parity checks passed.");
 }
 
-main();
+await main();

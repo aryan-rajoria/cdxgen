@@ -1,0 +1,10 @@
+{
+  "fixture": "fixture",
+  "scenarios": [
+    {
+      "name": "default",
+      "projectType": ["oci"],
+      "options": {}
+    }
+  ]
+}

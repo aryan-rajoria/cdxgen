@@ -124,7 +124,9 @@
   "scripts": {
     "check:boundaries": "node contrib/check-boundaries.js",
     "check:lib-paths": "node contrib/check-lib-paths.js",
+    "check:validators": "node contrib/gen-validators.mjs --check",
     "gen-types": "pnpm exec tsc",
+    "gen:validators": "node contrib/gen-validators.mjs",
     "install:frozen": "pnpm install --config.strict-dep-builds=true --frozen-lockfile --package-import-method copy",
     "install:prod": "pnpm install --config.strict-dep-builds=true --frozen-lockfile --package-import-method copy --prod",
     "lint": "biome check --write",

@@ -1349,10 +1349,11 @@ cdxgenRepl.defineCommand("validate", {
   help: "validate the bom using jsonschema",
   action() {
     if (sbom) {
-      const result = validateBom(sbom);
-      if (result) {
-        console.log("BOM is valid!");
-      }
+      validateBom(sbom).then((result) => {
+        if (result) {
+          console.log("BOM is valid!");
+        }
+      });
     } else {
       console.log(
         "⚠ No BOM is loaded. Use .import command to import an existing BOM",

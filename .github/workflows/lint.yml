@@ -63,5 +63,6 @@ jobs:
         run: |
           pnpm install --config.strict-dep-builds=true
           pnpm run check:boundaries
+          pnpm run check:validators
         env:
           CI: true

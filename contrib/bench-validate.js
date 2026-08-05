@@ -73,7 +73,7 @@ console.log(`BOM size: ${sizeMB} MB (${bomPath})\n`);
 // ---- JS validator benchmark ----
 console.log("=== JS Validator ===");
 const jsStart = process.hrtime.bigint();
-const jsResult = validateBom(bom);
+const jsResult = await validateBom(bom);
 const jsEnd = process.hrtime.bigint();
 const jsMs = Number(jsEnd - jsStart) / 1_000_000;
 const jsMemMB = (process.memoryUsage().rss / 1024 / 1024).toFixed(0);

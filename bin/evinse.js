@@ -339,7 +339,7 @@ ensureCycloneDxInput(args.input);
     // Create the SBOM with Evidence
     const bomJson = createEvinseFile(sliceArtefacts, args);
     // Validate our final SBOM
-    if (!validateBom(bomJson)) {
+    if (!(await validateBom(bomJson))) {
       process.exit(1);
     }
     if (args.print) {

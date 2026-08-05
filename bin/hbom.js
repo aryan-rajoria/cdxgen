@@ -454,7 +454,7 @@ async function runDiagnosticsCommand() {
     );
   }
   const { bomJson } = await createHBom(process.cwd(), options);
-  if (options.validate && !validateBom(bomJson)) {
+  if (options.validate && !(await validateBom(bomJson))) {
     process.exit(1);
   }
   const output = JSON.stringify(bomJson, null, options.pretty ? 2 : null);

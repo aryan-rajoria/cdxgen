@@ -38,6 +38,103 @@ export declare function tryBuildPurl(parts: object): string | null;
  */
 export declare function npmPurl(pkgName: string, version?: string): string;
 /**
+ * Detect whether a version string is a concrete version or an MSBuild
+ * expression / NuGet range that names no single version.
+ *
+ * NuGet project files express versions in a small language of their own:
+ * `$(TargetFSharpCoreVersion)` is an MSBuild property that only a build
+ * evaluates, `1.0-*` is a floating range, and `[1.0,2.0)` is an interval.
+ * None of them is a version, so none can be encoded into a purl — the result
+ * would parse but identify no package.
+ *
+ * Callers resolve such a version from a manifest that pins one (paket.lock,
+ * packages.lock.json, project.assets.json, Directory.Packages.props). This
+ * function is the last-resort guard for when no manifest pins it: the purl is
+ * then emitted without a version rather than with a meaningless one.
+ *
+ * It encodes NuGet's syntax specifically, so it belongs to the NuGet helpers
+ * and not to purl construction in general — an ecosystem that allows brackets
+ * or commas in a legitimate version must not have it applied.
+ *
+ * @param {string} version Candidate version
+ * @returns {string|null} The version when concrete, or null to omit it
+ */
+export declare function concreteVersion(version: string): string | null;
+/**
+ * Build a canonical NuGet purl from a package name and version.
+ *
+ * The version is expected to have been resolved from a manifest that pins one.
+ * An MSBuild expression or NuGet range that reaches here unresolved is dropped
+ * by {@link concreteVersion}, leaving a versionless purl that identifies the
+ * package rather than a version-shaped purl that identifies nothing.
+ *
+ * @param {string} name Package name
+ * @param {string} [version] Package version (may be non-concrete)
+ * @returns {string|null} Canonical purl, or null when the name is empty
+ */
+export declare function nugetPurl(name: string, version?: string): string | null;
+/**
+ * Build a canonical PyPI purl from a package name and version.
+ *
+ * PyPI normalises underscores to hyphens in the name component.
+ *
+ * @param {string} name Package name (underscores will be normalised)
+ * @param {string} [version] Package version
+ * @returns {string|null} Canonical purl, or null when invalid
+ */
+export declare function pypiPurl(name: string, version?: string): string | null;
+/**
+ * Identifier a dependency graph uses to reference a PyPI component.
+ *
+ * PyPI names are case-insensitive and treat `_` and `-` as equivalent, so
+ * cdx-purl folds both when it builds the purl. A reference assembled by hand
+ * from the raw name does not, and then names out of the same distribution
+ * disagree: a `zope_interface` requirement points at nothing while the
+ * component is `pkg:pypi/zope-interface`. Deriving the reference from the purl
+ * keeps the graph attached to the components.
+ *
+ * @param {string} name Package name
+ * @param {string} [version] Package version
+ * @returns {string} bom-ref for the component
+ */
+export declare function pypiBomRef(name: string, version?: string): string;
+/**
+ * Build a canonical Maven purl from group, name, and version.
+ *
+ * @param {string} group Group ID (required for Maven)
+ * @param {string} name Artifact ID
+ * @param {string} [version] Version
+ * @param {object} [qualifiers] Optional qualifiers (e.g. `{type: "jar"}`)
+ * @returns {string|null} Canonical purl, or null when invalid
+ */
+export declare function mavenPurl(group: string, name: string, version?: string, qualifiers?: object): string | null;
+/**
+ * Build a canonical Nix purl from a name and version.
+ *
+ * @param {string} name Package name
+ * @param {string} [version] Package version
+ * @returns {string|null} Canonical purl, or null when invalid
+ */
+export declare function nixPurl(name: string, version?: string): string | null;
+/**
+ * Identifier for a Nix flake project, whose version is not pinned by the flake
+ * itself.
+ *
+ * A flake project is named after its directory, so the name can contain
+ * characters a purl has to encode.
+ *
+ * @param {string} name Project name
+ * @returns {string} bom-ref for the component
+ */
+export declare function nixBomRef(name: string): string;
+/**
+ * Build a canonical generic purl from a name.
+ *
+ * @param {string} name Package name
+ * @returns {string|null} Canonical purl, or null when invalid
+ */
+export declare function genericPurl(name: string): string | null;
+/**
  * Report whether a string is a valid purl according to cdx-purl.
  *
  * Use this before writing anything into a CycloneDX `purl` field that did not

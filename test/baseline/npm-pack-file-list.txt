@@ -214,6 +214,7 @@ lib/stages/postgen/annotator.js
 lib/stages/postgen/auditBom.js
 lib/stages/postgen/postgen.js
 lib/stages/postgen/ruleEngine.js
+lib/stages/postgen/sortBom.js
 lib/stages/postgen/spdxConverter.js
 lib/stages/pregen/envAudit.js
 lib/stages/pregen/pregen.js
@@ -261,6 +262,10 @@ lib/third-party/arborist/lib/yarn-lock.js
 lib/validator/bomValidator.js
 lib/validator/complianceEngine.js
 lib/validator/complianceRules.js
+lib/validator/generated/runtime.mjs
+lib/validator/generated/validate-1.6.mjs
+lib/validator/generated/validate-1.7.mjs
+lib/validator/generated/validate-2.0.mjs
 lib/validator/index.js
 lib/validator/reporters/annotations.js
 lib/validator/reporters/console.js
@@ -562,6 +567,8 @@ types/lib/stages/postgen/postgen.d.ts
 types/lib/stages/postgen/postgen.d.ts.map
 types/lib/stages/postgen/ruleEngine.d.ts
 types/lib/stages/postgen/ruleEngine.d.ts.map
+types/lib/stages/postgen/sortBom.d.ts
+types/lib/stages/postgen/sortBom.d.ts.map
 types/lib/stages/postgen/spdxConverter.d.ts
 types/lib/stages/postgen/spdxConverter.d.ts.map
 types/lib/stages/pregen/envAudit.d.ts
