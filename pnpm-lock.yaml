@@ -124,8 +124,8 @@ importers:
         version: 7.0.2
     optionalDependencies:
       '@appthreat/atom':
-        specifier: 2.5.6
-        version: 2.5.6
+        specifier: 3.0.3
+        version: 3.0.3
       '@appthreat/atom-parsetools':
         specifier: 1.2.2
         version: 1.2.2
@@ -215,13 +215,57 @@ packages:
   '@appthreat/atom-common@1.1.0':
     resolution: {integrity: sha512-vGZpJdy9e0l83o8XwDAsQUDpkMVzR4DLb7mbi5npu8Nz/R+2m5oyHlpBGuLYBKm5+KkjTInXP9eNTcMa0Mn3Uw==, tarball: https://registry.npmjs.org/@appthreat/atom-common/-/atom-common-1.1.0.tgz}
 
+  '@appthreat/atom-darwin-amd64@3.0.3':
+    resolution: {integrity: sha512-t/fsT4GDd3gNYvn0eYsuKsL6RJyvBZYH028Cz7sGeJTcnWRzQ21xY59l4GUU7AKmQSmx5ZXjCkmA9TDSLeGyog==, tarball: https://registry.npmjs.org/@appthreat/atom-darwin-amd64/-/atom-darwin-amd64-3.0.3.tgz}
+    cpu: [x64]
+    os: [darwin]
+
+  '@appthreat/atom-darwin-arm64@3.0.3':
+    resolution: {integrity: sha512-s/OSc5LWQS/nARsWE630r4FYmJDkoRXCPu/4gkXwoBXLhOOYgn8ZCyUr+dovxrPb7CZinya+yJHJB0xfYnDpOQ==, tarball: https://registry.npmjs.org/@appthreat/atom-darwin-arm64/-/atom-darwin-arm64-3.0.3.tgz}
+    cpu: [arm64]
+    os: [darwin]
+
+  '@appthreat/atom-linux-amd64-musl@3.0.3':
+    resolution: {integrity: sha512-1wxO0BloQcXKEhrsE97ZJVJzea+G2f0XDXU8yT1P1bcNGRYrWO+98VwL3T5pWtZ/1uDkCbtc05UuVxjSToxfJA==, tarball: https://registry.npmjs.org/@appthreat/atom-linux-amd64-musl/-/atom-linux-amd64-musl-3.0.3.tgz}
+    cpu: [x64]
+    os: [linux]
+    libc: [musl]
+
+  '@appthreat/atom-linux-amd64@3.0.3':
+    resolution: {integrity: sha512-+LruyRicWs7Sft2cMTnW6sha43LVGqJRRgdvXXHLDzWeSvzR7A69ADDfcb4QeSQIJUR3916oZVr+G3HBMil23w==, tarball: https://registry.npmjs.org/@appthreat/atom-linux-amd64/-/atom-linux-amd64-3.0.3.tgz}
+    cpu: [x64]
+    os: [linux]
+    libc: [glibc]
+
+  '@appthreat/atom-linux-arm64-musl@3.0.3':
+    resolution: {integrity: sha512-oZW88xbhyMV9shlHAdwBH7i/DP8qZK2h1qNdGKbg22uCKEI8DIriU80MO8vv50C8TjSudCMsPxD5258S3W4Cpw==, tarball: https://registry.npmjs.org/@appthreat/atom-linux-arm64-musl/-/atom-linux-arm64-musl-3.0.3.tgz}
+    cpu: [arm64]
+    os: [linux]
+    libc: [musl]
+
+  '@appthreat/atom-linux-arm64@3.0.3':
+    resolution: {integrity: sha512-IgTFNlYUGdMvQWjw86Zry1N+prr2QCISEdeZnOhSxQ3C0fDuV3nzgHZVvhf+k4xaY9EBBlz0k7Oobx3RB2c6Vw==, tarball: https://registry.npmjs.org/@appthreat/atom-linux-arm64/-/atom-linux-arm64-3.0.3.tgz}
+    cpu: [arm64]
+    os: [linux]
+    libc: [glibc]
+
   '@appthreat/atom-parsetools@1.2.2':
     resolution: {integrity: sha512-uH93lVI2H53x3ZbcXWUBhcm25Kv4Iz+bWHtrghCn5YHtsm223kGRKqDx3hqmfUNybz+ZqFs1WhHFW7ah4HIqEA==, tarball: https://registry.npmjs.org/@appthreat/atom-parsetools/-/atom-parsetools-1.2.2.tgz}
     engines: {node: '>=16.0.0'}
     hasBin: true
 
-  '@appthreat/atom@2.5.6':
-    resolution: {integrity: sha512-AhMd7hwEVRJCu3ZuAaF2Snmw7o/9x+2F222qycIQaUNbVvwW+++ns3WjcQnIRMkhXRao6Oczx09A2/rFiRShfg==, tarball: https://registry.npmjs.org/@appthreat/atom/-/atom-2.5.6.tgz}
+  '@appthreat/atom-windows-amd64@3.0.3':
+    resolution: {integrity: sha512-nl+658vXHiqBjPclosDnBw9p5FV1dsdsw/txnG0XX2gl1OlrPlioUPXDcG1pUCOcEh1/V9vv9jQoVOJTXrMavA==, tarball: https://registry.npmjs.org/@appthreat/atom-windows-amd64/-/atom-windows-amd64-3.0.3.tgz}
+    cpu: [x64]
+    os: [win32]
+
+  '@appthreat/atom-windows-arm64@3.0.3':
+    resolution: {integrity: sha512-BwvJwpy5tSsNSIM8UMAjPvffsgHOfrrJlTUVomJZNiQZi1bU3YUQhgs4TWdsw4WkHxWfLZDAkRWIUWX1XLiPhw==, tarball: https://registry.npmjs.org/@appthreat/atom-windows-arm64/-/atom-windows-arm64-3.0.3.tgz}
+    cpu: [arm64]
+    os: [win32]
+
+  '@appthreat/atom@3.0.3':
+    resolution: {integrity: sha512-3vEx6EvxqhbMDpaGcm8m+J3d3nMPEDzt3vDYCMVkgMxI/nXXYZ2xA9r1PczizdBapcWXbhW8xG/LiV/m/QSG+Q==, tarball: https://registry.npmjs.org/@appthreat/atom/-/atom-3.0.3.tgz}
     engines: {node: '>=18'}
     hasBin: true
 
@@ -1191,6 +1235,24 @@ snapshots:
   '@appthreat/atom-common@1.1.0':
     optional: true
 
+  '@appthreat/atom-darwin-amd64@3.0.3':
+    optional: true
+
+  '@appthreat/atom-darwin-arm64@3.0.3':
+    optional: true
+
+  '@appthreat/atom-linux-amd64-musl@3.0.3':
+    optional: true
+
+  '@appthreat/atom-linux-amd64@3.0.3':
+    optional: true
+
+  '@appthreat/atom-linux-arm64-musl@3.0.3':
+    optional: true
+
+  '@appthreat/atom-linux-arm64@3.0.3':
+    optional: true
+
   '@appthreat/atom-parsetools@1.2.2':
     dependencies:
       '@appthreat/atom-common': 1.1.0
@@ -1199,9 +1261,22 @@ snapshots:
       typescript: 6.0.3
     optional: true
 
-  '@appthreat/atom@2.5.6':
-    dependencies:
-      '@appthreat/atom-common': 1.1.0
+  '@appthreat/atom-windows-amd64@3.0.3':
+    optional: true
+
+  '@appthreat/atom-windows-arm64@3.0.3':
+    optional: true
+
+  '@appthreat/atom@3.0.3':
+    optionalDependencies:
+      '@appthreat/atom-darwin-amd64': 3.0.3
+      '@appthreat/atom-darwin-arm64': 3.0.3
+      '@appthreat/atom-linux-amd64': 3.0.3
+      '@appthreat/atom-linux-amd64-musl': 3.0.3
+      '@appthreat/atom-linux-arm64': 3.0.3
+      '@appthreat/atom-linux-arm64-musl': 3.0.3
+      '@appthreat/atom-windows-amd64': 3.0.3
+      '@appthreat/atom-windows-arm64': 3.0.3
     optional: true
 
   '@babel/code-frame@7.29.7':

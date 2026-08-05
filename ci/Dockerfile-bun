@@ -89,8 +89,15 @@ RUN set -e; \
     # Install atom and the atom-parsetools commands (astgen, phpastgen,
     # rbastgen, scalasem) globally so `cdxgen --profile research` and `--deep`
     # (which rely on atom via evinse) work inside the bun image.
+    # atom 3 ships a dispatcher plus per-platform optional sub-packages; assert
+    # the resolver actually finds the native payload rather than silently
+    # falling back to the jar kind. If bun fails to install the libc-matched
+    # sub-package, add it explicitly, e.g.
+    #   bun add -g @appthreat/atom-linux-amd64
     && bun add -g @appthreat/atom @appthreat/atom-parsetools \
-    && atom --help \
+    && ATOM_DEBUG=1 atom --help 2>/tmp/atom-resolve.log \
+    && grep -q "\[atom\] check native.*-> true" /tmp/atom-resolve.log \
+    && rm -f /tmp/atom-resolve.log \
     && astgen --version \
     && curl -s "https://get.sdkman.io" | bash \
     && echo -e "sdkman_auto_answer=true\nsdkman_selfupdate_feature=false\nsdkman_auto_env=true" >> $HOME/.sdkman/etc/config \

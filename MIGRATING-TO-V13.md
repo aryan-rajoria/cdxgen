@@ -362,3 +362,72 @@ canonical forms. An unmigrated consumer that looks up
 4. **Components without a purl** now use a name-based `bom-ref`. Consumers
    that assumed every component has a `pkg:`-prefixed `bom-ref` should handle
    non-purl refs gracefully.
+
+## atom 3 (native binaries)
+
+cdxgen v13 has upgraded the bundled [atom](https://github.com/AppThreat/atom)
+from 2.5.6 to 3.x. atom 3 is repackaged: `@appthreat/atom` is now a ~30 KB
+dispatcher with eight per-platform `optionalDependencies` that carry the actual
+payload. `@appthreat/atom-parsetools` (the `astgen`, `rbastgen`, `phpastgen`,
+`scalasem`, and `php-parse` frontends) is still required for JS/TS, Python,
+Ruby, PHP, and Scala analysis.
+
+### JDK no longer required on five native platforms
+
+The five native sub-packages embed a GraalVM native image and need **no JDK**:
+
+- linux-amd64 (glibc)
+- linux-arm64 (glibc)
+- linux-amd64-musl
+- darwin-arm64
+- windows-amd64
+
+The three jar-kind triples still require **Java 21+**:
+
+- darwin-amd64
+- windows-arm64
+- linux-arm64-musl
+
+cdxgen now gates the "Atom requires Java 21" advice on the jar-kind provider,
+so users on native platforms are no longer told to install a JDK for unrelated
+failures. The standalone `cbom` and `saasbom` release binaries embed the
+matching native (or jar) payload for their target triple.
+
+### Reachables results are stricter
+
+atom 3's reachables slicer uses a new Flux data-flow engine and additionally
+drops sanitised flows, profile-neutralised flows, `<metaClassAdapter>`
+duplicates, and flows terminating in benign builtins. **Reachables counts will
+fall and purl coverage will rise** — this is the intended upstream improvement,
+not a regression. Re-baseline any reachables-based assertions accordingly.
+
+### `@appthreat/atom-parsetools` is now mandatory for evinse
+
+The native atom binaries ship `bin/atom` alone; `astgen`, `rbastgen`,
+`phpastgen`, and `scalasem` come from `@appthreat/atom-parsetools`, which cdxgen
+already declares and places on `PATH`. Plain `npm i -g @cdxgen/cdxgen` installs
+it automatically. If you previously relied on the old jar distribution bundling
+these frontends, ensure `@appthreat/atom-parsetools` is installed.
+
+### PHP `php-parse` handling
+
+The atom 3 dispatcher clobbers `PHP_PARSER_BIN` with a path that does not exist
+on native platforms. cdxgen works around this by resolving the real `php-parse`
+from `@appthreat/atom-parsetools` (or the `PHP_PARSER_BIN` env var) and spawning
+the native binary directly for PHP. No operator action is required; container
+images that set `PHP_PARSER_BIN` are honoured explicitly.
+
+### Container memory
+
+The native images size their heap from the cgroup limit, not host RAM, so atom
+does not OOM in a memory-capped container and needs no `-XX:` override.
+It does degrade sharply instead: measured on a 60-file JavaScript corpus,
+`--memory=4g` ran in 11 s at 34% GC load, while `--memory=256m` ran the same
+analysis in 116 s at 90% GC load. Give containers running evinse a few GB if
+you care about wall time.
+
+### New environment variables
+
+See [`docs/ENV.md`](docs/ENV.md) for the Atom/Evinse env-var table
+(`ATOM_CMD`, `ATOM_HOME`, `ATOM_JAVA_HOME`, `ATOM_DEBUG`, `PHP_PARSER_BIN`,
+`ATOM_JVM_ARGS`, `ATOM_SLICE_DEPTH`).

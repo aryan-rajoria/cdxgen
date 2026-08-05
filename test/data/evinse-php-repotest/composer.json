@@ -1,0 +1,11 @@
+{
+  "name": "evinse/evinse-php-repotest",
+  "description": "Tiny PHP fixture for evinse atom coverage",
+  "type": "project",
+  "license": "Apache-2.0",
+  "require": {
+    "php": ">=8.1",
+    "ext-hash": "*",
+    "ext-json": "*"
+  }
+}

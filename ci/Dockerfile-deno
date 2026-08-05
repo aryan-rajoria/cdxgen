@@ -97,7 +97,13 @@ RUN set -e; \
     && deno install -g --allow-read --allow-env --allow-run --allow-sys=uid,systemMemoryInfo,gid,homedir --allow-write -n rbastgen "npm:@appthreat/atom-parsetools/rbastgen" \
     && deno install -g --allow-read --allow-env --allow-run --allow-sys=uid,systemMemoryInfo,gid,homedir --allow-write -n scalasem "npm:@appthreat/atom-parsetools/scalasem" \
     && cdxgen --version \
-    && atom --help \
+    # atom 3 ships a dispatcher plus per-platform optional sub-packages; assert
+    # the resolver finds the native payload rather than silently falling back to
+    # the jar kind. If deno does not install the libc-matched sub-package, add it
+    # explicitly, e.g. deno install -g -n atom-linux npm:@appthreat/atom-linux-amd64
+    && ATOM_DEBUG=1 atom --help 2>/tmp/atom-resolve.log \
+    && grep -q "\[atom\] check native.*-> true" /tmp/atom-resolve.log \
+    && rm -f /tmp/atom-resolve.log \
     && astgen --version \
     && python${PYTHON_VERSION} --version \
     && python${PYTHON_VERSION} -m pip install --no-cache-dir --upgrade setuptools wheel pip virtualenv \

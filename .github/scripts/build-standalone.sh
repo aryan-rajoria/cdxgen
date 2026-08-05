@@ -99,7 +99,75 @@ run_binary_build() {
   chmod +x "$output"
   "./$output" --version
   "./$output" --help
+  if [[ "$output" == "cbom" || "$output" == "saasbom" ]]; then
+    run_atom_smoke_test "$output"
+  fi
   assert_binary_size_limit "$output"
+}
+
+# Spawn atom through the freshly built caxa binary so a payload-less or
+# non-executable dispatcher fails the build on the runner that produced it. The
+# --version/--help checks above do not exercise atom; this does.
+#
+# The fixture is a header-only C source tree with no build manifest. Its whole
+# component inventory comes from `atom parsedeps` (lib/ecosystems/cppEvidence.js
+# -> findAppModules), so the component count is zero when atom cannot run and
+# non-zero when it can. That property is what makes this a test rather than a
+# formality, so the run is bracketed by a negative control: the same binary is
+# first run with ATOM_CMD pointed at a command that always fails, and must
+# produce nothing. If a future cdxgen learns to inventory C without atom, the
+# control starts producing components and fails here, rather than leaving a
+# green test that no longer proves anything.
+ATOM_SMOKE_FIXTURE="test/data/evinse-cpp-repotest"
+
+count_bom_components() {
+  node --input-type=module - "$1" <<'NODE'
+    import { existsSync, readFileSync } from "node:fs";
+    const [, , file] = process.argv;
+    if (!existsSync(file)) {
+      console.log("0");
+    } else {
+      const bom = JSON.parse(readFileSync(file, "utf8"));
+      console.log(`${(bom.components || []).length}`);
+    }
+NODE
+}
+
+run_atom_smoke_test() {
+  local output="$1"
+  local smoke_out=".${output}-atom-smoke.json"
+  local control_out=".${output}-atom-smoke-control.json"
+  local atom_pkg kind control_count smoke_count
+  atom_pkg="$(resolve_atom_platform_package_name)"
+  kind="$(atom_payload_kind_for_package "$atom_pkg")"
+  if [[ "$kind" == "jar" ]] && ! command -v java >/dev/null 2>&1; then
+    echo "atom smoke test: jar flavour ($atom_pkg), JDK unavailable, skipped."
+    return
+  fi
+  echo "atom smoke test: ./$output against $ATOM_SMOKE_FIXTURE (provider=$atom_pkg, kind=$kind)"
+
+  rm -f "$control_out"
+  ATOM_CMD="$(command -v false)" "./$output" -t c "$ATOM_SMOKE_FIXTURE" -o "$control_out" >/dev/null 2>&1 || true
+  control_count="$(count_bom_components "$control_out")"
+  rm -f "$control_out"
+  if [[ "$control_count" != "0" ]]; then
+    echo "atom smoke test FAILED: the negative control produced $control_count component(s) with atom disabled, so this fixture no longer proves atom ran." >&2
+    exit 1
+  fi
+
+  rm -f "$smoke_out"
+  if ! "./$output" -t c "$ATOM_SMOKE_FIXTURE" -o "$smoke_out" --fail-on-error; then
+    echo "atom smoke test FAILED: ./$output exited non-zero." >&2
+    rm -f "$smoke_out"
+    exit 1
+  fi
+  smoke_count="$(count_bom_components "$smoke_out")"
+  rm -f "$smoke_out"
+  if [[ "$smoke_count" == "0" ]]; then
+    echo "atom smoke test FAILED: no components produced; the atom payload is missing or did not run." >&2
+    exit 1
+  fi
+  echo "atom smoke test: $smoke_count component(s) from atom, 0 from the disabled-atom control."
 }
 
 promote_optional_dependencies() {
@@ -117,6 +185,7 @@ promote_optional_dependencies() {
     const [, , packageJsonFile, ...packageNames] = process.argv;
     const packageJson = JSON.parse(readFileSync(packageJsonFile, "utf8"));
     packageJson.dependencies ??= {};
+
     let safeExecMode = false;
     for (const packageName of packageNames) {
       if (packageName.includes("@cdxgen/safer-exec-")) {
@@ -127,6 +196,25 @@ promote_optional_dependencies() {
         packageJson.dependencies["@cdxgen/safer-exec-linux-amd64"] = packageVersion;
         packageJson.dependencies["@cdxgen/safer-exec-linux-arm64"] = packageVersion;
         safeExecMode = true;
+      } else if (packageName === "@appthreat/atom") {
+        const atomVersion = packageJson.optionalDependencies?.["@appthreat/atom"];
+        if (!atomVersion) {
+          console.error("Missing optional dependency version for @appthreat/atom");
+          process.exit(1);
+        }
+        // atom 3 splits its payload into per-platform sub-packages that are NOT
+        // in cdxgen's optionalDependencies, so the version cannot be looked up —
+        // it is the parent's by construction. The sub-package name comes from
+        // resolve_atom_platform_package_name so the platform table lives in
+        // exactly one place in this script.
+        const subPackage = process.env.ATOM_PLATFORM_PACKAGE;
+        if (!subPackage) {
+          console.error("ATOM_PLATFORM_PACKAGE must be set when promoting @appthreat/atom");
+          process.exit(1);
+        }
+        packageJson.dependencies["@appthreat/atom"] = atomVersion;
+        packageJson.dependencies[subPackage] = atomVersion;
+        delete packageJson.optionalDependencies["@appthreat/atom"];
       } else {
         const packageVersion = packageJson.optionalDependencies?.[packageName];
         if (!packageVersion) {
@@ -203,6 +291,96 @@ resolve_safer_exec_package_name() {
 
     console.log(packageName);
 NODE
+}
+
+# Resolve the atom 3 platform sub-package for the build target. Mirrors
+# resolve_platform_plugin_package_name in shape and atom's own
+# resolveAtomProvider in mapping. Used by the atom-analysis verification block
+# to assert the payload sub-package and its contents are present.
+resolve_atom_platform_package_name() {
+  node --input-type=module <<'NODE'
+    const normalizeOs = (value) => {
+      const osValue = value || process.platform;
+      if (osValue === "win32") return "windows";
+      return osValue;
+    };
+    const normalizeArch = (value) => {
+      const archValue = value || process.arch;
+      if (archValue === "x64") return "amd64";
+      if (archValue === "ppc64le") return "ppc64";
+      return archValue;
+    };
+    const targetOs = normalizeOs(process.env.TARGET_OS);
+    const targetArch = normalizeArch(process.env.TARGET_ARCH);
+    const targetLibc = process.env.TARGET_LIBC || "gnu";
+    let packageName;
+    if (targetOs === "linux") {
+      if (targetArch === "amd64") {
+        packageName = targetLibc === "musl"
+          ? "@appthreat/atom-linux-amd64-musl"
+          : "@appthreat/atom-linux-amd64";
+      } else if (targetArch === "arm64") {
+        packageName = targetLibc === "musl"
+          ? "@appthreat/atom-linux-arm64-musl"
+          : "@appthreat/atom-linux-arm64";
+      }
+    } else if (targetOs === "darwin") {
+      if (targetArch === "amd64") packageName = "@appthreat/atom-darwin-amd64";
+      else if (targetArch === "arm64") packageName = "@appthreat/atom-darwin-arm64";
+    } else if (targetOs === "windows") {
+      if (targetArch === "amd64") packageName = "@appthreat/atom-windows-amd64";
+      else if (targetArch === "arm64") packageName = "@appthreat/atom-windows-arm64";
+    }
+    if (!packageName) {
+      console.error(
+        `Unmapped atom platform triple: ${targetOs}/${targetArch}/${targetLibc}`,
+      );
+      process.exit(1);
+    }
+    console.log(packageName);
+NODE
+}
+
+# Returns "native" or "jar" for an atom sub-package name. Must agree with
+# ATOM_NATIVE_PACKAGES in lib/inventory/atomUtils.js.
+atom_payload_kind_for_package() {
+  case "$1" in
+    @appthreat/atom-linux-amd64|@appthreat/atom-linux-arm64|@appthreat/atom-darwin-arm64|@appthreat/atom-linux-amd64-musl|@appthreat/atom-windows-amd64)
+      echo "native" ;;
+    *) echo "jar" ;;
+  esac
+}
+
+# Assert that the atom sub-package payload actually exists in the staging tree.
+# A payload-less dispatcher (the atom 3 failure mode under --no-optional) would
+# otherwise pass assert_package_present while failing at runtime. On POSIX native
+# targets the binary must also be executable (caxa must preserve the mode bit).
+assert_atom_payload_present() {
+  local staging_dir="$1"
+  local package_name="$2"
+  local kind
+  local payload_path
+  kind="$(atom_payload_kind_for_package "$package_name")"
+  if [[ "$kind" == "native" ]]; then
+    local exe_name="atom"
+    if [[ "$(normalized_target_os)" == "windows" ]]; then
+      exe_name="atom.exe"
+    fi
+    payload_path="$staging_dir/node_modules/${package_name}/bin/${exe_name}"
+  else
+    payload_path="$staging_dir/node_modules/${package_name}/plugins"
+  fi
+  if [[ ! -e "$payload_path" ]]; then
+    echo "Standalone atom payload missing: $payload_path (kind=$kind). The dispatcher would be payload-less." >&2
+    exit 1
+  fi
+  if [[ "$kind" == "native" && "$(normalized_target_os)" != "windows" ]]; then
+    if [[ ! -x "$payload_path" ]]; then
+      echo "Standalone atom native binary is not executable: $payload_path" >&2
+      exit 1
+    fi
+  fi
+  echo "Standalone atom payload present: $payload_path (kind=$kind)."
 }
 
 normalized_target_os() {
@@ -322,7 +500,12 @@ install_profile_dependencies() {
         ;;
     esac
     if [[ "${#selected_optional_packages[@]}" -gt 0 ]]; then
-      promote_optional_dependencies "$staging_dir" "${selected_optional_packages[@]}"
+      if [[ "$profile" == "atom-analysis" ]]; then
+        ATOM_PLATFORM_PACKAGE="$(resolve_atom_platform_package_name)" \
+          promote_optional_dependencies "$staging_dir" "${selected_optional_packages[@]}"
+      else
+        promote_optional_dependencies "$staging_dir" "${selected_optional_packages[@]}"
+      fi
       pnpm --dir "$staging_dir" "${install_args[@]}" --no-optional --no-frozen-lockfile
     else
       pnpm --dir "$staging_dir" "${install_args[@]}" --no-optional --frozen-lockfile
@@ -490,6 +673,10 @@ apply_profile_pruning_and_preflight() {
       assert_package_present "$staging_dir" @appthreat/atom-parsetools
       assert_package_present "$staging_dir" @cdxgen/cdx-proto
       assert_package_present "$staging_dir" @bufbuild/protobuf
+      local atom_pkg
+      atom_pkg="$(resolve_atom_platform_package_name)"
+      assert_package_present "$staging_dir" "$atom_pkg"
+      assert_atom_payload_present "$staging_dir" "$atom_pkg"
       remove_platform_plugins "$staging_dir"
       assert_package_absent "$staging_dir" @cdxgen/cdx-hbom
       assert_package_absent "$staging_dir" jsonata
