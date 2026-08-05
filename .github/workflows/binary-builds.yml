@@ -138,13 +138,15 @@ jobs:
       # darwin-amd64 and windows-arm64 get atom's jar payload rather than a
       # native image, and those jars are class-file version 67 (Java 23). The
       # runner images default to JDK 21, which cannot load them, so the atom
-      # smoke test below needs a JDK of its own.
+      # smoke test below needs a JDK of its own. 23 rather than the 24 the rest
+      # of the workflows pin: Temurin publishes no 24 build for windows/aarch64,
+      # and 23 is the version the payload actually requires.
       - name: Use Java
         if: ${{ matrix.os != 'linux' }}
         uses: actions/setup-java@03ad4de0992f5dab5e18fcb136590ce7c4a0ac95  # v5.6.0
         with:
           distribution: 'temurin'
-          java-version: '24'
+          java-version: '23'
       - name: Install php and composer
         if: ${{ matrix.os == 'darwin' }}
         run: brew install php composer
