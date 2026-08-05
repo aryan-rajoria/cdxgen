@@ -87,7 +87,10 @@ jobs:
             ext: .exe
           # Set musl configurations
           - os: linux
-            image: php:8.4-bullseye@sha256:aa9ca431aa35219492184f73202359109e172e33710e7d9928ee7da600b60cb7
+            # bookworm, not bullseye: the atom 3 linux-gnu native images are
+            # linked against GLIBC_2.34, which bullseye (2.31) does not provide,
+            # so the bundled atom payload cannot start there.
+            image: php:8.4-bookworm@sha256:5380a7dd17b978cd14fb2c84cd67ddc47adaf079b240f8138224bbadefae46f7
             libc-suffix: ''
             node-download-url: https://nodejs.org/dist/
             ext: ''
@@ -132,6 +135,16 @@ jobs:
         with:
           node-version-file: .nvmrc
           package-manager-cache: false
+      # darwin-amd64 and windows-arm64 get atom's jar payload rather than a
+      # native image, and those jars are class-file version 67 (Java 23). The
+      # runner images default to JDK 21, which cannot load them, so the atom
+      # smoke test below needs a JDK of its own.
+      - name: Use Java
+        if: ${{ matrix.os != 'linux' }}
+        uses: actions/setup-java@03ad4de0992f5dab5e18fcb136590ce7c4a0ac95  # v5.6.0
+        with:
+          distribution: 'temurin'
+          java-version: '24'
       - name: Install php and composer
         if: ${{ matrix.os == 'darwin' }}
         run: brew install php composer

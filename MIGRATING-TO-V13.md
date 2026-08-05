@@ -382,13 +382,13 @@ The five native sub-packages embed a GraalVM native image and need **no JDK**:
 - darwin-arm64
 - windows-amd64
 
-The three jar-kind triples still require **Java 21+**:
+The three jar-kind triples still require **Java 23+** (atom 3's jars are class-file version 67):
 
 - darwin-amd64
 - windows-arm64
 - linux-arm64-musl
 
-cdxgen now gates the "Atom requires Java 21" advice on the jar-kind provider,
+cdxgen now gates the "Atom requires Java 23" advice on the jar-kind provider,
 so users on native platforms are no longer told to install a JDK for unrelated
 failures. The standalone `cbom` and `saasbom` release binaries embed the
 matching native (or jar) payload for their target triple.
