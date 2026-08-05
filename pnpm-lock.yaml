@@ -184,32 +184,6 @@ importers:
         specifier: 2.2.2
         version: 2.2.2
 
-  packages/audit: {}
-
-  packages/cli: {}
-
-  packages/core: {}
-
-  packages/ecosystems: {}
-
-  packages/evinser: {}
-
-  packages/helpers: {}
-
-  packages/inventory: {}
-
-  packages/managers: {}
-
-  packages/parsers: {}
-
-  packages/server: {}
-
-  packages/stages: {}
-
-  packages/third-party: {}
-
-  packages/validator: {}
-
 packages:
 
   '@appthreat/atom-common@1.1.0':

@@ -38,22 +38,34 @@ const DESIGNATED_BARRELS = new Set([
   "lib/ecosystems/utils.js",
 ]);
 
-// Package → directory mapping.
-const PACKAGE_DIRS = {
-  core: ["lib/core"],
-  parsers: ["lib/parsers"],
-  inventory: ["lib/inventory"],
-  ecosystems: ["lib/ecosystems"],
-  helpers: ["lib/helpers"],
-  managers: ["lib/managers"],
-  stages: ["lib/stages/postgen", "lib/stages/pregen"],
-  cli: ["lib/cli"],
-  evinser: ["lib/evinser"],
-  server: ["lib/server"],
-  validator: ["lib/validator"],
-  audit: ["lib/audit"],
-  "third-party": ["lib/third-party"],
+// Package → directories and layer. An import from layer N may only reach a
+// package whose layer is strictly lower. `layer: null` opts a package out of
+// the layer rule (third-party code is vendored and not ours to order).
+//
+// These layers used to live in `packages/*/package.json`, read back at runtime.
+// Those descriptors held nothing else the checker needed — the directory
+// mapping was already here — so they were deleted and the numbers moved into
+// this table. Keeping the two halves of one fact in one place is the point.
+const PACKAGES = {
+  core: { dirs: ["lib/core"], layer: 0 },
+  parsers: { dirs: ["lib/parsers"], layer: 1 },
+  inventory: { dirs: ["lib/inventory"], layer: 2 },
+  ecosystems: { dirs: ["lib/ecosystems"], layer: 3 },
+  helpers: { dirs: ["lib/helpers"], layer: 2 },
+  managers: { dirs: ["lib/managers"], layer: 4 },
+  stages: { dirs: ["lib/stages/postgen", "lib/stages/pregen"], layer: 4 },
+  cli: { dirs: ["lib/cli"], layer: 5 },
+  evinser: { dirs: ["lib/evinser"], layer: 5 },
+  server: { dirs: ["lib/server"], layer: 6 },
+  validator: { dirs: ["lib/validator"], layer: 5 },
+  audit: { dirs: ["lib/audit"], layer: 6 },
+  "third-party": { dirs: ["lib/third-party"], layer: null },
 };
+
+// Package → directory mapping, derived from the table above.
+const PACKAGE_DIRS = Object.fromEntries(
+  Object.entries(PACKAGES).map(([name, { dirs }]) => [name, dirs]),
+);
 
 const ROOT_DIRS = ["bin"];
 
@@ -186,26 +198,12 @@ function isExcluded(filePath) {
 
 function loadLayers() {
   const layers = {};
-  let anyDeclared = false;
-  for (const pkgName of Object.keys(PACKAGE_DIRS)) {
-    if (pkgName === "third-party") continue;
-    const pkgJsonPath = path.join(
-      REPO_ROOT,
-      "packages",
-      pkgName,
-      "package.json",
-    );
-    try {
-      const pkg = JSON.parse(readFileSync(pkgJsonPath, "utf-8"));
-      if (typeof pkg.layer === "number") {
-        layers[pkgName] = pkg.layer;
-        anyDeclared = true;
-      }
-    } catch {
-      // package.json might not exist
+  for (const [pkgName, { layer }] of Object.entries(PACKAGES)) {
+    if (typeof layer === "number") {
+      layers[pkgName] = layer;
     }
   }
-  return { layers, anyDeclared };
+  return layers;
 }
 
 // ─── File-level graph builder + cycle detection ──────────────────────────────
@@ -504,7 +502,7 @@ function runAllChecks(options = {}) {
         console.error(`    ${d}  (mapped to @cdxgen/internal-${pkgName})`);
       }
       console.error(
-        "\nUpdate PACKAGE_DIRS in contrib/check-boundaries.js to match the tree.",
+        "\nUpdate PACKAGES in contrib/check-boundaries.js to match the tree.",
       );
       process.exit(2);
     }
@@ -522,8 +520,8 @@ function runAllChecks(options = {}) {
   const packageCycles = detectPackageCycles(pkgGraph);
 
   // Layer rule (only if layers are declared)
-  const { layers, anyDeclared } = loadLayers();
-  const layerViolations = anyDeclared ? checkLayerRule(graph, layers) : [];
+  const layers = loadLayers();
+  const layerViolations = checkLayerRule(graph, layers);
 
   // Barrel ban (skip for custom scan-root — fixture may not match package paths)
   const barrelViolations = options.scanRoot ? [] : checkBarrelBan(edges);
@@ -634,5 +632,6 @@ export {
   normalizeCycle,
   runAllChecks,
   DESIGNATED_BARRELS,
+  PACKAGES,
   PACKAGE_DIRS,
 };

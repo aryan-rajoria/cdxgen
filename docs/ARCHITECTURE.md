@@ -179,10 +179,10 @@ The repository is not only one generator command.
 
 The strongest architectural rule in cdxgen is the layering rule.
 
-Every package under `lib/` declares a numeric `layer` in its
-`packages/<name>/package.json`. An import from layer N may only target a package
-at a layer strictly below N, so there are no cycles and no same-layer
-cross-package edges.
+Every package under `lib/` is assigned a numeric `layer` in the `PACKAGES` table
+in `contrib/check-boundaries.js`, which also maps each package to its
+directories. An import from layer N may only target a package at a layer
+strictly below N, so there are no cycles and no same-layer cross-package edges.
 
 | Layer | Packages                                    |
 | ----- | ------------------------------------------- |

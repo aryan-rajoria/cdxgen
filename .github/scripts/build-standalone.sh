@@ -408,8 +408,9 @@ copy_runtime_sources() {
   # field of package.json. Without it here the staging install disagrees with
   # the lockfile it was given (ERR_PNPM_LOCKFILE_CONFIG_MISMATCH under
   # --frozen-lockfile) and produces an incomplete node_modules otherwise. The
-  # `packages:` key is dropped because the staging tree has no workspace
-  # members.
+  # `packages:` key is filtered defensively: the repo has no workspace members
+  # today, but a staging tree can never have them, and a `packages:` glob that
+  # matches nothing there fails the install.
   if [[ -f pnpm-workspace.yaml ]]; then
     awk '
       /^packages:/ { skip = 1; next }

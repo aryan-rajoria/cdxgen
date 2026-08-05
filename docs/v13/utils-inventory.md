@@ -49,7 +49,8 @@ Rationale:
    enforced against `cli/`, `managers/`, `parsers/`, etc. No `PACKAGE_DIRS`
    edit is required for new files in an existing mapped directory; the
    between-helpers edges are not package boundaries (acceptable for D03).
-3. **`packages/helpers/package.json`** already declares its dependencies; no
+3. **The `helpers` entry in `contrib/check-boundaries.js`** already maps the
+   directory and its layer; no
    new workspace packages are created by adding files inside the mapped dir.
 
 > **Boundary-enforcement note.** Because all new files remain inside the
