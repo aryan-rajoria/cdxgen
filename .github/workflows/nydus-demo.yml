@@ -37,7 +37,7 @@ jobs:
         with:
           persist-credentials: false
           repository: 'DependencyTrack/dependency-track'
-          path: 'repotests/dependency-track'
+          path: 'test/repotests/dependency-track'
       - name: setup nydus
         run: |
           curl -LO https://github.com/dragonflyoss/nydus/releases/download/v2.3.1/nydus-static-v2.3.1-linux-amd64.tgz
@@ -59,27 +59,27 @@ jobs:
           sudo systemctl restart containerd
       - name: compile
         run: |
-          cd repotests/dependency-track
+          cd test/repotests/dependency-track
           mvn -q clean compile -DskipTests -Dmaven.test.skip=true
       - name: nydustests
         run: |
           sudo /usr/local/bin/containerd-nydus-grpc --nydusd-config /etc/nydus/nydusd-config.fusedev.json &
           sleep 15
-          cd repotests/dependency-track
+          cd test/repotests/dependency-track
           sudo nerdctl --snapshotter nydus run --rm -e JAVA_TOOL_OPTIONS -v $HOME/.m2:$HOME/.m2 -v $(pwd):/app ghcr.io/cyclonedx/cdxgen:master-nydus --deep -t java /app -o /app/bom.json
           ls -ltr
         env:
           JAVA_TOOL_OPTIONS: "-Dfile.encoding=UTF-8"
       - name: cleanup
         run: |
-          cd repotests/dependency-track
+          cd test/repotests/dependency-track
           rm bom.json
           sudo rm -rf /var/lib/containerd-nydus
         continue-on-error: true
       - name: dockertests
         run: |
           sleep 15
-          cd repotests/dependency-track
+          cd test/repotests/dependency-track
           sudo nerdctl run --rm -e JAVA_TOOL_OPTIONS -v $HOME/.m2:$HOME/.m2 -v $(pwd):/app ghcr.io/cyclonedx/cdxgen:master --deep -t java /app -o /app/bom.json
           ls -ltr
         env:

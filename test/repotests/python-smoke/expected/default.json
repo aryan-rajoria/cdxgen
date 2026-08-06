@@ -1,0 +1,113 @@
+{
+  "bomFormat": "CycloneDX",
+  "components": [
+    {
+      "bom-ref": "pkg:pypi/flask@2.0.0",
+      "evidence": {
+        "identity": [
+          {
+            "concludedValue": "$ROOT/requirements.txt",
+            "confidence": 0.5,
+            "field": "purl",
+            "methods": [
+              {
+                "confidence": 0.5,
+                "technique": "manifest-analysis",
+                "value": "$ROOT/requirements.txt"
+              }
+            ]
+          }
+        ]
+      },
+      "group": "",
+      "name": "flask",
+      "properties": [
+        {
+          "name": "cdx:pypi:versionSpecifiers",
+          "value": ">=2.0.0"
+        },
+        {
+          "name": "internal:SrcFile",
+          "value": "$ROOT/requirements.txt"
+        }
+      ],
+      "purl": "pkg:pypi/flask@2.0.0",
+      "type": "library",
+      "version": "2.0.0"
+    },
+    {
+      "bom-ref": "pkg:pypi/requests@2.28.0",
+      "evidence": {
+        "identity": [
+          {
+            "concludedValue": "$ROOT/requirements.txt",
+            "confidence": 0.5,
+            "field": "purl",
+            "methods": [
+              {
+                "confidence": 0.5,
+                "technique": "manifest-analysis",
+                "value": "$ROOT/requirements.txt"
+              }
+            ]
+          }
+        ]
+      },
+      "group": "",
+      "name": "requests",
+      "properties": [
+        {
+          "name": "internal:SrcFile",
+          "value": "$ROOT/requirements.txt"
+        }
+      ],
+      "purl": "pkg:pypi/requests@2.28.0",
+      "type": "library",
+      "version": "2.28.0"
+    }
+  ],
+  "dependencies": [],
+  "metadata": {
+    "authors": [],
+    "component": {
+      "bom-ref": "pkg:pypi/python-smoke@1.0.0",
+      "name": "python-smoke",
+      "properties": [
+        {
+          "name": "internal:SrcFile",
+          "value": "$ROOT/pyproject.toml"
+        }
+      ],
+      "purl": "pkg:pypi/python-smoke@1.0.0",
+      "type": "application",
+      "version": "1.0.0"
+    },
+    "lifecycles": [
+      {
+        "phase": "pre-build"
+      }
+    ],
+    "timestamp": "1970-01-01T00:00:00.000Z",
+    "tools": {
+      "components": [
+        {
+          "authors": [
+            {
+              "name": "OWASP Foundation"
+            }
+          ],
+          "bom-ref": "pkg:npm/%40cdxgen/cdxgen@0.0.0-normalized",
+          "group": "@cdxgen",
+          "name": "cdxgen",
+          "publisher": "OWASP Foundation",
+          "purl": "pkg:npm/%40cdxgen/cdxgen@0.0.0-normalized",
+          "type": "application",
+          "version": "0.0.0-normalized"
+        }
+      ]
+    }
+  },
+  "serialNumber": "urn:uuid:00000000-0000-0000-0000-000000000000",
+  "specVersion": "1.7",
+  "version": 1
+}

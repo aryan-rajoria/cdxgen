@@ -135,7 +135,7 @@ export declare const removeImage: (fullImageName: string, force?: boolean) => Pr
  */
 export declare const getCredsFromHelper: (exeSuffix: string, serverAddress: string) => string | undefined;
 /**
- * Append skipped source-file entries to the `SrcFile` properties of matching
+ * Append skipped source-file entries to the `internal:SrcFile` properties of matching
  * components. A component matches when its `oci:SrcImage` property value
  * equals the skipped image's `image` field and the source file path is not
  * already listed.

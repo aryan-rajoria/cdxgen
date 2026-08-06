@@ -25,7 +25,7 @@ export declare function attachIdentityTools(subjects: Object | Object[], toolRef
  * Enrich .NET package components with occurrence evidence and imported module/method
  * information from a dosai dependency slices file.
  *
- * Builds a mapping of DLL filenames to purls using the `PackageFiles` property of each
+ * Builds a mapping of DLL filenames to purls using the `internal:PackageFiles` property of each
  * package, then reads the slices file to add occurrence locations, imported modules,
  * called methods, and assembly version information where available.
  *

@@ -22,7 +22,7 @@ import process from "node:process";
 import { normalizeBom, serializeBom } from "./sbom-normalize.js";
 
 const REPO_ROOT = path.resolve(import.meta.dirname, "..");
-const REPOTESTS_DIR = path.join(REPO_ROOT, "repotests");
+const REPOTESTS_DIR = path.join(REPO_ROOT, "test", "repotests");
 
 let passed = 0;
 let failed = 0;
@@ -98,7 +98,7 @@ function shuffleBom(bom, seed) {
   return clone;
 }
 
-/** Discover every golden file under repotests/ ... /expected/*.json. */
+/** Discover every golden file under test/repotests/ ... /expected/*.json. */
 function discoverGoldens() {
   const found = [];
   if (!existsSync(REPOTESTS_DIR)) return found;
@@ -126,7 +126,7 @@ export async function main() {
 
   const goldens = discoverGoldens();
   if (goldens.length === 0) {
-    console.error("FATAL: no golden files found under repotests/*/expected/.");
+    console.error("FATAL: no golden files found under test/repotests/*/expected/.");
     process.exit(1);
   }
 

@@ -737,7 +737,7 @@ const args = _yargs
   })
   .wrap(Math.min(120, yargs().terminalWidth())).argv;
 
-if (process.env?.CDXGEN_NODE_OPTIONS) {
+if (readEnvironmentVariable("CDXGEN_NODE_OPTIONS")) {
   process.env.NODE_OPTIONS = `${process.env.NODE_OPTIONS || ""} ${process.env.CDXGEN_NODE_OPTIONS}`;
 }
 
@@ -787,7 +787,7 @@ if (args.bomAuditIncludeTrusted && args.bomAuditOnlyTrusted) {
   process.exit(1);
 }
 
-if (args.tui && !process.env.CI) {
+if (args.tui && !readEnvironmentVariable("CI")) {
   const cdxuiPath = resolvePluginBinary("cdxui");
   if (cdxuiPath) {
     const cdxgenArgs = process.argv.slice(2).filter((a) => a !== "--tui");
@@ -795,7 +795,8 @@ if (args.tui && !process.env.CI) {
       stdio: "inherit",
       env: {
         ...process.env,
-        CDXGEN_CMD: process.env?.CDXGEN_CMD || process.argv[1] || "cdxgen",
+        CDXGEN_CMD:
+          readEnvironmentVariable("CDXGEN_CMD") || process.argv[1] || "cdxgen",
         CDXGEN_ARGS: cdxgenArgs.join(" "),
       },
     });
@@ -807,14 +808,17 @@ if (args.tui && !process.env.CI) {
 // https://nodejs.org/en/learn/http/enterprise-network-configuration
 // https://docs.deno.com/runtime/reference/env_variables/#special-environment-variables
 // https://bun.com/docs/guides/http/proxy#environment-variables
-if (process.env.HTTP_PROXY || process.env.HTTPS_PROXY) {
+if (
+  readEnvironmentVariable("HTTP_PROXY") ||
+  readEnvironmentVariable("HTTPS_PROXY")
+) {
   if (isNode && !isBun && !isDeno) {
     process.env.NODE_USE_ENV_PROXY = "1";
     try {
       const proxyEnv = {
-        HTTP_PROXY: process.env.HTTP_PROXY,
-        HTTPS_PROXY: process.env.HTTPS_PROXY,
-        NO_PROXY: process.env.NO_PROXY,
+        HTTP_PROXY: readEnvironmentVariable("HTTP_PROXY"),
+        HTTPS_PROXY: readEnvironmentVariable("HTTPS_PROXY"),
+        NO_PROXY: readEnvironmentVariable("NO_PROXY"),
       };
       http.globalAgent = new http.Agent({ proxyEnv });
       https.globalAgent = new https.Agent({ proxyEnv });
@@ -829,7 +833,7 @@ if (process.env.HTTP_PROXY || process.env.HTTPS_PROXY) {
   }
 }
 
-if (!process.env.NODE_USE_SYSTEM_CA) {
+if (!readEnvironmentVariable("NODE_USE_SYSTEM_CA")) {
   process.env.NODE_USE_SYSTEM_CA = "1";
 }
 
@@ -942,7 +946,7 @@ if (["cbom", "saasbom"].includes(invokedCommandName)) {
     thoughtLog(
       "Ok, the user wants to generate a Software as a Service Bill-of-Materials (SaaSBOM). I should carefully collect the services, endpoints, and data flows.",
     );
-    if (process.env?.CDXGEN_IN_CONTAINER !== "true") {
+    if (readEnvironmentVariable("CDXGEN_IN_CONTAINER") !== "true") {
       thoughtLog(
         "Wait, I'm not running in a container. This means the chances of successfully collecting this inventory are quite low. Perhaps this is an advanced user who has set up atom and atom-tools already 🤔?",
       );
@@ -1065,8 +1069,8 @@ const checkPermissions = (filePath, options) => {
   if (
     process.getuid &&
     process.getuid() === 0 &&
-    process.env?.CDXGEN_IN_CONTAINER !== "true" &&
-    process.env?.RUNNING_IN_SAFER_EXEC_SANDBOX !== "true"
+    readEnvironmentVariable("CDXGEN_IN_CONTAINER") !== "true" &&
+    readEnvironmentVariable("RUNNING_IN_SAFER_EXEC_SANDBOX") !== "true"
   ) {
     console.log(
       "\x1b[1;35mSECURE MODE: DO NOT run cdxgen with root privileges.\x1b[0m",
@@ -1089,7 +1093,7 @@ const checkPermissions = (filePath, options) => {
       console.log(
         `${isWin ? "$env:" : "export "}NODE_OPTIONS='${nodeOptionsVal}'`,
       );
-      if (process.env?.CDXGEN_IN_CONTAINER !== "true") {
+      if (readEnvironmentVariable("CDXGEN_IN_CONTAINER") !== "true") {
         console.log(
           "TIP: Run cdxgen using the secure container image 'ghcr.io/cyclonedx/cdxgen-secure' for best experience.",
         );
@@ -1099,7 +1103,7 @@ const checkPermissions = (filePath, options) => {
   }
   // Secure mode checks
   if (isSecureMode) {
-    if (process.env?.GITHUB_TOKEN) {
+    if (readEnvironmentVariable("GITHUB_TOKEN")) {
       console.log(
         "Ensure that the GitHub token provided to cdxgen is restricted to read-only scopes.",
       );
@@ -1444,8 +1448,8 @@ const writeCycloneDxOutput = (jsonFile, bomJson, options) => {
     maybeRemotePath(sourcePath) &&
     !directHuggingFaceSource &&
     isSecureMode &&
-    !process.env.CDXGEN_GIT_ALLOWED_HOSTS &&
-    !process.env.CDXGEN_SERVER_ALLOWED_HOSTS
+    !readEnvironmentVariable("CDXGEN_GIT_ALLOWED_HOSTS") &&
+    !readEnvironmentVariable("CDXGEN_SERVER_ALLOWED_HOSTS")
   ) {
     console.error(
       "SECURE MODE: Configure CDXGEN_GIT_ALLOWED_HOSTS (or CDXGEN_SERVER_ALLOWED_HOSTS) before using git URL or purl sources.",
@@ -1544,7 +1548,9 @@ const writeCycloneDxOutput = (jsonFile, bomJson, options) => {
       console.log("cdxrs: bridge not loaded — using JS path");
     }
   }
-  const originalFetchPackageMetadata = process.env.CDXGEN_FETCH_PKG_METADATA;
+  const originalFetchPackageMetadata = readEnvironmentVariable(
+    "CDXGEN_FETCH_PKG_METADATA",
+  );
   const shouldRunPredictiveAudit = shouldRunPredictiveBomAudit(
     options,
     process.argv[1],
@@ -2023,8 +2029,8 @@ const writeCycloneDxOutput = (jsonFile, bomJson, options) => {
   }
   if (
     (DEBUG_MODE || TRACE_MODE) &&
-    (!process.env?.CDXGEN_ALLOWED_HOSTS ||
-      !process.env?.CDXGEN_ALLOWED_COMMANDS)
+    (!readEnvironmentVariable("CDXGEN_ALLOWED_HOSTS") ||
+      !readEnvironmentVariable("CDXGEN_ALLOWED_COMMANDS"))
   ) {
     let allowListSuggestion = "";
     const envPrefix = isWin ? "set $env:" : "export ";

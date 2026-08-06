@@ -7,6 +7,7 @@ import process from "node:process";
 import yargs from "yargs";
 import { hideBin } from "yargs/helpers";
 
+import { readEnvironmentVariable } from "../lib/core/activity.js";
 import { safeExistsSync } from "../lib/ecosystems/utils.js";
 import {
   analyzeProject,
@@ -88,7 +89,7 @@ const args = yargs(hideBin(process.argv))
   })
   .option("golem-command", {
     description: "Use a specific golem binary for Go Evinse analysis.",
-    default: process.env.GOLEM_CMD,
+    default: readEnvironmentVariable("GOLEM_CMD"),
   })
   .option("golem-callgraph", {
     description: "Golem call graph mode for Go Evinse analysis.",
@@ -177,7 +178,7 @@ const args = yargs(hideBin(process.argv))
   })
   .option("rusi-command", {
     description: "Use a specific rusi binary for Rust Evinse analysis.",
-    default: process.env.RUSI_CMD,
+    default: readEnvironmentVariable("RUSI_CMD"),
   })
   .option("rusi-mode", {
     description: "Rusi analysis mode.",
@@ -308,7 +309,7 @@ const evinseArt = `
 ╚══════╝  ╚═══╝  ╚═╝╚═╝  ╚═══╝╚══════╝╚══════╝
 `;
 
-if (process.env?.CDXGEN_NODE_OPTIONS) {
+if (readEnvironmentVariable("CDXGEN_NODE_OPTIONS")) {
   process.env.NODE_OPTIONS = `${process.env.NODE_OPTIONS || ""} ${process.env.CDXGEN_NODE_OPTIONS}`;
 }
 

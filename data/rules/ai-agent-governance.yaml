@@ -27,7 +27,7 @@
   location: |
     {
       "bomRef": $."bom-ref",
-      "file": $prop($, 'SrcFile')
+      "file": $prop($, 'internal:SrcFile')
     }
   message: "AI agent file '{{ name }}' contains hidden Unicode characters"
   mitigation: "Review the file with hidden-character rendering enabled, remove suspicious bidirectional or zero-width characters, and verify instruction blocks before merge."
@@ -75,7 +75,7 @@
   location: |
     {
       "bomRef": $."bom-ref",
-      "file": $prop($, 'SrcFile')
+      "file": $prop($, 'internal:SrcFile')
     }
   message: "AI agent file '{{ name }}' references a public MCP endpoint without any auth hints"
   mitigation: "Treat public MCP endpoints as untrusted until authentication, authorization, and endpoint provenance are documented explicitly."
@@ -122,7 +122,7 @@
   location: |
     {
       "bomRef": $."bom-ref",
-      "file": $prop($, 'SrcFile')
+      "file": $prop($, 'internal:SrcFile')
     }
   message: "AI agent file '{{ name }}' references MCP surfaces that are not otherwise declared in the BOM"
   mitigation: "Inventory the referenced MCP packages, endpoints, and trust boundaries explicitly so reviewers can validate provenance and access controls."
@@ -169,7 +169,7 @@
   location: |
     {
       "bomRef": $."bom-ref",
-      "file": $prop($, 'SrcFile')
+      "file": $prop($, 'internal:SrcFile')
     }
   message: "AI agent file '{{ name }}' references a tunneled or reverse-proxied MCP endpoint"
   mitigation: "Avoid exposing localhost MCP servers through ad-hoc tunnels; require reviewed ingress, authentication, and environment-specific controls."
@@ -211,7 +211,7 @@
   location: |
     {
       "bomRef": $."bom-ref",
-      "file": $prop($, 'SrcFile')
+      "file": $prop($, 'internal:SrcFile')
     }
   message: "AI agent file '{{ name }}' references non-official MCP packages or wrappers"
   mitigation: "Prefer official MCP SDKs where possible and document provenance, version pinning, and trust assumptions for any wrapper packages."
@@ -257,7 +257,7 @@
   location: |
     {
       "bomRef": $."bom-ref",
-      "file": $prop($, 'SrcFile')
+      "file": $prop($, 'internal:SrcFile')
     }
   message: "AI agent file '{{ name }}' contains inline credential patterns"
   mitigation: "Remove embedded credentials from agent instructions and move them into reviewed secret-management flows before the file is shared or executed."
@@ -311,7 +311,7 @@
   location: |
     {
       "bomRef": $."bom-ref",
-      "file": $prop($, 'SrcFile')
+      "file": $prop($, 'internal:SrcFile')
     }
   message: "AI instruction or skill file '{{ name }}' is included in a build/post-build SBOM"
   mitigation: "If the file must ship, keep the BOM review-friendly with '--bom-audit --bom-audit-categories ai-agent' and consider '--tlp-classification AMBER'. If you want a package-only BOM, rerun with '--exclude-type ai-skill'."

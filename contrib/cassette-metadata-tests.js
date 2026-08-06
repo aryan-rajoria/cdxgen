@@ -19,7 +19,7 @@ import process from "node:process";
 import { startReplay, CassetteMissError } from "./cassette.js";
 
 const REPO_ROOT = path.resolve(import.meta.dirname, "..");
-const CASSETTES_DIR = path.join(REPO_ROOT, "repotests", "_cassettes");
+const CASSETTES_DIR = path.join(REPO_ROOT, "test", "repotests", "_cassettes");
 
 let passed = 0;
 let failed = 0;

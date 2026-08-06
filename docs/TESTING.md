@@ -231,7 +231,7 @@ these so two runs of cdxgen on the same project produce byte-identical output.
 
 ### Golden files (`contrib/golden-runner.js`)
 
-Each scenario under `repotests/<project>/` runs cdxgen, normalizes the output,
+Each scenario under `test/repotests/<project>/` runs cdxgen, normalizes the output,
 and compares against a committed golden file at `expected/<scenario>.json`.
 
 ```bash
@@ -240,7 +240,7 @@ UPDATE_GOLDEN=1 pnpm run test:golden  # Regenerate golden files (prints summary)
 ```
 
 **Offline by default**: network-dependent scenarios use a recorded-fixture
-HTTP layer (cassettes under `repotests/_cassettes/`). An unmatched request
+HTTP layer (cassettes under `test/repotests/_cassettes/`). An unmatched request
 throws `CassetteMissError` — the harness never silently falls through to the
 live network.
 
@@ -259,7 +259,7 @@ Run as part of `pnpm run test:golden`.
 
 ## How to add a scenario
 
-1. Create a fixture directory under `repotests/<project>/` with the manifest
+1. Create a fixture directory under `test/repotests/<project>/` with the manifest
    files (e.g. `package.json`, `pom.xml`, `Cargo.lock`).
 
 2. Add a `golden.manifest.json`:
@@ -297,7 +297,7 @@ lookups):
 2. First run with `UPDATE_GOLDEN=1 CDXGEN_CASSETTE_MODE=record` to capture
    the cassette.
 3. Subsequent runs replay from the cassette — no network needed.
-4. Commit the cassette under `repotests/_cassettes/`.
+4. Commit the cassette under `test/repotests/_cassettes/`.
 
 ## Related pages
 

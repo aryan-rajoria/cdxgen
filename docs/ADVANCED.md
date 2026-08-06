@@ -456,7 +456,7 @@ evinse -i bom.json -o bom.evinse.json --usages-slices-file usages.json --reachab
 ## Generate SBOM from maven or gradle cache
 
 There could be Java applications with complex dependency requirements. Or you might be interested in cataloging your Maven or gradle cache.
-A bonus of this mode is that the resulting SBOM would have a property called `Namespaces` with a list of class names belonging to each jar.
+A bonus of this mode is that the resulting SBOM would have a property called `internal:Namespaces` with a list of class names belonging to each jar.
 
 ### Generate evidence of usage
 
@@ -715,7 +715,7 @@ Example:
               },
               "environmentVars": [
                 {
-                  "name": "GIT_BRANCH",
+                  "name": "internal:GIT_BRANCH",
                   "value": "master"
                 }
               ]

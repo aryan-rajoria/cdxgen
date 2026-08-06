@@ -6,7 +6,7 @@
  *
  * Usage: node contrib/record-cassettes.js
  *
- * After recording, cassettes are committed to repotests/_cassettes/ and
+ * After recording, cassettes are committed to test/repotests/_cassettes/ and
  * the golden runner replays them with network blocked.
  */
 
@@ -17,6 +17,7 @@ import { startRecord } from "./cassette.js";
 
 const CASSETTES_DIR = path.join(
   path.resolve(import.meta.dirname, ".."),
+  "test",
   "repotests",
   "_cassettes",
 );

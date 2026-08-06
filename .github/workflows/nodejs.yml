@@ -14,7 +14,7 @@ on:
       - 'lib/**'
       - 'package.json'
       - 'pnpm-lock.yaml'
-      - 'repotests/**'
+      - 'test/repotests/**'
       - 'devenv*'
   push:
     branches:
@@ -34,7 +34,7 @@ on:
       - 'lib/**'
       - 'package.json'
       - 'pnpm-lock.yaml'
-      - 'repotests/**'
+      - 'test/repotests/**'
   workflow_dispatch:
 
 concurrency:

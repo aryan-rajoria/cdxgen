@@ -24,7 +24,7 @@
   mitigation: "Move package sources to HTTPS or a trusted local mirror protected by authenticated transport and repository signing."
   evidence: |
     {
-      "sourceFile": $prop($, 'SrcFile'),
+      "sourceFile": $prop($, 'internal:SrcFile'),
       "repoType": $prop($, 'cdx:os:repo:type'),
       "repoUrl": $prop($, 'cdx:os:repo:url')
     }
@@ -51,7 +51,7 @@
   mitigation: "Enable gpgcheck, pin the expected signing keys, and review recent repository changes before continuing to trust packages from this source."
   evidence: |
     {
-      "sourceFile": $prop($, 'SrcFile'),
+      "sourceFile": $prop($, 'internal:SrcFile'),
       "repoUrl": $prop($, 'cdx:os:repo:url'),
       "gpgcheck": $prop($, 'cdx:os:repo:gpgcheck'),
       "gpgkey": $prop($, 'cdx:os:repo:gpgkey')
@@ -77,7 +77,7 @@
   mitigation: "Remove stale keys, replace expired trust anchors, and confirm the remaining repository trust chain matches approved policy."
   evidence: |
     {
-      "path": $prop($, 'SrcFile'),
+      "path": $prop($, 'internal:SrcFile'),
       "trustDomain": $prop($, 'cdx:crypto:trustDomain'),
       "keyId": $prop($, 'cdx:crypto:keyId'),
       "expiresAt": $prop($, 'cdx:crypto:expiresAt')
@@ -112,7 +112,7 @@
   mitigation: "Remove unnecessary setuid or setgid bits, replace the helper with a safer alternative, or justify and baseline the exposure explicitly."
   evidence: |
     {
-      "path": $prop($, 'SrcFile'),
+      "path": $prop($, 'internal:SrcFile'),
       "functions": $prop($, 'cdx:gtfobins:functions'),
       "contexts": $prop($, 'cdx:gtfobins:contexts'),
       "riskTags": $prop($, 'cdx:gtfobins:riskTags')
@@ -140,7 +140,7 @@
   mitigation: "Relocate approved service binaries into trusted system paths and investigate any service definition that executes from writable directories."
   evidence: |
     {
-      "sourceFile": $prop($, 'SrcFile'),
+      "sourceFile": $prop($, 'internal:SrcFile'),
       "manager": $prop($, 'cdx:service:manager'),
       "execStart": $prop($, 'cdx:service:ExecStart'),
       "packageRef": $prop($, 'cdx:service:packageRef')
@@ -173,7 +173,7 @@
   mitigation: "Move bootstrap downloads into the image build pipeline, pin artifacts, and keep service startup paths deterministic and locally sourced."
   evidence: |
     {
-      "sourceFile": $prop($, 'SrcFile'),
+      "sourceFile": $prop($, 'internal:SrcFile'),
       "manager": $prop($, 'cdx:service:manager'),
       "execStartPre": $prop($, 'cdx:service:ExecStartPre')
     }

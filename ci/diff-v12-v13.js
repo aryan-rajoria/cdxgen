@@ -33,7 +33,7 @@ import { diffBoms } from "../contrib/sbom-diff.js";
 import { normalizeBom } from "../contrib/sbom-normalize.js";
 
 const REPO_ROOT = path.resolve(import.meta.dirname, "..");
-const REPOTESTS_DIR = path.join(REPO_ROOT, "repotests");
+const REPOTESTS_DIR = path.join(REPO_ROOT, "test", "repotests");
 const EXPECTED_DELTAS_PATH = path.join(REPO_ROOT, "ci", "expected-deltas.yaml");
 
 /**

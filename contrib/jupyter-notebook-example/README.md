@@ -2,7 +2,7 @@
 
 This contrib example demonstrates how `cdxgen` handles mixed-language projects.
 It reproduces the bug reported in [#2236](https://github.com/cdxgen/cdxgen/issues/2236),
-where the root `pyproject.toml` caused a crash due to a missing `SrcFile` property.
+where the root `pyproject.toml` caused a crash due to a missing `internal:SrcFile` property.
 
 ## File Structure That Triggers the Bug
 

@@ -292,8 +292,6 @@ types/bin/sign.d.ts
 types/bin/sign.d.ts.map
 types/bin/tracebom.d.ts
 types/bin/tracebom.d.ts.map
-types/bin/tracebom.poku.d.ts
-types/bin/tracebom.poku.d.ts.map
 types/bin/validate.d.ts
 types/bin/validate.d.ts.map
 types/bin/verify.d.ts

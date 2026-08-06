@@ -37,6 +37,7 @@ const REPO_ROOT = path.resolve(import.meta.dirname, "..");
 function loadBaseBom(which = "cargo-smoke") {
   const goldenPath = path.join(
     REPO_ROOT,
+    "test",
     "repotests",
     which,
     "expected",
@@ -447,7 +448,7 @@ async function runTwoRunDeterminism() {
       path.join(REPO_ROOT, "lib", "cli", "index.js")
     );
 
-    const fixtureDir = path.join(REPO_ROOT, "repotests", "maven-smoke");
+    const fixtureDir = path.join(REPO_ROOT, "test", "repotests", "maven-smoke");
     const options = {
       projectType: ["maven"],
       multiProject: false,

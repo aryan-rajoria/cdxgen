@@ -22,7 +22,7 @@
   location: |
     {
       "bomRef": $. "bom-ref",
-      "srcFile": $prop($, 'SrcFile'),
+      "srcFile": $prop($, 'internal:SrcFile'),
       "archivePath": $prop($, 'cdx:asar:path')
     }
   message: "Archived JavaScript '{{ name }}' uses eval-like or dynamic loading behavior inside an ASAR package"
@@ -54,7 +54,7 @@
   location: |
     {
       "bomRef": $. "bom-ref",
-      "srcFile": $prop($, 'SrcFile'),
+      "srcFile": $prop($, 'internal:SrcFile'),
       "archivePath": $prop($, 'cdx:asar:path')
     }
   message: "Archived JavaScript '{{ name }}' combines network behavior with sensitive local access capabilities"
@@ -82,7 +82,7 @@
   location: |
     {
       "bomRef": $. "bom-ref",
-      "srcFile": $prop($, 'SrcFile'),
+      "srcFile": $prop($, 'internal:SrcFile'),
       "archivePath": $prop($, 'cdx:asar:path')
     }
   message: "Archived entry '{{ name }}' has a declared integrity hash mismatch inside an ASAR package"
@@ -103,19 +103,19 @@
   condition: |
     components[
       $propBool($, 'cdx:npm:hasInstallScript') = true
-      and $contains($prop($, 'SrcFile'), '.asar#/')
+      and $contains($prop($, 'internal:SrcFile'), '.asar#/')
     ]
   location: |
     {
       "bomRef": $. "bom-ref",
       "purl": purl,
-      "srcFile": $prop($, 'SrcFile')
+      "srcFile": $prop($, 'internal:SrcFile')
     }
   message: "Embedded npm package '{{ name }}@{{ version }}' inside ASAR declares install-time lifecycle scripts"
   mitigation: "Review the embedded package source and build provenance. Remove unnecessary lifecycle hooks or vendor only prebuilt trusted artifacts."
   evidence: |
     {
-      "srcFile": $prop($, 'SrcFile'),
+      "srcFile": $prop($, 'internal:SrcFile'),
       "lifecycleScripts": $prop($, 'cdx:npm:risky_scripts'),
       "executionIndicators": $prop($, 'cdx:npm:lifecycleExecutionIndicators'),
       "obfuscationIndicators": $prop($, 'cdx:npm:lifecycleObfuscationIndicators')
@@ -136,7 +136,7 @@
   location: |
     {
       "bomRef": $. "bom-ref",
-      "srcFile": $prop($, 'SrcFile')
+      "srcFile": $prop($, 'internal:SrcFile')
     }
   message: "ASAR archive '{{ name }}' has Electron signing metadata that failed verification"
   mitigation: "Rebuild the Electron package from trusted sources, verify the Info.plist ElectronAsarIntegrity data, and confirm the shipped ASAR matches the expected signed release artifact."

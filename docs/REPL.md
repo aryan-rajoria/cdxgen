@@ -262,7 +262,7 @@ Set `CDXGEN_REPL_HISTORY` to override the history file location.
 
 - Use `.unpackagedbins` and `.unpackagedlibs` after importing a container or rootfs BOM when you want to inspect executable or shared-library file components that were not traced back to OS package ownership.
 - Use `.sourcecryptos` after importing a CBOM or an SBOM generated with `--include-crypto` when you want just the source-derived crypto algorithms detected from JavaScript or TypeScript AST analysis.
-- Pair `.sourcecryptos` with `.inspect <name>` when you want the exact `cdx:crypto:sourceLocation` and `SrcFile` evidence for a detected algorithm.
+- Pair `.sourcecryptos` with `.inspect <name>` when you want the exact `cdx:crypto:sourceLocation` and `internal:SrcFile` evidence for a detected algorithm.
 
 ## Related docs
 

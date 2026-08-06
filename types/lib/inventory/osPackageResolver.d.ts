@@ -15,7 +15,7 @@ export declare function resolvePackageForFile(filePath: string): {
 } | undefined;
 /**
  * Find the OS package component that provides a given file, by searching the
- * `PkgProvides` property of each package in the OS package list.
+ * `internal:PkgProvides` property of each package in the OS package list.
  *
  * @param {string} afile Filename or path to look up (matched case-insensitively)
  * @param {Object[]} osPkgsList Array of OS package component objects to search

@@ -17,7 +17,7 @@
     {
       "bomRef": $. "bom-ref",
       "purl": purl,
-      "srcFile": $prop($, 'SrcFile')
+      "srcFile": $prop($, 'internal:SrcFile')
     }
   message: "VS Code extension '{{ publisher }}.{{ name }}@{{ version }}' executes lifecycle scripts: {{ $prop($, 'cdx:vscode-extension:lifecycleScripts') }}"
   mitigation: "Review extension source code before installation; prefer extensions without install-time scripts; use workspace trust boundaries"

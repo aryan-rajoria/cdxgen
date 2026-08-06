@@ -20,9 +20,9 @@ mkdirSync(OUT, { recursive: true });
 
 
 const targets = [];
-for (const d of readdirSync(join(REPO, "repotests"), { withFileTypes: true })) {
+for (const d of readdirSync(join(REPO, "test", "repotests"), { withFileTypes: true })) {
   if (d.isDirectory() && !d.name.startsWith("_")) {
-    targets.push(join(REPO, "repotests", d.name));
+    targets.push(join(REPO, "test", "repotests", d.name));
   }
 }
 const corpus = process.env.CDXGEN_PURL_SWEEP_CORPUS || "";

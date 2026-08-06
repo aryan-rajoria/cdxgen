@@ -22,9 +22,9 @@
     {
       "bomRef": $."bom-ref",
       "purl": purl,
-      "file": $prop($, 'SrcFile')
+      "file": $prop($, 'internal:SrcFile')
     }
-  message: "Executable '{{ name }}' at '{{ $prop($, 'SrcFile') }}' combines GTFOBins execution features with setuid/setgid permissions"
+  message: "Executable '{{ name }}' at '{{ $prop($, 'internal:SrcFile') }}' combines GTFOBins execution features with setuid/setgid permissions"
   mitigation: "Remove the setuid/setgid bit, replace the image with a slimmer base, and keep container privilege boundaries strict (no host mounts, no privileged mode, no extra capabilities)."
   attack:
     tactics: [TA0004]
@@ -35,7 +35,7 @@
       "functions": $prop($, 'cdx:gtfobins:functions'),
       "contexts": $prop($, 'cdx:gtfobins:contexts'),
       "riskTags": $prop($, 'cdx:gtfobins:riskTags'),
-      "srcFile": $prop($, 'SrcFile'),
+      "srcFile": $prop($, 'internal:SrcFile'),
       "reference": $prop($, 'cdx:gtfobins:reference')
     }
 
@@ -59,9 +59,9 @@
     {
       "bomRef": $."bom-ref",
       "purl": purl,
-      "file": $prop($, 'SrcFile')
+      "file": $prop($, 'internal:SrcFile')
     }
-  message: "Container-escape helper '{{ name }}' is present at '{{ $prop($, 'SrcFile') }}' with elevated execution semantics"
+  message: "Container-escape helper '{{ name }}' is present at '{{ $prop($, 'internal:SrcFile') }}' with elevated execution semantics"
   mitigation: "Remove container runtime and namespace-management tooling from application images, avoid CAP_SYS_ADMIN-like capability grants, and block access to the Docker/containerd sockets."
   attack:
     tactics: [TA0004]
@@ -71,7 +71,7 @@
       "canonicalName": $prop($, 'cdx:gtfobins:name'),
       "privilegedContexts": $prop($, 'cdx:gtfobins:privilegedContexts'),
       "riskTags": $prop($, 'cdx:gtfobins:riskTags'),
-      "srcFile": $prop($, 'SrcFile')
+      "srcFile": $prop($, 'internal:SrcFile')
     }
 
 - id: CTR-003
@@ -99,7 +99,7 @@
     {
       "bomRef": $."bom-ref",
       "purl": purl,
-      "file": $prop($, 'SrcFile')
+      "file": $prop($, 'internal:SrcFile')
     }
   message: "Binary '{{ name }}' exposes GTFOBins privilege-escalation or library-load behavior in a privileged execution context"
   mitigation: "Remove the helper from the image where possible, strip privileged bits/capabilities, and keep writable mounts away from privileged processes."
@@ -111,7 +111,7 @@
       "canonicalName": $prop($, 'cdx:gtfobins:name'),
       "functions": $prop($, 'cdx:gtfobins:functions'),
       "privilegedContexts": $prop($, 'cdx:gtfobins:privilegedContexts'),
-      "srcFile": $prop($, 'SrcFile')
+      "srcFile": $prop($, 'internal:SrcFile')
     }
 
 - id: CTR-004
@@ -139,7 +139,7 @@
     {
       "bomRef": $."bom-ref",
       "purl": purl,
-      "file": $prop($, 'SrcFile')
+      "file": $prop($, 'internal:SrcFile')
     }
   message: "Binary '{{ name }}' can read or exfiltrate local data from a privileged execution path"
   mitigation: "Drop privileged bits, keep secrets off the image filesystem, and remove unnecessary upload/file-read helpers from runtime images."
@@ -151,7 +151,7 @@
       "canonicalName": $prop($, 'cdx:gtfobins:name'),
       "functions": $prop($, 'cdx:gtfobins:functions'),
       "privilegedContexts": $prop($, 'cdx:gtfobins:privilegedContexts'),
-      "srcFile": $prop($, 'SrcFile')
+      "srcFile": $prop($, 'internal:SrcFile')
     }
 
 - id: CTR-005
@@ -178,22 +178,22 @@
         )
       )
       and (
-        $startsWith($prop($, 'SrcFile'), '/usr/local/')
-        or $startsWith($prop($, 'SrcFile'), '/opt/')
-        or $startsWith($prop($, 'SrcFile'), '/app/')
-        or $startsWith($prop($, 'SrcFile'), '/tmp/')
-        or $startsWith($prop($, 'SrcFile'), '/var/tmp/')
-        or $startsWith($prop($, 'SrcFile'), '/root/')
-        or $startsWith($prop($, 'SrcFile'), '/home/')
+        $startsWith($prop($, 'internal:SrcFile'), '/usr/local/')
+        or $startsWith($prop($, 'internal:SrcFile'), '/opt/')
+        or $startsWith($prop($, 'internal:SrcFile'), '/app/')
+        or $startsWith($prop($, 'internal:SrcFile'), '/tmp/')
+        or $startsWith($prop($, 'internal:SrcFile'), '/var/tmp/')
+        or $startsWith($prop($, 'internal:SrcFile'), '/root/')
+        or $startsWith($prop($, 'internal:SrcFile'), '/home/')
       )
     ]
   location: |
     {
       "bomRef": $."bom-ref",
       "purl": purl,
-      "file": $prop($, 'SrcFile')
+      "file": $prop($, 'internal:SrcFile')
     }
-  message: "GTFOBins remote-execution helper '{{ name }}' is present in mutable image path '{{ $prop($, 'SrcFile') }}'"
+  message: "GTFOBins remote-execution helper '{{ name }}' is present in mutable image path '{{ $prop($, 'internal:SrcFile') }}'"
   mitigation: "Keep runtime images immutable and minimal, move administrative tooling to separate debug images, and investigate how the helper entered the image."
   attack:
     tactics: [TA0008, TA0011]
@@ -203,7 +203,7 @@
       "canonicalName": $prop($, 'cdx:gtfobins:name'),
       "functions": $prop($, 'cdx:gtfobins:functions'),
       "riskTags": $prop($, 'cdx:gtfobins:riskTags'),
-      "srcFile": $prop($, 'SrcFile')
+      "srcFile": $prop($, 'internal:SrcFile')
     }
 
 - id: CTR-006
@@ -221,9 +221,9 @@
     {
       "bomRef": $."bom-ref",
       "purl": purl,
-      "file": $prop($, 'SrcFile')
+      "file": $prop($, 'internal:SrcFile')
     }
-  message: "Dedicated offensive toolkit '{{ name }}' is present at '{{ $prop($, 'SrcFile') }}'"
+  message: "Dedicated offensive toolkit '{{ name }}' is present at '{{ $prop($, 'internal:SrcFile') }}'"
   mitigation: "Remove offensive testing binaries from runtime images, rebuild from a minimal trusted base, and keep container debugging or red-team tooling in separate break-glass images."
   attack:
     tactics: [TA0002, TA0004, TA0006, TA0007]
@@ -235,7 +235,7 @@
       "riskTags": $prop($, 'cdx:container:riskTags'),
       "attackTechniques": $prop($, 'cdx:container:attackTechniques'),
       "knowledgeSources": $prop($, 'cdx:container:knowledgeSources'),
-      "srcFile": $prop($, 'SrcFile')
+      "srcFile": $prop($, 'internal:SrcFile')
     }
 
 - id: CTR-007
@@ -258,9 +258,9 @@
     {
       "bomRef": $."bom-ref",
       "purl": purl,
-      "file": $prop($, 'SrcFile')
+      "file": $prop($, 'internal:SrcFile')
     }
-  message: "Seccomp-sensitive escape helper '{{ name }}' is present at '{{ $prop($, 'SrcFile') }}' and depends on syscalls blocked by the Docker default seccomp profile"
+  message: "Seccomp-sensitive escape helper '{{ name }}' is present at '{{ $prop($, 'internal:SrcFile') }}' and depends on syscalls blocked by the Docker default seccomp profile"
   mitigation: "Keep Docker or OCI runtimes on the default seccomp profile, never use `seccomp=unconfined` for app workloads, and review custom profiles so they do not allow namespace or host-escape syscalls without a clear need."
   attack:
     tactics: [TA0004]
@@ -273,7 +273,7 @@
       "seccompProfile": $prop($, 'cdx:container:seccompProfile'),
       "seccompBlockedSyscalls": $prop($, 'cdx:container:seccompBlockedSyscalls'),
       "knowledgeSources": $prop($, 'cdx:container:knowledgeSources'),
-      "srcFile": $prop($, 'SrcFile')
+      "srcFile": $prop($, 'internal:SrcFile')
     }
 
 - id: CTR-008

@@ -1,6 +1,6 @@
 {
   "$schema": "https://poku.io/schemas/configs.json",
-  "include": ["lib"],
+  "include": ["lib", "bin"],
   "filter": ".poku.js",
   "reporter": "compact"
 }

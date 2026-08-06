@@ -31,7 +31,7 @@
       "!test/**",
       "!types/**",
       "!docs/**",
-      "!repotests/**",
+      "!test/repotests/**",
       "!lib/validator/generated/**"
     ],
     "rules": {
@@ -102,7 +102,7 @@
       "!test/**",
       "!types/**",
       "!docs/**",
-      "!repotests/**",
+      "!test/repotests/**",
       "!lib/validator/generated/**"
     ],
     "indentStyle": "space",
@@ -121,7 +121,7 @@
       "!**/doc",
       "!**/*.html",
       "!**/*.css",
-      "!repotests",
+      "!test/repotests",
       "!lib/validator/generated"
     ]
   }

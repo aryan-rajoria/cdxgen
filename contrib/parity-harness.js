@@ -139,7 +139,7 @@ function collectBoms() {
   const boms = [];
 
   // Golden corpus from repotests
-  const repotestsDir = join(root, "repotests");
+  const repotestsDir = join(root, "test", "repotests");
   if (existsSync(repotestsDir)) {
     for (const project of readdirSync(repotestsDir)) {
       if (project.startsWith("_")) continue;

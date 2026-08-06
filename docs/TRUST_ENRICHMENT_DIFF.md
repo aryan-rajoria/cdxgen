@@ -67,7 +67,7 @@ A conventional rootfs SBOM already contains OS packages, but it typically does *
 +    "name": "deb.debian.org/debian",
 +    "purl": "pkg:generic/os-repository/deb.debian.org%2Fdebian@bookworm?...",
 +    "properties": [
-+      { "name": "SrcFile", "value": "/etc/apt/sources.list.d/debian.sources" },
++      { "name": "internal:SrcFile", "value": "/etc/apt/sources.list.d/debian.sources" },
 +      { "name": "cdx:os:repo:type", "value": "apt" },
 +      { "name": "cdx:os:repo:url", "value": "https://deb.debian.org/debian" },
 +      { "name": "cdx:os:repo:enabled", "value": "true" },
@@ -85,7 +85,7 @@ A conventional rootfs SBOM already contains OS packages, but it typically does *
 +      }
 +    },
 +    "properties": [
-+      { "name": "SrcFile", "value": "/usr/share/keyrings/debian-archive-keyring.gpg" },
++      { "name": "internal:SrcFile", "value": "/usr/share/keyrings/debian-archive-keyring.gpg" },
 +      { "name": "cdx:crypto:trustDomain", "value": "apt" },
 +      { "name": "cdx:crypto:fingerprint", "value": "<fingerprint>" },
 +      { "name": "cdx:crypto:algorithm", "value": "RSA" },

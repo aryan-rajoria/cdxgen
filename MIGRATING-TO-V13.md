@@ -410,6 +410,34 @@ None of them squats an unregistered purl type:
   rules prohibit a namespace and default `repository_url` to
   `https://bcr.bazel.build`.
 
+## Legacy properties moved under `internal:`
+
+**Affected:** anyone matching cdxgen's unnamespaced component properties.
+
+Properties that predate the `cdx:*` convention are now prefixed with
+`internal:`, marking them as implementation detail rather than a modelled part
+of the property surface:
+
+| Before (v12) | After (v13) |
+|---|---|
+| `SrcFile` | `internal:SrcFile` |
+| `Namespaces` | `internal:Namespaces` |
+| `ImportedModules` | `internal:ImportedModules` |
+| `LocalNodeModulesPath` | `internal:LocalNodeModulesPath` |
+
+The same applies to `CalledMethods`, `ExportedModules`, `GIT_BRANCH`,
+`GradleModule`, `GradleProfileName`, `ImportedSymbols`, `ModuleGoVersion`,
+`PackageFiles`, `PackageMaintainer`, `PackageVendor`, `PkgProvides`,
+`ResolvedUrl`, `ServiceName`, `SrcGoMod`, `SrcPath`, `localScanPath` and the
+three `privado*` keys. `docs/CUSTOM_PROPERTIES.md` carries the full list.
+
+Container image properties keep their `oci:` namespace and `java:modules` keeps
+its own — both were already namespaced.
+
+For source evidence, prefer `evidence.occurrences[].location` and
+`evidence.identity[].methods[].value` over matching `internal:SrcFile`; those
+are modelled CycloneDX fields and will stay stable.
+
 ## atom 3 (native binaries)
 
 cdxgen v13 has upgraded the bundled [atom](https://github.com/AppThreat/atom)

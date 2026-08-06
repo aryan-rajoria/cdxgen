@@ -9,6 +9,7 @@ import repl from "node:repl";
 import jsonata from "jsonata";
 
 import { createBom } from "../lib/cli/index.js";
+import { readEnvironmentVariable } from "../lib/core/activity.js";
 import {
   getTmpDir,
   isDryRun,
@@ -80,7 +81,7 @@ const cdxArt = `
 
 console.log(cdxArt);
 
-if (process.env.CDXGEN_NODE_OPTIONS) {
+if (readEnvironmentVariable("CDXGEN_NODE_OPTIONS")) {
   process.env.NODE_OPTIONS = `${process.env.NODE_OPTIONS || ""} ${process.env.CDXGEN_NODE_OPTIONS}`;
 }
 
@@ -402,7 +403,10 @@ function getDiagnosticDisplayDetail(diagnostic) {
 
 let historyFile;
 const historyConfigDir = join(homedir(), ".config", ".cdxgen");
-if (!process.env.CDXGEN_REPL_HISTORY && !safeExistsSync(historyConfigDir)) {
+if (
+  !readEnvironmentVariable("CDXGEN_REPL_HISTORY") &&
+  !safeExistsSync(historyConfigDir)
+) {
   try {
     safeMkdirSync(historyConfigDir, { recursive: true });
     historyFile = join(historyConfigDir, ".repl_history");
@@ -528,7 +532,7 @@ if (process.argv.length > 2) {
 const cdxgenRepl = repl.start(options);
 if (historyFile) {
   cdxgenRepl.setupHistory(
-    process.env.CDXGEN_REPL_HISTORY || historyFile,
+    readEnvironmentVariable("CDXGEN_REPL_HISTORY") || historyFile,
     (err) => {
       if (err) {
         console.log(

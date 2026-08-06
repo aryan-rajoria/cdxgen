@@ -12,7 +12,7 @@
  *   stdin/stdout carry JSON; stderr carries newline-delimited JSON log records.
  *   Exit codes: 0 ok, 1 operational failure, 2 bad usage, 3 validation findings.
  *
- * See docs/v13/rust.md for the full specification.
+ * See docs/CDXRS_PROTOCOL.md for the full specification.
  */
 /** Sentinel returned when the Rust path is unavailable. Callers take JS path. */
 export declare const CDXRS_FALLBACK: Readonly<{

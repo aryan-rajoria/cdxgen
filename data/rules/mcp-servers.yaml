@@ -38,7 +38,7 @@
   location: |
     {
       "bomRef": $."bom-ref",
-      "file": $prop($, 'SrcFile'),
+      "file": $prop($, 'internal:SrcFile'),
       "purl": endpoints[0]
     }
   message: "MCP server '{{ name }}' exposes tool endpoints without authentication"
@@ -83,7 +83,7 @@
   location: |
     {
       "bomRef": $."bom-ref",
-      "file": $prop($, 'SrcFile'),
+      "file": $prop($, 'internal:SrcFile'),
       "purl": endpoints[0]
     }
   message: "MCP HTTP endpoint '{{ endpoints[0] }}' is reachable without authentication"
@@ -137,7 +137,7 @@
   location: |
     {
       "bomRef": $."bom-ref",
-      "file": $prop($, 'SrcFile'),
+      "file": $prop($, 'internal:SrcFile'),
       "purl": endpoints[0]
     }
   message: "MCP server '{{ name }}' is network-accessible but relies on a non-official SDK or wrapper"
@@ -187,7 +187,7 @@
   location: |
     {
       "bomRef": $."bom-ref",
-      "file": $prop($, 'SrcFile'),
+      "file": $prop($, 'internal:SrcFile'),
       "purl": endpoints[0]
     }
   message: "Configured MCP endpoint '{{ endpoints[0] }}' lacks any discovered auth posture"
@@ -236,7 +236,7 @@
   location: |
     {
       "bomRef": $."bom-ref",
-      "file": $prop($, 'SrcFile')
+      "file": $prop($, 'internal:SrcFile')
     }
   message: "MCP config entry '{{ name }}' exposes inline credentials"
   mitigation: "Move secrets out of config files and command args into secret stores or environment references that can be managed separately."
@@ -284,7 +284,7 @@
   location: |
     {
       "bomRef": $."bom-ref",
-      "file": $prop($, 'SrcFile')
+      "file": $prop($, 'internal:SrcFile')
     }
   message: "MCP config entry '{{ name }}' combines dynamic client registration with a static client identity"
   mitigation: "Avoid mixing DCR with shared static client identities; isolate delegated clients and validate downstream authorization assumptions."
@@ -332,7 +332,7 @@
   location: |
     {
       "bomRef": $."bom-ref",
-      "file": $prop($, 'SrcFile')
+      "file": $prop($, 'internal:SrcFile')
     }
   message: "MCP config entry '{{ name }}' forwards or passes through bearer-like credentials"
   mitigation: "Prefer server-side credential exchange or scoped token minting instead of forwarding end-user tokens through MCP configs."
@@ -376,7 +376,7 @@
   location: |
     {
       "bomRef": $."bom-ref",
-      "file": $prop($, 'SrcFile')
+      "file": $prop($, 'internal:SrcFile')
     }
   message: "MCP config file '{{ name }}' is included in a build/post-build SBOM"
   mitigation: "Review the config with '--bom-audit --bom-audit-categories mcp-server', consider '--tlp-classification AMBER' before sharing the BOM broadly, or rerun with '--exclude-type mcp' if config artifacts should be omitted."

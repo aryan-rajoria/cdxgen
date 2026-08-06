@@ -1,7 +1,7 @@
 /**
  * Golden SBOM test runner.
  *
- * Discovers scenarios under `repotests/`, runs `createBom` for each, installs
+ * Discovers scenarios under `test/repotests/`, runs `createBom` for each, installs
  * the cassette replay layer for offline coverage, normalizes the output, and
  * compares against committed golden files.
  *
@@ -9,7 +9,7 @@
  *   pnpm run test:golden             # compare (fail on mismatch)
  *   UPDATE_GOLDEN=1 pnpm run test:golden  # regenerate + print summary
  *
- * Scenario manifest format (`repotests/<project>/golden.manifest.json`):
+ * Scenario manifest format (`test/repotests/<project>/golden.manifest.json`):
  *
  * ```json
  * {
@@ -23,7 +23,7 @@
  *       "network": false,         // needs a cassette (default false)
  *       "env": {},                // env vars set for the scenario only
  *       "registry": {             // serve a local registry double instead of a
- *         "fixture": "npm.json",  //   cassette; see repotests/_registries/
+ *         "fixture": "npm.json",  //   cassette; see test/repotests/_registries/
  *         "env": ["NPM_URL"]      //   env vars pointed at it (trailing slash
  *       }                         //   added for *_URL vars that need one)
  *     }
@@ -31,8 +31,8 @@
  * }
  * ```
  *
- * Golden files live at `repotests/<project>/expected/<scenario>.json`.
- * Cassettes live at `repotests/_cassettes/<project>_<scenario>.json`.
+ * Golden files live at `test/repotests/<project>/expected/<scenario>.json`.
+ * Cassettes live at `test/repotests/_cassettes/<project>_<scenario>.json`.
  */
 
 import { existsSync, readFileSync, writeFileSync, mkdirSync, mkdtempSync, readdirSync } from "node:fs";
@@ -46,11 +46,11 @@ import { diffBoms } from "./sbom-diff.js";
 import { startCassette, CassetteMissError } from "./cassette.js";
 
 const REPO_ROOT = path.resolve(import.meta.dirname, "..");
-const REPOTESTS_DIR = path.join(REPO_ROOT, "repotests");
+const REPOTESTS_DIR = path.join(REPO_ROOT, "test", "repotests");
 const CASSETTES_DIR = path.join(REPOTESTS_DIR, "_cassettes");
 
 // Pin CocoaPods full-scan off. The justification is determinism, not
-// convenience: `pod spec` adds a `SrcFile` property whose value is a local
+// convenience: `pod spec` adds a `internal:SrcFile` property whose value is a local
 // filesystem path, so a golden generated on a machine with CocoaPods installed
 // would never match one generated without it. Pinning makes the lockfile the
 // sole input.
@@ -103,7 +103,7 @@ async function getCreateBom() {
 }
 
 /**
- * Discover all golden scenario manifests under repotests/.
+ * Discover all golden scenario manifests under test/repotests/.
  * @returns {{ project: string, manifestPath: string, manifest: Object }[]}
  */
 export function discoverScenarios() {
@@ -145,7 +145,7 @@ const REGISTRIES_DIR = path.join(REPOTESTS_DIR, "_registries");
  * asking for something the fixture does not describe must produce the same
  * (absent) result on every machine.
  *
- * @param {string} fixtureName File under repotests/_registries/.
+ * @param {string} fixtureName File under test/repotests/_registries/.
  * @returns {Promise<{url: string, requests: string[], stop: () => Promise<void>}>}
  */
 async function startRegistryDouble(fixtureName) {
@@ -376,7 +376,7 @@ export async function runAll() {
   const scenarios = discoverScenarios();
 
   if (scenarios.length === 0) {
-    console.error("FATAL: no golden scenarios found under repotests/. The runner must find non-zero scenarios.");
+    console.error("FATAL: no golden scenarios found under test/repotests/. The runner must find non-zero scenarios.");
     return {
       passed: 0,
       failed: 1,

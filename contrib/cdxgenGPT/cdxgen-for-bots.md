@@ -8,7 +8,7 @@ Many BOM generation tools exist. cdxgen stands out due to its focus on:
 
 1. **Explainability**
 
-    - _Package manifest evidence_: Stored under `components.properties` with the name `SrcFile`.
+    - _Package manifest evidence_: Stored under `components.properties` with the name `internal:SrcFile`.
     - _Workspace references for monorepos_: Stored under `components.properties` with the name `internal:workspaceRef`. Supported for pnpm and uv workspaces.
     - _Registry information_: Stored under `components.properties` with the name ending with `:registry`. Example: `cdx:pypi:registry`, `cdx:pub:registry`.
     - _Identity evidence_: Found under `components.evidence.identity`.
@@ -54,7 +54,7 @@ Many BOM generation tools exist. cdxgen stands out due to its focus on:
 
 4. **Package Manager and Manifest Identification**
 
-    - `SrcFile` property under `components.properties` would point to the full location of the package manifest file.
+    - `internal:SrcFile` property under `components.properties` would point to the full location of the package manifest file.
     - Alternatively, the attribute `components.evidence.identity.concludedValue` can be used to identity the manifest.
     - Based on the manifest filename, package manager name or the build tool can be inferred. Example, uv.lock means "astral uv". poetry.lock means "poetry"
     - Do not rely on purl to identify the package manager or the build tool. This is not a correct approach.
@@ -63,7 +63,7 @@ Many BOM generation tools exist. cdxgen stands out due to its focus on:
 
     - Components with the property `internal:is_executable` set to `true` indicate executable binaries in container images. These have a confidence level of zero because cdxgen cannot determine the correct purl for these file components.
     - Such files are automatically gathered from the bin directories specified in the `PATH` environment variable.
-    - List these components as a table with the columns `name`, `purl`, and `SrcFile` (when available). For the `SrcFile` column, refer to a property named `SrcFile`.
+    - List these components as a table with the columns `name`, `purl`, and `internal:SrcFile` (when available). For the `internal:SrcFile` column, refer to a property named `internal:SrcFile`.
     - `metadata.component.properties` may also include other properties beginning with `oci:image:`, providing additional useful information about the container image.
         - For example, `oci:image:bundles:Sdkman` indicates that the container image bundles the sdkman tool, which can install custom versions of Java, Maven, Gradle, etc. The exact versions of these build tools may not be captured by cdxgen. Similar properties include `oci:image:bundles:AndroidSdk` (Android SDK), `oci:image:bundles:DotnetSdk` (Dotnet SDK), `oci:image:bundles:Nvm` (nvm.sh), `oci:image:bundles:Rbenv` (rbenv).
         - Another example: properties with the `oci:image:env:` prefix (e.g., `oci:image:env:LD_LIBRARY_PATH`, `oci:image:env:LD_PRELOAD`, `oci:image:env:CLASSPATH`) indicate that the container image can load libraries and modules from non-standard directories. Flag SBOMs with these properties.

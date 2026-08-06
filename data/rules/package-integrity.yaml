@@ -155,7 +155,7 @@
   location: |
     {
       "bomRef": $."bom-ref",
-      "file": $prop($, 'SrcFile')
+      "file": $prop($, 'internal:SrcFile')
     }
   message: "README file '{{ name }}' contains hidden Unicode characters"
   mitigation: "Review the file with hidden-character rendering enabled, remove suspicious bidirectional or zero-width characters, and verify comment blocks carefully before merge"
@@ -227,7 +227,7 @@
   location: |
     {
       "bomRef": $."bom-ref",
-      "file": $prop($, 'SrcFile')
+      "file": $prop($, 'internal:SrcFile')
     }
   message: "Rust project '{{ name }}' uses Cargo build.rs or native build helpers"
   mitigation: "Review `build.rs`, native build dependencies, and release workflows to ensure the build remains hermetic and expected"
@@ -257,7 +257,7 @@
   location: |
     {
       "bomRef": $."bom-ref",
-      "file": $prop($, 'SrcFile')
+      "file": $prop($, 'internal:SrcFile')
     }
   message: "Rust project '{{ name }}' combines native Cargo build surfaces with mutable Cargo toolchain setup actions"
   mitigation: "Prefer SHA-pinned Cargo toolchain setup actions for release workflows, especially when build.rs or native helpers run during CI"
@@ -300,7 +300,7 @@
   location: |
     {
       "bomRef": $."bom-ref",
-      "file": $prop($, 'SrcFile')
+      "file": $prop($, 'internal:SrcFile')
     }
   message: "Rust project '{{ name }}' runs Cargo build/test/package workflow steps against a native build surface"
   mitigation: "Review build.rs, native helper crates, and workflow command scope before merging or publishing releases that exercise native build logic"

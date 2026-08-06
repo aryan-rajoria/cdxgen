@@ -4,6 +4,7 @@
     ".*/**",
     "*.poku.js",
     "lib/**/*.poku.js",
+    "bin/**/*.poku.js",
     "types/**/*",
     "contrib/**"
   ],

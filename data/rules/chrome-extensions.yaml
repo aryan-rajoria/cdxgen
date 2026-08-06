@@ -21,7 +21,7 @@
     {
       "bomRef": $. "bom-ref",
       "purl": purl,
-      "srcFile": $prop($, 'SrcFile')
+      "srcFile": $prop($, 'internal:SrcFile')
     }
   message: "Chrome extension '{{ name }}@{{ version }}' has broad host access permissions"
   mitigation: "Limit host permissions to required domains; avoid <all_urls> and broad wildcard host patterns"
@@ -47,7 +47,7 @@
     {
       "bomRef": $. "bom-ref",
       "purl": purl,
-      "srcFile": $prop($, 'SrcFile')
+      "srcFile": $prop($, 'internal:SrcFile')
     }
   message: "Chrome extension '{{ name }}@{{ version }}' can intercept and block web requests"
   mitigation: "Review extension code for request filtering/modification logic; restrict deployment to trusted publishers"
@@ -142,7 +142,7 @@
     {
       "bomRef": $. "bom-ref",
       "purl": purl,
-      "srcFile": $prop($, 'SrcFile')
+      "srcFile": $prop($, 'internal:SrcFile')
     }
   message: "Chrome extension '{{ name }}@{{ version }}' combines broad host scope with file/device capabilities"
   mitigation: "Review whether file/device permissions are required and narrow host permissions to explicit trusted origins."
@@ -173,7 +173,7 @@
     {
       "bomRef": $. "bom-ref",
       "purl": purl,
-      "srcFile": $prop($, 'SrcFile')
+      "srcFile": $prop($, 'internal:SrcFile')
     }
   message: "Chrome extension '{{ name }}@{{ version }}' has code-injection capability with broad host coverage"
   mitigation: "Constrain host permissions and validate code-injection paths (scripting/tabs/debugger/content scripts) against strict allowlists."
@@ -204,7 +204,7 @@
     {
       "bomRef": $. "bom-ref",
       "purl": purl,
-      "srcFile": $prop($, 'SrcFile')
+      "srcFile": $prop($, 'internal:SrcFile')
     }
   message: "Chrome extension '{{ name }}@{{ version }}' has fingerprinting indicators with broad host access"
   mitigation: "Review extension behavior for passive/active fingerprinting collection and reduce scope to required domains."
@@ -236,7 +236,7 @@
     {
       "bomRef": $. "bom-ref",
       "purl": purl,
-      "srcFile": $prop($, 'SrcFile')
+      "srcFile": $prop($, 'internal:SrcFile')
     }
   message: "AI-assistant extension '{{ name }}@{{ version }}' can inject code in assistant workflows"
   mitigation: "Review prompt/session handling, enforce least-privilege host permissions, and gate deployment to trusted publishers."

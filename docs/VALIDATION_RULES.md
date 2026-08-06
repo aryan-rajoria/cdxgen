@@ -80,11 +80,11 @@ They are cdxgen quality checks, not CycloneDX spec violations.
 | Rule id | Severity | Meaning |
 |---------|----------|---------|
 | `props.missing-properties` | `warning` | A library/framework npm or pypi component lacks `properties`. |
-| `props.missing-srcfile` | `warning` | A component lacks a `SrcFile` property. |
+| `props.missing-srcfile` | `warning` | A component lacks a `internal:SrcFile` property. |
 | `props.missing-workspace-properties` | `warning` | In workspace mode, a component lacks workspace-related properties. |
 | `props.missing-evidence` | `warning` | A component lacks `evidence`. |
 | `props.npm-missing-tarball` | `warning` | Some npm components lack `externalReferences.distribution` while others have it. |
-| `props.absolute-srcfile-path` | `warning` | A `SrcFile` property value starts with `/` (absolute path). |
+| `props.absolute-srcfile-path` | `warning` | A `internal:SrcFile` property value starts with `/` (absolute path). |
 | `props.suspicious-native-name` | `warning` | An npm package has a native-sounding name but no `cdx:npm:native_addon` flag. Not emitted; see below. |
 
 ## Not covered by these rules

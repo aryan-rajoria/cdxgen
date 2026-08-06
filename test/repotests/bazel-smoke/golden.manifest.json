@@ -1,0 +1,13 @@
+{
+  "description": "bzlmod dependency extraction. Manifest- and lock-backed: BCR modules plus Maven coordinates, no bazel toolchain.",
+  "fixture": "../../data/bzlmod-smoke",
+  "scenarios": [
+    {
+      "name": "default",
+      "projectType": [
+        "bazel"
+      ],
+      "options": {}
+    }
+  ]
+}

@@ -4,17 +4,39 @@ This page documents the current `cdx:` custom properties emitted by cdxgen, the 
 
 ## Scope
 
-- Source of truth: non-test source files under `lib/**` (including `lib/ecosystems/utils.js` and `lib/helpers/ciParsers/*`).
+- Source of truth: non-test source files under `lib/**` (including `lib/ecosystems/utils.js` and `lib/inventory/ciParsers/*`).
 - These are cdxgen-specific properties added to CycloneDX objects (components, workflows, tasks, metadata, and services).
 - They are intended to enrich analysis and policy decisions; they are not CycloneDX core fields.
 
-## Legacy compatibility properties
+## `internal:` properties
 
-- This page inventories the current namespaced `cdx:*` custom properties. It does **not** treat older unnamespaced compatibility properties as part of the preferred property surface.
-- Current legacy examples still seen in some outputs include `SrcFile`, `ImportedModules`, and `LocalNodeModulesPath`.
-- Prefer standard CycloneDX modeling first: use `evidence.occurrences[].location` and `evidence.identity[].methods[].value` for discovery/source evidence, and use BOM metadata properties such as `cdx:bom:componentSrcFiles` for aggregated manifest-origin signals.
-- Treat `LocalNodeModulesPath` as environment-specific and potentially sensitive; downstream policies should avoid depending on it.
-- Expect these legacy keys to remain compatibility-oriented and less stable than the namespaced `cdx:*` inventory below.
+- Properties that predate the namespaced `cdx:*` convention now carry an
+  `internal:` prefix — `internal:SrcFile`, `internal:Namespaces`,
+  `internal:ImportedModules`, `internal:LocalNodeModulesPath` and the rest of
+  the list below. The prefix marks them as cdxgen implementation detail rather
+  than a modelled part of the property surface.
+- Prefer standard CycloneDX modeling first: use
+  `evidence.occurrences[].location` and `evidence.identity[].methods[].value`
+  for discovery and source evidence, and BOM metadata properties such as
+  `cdx:bom:componentSrcFiles` for aggregated manifest-origin signals.
+- Treat `internal:LocalNodeModulesPath` as environment-specific and potentially
+  sensitive; downstream policies should avoid depending on it.
+- Expect `internal:*` keys to be less stable than the namespaced `cdx:*`
+  inventory below.
+
+The full set: `internal:CalledMethods`, `internal:ExportedModules`,
+`internal:GIT_BRANCH`, `internal:GradleModule`, `internal:GradleProfileName`,
+`internal:ImportedModules`, `internal:ImportedSymbols`,
+`internal:LocalNodeModulesPath`, `internal:ModuleGoVersion`,
+`internal:Namespaces`, `internal:PackageFiles`, `internal:PackageMaintainer`,
+`internal:PackageVendor`, `internal:PkgProvides`, `internal:ResolvedUrl`,
+`internal:ServiceName`, `internal:SrcFile`, `internal:SrcGoMod`,
+`internal:SrcPath`, `internal:binary_path`, `internal:localScanPath`,
+`internal:privadoCLIVersion`, `internal:privadoCoreVersion`,
+`internal:privado_violations`.
+
+Container image properties keep their existing `oci:` namespace, and
+`java:modules` keeps its own, because both were already namespaced.
 
 ## How to read these properties
 
@@ -1026,6 +1048,456 @@ These properties are safe for policy because they are small values, counts, cate
 - Chromium-browser extensions can include capability booleans derived from manifest + Babel source analysis: `cdx:chrome-extension:capability:fileAccess`, `cdx:chrome-extension:capability:deviceAccess`, `cdx:chrome-extension:capability:network`, `cdx:chrome-extension:capability:bluetooth`, `cdx:chrome-extension:capability:accessibility`, `cdx:chrome-extension:capability:codeInjection`, and `cdx:chrome-extension:capability:fingerprinting`.
 - Vendor-specific fields are namespaced explicitly: Edge (`cdx:chrome-extension:edge:*`) and Brave (`cdx:chrome-extension:brave:*`).
 - Chrome extensions discovered via osquery (`-t os`) use `pkg:chrome-extension` and may also carry `cdx:osquery:category`.
+
+<a id="inventory-remaining"></a>
+
+### Remaining emitted keys, by namespace
+
+The groups above describe the keys that carry policy meaning. This index closes
+the gap: it lists every other property cdxgen can emit, so the document covers
+the full emitted surface. `lib/customProperties.poku.js` fails the build when a
+property is emitted that appears nowhere in this file.
+
+**`cdx:agent:*`**
+
+- `cdx:agent:authHints`
+- `cdx:agent:credentialRiskIndicators`
+- `cdx:agent:description`
+- `cdx:agent:disallowedTools`
+- `cdx:agent:hasMcpReferences`
+- `cdx:agent:hasNonOfficialMcpReference`
+- `cdx:agent:hiddenComponentKinds`
+- `cdx:agent:hiddenEndpointCount`
+- `cdx:agent:hiddenMcpHosts`
+- `cdx:agent:hiddenMcpUrls`
+- `cdx:agent:inventorySource`
+- `cdx:agent:mcpPackageRefs`
+- `cdx:agent:mode`
+- `cdx:agent:model`
+- `cdx:agent:permission`
+- `cdx:agent:providerNames`
+- `cdx:agent:providerOverride`
+- `cdx:agent:role`
+- `cdx:agent:tools`
+
+**`cdx:ai:*`**
+
+- `cdx:ai:codegen:signals:count`
+- `cdx:ai:safetensors:parameterCount`
+- `cdx:ai:safetensors:parameterCountLabel`
+- `cdx:ai:safetensors:tensorType`
+
+**`cdx:asar:*`**
+
+- `cdx:asar:embeddedManifests`
+- `cdx:asar:hasDynamicFetch`
+- `cdx:asar:hasDynamicImport`
+- `cdx:asar:hasEval`
+- `cdx:asar:hasNestedArchives`
+- `cdx:asar:integrityAlgorithm`
+- `cdx:asar:manifestInventoryComplete`
+- `cdx:asar:nestedArchiveCount`
+
+**`cdx:audit:*`**
+
+- `cdx:audit:attack:tactics`
+- `cdx:audit:attack:techniques`
+- `cdx:audit:category`
+- `cdx:audit:confidence`
+- `cdx:audit:dispatch:edge`
+- `cdx:audit:dispatch:receiverFiles`
+- `cdx:audit:dispatch:receiverNames`
+- `cdx:audit:engine`
+- `cdx:audit:location:bomRef`
+- `cdx:audit:location:file`
+- `cdx:audit:location:purl`
+- `cdx:audit:mitigation`
+- `cdx:audit:name`
+- `cdx:audit:nextAction`
+- `cdx:audit:ruleId`
+- `cdx:audit:score`
+- `cdx:audit:severity`
+- `cdx:audit:target:purl`
+- `cdx:audit:target:repoUrl`
+- `cdx:audit:topFinding:ruleId`
+- `cdx:audit:upstreamGuidance`
+
+**`cdx:cargo:*`**
+
+- `cdx:cargo:hasWorkspaceMembers`
+- `cdx:cargo:publisherSetPartialDrift`
+
+**`cdx:chrome-extension:*`**
+
+- `cdx:chrome-extension:description`
+
+**`cdx:container:*`**
+
+- `cdx:container:unpackagedExecutableCount`
+- `cdx:container:unpackagedSharedLibraryCount`
+
+**`cdx:crewai:*`**
+
+- `cdx:crewai:assignedAgent`
+- `cdx:crewai:backstory`
+- `cdx:crewai:description`
+- `cdx:crewai:expectedOutput`
+- `cdx:crewai:goal`
+- `cdx:crewai:role`
+
+**`cdx:crypto:*`**
+
+- `cdx:crypto:primitive`
+- `cdx:crypto:sourceLocation`
+- `cdx:crypto:sourceType`
+
+**`cdx:dosai:*`**
+
+- `cdx:dosai:allowAnonymous`
+- `cdx:dosai:authorizationPolicyCount`
+- `cdx:dosai:authorizationRequired`
+- `cdx:dosai:endpointKind`
+- `cdx:dosai:location`
+- `cdx:dosai:requiredClaimCount`
+- `cdx:dosai:requiredScopeCount`
+- `cdx:dosai:roleCount`
+
+**`cdx:dynamic:*`**
+
+- `cdx:dynamic:filePath`
+- `cdx:dynamic:httpQuery`
+
+**`cdx:file:*`**
+
+- `cdx:file:hasHiddenUnicode`
+- `cdx:file:hiddenUnicodeCodePoints`
+- `cdx:file:hiddenUnicodeCommentCodePoints`
+- `cdx:file:hiddenUnicodeInComments`
+- `cdx:file:hiddenUnicodeLineNumbers`
+- `cdx:file:kind`
+
+**`cdx:github:*`**
+
+- `cdx:github:action:buildCacheDisableInput`
+- `cdx:github:action:buildCacheDisableValue`
+- `cdx:github:action:buildCacheEcosystem`
+- `cdx:github:action:disablesBuildCache`
+- `cdx:github:checkout:checksOutUntrustedRef`
+- `cdx:github:checkout:forkContextRefs`
+- `cdx:github:checkout:ref`
+- `cdx:github:checkout:referencesForkContext`
+- `cdx:github:checkout:repository`
+- `cdx:github:checkout:untrustedRefContexts`
+- `cdx:github:job:hasExplicitPermissionsBlock`
+- `cdx:github:step:exfiltrationIndicators`
+- `cdx:github:step:hasSensitiveOperations`
+- `cdx:github:step:isPublishCommand`
+- `cdx:github:step:legacyPublishTokenSources`
+- `cdx:github:step:likelyExfiltration`
+- `cdx:github:step:publishEcosystem`
+- `cdx:github:step:sensitiveOperations`
+- `cdx:github:step:usesLegacyPublishToken`
+- `cdx:github:workflow:hasAnyExplicitPermissionsBlock`
+- `cdx:github:workflow:hasExplicitPermissionsBlock`
+
+**`cdx:gtfobins:*`**
+
+- `cdx:gtfobins:matchFields`
+- `cdx:gtfobins:names`
+- `cdx:gtfobins:queryCategory`
+
+**`cdx:hbom:*`**
+
+- `cdx:hbom:addressSizes`
+- `cdx:hbom:analysis:actionableDiagnosticCount`
+- `cdx:hbom:analysis:commandDiagnosticCount`
+- `cdx:hbom:analysis:commandErrorCount`
+- `cdx:hbom:analysis:commandErrorIds`
+- `cdx:hbom:analysis:diagnosticIssues`
+- `cdx:hbom:analysis:installHintCount`
+- `cdx:hbom:analysis:missingCommandCount`
+- `cdx:hbom:analysis:missingCommandIds`
+- `cdx:hbom:analysis:missingCommands`
+- `cdx:hbom:analysis:partialSupportCount`
+- `cdx:hbom:analysis:partialSupportIds`
+- `cdx:hbom:analysis:permissionDeniedCommands`
+- `cdx:hbom:analysis:permissionDeniedCount`
+- `cdx:hbom:analysis:permissionDeniedIds`
+- `cdx:hbom:analysis:privilegeHintCount`
+- `cdx:hbom:analysis:requiresPrivileged`
+- `cdx:hbom:analysis:timeoutCount`
+- `cdx:hbom:analysis:timeoutIds`
+- `cdx:hbom:architecture`
+- `cdx:hbom:busInfo`
+- `cdx:hbom:cameraModelId`
+- `cdx:hbom:capacity`
+- `cdx:hbom:channel`
+- `cdx:hbom:chargePercent`
+- `cdx:hbom:collectorProfile`
+- `cdx:hbom:connected`
+- `cdx:hbom:connectionState`
+- `cdx:hbom:connectionType`
+- `cdx:hbom:coreCount`
+- `cdx:hbom:cycleCount`
+- `cdx:hbom:defaultInput`
+- `cdx:hbom:defaultOutput`
+- `cdx:hbom:deviceNode`
+- `cdx:hbom:devicePath`
+- `cdx:hbom:driver`
+- `cdx:hbom:duplex`
+- `cdx:hbom:evidence:command`
+- `cdx:hbom:evidence:commandCount`
+- `cdx:hbom:evidence:commandDiagnostic`
+- `cdx:hbom:evidence:file`
+- `cdx:hbom:evidence:fileCount`
+- `cdx:hbom:fanCount`
+- `cdx:hbom:fileVault`
+- `cdx:hbom:firmwareVersion`
+- `cdx:hbom:hardwareClass`
+- `cdx:hbom:health`
+- `cdx:hbom:identifierPolicy`
+- `cdx:hbom:interface`
+- `cdx:hbom:interfaceName`
+- `cdx:hbom:isCharging`
+- `cdx:hbom:isEncrypted`
+- `cdx:hbom:isRemovable`
+- `cdx:hbom:isVirtual`
+- `cdx:hbom:linkRateMbps`
+- `cdx:hbom:linkStatus`
+- `cdx:hbom:logicalCpuCount`
+- `cdx:hbom:maximumCapacity`
+- `cdx:hbom:memoryOnlineSize`
+- `cdx:hbom:minorType`
+- `cdx:hbom:mountPath`
+- `cdx:hbom:mountPoint`
+- `cdx:hbom:path`
+- `cdx:hbom:phyMode`
+- `cdx:hbom:physicalCpuCount`
+- `cdx:hbom:platform`
+- `cdx:hbom:powerSource`
+- `cdx:hbom:productId`
+- `cdx:hbom:receptacleStatus`
+- `cdx:hbom:resolution`
+- `cdx:hbom:rssi`
+- `cdx:hbom:sampleRate`
+- `cdx:hbom:secureBootAuthorityKeyId`
+- `cdx:hbom:secureBootCertificateAuthorityKeyId`
+- `cdx:hbom:secureBootCertificatePath`
+- `cdx:hbom:secureBootCertificateSerial`
+- `cdx:hbom:secureBootCertificateSha1`
+- `cdx:hbom:secureBootCertificateSubjectKeyId`
+- `cdx:hbom:secureBootDbAuthorityKeyId`
+- `cdx:hbom:secureBootDbPath`
+- `cdx:hbom:secureBootDbSerial`
+- `cdx:hbom:secureBootDbSha1`
+- `cdx:hbom:secureBootDbSubjectKeyId`
+- `cdx:hbom:secureBootDbxAuthorityKeyId`
+- `cdx:hbom:secureBootDbxPath`
+- `cdx:hbom:secureBootDbxSerial`
+- `cdx:hbom:secureBootDbxSha1`
+- `cdx:hbom:secureBootDbxSubjectKeyId`
+- `cdx:hbom:secureBootSerial`
+- `cdx:hbom:secureBootSha1`
+- `cdx:hbom:secureBootSubjectKeyId`
+- `cdx:hbom:securityMode`
+- `cdx:hbom:size`
+- `cdx:hbom:sizeBytes`
+- `cdx:hbom:smartStatus`
+- `cdx:hbom:speed`
+- `cdx:hbom:speedMbps`
+- `cdx:hbom:state`
+- `cdx:hbom:status`
+- `cdx:hbom:targetArchitecture`
+- `cdx:hbom:targetPlatform`
+- `cdx:hbom:temperatureCelsius`
+- `cdx:hbom:transport`
+- `cdx:hbom:uuid`
+- `cdx:hbom:vendorId`
+- `cdx:hbom:volumeUuid`
+- `cdx:hbom:watts`
+- `cdx:hbom:wearPercentageUsed`
+
+**`cdx:hostview:*`**
+
+- `cdx:hostview:hardwareComponentCount`
+- `cdx:hostview:kernel_modules:count`
+- `cdx:hostview:linkedHardwareComponentCount`
+- `cdx:hostview:linkedRuntimeCategory`
+- `cdx:hostview:linkedRuntimeCategoryCount`
+- `cdx:hostview:mode`
+- `cdx:hostview:mount_hardening:count`
+- `cdx:hostview:runtime-storage:count`
+- `cdx:hostview:runtimeAddressCount`
+- `cdx:hostview:runtimeAnchorCount`
+- `cdx:hostview:runtimeComponentCount`
+- `cdx:hostview:topologyLinkCount`
+
+**`cdx:huggingface:*`**
+
+- `cdx:huggingface:citationDetected`
+- `cdx:huggingface:co2EmissionsGrams`
+- `cdx:huggingface:co2Geo`
+- `cdx:huggingface:co2HardwareUsed`
+- `cdx:huggingface:co2Source`
+- `cdx:huggingface:co2TrainingType`
+- `cdx:huggingface:createdAt`
+- `cdx:huggingface:datasetDescription`
+- `cdx:huggingface:language`
+- `cdx:huggingface:languageBcp47`
+- `cdx:huggingface:lastModified`
+- `cdx:huggingface:maskToken`
+- `cdx:huggingface:widgetExampleCount`
+
+**`cdx:invalid-purl:*`**
+
+- `cdx:invalid-purl`
+
+**`cdx:langgraph:*`**
+
+- `cdx:langgraph:dependencies`
+- `cdx:langgraph:envFile`
+
+**`cdx:license:*`**
+
+- `cdx:license:category`
+- `cdx:license:complianceAlert`
+- `cdx:license:deprecated`
+- `cdx:license:foss`
+- `cdx:license:fsfLibre`
+- `cdx:license:osiApproved`
+
+**`cdx:maturin:*`**
+
+- `cdx:maturin:bindings`
+- `cdx:maturin:buildBackend`
+- `cdx:maturin:compatibility`
+- `cdx:maturin:features`
+- `cdx:maturin:manifestPath`
+- `cdx:maturin:moduleName`
+- `cdx:maturin:strip`
+
+**`cdx:mcp:*`**
+
+- `cdx:mcp:agentReference`
+- `cdx:mcp:auth:protectedResourceMetadata`
+- `cdx:mcp:auth:requiresOAuth`
+- `cdx:mcp:auth:supportsDCR`
+- `cdx:mcp:authMode`
+- `cdx:mcp:catalogSource`
+- `cdx:mcp:command`
+- `cdx:mcp:configFormat`
+- `cdx:mcp:configKey`
+- `cdx:mcp:configuredEndpoints`
+- `cdx:mcp:configuredServiceCount`
+- `cdx:mcp:configuredServiceNames`
+- `cdx:mcp:credentialExposedServiceCount`
+- `cdx:mcp:credentialExposureFieldCount`
+- `cdx:mcp:credentialIndicatorCount`
+- `cdx:mcp:credentialReferenceCount`
+- `cdx:mcp:description`
+- `cdx:mcp:exposureType`
+- `cdx:mcp:hasTunnelReference`
+- `cdx:mcp:inventorySource`
+- `cdx:mcp:modelFamilies`
+- `cdx:mcp:modelNames`
+- `cdx:mcp:package`
+- `cdx:mcp:packageName`
+- `cdx:mcp:packageRefs`
+- `cdx:mcp:promptCount`
+- `cdx:mcp:providerFamilies`
+- `cdx:mcp:providerNames`
+- `cdx:mcp:resourceCount`
+- `cdx:mcp:resourceUri`
+- `cdx:mcp:reviewNeeded`
+- `cdx:mcp:role`
+- `cdx:mcp:sdkImports`
+- `cdx:mcp:serviceRef`
+- `cdx:mcp:sourceLine`
+- `cdx:mcp:toolAnnotations`
+- `cdx:mcp:usageConfidence`
+- `cdx:mcp:usageSignals`
+
+**`cdx:npm:*`**
+
+- `cdx:npm:manifestSource`
+- `cdx:npm:manifestSourceType`
+
+**`cdx:nuget:*`**
+
+- `cdx:nuget:declared_version_range`
+
+**`cdx:os:*`**
+
+- `cdx:os:repo:architectures`
+- `cdx:os:repo:baseurl`
+- `cdx:os:repo:components`
+- `cdx:os:repo:kind`
+- `cdx:os:repo:metalink`
+- `cdx:os:repo:mirrorlist`
+- `cdx:os:repo:release`
+
+**`cdx:pylock:*`**
+
+- `cdx:pylock:file:path`
+- `cdx:pylock:file:registry`
+- `cdx:pylock:file:size`
+- `cdx:pylock:file:source_type`
+- `cdx:pylock:file:subdirectory`
+- `cdx:pylock:file:upload_time`
+
+**`cdx:pypi:*`**
+
+- `cdx:pypi:editable`
+
+**`cdx:pyproject:*`**
+
+- `cdx:pyproject:dependencyGroupMember`
+- `cdx:pyproject:extra`
+
+**`cdx:sbt:*`**
+
+- `cdx:sbt:package:development`
+
+**`cdx:service:*`**
+
+- `cdx:service:DefaultStart`
+- `cdx:service:Provides`
+- `cdx:service:RequiredStart`
+- `cdx:service:manager`
+- `cdx:service:packageName`
+- `cdx:service:packageRef`
+- `cdx:service:unitType`
+
+**`cdx:skill:*`**
+
+- `cdx:skill:compatibility`
+- `cdx:skill:description`
+- `cdx:skill:license`
+- `cdx:skill:metadata`
+
+**`cdx:tool:*`**
+
+- `cdx:tool:aliases`
+- `cdx:tool:author`
+- `cdx:tool:category`
+- `cdx:tool:triggers`
+- `cdx:tool:version`
+
+**`cdx:trustinspector:*`**
+
+- `cdx:trustinspector:kind`
+
+**`cdx:validate:*`**
+
+- `cdx:validate:category`
+- `cdx:validate:engine`
+- `cdx:validate:mitigation`
+- `cdx:validate:ruleId`
+- `cdx:validate:scvsLevels`
+- `cdx:validate:severity`
+- `cdx:validate:standard`
+- `cdx:validate:standardRefs`
+- `cdx:validate:status`
 
 ## Consumer-oriented views
 
