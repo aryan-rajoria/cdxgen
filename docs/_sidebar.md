@@ -60,6 +60,8 @@
 - [Tutorials - Dynamic trace and instrumentation](LESSON16.md)
 - [Tutorials - License normalization and compliance policies](LESSON17.md)
 - [Tutorials - Detecting AI-generated code and authorship provenance](LESSON18.md)
+- [Tutorials - Recording provenance with CycloneDX 1.7 citations](LESSON19.md)
+- [Tutorials - Exchanging BOMs with the Transparency Exchange API](LESSON20.md)
 - [Tutorials - Generating OBOM](OBOM_LESSONS.md)
 - [Trust enrichment BOM diff examples](TRUST_ENRICHMENT_DIFF.md)
 - [macOS OBOM troubleshooting](OBOM_MACOS_TROUBLESHOOTING.md)

@@ -211,7 +211,7 @@ The [Transparency Exchange API](https://github.com/CycloneDX/transparency-exchan
 ### Fetching upstream SBOMs (`--tea-fetch`)
 
 ```bash
-cdxgen -t js /path/to/repo --tea-fetch urn:tei:uuid:products.example.com:d4d9f54a-abcf-11ee-ac79-1a52914d44b1
+cdxgen -t js /path/to/repo --tea-fetch urn:tei:uuid:cdxgen.github.io:d4d9f54a-abcf-11ee-ac79-1a52914d44b1
 ```
 
 cdxgen resolves the TEI via `/.well-known/tea` discovery (HTTPS only, per the spec), selects the endpoint with the highest matching API version and priority, resolves the TEI to a product release, downloads the latest Collection's BOM artifacts, and merges the upstream components into the generated BOM. Fetched components are tagged `cdx:tea:source` / `cdx:tea:collection` and carry a CycloneDX 1.7 citation. The merge uses the same rule as PEP 770: the upstream document is a stronger assertion than cdxgen's inference, so it wins on conflict and the conflict is recorded rather than discarded. A fetch failure only warns — the locally generated BOM stands.
@@ -222,10 +222,10 @@ Every checksum a Collection declares must match, and an artifact whose checksums
 
 ```bash
 cdxgen -t js /path/to/repo -o bom.json \
-  --tea-publish https://tea.example.com \
+  --tea-publish https://cdxgen.github.io/tea \
   --tea-leaf-identifier 123e4567-e89b-12d3-a456-426614174000 \
   --tea-author-name "Jane Doe" \
-  --tea-artifact-url https://example.com/bom.json
+  --tea-artifact-url https://cdxgen.github.io/downloads/bom.json
 ```
 
 The generated BOM is published as a TEA Artifact in a Collection via the draft publisher API's `POST /collection`. Collection versioning is owned by the server: publish the first collection with the default `--tea-reason INITIAL_RELEASE`, and subsequent updates with `ARTIFACT_UPDATED`, `ARTIFACT_ADDED`, `ARTIFACT_REMOVED`, or `VEX_UPDATED`; the server increments the collection version.
@@ -814,6 +814,97 @@ Using the `cbom` alias sets the following options:
 - specVersion: 1.7
 
 For service-oriented evidence collection, use the `saasbom` alias or the dedicated [`evinse` guide](EVINSE.md).
+
+### The shape of a cryptographic-asset component
+
+A CBOM is not an SBOM with a different component type. `cryptographic-asset`
+components are described by `cryptoProperties` rather than by a purl, and they
+intentionally carry **no purl at all** — an algorithm is not a package. This is
+what one looks like:
+
+```json
+{
+  "type": "cryptographic-asset",
+  "bom-ref": "cryptographic-asset:sha-256:",
+  "name": "sha-256",
+  "description": "NIST Algorithm",
+  "cryptoProperties": {
+    "assetType": "algorithm",
+    "oid": "2.16.840.1.101.3.4.2.1",
+    "algorithmProperties": {
+      "algorithmFamily": "SHA-2",
+      "primitive": "kdf"
+    }
+  },
+  "properties": [
+    { "name": "cdx:crypto:primitive", "value": "hmac" },
+    { "name": "cdx:crypto:primitive", "value": "kdf" },
+    { "name": "cdx:crypto:sourceLocation", "value": "src/crypto.js:12:9" },
+    { "name": "cdx:crypto:sourceType", "value": "js-ast:node:crypto.createHmac" }
+  ]
+}
+```
+
+#### `algorithmFamily` (CycloneDX 1.7)
+
+`algorithmFamily` is a closed enum of 77 values (`AES`, `SHA-2`,
+`ML-DSA`, `RSASSA-PSS`, `ChaCha20`, `bcrypt`, …), defined in
+`data/cryptography-defs.schema.json`. cdxgen resolves it from the detected
+algorithm name in three stages:
+
+1. the name already is a family (`AES`, `Whirlpool`);
+2. the name compacts to a family, so spelling and punctuation do not matter
+   (`md5` → `MD5`, `ml-dsa` → `ML-DSA`);
+3. an ordered rule matches a composite or OID spelling. Order matters here:
+   `sha256WithRSAEncryption` is `RSASSA-PKCS1`, not `SHA-2`, because the
+   signature scheme is the family and the hash is a parameter of it.
+
+**When no rule matches, the field is left unset.** The algorithm is still fully
+identified by its OID and name, and a wrong family is worse than an absent one —
+it would silently mis-group assets in any query that pivots on family.
+
+#### `primitive` and the properties that back it up
+
+`primitive` is also a closed enum (`hash`, `kdf`, `mac`, `signature`,
+`block-cipher`, `kem`, …). Two things follow from that:
+
+- A detector may report a kind the enum cannot express. rusi, for instance,
+  reports kinds like `key-generation`. cdxgen drops the non-conforming value
+  from the structured field so the document stays schema-valid, and keeps the
+  raw detection on a property: `cdx:crypto:primitive`, or
+  `cdx:rusi:crypto:kind` for rusi-sourced assets. Nothing detected is lost.
+- One asset can be used several ways. In the example above `sha-256` appears as
+  both an HMAC and a KDF, but `algorithmProperties.primitive` holds a single
+  value. The repeated `cdx:crypto:primitive` properties carry the full set, so
+  **query the properties, not the structured field, when you need every usage**.
+
+#### `ellipticCurve` and the deprecated `curve`
+
+1.7 replaces the free-text `curve` with an `ellipticCurve` enum using namespaced
+names (`nist/P-256`, `secg/secp256k1`, `brainpool/brainpoolP256r1`,
+`other/Ed25519`, `bls/BLS12-381`). cdxgen maps the common aliases — `P-256`,
+`prime256v1`, `secp256r1` and `P256` all resolve — and:
+
+> when a curve name cannot be mapped to the enum, cdxgen writes the deprecated
+> free-text `curve` instead of dropping it.
+
+Losing a cryptographic fact to satisfy an enum is the wrong trade. An unmappable
+curve is still a curve worth recording, so it degrades to the older field rather
+than disappearing.
+
+#### Downgrading below 1.7
+
+`algorithmFamily` and `ellipticCurve` are 1.7 additions. With
+`--spec-version 1.6` both are removed and the deprecated `curve` is preserved,
+because 1.6 has no other way to express the curve:
+
+```shell
+cbom -t java --spec-version 1.6 .
+```
+
+Certificate `certificateFileExtension` and `fingerprint` are stripped on the
+same path.
+
 
 ## Choosing a Container Image
 
