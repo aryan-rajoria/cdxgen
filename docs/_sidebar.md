@@ -5,6 +5,7 @@
 - [cdx-convert — CycloneDX to SPDX](CDX_CONVERT.md)
 - [cdx-sign — Sign a CycloneDX BOM](CDX_SIGN.md)
 - [cdx-validate — SCVS & CRA](CDX_VALIDATE.md)
+- [Validation rules](VALIDATION_RULES.md)
 - [cdx-verify — Verify BOM signatures](CDX_VERIFY.md)
 - [evinse — Evidence and SaaSBOM enrichment](EVINSE.md)
 - [Go Evinse with Golem](GO_EVINSE_GOLEM.md)
@@ -36,6 +37,7 @@
 - [Adding a New Ecosystem](ADD_ECOSYSTEM.md)
 - [AI Prompt for New Ecosystem Contributions](AI_ECOSYSTEM_PROMPT.md)
 - [Testing Guide](TESTING.md)
+- [cdxrs protocol](CDXRS_PROTOCOL.md)
 - **Guides**
 - [Troubleshooting](TROUBLESHOOTING.md)
 - [Large and Complex Projects](MONOREPO.md)
