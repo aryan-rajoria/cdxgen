@@ -21,11 +21,79 @@
               "version": "2.0.9"
             }
           },
-          "not_a_package": {
-            "repoRuleId": "@@bazel_tools//tools/build_defs/repo:http.bzl%http_file",
+          "buildtools_archive": {
+            "repoRuleId": "@@bazel_tools//tools/build_defs/repo:http.bzl%http_archive",
             "attributes": {
-              "url": "https://example.com/file.tar.gz"
+              "sha256": "f3b800e9f6ca60bdef3709440f393348f7c18a29f30814288a7326285c80aab9",
+              "strip_prefix": "buildtools-8.5.1",
+              "urls": ["https://github.com/bazelbuild/buildtools/archive/v8.5.1.tar.gz"]
             }
+          }
+        }
+      }
+    },
+    "@@gazelle+//:extensions.bzl%go_deps": {
+      "os:linux,arch:amd64": {
+        "generatedRepoSpecs": {
+          "com_github_pkg_errors": {
+            "repoRuleId": "@@gazelle+//internal:go_repository.bzl%go_repository",
+            "attributes": {
+              "importpath": "github.com/pkg/errors",
+              "version": "v0.9.1",
+              "sum": "h1:FEBLx1pp7UFdUd0iLoJ9F/lTz+Xk8kAYQZQTfvNAmvw="
+            }
+          }
+        }
+      }
+    },
+    "@@rules_python+//python/extensions:pip.bzl%pip": {
+      "general": {
+        "generatedRepoSpecs": {
+          "pip_deps_requests": {
+            "repoRuleId": "@@rules_python+//python/private/pypi:whl_library.bzl%whl_library",
+            "attributes": {
+              "requirement": "requests==2.31.0",
+              "sha256": "942c5a758f98d790eaed1a29cb6eefc7ffb0d1cf7af05c3d2791656dbd6ad1e1"
+            }
+          }
+        }
+      }
+    },
+    "@@rules_js+//npm:extensions.bzl%npm": {
+      "general": {
+        "generatedRepoSpecs": {
+          "npm__at_scope_pkg__1.0.0": {
+            "repoRuleId": "@@aspect_rules_js+//npm/private:npm_import.bzl%npm_import",
+            "attributes": {
+              "package": "@scope/pkg",
+              "version": "1.0.0",
+              "integrity": "sha512-cktIiTX6MgvOJI3sGN4kWxi7bLddhFrBAOYUTr50fbCxjXNM9wSc0Fp0MCkY3PjBLZ+hRb1cgnKZaBTUPXmZTg=="
+            }
+          }
+        }
+      }
+    },
+    "@@rules_java+//java:extensions.bzl%toolchains": {
+      "general": {
+        "generatedRepoSpecs": {
+          "remotejdk21_linux": {
+            "repoRuleId": "@@bazel_tools//tools/build_defs/repo:http.bzl%http_archive",
+            "attributes": {
+              "sha256": "0000000000000000000000000000000000000000000000000000000000000000",
+              "strip_prefix": "zulu21.32.17-ca-jdk21.0.2-linux_x64",
+              "urls": ["https://example.invalid/zulu21.tar.gz"]
+            }
+          }
+        }
+      }
+    },
+    "@@apple_support+//crosstool:setup.bzl%apple_cc_configure_extension": {
+      "general": {
+        "generatedRepoSpecs": {
+          "local_config_apple_cc": {
+            "bzlFile": "@@apple_support+//crosstool:setup.bzl",
+            "ruleClassName": "_apple_cc_autoconf",
+            "attributes": {}
           }
         }
       }
