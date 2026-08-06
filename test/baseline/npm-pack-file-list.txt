@@ -116,6 +116,7 @@ lib/ecosystems/parsers-misc.js
 lib/ecosystems/parsers-python.js
 lib/ecosystems/parsers-rust.js
 lib/ecosystems/parsers-zig.js
+lib/ecosystems/pep770.js
 lib/ecosystems/pylockutils.js
 lib/ecosystems/pythonutils.js
 lib/ecosystems/registryProvenance.js
@@ -123,6 +124,7 @@ lib/ecosystems/remote/huggingface.js
 lib/ecosystems/rubyutils.js
 lib/ecosystems/rusi.js
 lib/ecosystems/sbtutils.js
+lib/ecosystems/tea.js
 lib/ecosystems/utils.js
 lib/evinser/db.js
 lib/evinser/evinser.js
@@ -158,6 +160,8 @@ lib/inventory/ciParsers/gitlabCi.js
 lib/inventory/ciParsers/jenkins.js
 lib/inventory/communityAiConfigParser.js
 lib/inventory/containerRisk.js
+lib/inventory/cryptoAlgorithmFamily.js
+lib/inventory/citations.js
 lib/inventory/deps.js
 lib/inventory/depsUtils.js
 lib/inventory/display.js
@@ -182,6 +186,7 @@ lib/inventory/lolbas.js
 lib/inventory/mcp.js
 lib/inventory/mcpConfigParser.js
 lib/inventory/mcpDiscovery.js
+lib/inventory/mcpPinning.js
 lib/inventory/osPackageResolver.js
 lib/inventory/osinfo.js
 lib/inventory/osqueryTransform.js
@@ -191,6 +196,7 @@ lib/inventory/protobomLoader.js
 lib/inventory/provenanceUtils.js
 lib/inventory/purl.js
 lib/inventory/rustFormulationParser.js
+lib/inventory/sbomDocument.js
 lib/inventory/source.js
 lib/inventory/spdx.js
 lib/inventory/spdxExpression.js
@@ -374,6 +380,8 @@ types/lib/ecosystems/parsers-rust.d.ts
 types/lib/ecosystems/parsers-rust.d.ts.map
 types/lib/ecosystems/parsers-zig.d.ts
 types/lib/ecosystems/parsers-zig.d.ts.map
+types/lib/ecosystems/pep770.d.ts
+types/lib/ecosystems/pep770.d.ts.map
 types/lib/ecosystems/pylockutils.d.ts
 types/lib/ecosystems/pylockutils.d.ts.map
 types/lib/ecosystems/pythonutils.d.ts
@@ -388,6 +396,8 @@ types/lib/ecosystems/rusi.d.ts
 types/lib/ecosystems/rusi.d.ts.map
 types/lib/ecosystems/sbtutils.d.ts
 types/lib/ecosystems/sbtutils.d.ts.map
+types/lib/ecosystems/tea.d.ts
+types/lib/ecosystems/tea.d.ts.map
 types/lib/ecosystems/utils.d.ts
 types/lib/ecosystems/utils.d.ts.map
 types/lib/evinser/db.d.ts
@@ -458,6 +468,10 @@ types/lib/inventory/communityAiConfigParser.d.ts
 types/lib/inventory/communityAiConfigParser.d.ts.map
 types/lib/inventory/containerRisk.d.ts
 types/lib/inventory/containerRisk.d.ts.map
+types/lib/inventory/cryptoAlgorithmFamily.d.ts
+types/lib/inventory/cryptoAlgorithmFamily.d.ts.map
+types/lib/inventory/citations.d.ts
+types/lib/inventory/citations.d.ts.map
 types/lib/inventory/deps.d.ts
 types/lib/inventory/deps.d.ts.map
 types/lib/inventory/depsUtils.d.ts
@@ -506,6 +520,8 @@ types/lib/inventory/mcpConfigParser.d.ts
 types/lib/inventory/mcpConfigParser.d.ts.map
 types/lib/inventory/mcpDiscovery.d.ts
 types/lib/inventory/mcpDiscovery.d.ts.map
+types/lib/inventory/mcpPinning.d.ts
+types/lib/inventory/mcpPinning.d.ts.map
 types/lib/inventory/osPackageResolver.d.ts
 types/lib/inventory/osPackageResolver.d.ts.map
 types/lib/inventory/osinfo.d.ts
@@ -524,6 +540,8 @@ types/lib/inventory/purl.d.ts
 types/lib/inventory/purl.d.ts.map
 types/lib/inventory/rustFormulationParser.d.ts
 types/lib/inventory/rustFormulationParser.d.ts.map
+types/lib/inventory/sbomDocument.d.ts
+types/lib/inventory/sbomDocument.d.ts.map
 types/lib/inventory/source.d.ts
 types/lib/inventory/source.d.ts.map
 types/lib/inventory/spdx.d.ts

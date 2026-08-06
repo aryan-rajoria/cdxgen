@@ -63,19 +63,19 @@ cdxrs <subcommand> [--input <file|->] [--output <file|->] [--max-input-bytes N]
 
 ### I/O channels
 
-| Channel | Content |
-|---------|---------|
-| stdin   | JSON BOM data (when `--input -`) |
-| stdout  | JSON output (command results, BOM data) |
+| Channel | Content                                                     |
+| ------- | ----------------------------------------------------------- |
+| stdin   | JSON BOM data (when `--input -`)                            |
+| stdout  | JSON output (command results, BOM data)                     |
 | stderr  | NDJSON log records ONLY (never interleave logs into stdout) |
 
 ### Exit codes
 
-| Code | Meaning |
-|------|---------|
-| 0    | Success |
-| 1    | Operational failure (I/O error, parse error, size limit) |
-| 2    | Bad usage (invalid arguments) |
+| Code | Meaning                                                                    |
+| ---- | -------------------------------------------------------------------------- |
+| 0    | Success                                                                    |
+| 1    | Operational failure (I/O error, parse error, size limit)                   |
+| 2    | Bad usage (invalid arguments)                                              |
 | 3    | Validation failure with findings on stdout (findings are data, not errors) |
 
 ### NDJSON log records (stderr)
@@ -83,7 +83,7 @@ cdxrs <subcommand> [--input <file|->] [--output <file|->] [--max-input-bytes N]
 Every log record is a single-line JSON object:
 
 ```json
-{"level":"info","msg":"reading BOM"}
+{ "level": "info", "msg": "reading BOM" }
 ```
 
 Levels: `debug`, `info`, `warn`, `error`. The bridge forwards these to
@@ -117,7 +117,7 @@ Prints `cdxrs <version>` (e.g., `cdxrs 3.0.0`).
 Prints supported spec versions as JSON:
 
 ```json
-{"supportedSpecVersions":["1.6","1.7"]}
+{ "supportedSpecVersions": ["1.6", "1.7"] }
 ```
 
 ## Adding a new subcommand
@@ -126,11 +126,13 @@ Prints supported spec versions as JSON:
    function. All logic goes here.
 
 2. **Add to `src/cmd/mod.rs`:**
+
    ```rust
    pub mod <name>;
    ```
 
 3. **Add to the clap enum in `src/cli.rs`:**
+
    ```rust
    pub enum Command {
        Info,
@@ -141,6 +143,7 @@ Prints supported spec versions as JSON:
    ```
 
 4. **Add dispatch in `src/main.rs`:**
+
    ```rust
    Some(Command::<Name>) => cdxrs::cmd::<name>::run(&cli.input, &cli.output, cli.max_input_bytes),
    ```
@@ -187,19 +190,19 @@ CDXGEN_PLUGINS_DIR=/tmp/cdxgen-local-plugins npx poku lib/inventory/cdxrs.poku.j
 
 ## Environment variables
 
-| Variable | Purpose |
-|----------|---------|
-| `CDXGEN_PLUGINS_DIR` | Override the plugins directory (see above) |
-| `CDXRS_CMD` | Override the cdxrs binary path |
-| `CDXGEN_RS_DISABLE` | Disable Rust paths: `all` or comma-separated subcommand names |
-| `CDXGEN_NO_RUST` | Set to `true` to disable all Rust paths (same as `CDXGEN_RS_DISABLE=all`) |
-| `--no-rust` | CLI flag alias for `CDXGEN_NO_RUST=true` |
-| `CDXGEN_CACHE_DIR` | Override the metadata cache directory. Default: platform cache dir (`~/.cache/cdxgen` on Linux, `~/Library/Caches/cdxgen` on macOS, `%LOCALAPPDATA%\cdxgen\cache` on Windows). |
-| `CDXGEN_NO_CACHE` | Set to `true` or `1` to bypass the metadata cache for this run. |
-| `CDXGEN_CACHE_TTL` | Override the cache TTL in seconds. `0` means never expire. Default: 86400 (24h). |
+| Variable                | Purpose                                                                                                                                                                                                   |
+| ----------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `CDXGEN_PLUGINS_DIR`    | Override the plugins directory (see above)                                                                                                                                                                |
+| `CDXRS_CMD`             | Override the cdxrs binary path                                                                                                                                                                            |
+| `CDXGEN_RS_DISABLE`     | Disable Rust paths: `all` or comma-separated subcommand names                                                                                                                                             |
+| `CDXGEN_NO_RUST`        | Set to `true` to disable all Rust paths (same as `CDXGEN_RS_DISABLE=all`)                                                                                                                                 |
+| `--no-rust`             | CLI flag alias for `CDXGEN_NO_RUST=true`                                                                                                                                                                  |
+| `CDXGEN_CACHE_DIR`      | Override the metadata cache directory. Default: platform cache dir (`~/.cache/cdxgen` on Linux, `~/Library/Caches/cdxgen` on macOS, `%LOCALAPPDATA%\cdxgen\cache` on Windows).                            |
+| `CDXGEN_NO_CACHE`       | Set to `true` or `1` to bypass the metadata cache for this run.                                                                                                                                           |
+| `CDXGEN_CACHE_TTL`      | Override the cache TTL in seconds. `0` means never expire. Default: 86400 (24h).                                                                                                                          |
 | `CDXGEN_CACHE_LOOPBACK` | Set to `1` to allow caching loopback hosts (`127.0.0.1`, `::1`, `localhost`). Loopback is excluded by default because test-double entries are keyed by ephemeral ports. Used by `contrib/bench-fetch.js`. |
-| `--no-cache` | CLI flag alias for `CDXGEN_NO_CACHE=true` |
-| `--cache-ttl <secs>` | CLI flag alias for `CDXGEN_CACHE_TTL=<secs>` |
+| `--no-cache`            | CLI flag alias for `CDXGEN_NO_CACHE=true`                                                                                                                                                                 |
+| `--cache-ttl <secs>`    | CLI flag alias for `CDXGEN_CACHE_TTL=<secs>`                                                                                                                                                              |
 
 ## Metadata cache
 
@@ -233,7 +236,12 @@ resolved, the cache is disabled — it never falls back to the working directory
 ## JS bridge API
 
 ```js
-import { cdxrsAvailable, runCdxrs, cdxrsDisabled, CDXRS_FALLBACK } from "./cdxrs.js";
+import {
+  cdxrsAvailable,
+  runCdxrs,
+  cdxrsDisabled,
+  CDXRS_FALLBACK,
+} from "./cdxrs.js";
 
 // Check if the binary is present and version-compatible
 const { available, version, reason } = cdxrsAvailable("info");
@@ -241,9 +249,9 @@ const { available, version, reason } = cdxrsAvailable("info");
 // Run a subcommand (async). Normal case: pass in-memory BOM data as `content`,
 // which is written to the child's stdin with `--input -`.
 const result = await runCdxrs("info", {
-  content: bomJsonString,       // fed over stdin
-  args: [],                     // extra CLI args
-  timeoutMs: 30_000,            // default 30s
+  content: bomJsonString, // fed over stdin
+  args: [], // extra CLI args
+  timeoutMs: 30_000, // default 30s
 });
 
 // Alternative, when the BOM is already a file on disk:
@@ -253,7 +261,9 @@ const result2 = await runCdxrs("info", { input: "/path/to/bom.json" });
 // result: { ok: false, reason, stdout: "", exitCode: null } on failure
 
 // Check if a subcommand is disabled
-if (cdxrsDisabled("info")) { /* take JS path */ }
+if (cdxrsDisabled("info")) {
+  /* take JS path */
+}
 ```
 
 ### Failure modes (all non-fatal)
@@ -261,16 +271,16 @@ if (cdxrsDisabled("info")) { /* take JS path */ }
 Every failure mode logs once at `warn` and returns the `CDXRS_FALLBACK`
 sentinel (`{ ok: false, reason: "..." }`). The caller takes the JS path.
 
-| Failure | `reason` field |
-|---------|----------------|
-| Binary not found | `binary-not-found` |
-| Non-zero exit | `non-zero-exit:<code>` |
-| Timeout | `timeout` |
-| Malformed stdout | `malformed-stdout` |
-| Version-major mismatch | `version-mismatch` |
-| CDXGEN_RS_DISABLE | `disabled` |
-| Spawn error | `spawn-error` |
-| Unknown subcommand | `unknown-subcommand` |
+| Failure                | `reason` field         |
+| ---------------------- | ---------------------- |
+| Binary not found       | `binary-not-found`     |
+| Non-zero exit          | `non-zero-exit:<code>` |
+| Timeout                | `timeout`              |
+| Malformed stdout       | `malformed-stdout`     |
+| Version-major mismatch | `version-mismatch`     |
+| CDXGEN_RS_DISABLE      | `disabled`             |
+| Spawn error            | `spawn-error`          |
+| Unknown subcommand     | `unknown-subcommand`   |
 
 The bridge kills the **process group** on timeout (`process.kill(-pid,
 "SIGKILL")`) so a hung child cannot outlive the parent.
@@ -281,6 +291,7 @@ The bridge kills the **process group** on timeout (`process.kill(-pid,
 
 The CycloneDX serde model in `src/bom/model.rs` is hand-written, not
 generated. typify was evaluated but rejected because:
+
 1. The official JSON schemas declare `additionalProperties: false`, conflicting
    with the mandatory unknown-field-preservation requirement.
 2. The 91 interlinked definitions with complex oneOf/anyOf produce unwieldy
@@ -290,6 +301,7 @@ generated. typify was evaluated but rejected because:
 ### Unknown-field preservation
 
 Every object that can carry vendor extensions has:
+
 ```rust
 #[serde(flatten)]
 pub extra: BTreeMap<String, Value>,
@@ -348,6 +360,7 @@ strip = true
 ### Cross-build
 
 The Makefile mirrors `thirdparty/cdxui/Makefile`:
+
 - `make darwin` — darwin-amd64, darwin-arm64 (native macOS)
 - `make linux` — 5 Linux GNU targets (requires Linux host + cargo-zigbuild)
 - `make linuxmusl` — 2 musl targets
@@ -363,17 +376,18 @@ cdxrs release binaries are ~440 KB (unstripped ~480 KB), well within budget.
 
 ## Testing
 
-| Test | What it verifies |
-|------|------------------|
-| `cargo test` (9 tests) | `info`, round-trip incl. unsorted BOM, typed-model, fuzz guard |
-| `cargo clippy -- -D warnings` | No lint warnings |
-| `cargo fmt --check` | Code formatting |
-| `lib/inventory/cdxrs.poku.js` (11 tests) | Six bridge failure modes + success + cdxrsDisabled + sentinel |
-| `contrib/rs-disable-golden-test.js` | Default and `CDXGEN_RS_DISABLE=all` runs are byte-identical |
+| Test                                     | What it verifies                                               |
+| ---------------------------------------- | -------------------------------------------------------------- |
+| `cargo test` (9 tests)                   | `info`, round-trip incl. unsorted BOM, typed-model, fuzz guard |
+| `cargo clippy -- -D warnings`            | No lint warnings                                               |
+| `cargo fmt --check`                      | Code formatting                                                |
+| `lib/inventory/cdxrs.poku.js` (11 tests) | Six bridge failure modes + success + cdxrsDisabled + sentinel  |
+| `contrib/rs-disable-golden-test.js`      | Default and `CDXGEN_RS_DISABLE=all` runs are byte-identical    |
 
 ### CI integration
 
 Runs as a separate CI job:
+
 ```bash
 pnpm run test:rs-disable
 ```
@@ -386,7 +400,7 @@ Two properties of this job are load-bearing, and both are easy to lose in a
 well-meant simplification:
 
 1. **It runs every scenario twice** — once with Rust enabled, once with
-   `CDXGEN_RS_DISABLE=all` — and compares the two runs *against each other*.
+   `CDXGEN_RS_DISABLE=all` — and compares the two runs _against each other_.
    Running the golden corpus with `CDXGEN_RS_DISABLE=all` and checking it still
    matches the committed goldens is **not** equivalent and cannot detect a Rust
    path that ignores the flag, because that is exactly the run in which the Rust

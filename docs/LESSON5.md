@@ -54,7 +54,7 @@ Using the cdxgen container images could simplify the SBOM generation. However, b
 
 > The dedicated `ghcr.io/cyclonedx/cdxgen-node20` image was removed in cdxgen v13,
 > since cdxgen itself now requires Node.js >= 24. Use `-t node20` with the default
-> image instead — it installs Node.js 20 for the *target application* only.
+> image instead — it installs Node.js 20 for the _target application_ only.
 
 The default image of cdxgen `ghcr.io/cyclonedx/cdxgen:latest` bundles node 24 or higher, which is incompatible with juice-shop. Pass the type `-t node20` to automatically install node.js 20 and use the same for the SBOM generation.
 

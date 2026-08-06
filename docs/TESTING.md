@@ -31,10 +31,10 @@ That means new tests should normally live next to the source module they exercis
 
 ## Running tests
 
-| Goal                       | Command                          |
-| -------------------------- | -------------------------------- |
-| run the full suite         | `pnpm test`                      |
-| run in watch mode          | `pnpm run watch`                 |
+| Goal                       | Command                             |
+| -------------------------- | ----------------------------------- |
+| run the full suite         | `pnpm test`                         |
+| run in watch mode          | `pnpm run watch`                    |
 | run a single file directly | `node lib/ecosystems/utils.poku.js` |
 
 ## The three most common test shapes

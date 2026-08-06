@@ -83,6 +83,31 @@ export declare function getPomPropertiesFromMavenDir(mavenDir: string): {};
  */
 export declare function readZipEntry(zipFile: string, filePattern: string, contentEncoding?: string): Promise<string | undefined>;
 /**
+ * Read every zip entry whose name contains `pathFragment`. Unlike
+ * `readZipEntry`, which returns the first matching entry, this enumerates all
+ * matches — needed for PEP 770, where a distribution may carry several SBOM
+ * documents under `<dist>.dist-info/sboms/`, in a directory whose name is
+ * prefixed by the distribution stem and so is not known in advance.
+ *
+ * Entries larger than `maxEntryBytes` are skipped without being decompressed,
+ * because a wheel is untrusted input and its declared sizes are the only cheap
+ * defence against an archive that expands without bound.
+ *
+ * @param {string} zipFile Path to a zip archive (e.g. a wheel)
+ * @param {string} pathFragment Substring an entry name must contain
+ * @param {Object} [opts] Options
+ * @param {string} [opts.contentEncoding] Text encoding. Defaults to utf-8
+ * @param {number} [opts.maxEntryBytes] Per-entry uncompressed size bound
+ * @returns {Promise<Array<{name: string, data: string}>>} Matching entries
+ */
+export declare function readZipEntriesMatching(zipFile: string, pathFragment: string, { contentEncoding, maxEntryBytes }?: {
+    contentEncoding?: string;
+    maxEntryBytes?: number;
+}): Promise<Array<{
+    name: string;
+    data: string;
+}>>;
+/**
  * Method to get the classes and relevant sources in a jar file
  *
  * @param {string} jarFile Jar file to read

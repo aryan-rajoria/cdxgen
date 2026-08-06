@@ -172,3 +172,75 @@ HTTP MCP endpoints should be authenticated, Origin-validated, and pinned to trus
 - dynamically generated tool names, endpoints, or capability objects may be missed
 - provider/model detection is best-effort and only records explicit literals
 - stdio servers are inventoried, but HTTP-centric auth rules intentionally focus on network-exposed servers
+
+## Gap analysis: server pinning, transport, and composition
+
+This section records the gap between the current MCP inventory and what an
+Agent BOM needs, and what cdxgen does about it. The CycloneDX working group's
+agent-BOM proposal is still an open discussion (the `#895` reference in earlier
+planning does not resolve to a published, ratified standard), so every new
+field below is **experimental, off by default, and namespaced under `cdx:mcp:`**
+so migration is mechanical when a standard lands.
+
+### Relationship to `-t ai-provenance`
+
+`-t ai-provenance` (aliases `ai-authorship`, `aicode`, `ai-codegen`) is a
+distinct concern: it is an opt-in **generation-time property injector** that
+runs `collectAiProvenance` / `collectAiOversight` over git history and CI
+config and writes `cdx:ai:codegen:*` / `cdx:ai:oversight:*` to the document
+root. It does not inventory MCP servers. The MCP inventory itself is produced
+by the `mcp` / `js` / `python` project types via `lib/inventory/mcp*.js` and
+`lib/inventory/analyzer.js`. The work below extends that inventory; it does not
+change what `-t ai-provenance` emits.
+
+### What already works
+
+- **Local npm-package MCP servers are not opaque.** A server shipped as an npm
+  package is produced by the normal language pipeline as one `library` component
+  per installed package (server plus each transitive), each carrying its own
+  purl and ssri integrity from the lockfile. Transitive dependencies are
+  therefore already resolved. `enrichComponentWithMcpMetadata` only adds the
+  `cdx:mcp:package` / `cdx:mcp:role` tags on top.
+- **Transport and exposure are recorded for discovered _services_.** Config-file
+  servers (`mcpConfigParser`) and source-code servers (`analyzer`) emit
+  `cdx:mcp:transport` (`stdio` / `sse` / `streamable-http` / `websocket`) and
+  `cdx:mcp:exposureType` (`local-only` / `networked-public`).
+
+### The two real gaps
+
+1. **Pinning is decorative without an explicit pinning state.** A package
+   component may carry a hash, but nothing says _whether_ a given MCP server is
+   pinned, and an unpinned or unhashable server can serialize identically to a
+   pinned one. A remote server discovered only as a service has no package
+   component and therefore no hash at all, yet nothing records that absence.
+2. **Transport is not recorded on package components.** `mcp.js` stamps a _role_
+   (`server-sdk`, `client-sdk`, `transport-sdk`, …) but never the transport
+   mechanism, so a package-typed server cannot be distinguished from a
+   transport-layer library without reading the service inventory.
+
+### What cdxgen does about it (experimental)
+
+Behind `--experimental-mcp-pinning` (or `CDXGEN_EXPERIMENTAL_MCP_PINNING=true`),
+off by default:
+
+- For every component tagged `cdx:mcp:package`, cdxgen records an explicit
+  `cdx:mcp:pinning` property:
+  - `pinned` when the component carries a `hashes[]` entry (or an ssri
+    `_integrity` that `processHashes` converts),
+  - `unpinned` when the component is a package but has no hash,
+  - `unhashable` for servers discovered only as services with no resolvable
+    package.
+    Absence is never implied: an unhashable server is labelled, not left blank.
+- One CycloneDX 1.7 citation covers every pinned package, recording that the
+  integrity values came from the package registry. It is attributed to the
+  cdxgen tool component, the only object in the BOM that can carry the claim;
+  in a document with no cdxgen tool component the citation is omitted rather
+  than pointed at an invented reference.
+- Remote servers (no local package) additionally get
+  `cdx:mcp:composition=unknown`, so a consumer never mistakes a
+  composition-unknown remote for a fully-resolved local package.
+- Package-typed servers that can be linked to a discovered service inherit the
+  service's `cdx:mcp:transport`.
+
+These properties are subject to change and will be renamed or removed to match
+the eventual standard.

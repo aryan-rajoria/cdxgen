@@ -179,6 +179,61 @@ For example, `--spec-version 1.5 --component-type cryptographic-asset` is reject
 
 The dedicated `cbom` command does not accept `--component-type`; use `cdxgen --include-crypto` instead when you need normal SBOM generation plus component-type filtering.
 
+### Traffic Light Protocol classification
+
+Use `--tlp-classification` to record a [Traffic Light Protocol (TLP)](https://www.first.org/tlp/) classification under `metadata.distributionConstraints.tlp`. This field is defined by CycloneDX 1.7 and above; cdxgen omits it when downgrading to 1.6 or earlier so the generated document stays schema-valid.
+
+The accepted values match the CycloneDX 1.7 `tlpClassification` enum exactly: `CLEAR`, `GREEN`, `AMBER`, `AMBER_AND_STRICT`, `RED`.
+
+```shell
+cdxgen -t npm . --spec-version 1.7 --tlp-classification AMBER
+```
+
+When the classification is weak (`CLEAR`, `GREEN`, or `AMBER`), cdxgen redacts known sensitive property values (credentials, bearer tokens, signed URL parameters, and the `cdx:mcp:*` command/endpoint fields) before emitting the BOM, because a weakly-scoped document must not carry material that could be redistributed unintentionally. `AMBER_AND_STRICT` and `RED` preserve those values.
+
+## PEP 770 embedded SBOMs (Python)
+
+[PEP 770](https://peps.python.org/pep-0770/) (Final, 2025) lets a Python distribution carry one or more SBOM documents in a reserved `<dist>.dist-info/sboms/` directory. There is no metadata field — presence in the directory is the sole signal — and both CycloneDX and SPDX are permitted.
+
+cdxgen discovers embedded SBOMs in installed distributions (`site-packages/<dist>.dist-info/sboms/*`) and inside wheels, and merges them into the Python BOM:
+
+- Bundled components become **dependencies of the distribution that supplied them**, never orphan top-level siblings. The embedded dependency graph is preserved.
+- An embedded SBOM is a stronger assertion than cdxgen's inference, so on conflict the embedded component wins; the merge records rather than discards.
+- Ecosystems cdxgen does not otherwise handle (C libraries, `generic` purls) are passed through faithfully.
+- Each embedded component carries `cdx:embeddedSbom:source` (the distribution name) and `cdx:embeddedSbom:format` (`cyclonedx-1.5`, `spdx-2.3`, …), and a CycloneDX 1.7 citation attributes them to the distribution component that declared them, naming PEP 770 as the provenance.
+
+The embedded data is untrusted third-party input: cdxgen bounds its size (documents larger than 5 MiB are skipped), never follows references out of it, validates the shape before merging, and skips an invalid document with a warning rather than failing the run.
+
+## TEA — Transparency Exchange API
+
+The [Transparency Exchange API](https://github.com/CycloneDX/transparency-exchange-api) (ECMA TC54 TG1) is a standard for exchanging transparency artefacts (SBOMs, VEX, attestations) between systems. The consumer API is the current conformance base (spec version 0.4.0); the publisher API exists as a **draft recommendation** in `spec/publisher/` and is subject to change.
+
+### Fetching upstream SBOMs (`--tea-fetch`)
+
+```bash
+cdxgen -t js /path/to/repo --tea-fetch urn:tei:uuid:products.example.com:d4d9f54a-abcf-11ee-ac79-1a52914d44b1
+```
+
+cdxgen resolves the TEI via `/.well-known/tea` discovery (HTTPS only, per the spec), selects the endpoint with the highest matching API version and priority, resolves the TEI to a product release, downloads the latest Collection's BOM artifacts, and merges the upstream components into the generated BOM. Fetched components are tagged `cdx:tea:source` / `cdx:tea:collection` and carry a CycloneDX 1.7 citation. The merge uses the same rule as PEP 770: the upstream document is a stronger assertion than cdxgen's inference, so it wins on conflict and the conflict is recorded rather than discarded. A fetch failure only warns — the locally generated BOM stands.
+
+Every checksum a Collection declares must match, and an artifact whose checksums all use algorithms this client cannot compute is rejected rather than merged unverified: remote content whose integrity was asserted and then not checked is worse than fetching nothing. An artifact that declares no checksum at all is a publisher decision, and is merged with a warning. Documents over 5 MiB are skipped, as with PEP 770.
+
+### Publishing (`--tea-publish`)
+
+```bash
+cdxgen -t js /path/to/repo -o bom.json \
+  --tea-publish https://tea.example.com \
+  --tea-leaf-identifier 123e4567-e89b-12d3-a456-426614174000 \
+  --tea-author-name "Jane Doe" \
+  --tea-artifact-url https://example.com/bom.json
+```
+
+The generated BOM is published as a TEA Artifact in a Collection via the draft publisher API's `POST /collection`. Collection versioning is owned by the server: publish the first collection with the default `--tea-reason INITIAL_RELEASE`, and subsequent updates with `ARTIFACT_UPDATED`, `ARTIFACT_ADDED`, `ARTIFACT_REMOVED`, or `VEX_UPDATED`; the server increments the collection version.
+
+- The BOM is written locally **before** the publish attempt, so a publish failure never costs you your SBOM; the failure is reported and cdxgen exits with status `3` (distinct from other errors).
+- Credentials (`--tea-token` or `TEA_TOKEN`) are sent only as an `Authorization: Bearer` header, are never logged, and never reach the BOM.
+- `--tea-artifact-url` must be reachable by the TEA server; by default cdxgen uses the local output path, which most servers cannot fetch.
+
 ## Go Evinse data-flow and crypto-flow evidence
 
 For Go projects, generate the base SBOM first and then enrich it with `evinse -l go`. The Go Evinse path uses the optional `golem` helper from `@cdxgen/cdxgen-plugins-bin` to attach occurrence evidence, call-stack frames, usage scopes, security signals, crypto components, and data-flow/crypto-flow properties.

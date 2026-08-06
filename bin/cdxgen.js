@@ -248,6 +248,58 @@ const args = _yargs
     description: "Dependency track api key",
     type: "string",
   })
+  .option("tea-fetch", {
+    description:
+      "Fetch upstream SBOMs for a Transparency Exchange Identifier (TEI, e.g. urn:tei:uuid:products.example.com:<uuid>) and merge them into the generated BOM.",
+    type: "string",
+  })
+  .option("tea-publish", {
+    description:
+      "Publish the generated BOM as a TEA Artifact in a Collection at the given TEA server URL (draft publisher API).",
+    type: "string",
+  })
+  .option("tea-leaf-identifier", {
+    description:
+      "UUID of the TEA leaf/release that the published Collection belongs to (required with --tea-publish).",
+    type: "string",
+  })
+  .option("tea-collection-name", {
+    description:
+      "Artifact name used with --tea-publish. Defaults to '<project> sbom'.",
+    type: "string",
+  })
+  .option("tea-reason", {
+    description:
+      "Collection update reason with --tea-publish: INITIAL_RELEASE, ARTIFACT_UPDATED, ARTIFACT_ADDED, ARTIFACT_REMOVED, or VEX_UPDATED.",
+    type: "string",
+    choices: [
+      "INITIAL_RELEASE",
+      "VEX_UPDATED",
+      "ARTIFACT_UPDATED",
+      "ARTIFACT_REMOVED",
+      "ARTIFACT_ADDED",
+    ],
+    default: "INITIAL_RELEASE",
+  })
+  .option("tea-author-name", {
+    description: "Author name recorded in the published TEA Collection.",
+    type: "string",
+  })
+  .option("tea-author-email", {
+    description: "Author email recorded in the published TEA Collection.",
+    type: "string",
+  })
+  .option("tea-artifact-url", {
+    description:
+      "Publicly reachable URL where the published BOM artifact can be downloaded. Defaults to the local output path, which a TEA server will usually not be able to fetch, so supply this whenever the BOM is hosted somewhere.",
+    type: "string",
+  })
+  .option("tea-token", {
+    description:
+      "Bearer token for TEA authentication. Sent only as an Authorization header and never logged. May also be supplied via the TEA_TOKEN environment variable.",
+    type: "string",
+    hidden: true,
+  })
   .option("project-group", {
     description: "Dependency track project group",
   })
@@ -485,6 +537,13 @@ const args = _yargs
     default: false,
     description: "Include crypto libraries as components.",
   })
+  .option("experimental-mcp-pinning", {
+    type: "boolean",
+    default: false,
+    hidden: true,
+    description:
+      "Experimental: record an explicit pinning state (cdx:mcp:pinning) and composition (cdx:mcp:composition) for MCP server components. Off by default; the emitted property names are subject to change until the CycloneDX agent-BOM proposal is ratified.",
+  })
   .option("license-policy", {
     type: "string",
     description: "Path to a license compliance policy YAML file.",
@@ -556,9 +615,8 @@ const args = _yargs
   })
   .option("tlp-classification", {
     description:
-      "Traffic Light Protocol (TLP) is a classification system for identifying the potential risk associated with an artefact, including whether it is subject to certain types of legal, financial, or technical threats. Refer to [https://www.first.org/tlp/](https://www.first.org/tlp/) for further information.",
+      "Traffic Light Protocol (TLP) classification recorded under metadata.distributionConstraints.tlp (CycloneDX 1.7+). One of: CLEAR, GREEN, AMBER, AMBER_AND_STRICT, RED. See https://www.first.org/tlp/ for guidance.",
     choices: ["CLEAR", "GREEN", "AMBER", "AMBER_AND_STRICT", "RED"],
-    hidden: true,
   })
   .option("env-audit", {
     type: "boolean",
@@ -1588,6 +1646,12 @@ const writeCycloneDxOutput = (jsonFile, bomJson, options) => {
     ensureAiProvenanceProperties(bomNSData.bomJson, options);
     await ensureAiOversightProperties(bomNSData.bomJson, options);
   }
+  // TEA upstream SBOM fetch runs BEFORE post-processing so the "upstream wins"
+  // merge and the provenance citations flow through the normal pipeline.
+  if (options.teaFetch) {
+    const { applyTeaFetch } = await import("../lib/ecosystems/tea.js");
+    bomNSData = await applyTeaFetch(bomNSData, options);
+  }
   // Add extra metadata and annotations with post processing
   bomNSData = postProcess(bomNSData, { ...options, executeOsQuery }, srcDir);
   setActivityContext({
@@ -1978,6 +2042,73 @@ const writeCycloneDxOutput = (jsonFile, bomJson, options) => {
           cleanupSourceDir(srcDir);
         }
         process.exit(1);
+      }
+    }
+  }
+  // TEA publish (draft publisher API). The CycloneDX BOM is already written to
+  // disk above, so a publish failure never costs the user their SBOM: the
+  // failure is reported and the process exits with a distinct status (3).
+  if (options.teaPublish && bomNSData?.bomJson) {
+    if (!options.teaLeafIdentifier) {
+      console.error(
+        "cdxgen: --tea-publish requires --tea-leaf-identifier (UUID of the TEA leaf/release).",
+      );
+      process.exit(3);
+    }
+    if (isDryRun) {
+      recordActivity({
+        kind: "submit",
+        reason: "Dry run mode skips TEA collection publishing.",
+        status: "blocked",
+        target: options.teaPublish,
+      });
+    } else {
+      try {
+        const { buildPublishCollectionPayload, publishTeaCollection } =
+          await import("../lib/ecosystems/tea.js");
+        const parentComponent = bomNSData.bomJson.metadata?.component || {};
+        const projectName =
+          options.teaCollectionName ||
+          parentComponent.name ||
+          basename(resolve(srcDir));
+        // The checksum has to describe the bytes a consumer will download, so
+        // it is taken from the file that was written rather than from a fresh
+        // re-serialisation of the in-memory BOM.
+        const bomFile = outputPlan.outputs.cyclonedx;
+        const artifactContent = bomFile
+          ? fs.readFileSync(bomFile, "utf-8")
+          : JSON.stringify(bomNSData.bomJson);
+        const payload = buildPublishCollectionPayload({
+          leafIdentifier: options.teaLeafIdentifier,
+          productName: projectName,
+          // The product's own version, not bomJson.version, which counts
+          // revisions of the document.
+          productVersion: parentComponent.version || "unknown",
+          authorName: options.teaAuthorName || "cdxgen",
+          authorEmail: options.teaAuthorEmail,
+          reasonType: options.teaReason,
+          artifactName: `${projectName} sbom`,
+          artifactUrl: options.teaArtifactUrl || bomFile || "bom.json",
+          artifactContent,
+        });
+        const result = await publishTeaCollection(
+          options.teaPublish,
+          payload,
+          options,
+        );
+        recordActivity({
+          kind: "submit",
+          status: "completed",
+          target: options.teaPublish,
+        });
+        console.log(
+          `cdxgen: published TEA collection to ${options.teaPublish} (collection version ${result.body?.version ?? "assigned by server"}).`,
+        );
+      } catch (err) {
+        console.error(
+          `cdxgen: failed to publish TEA collection to ${options.teaPublish}: ${err?.message || err}. The local BOM was written regardless.`,
+        );
+        process.exit(3);
       }
     }
   }

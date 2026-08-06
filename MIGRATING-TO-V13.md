@@ -47,18 +47,18 @@ import { parsePkgLock } from "@cdxgen/cdxgen/helpers/parsers-js";
 Some modules moved package as well as scope. The foundational modules now live
 under `core/`, and the HuggingFace manifest readers under `parsers/`:
 
-| v12 path | v13 path |
-|---|---|
-| `helpers/logger` | `core/logger` |
-| `helpers/propertySanitizer` | `core/propertySanitizer` |
-| `helpers/paths` | `core/paths` |
-| `helpers/state` | `core/state` |
-| `helpers/core-activity` | `core/activity` |
-| `helpers/core-fs` | `core/fs` |
-| `helpers/core-env` | `core/env` |
-| `helpers/httpClient` | `core/httpClient` |
+| v12 path                      | v13 path                      |
+| ----------------------------- | ----------------------------- |
+| `helpers/logger`              | `core/logger`                 |
+| `helpers/propertySanitizer`   | `core/propertySanitizer`      |
+| `helpers/paths`               | `core/paths`                  |
+| `helpers/state`               | `core/state`                  |
+| `helpers/core-activity`       | `core/activity`               |
+| `helpers/core-fs`             | `core/fs`                     |
+| `helpers/core-env`            | `core/env`                    |
+| `helpers/httpClient`          | `core/httpClient`             |
 | `helpers/huggingfaceManifest` | `parsers/huggingfaceManifest` |
-| `helpers/huggingfaceUtils` | `parsers/huggingfaceUtils` |
+| `helpers/huggingfaceUtils`    | `parsers/huggingfaceUtils`    |
 
 Most of what used to be `helpers/` is now split across `ecosystems/` and
 `inventory/`. The ecosystem-specific parsers, registry metadata, and
@@ -73,43 +73,43 @@ backward compatibility. `helpers/` retains only the output-side modules
 
 Selected moves:
 
-| v12 path | v13 path |
-|---|---|
-| `helpers/parsers-js` | `ecosystems/parsers-js` |
-| `helpers/parsers-misc` | `ecosystems/parsers-misc` |
-| `helpers/parsers-python` | `ecosystems/parsers-python` |
-| `helpers/parsers-rust` | `ecosystems/parsers-rust` |
-| `helpers/parsers-dotnet` | `ecosystems/parsers-dotnet` |
-| `helpers/parsers-jvm` | `ecosystems/parsers-jvm` |
-| `helpers/parsers-go` | `ecosystems/parsers-go` |
-| `helpers/ecosystems` | `ecosystems/ecosystems` |
-| `helpers/purl` | `inventory/purl` |
-| `helpers/spdx` | `inventory/spdx` |
-| `helpers/npmutils` | `ecosystems/npmutils` |
-| `helpers/deps` | `inventory/deps` |
+| v12 path                 | v13 path                                                                 |
+| ------------------------ | ------------------------------------------------------------------------ |
+| `helpers/parsers-js`     | `ecosystems/parsers-js`                                                  |
+| `helpers/parsers-misc`   | `ecosystems/parsers-misc`                                                |
+| `helpers/parsers-python` | `ecosystems/parsers-python`                                              |
+| `helpers/parsers-rust`   | `ecosystems/parsers-rust`                                                |
+| `helpers/parsers-dotnet` | `ecosystems/parsers-dotnet`                                              |
+| `helpers/parsers-jvm`    | `ecosystems/parsers-jvm`                                                 |
+| `helpers/parsers-go`     | `ecosystems/parsers-go`                                                  |
+| `helpers/ecosystems`     | `ecosystems/ecosystems`                                                  |
+| `helpers/purl`           | `inventory/purl`                                                         |
+| `helpers/spdx`           | `inventory/spdx`                                                         |
+| `helpers/npmutils`       | `ecosystems/npmutils`                                                    |
+| `helpers/deps`           | `inventory/deps`                                                         |
 | `helpers/utils` (barrel) | `ecosystems/utils` (re-exports from both `ecosystems/` and `inventory/`) |
 
 Several exports from the retired `core-misc-a.js` and `core-misc-b.js` moved to
 new homes:
 
-| v12 export | v13 module |
-|---|---|
-| `isFeatureEnabled`, `hasAnyProjectType`, `shouldRunPredictiveBomAudit`, `isPackageManagerAllowed`, `extractPathEnv` | `core/env` |
-| `isValidDriveRoot`, `toCamel` | `core/paths` |
-| `isValidIriReference` | `parsers/iri` |
-| `getDefaultBomAuditCategories` | `ecosystems/auditCategories` |
-| `getRuntimeInformation`, `retrieveCdxgenVersion`, `retrieveCdxgenPluginVersion` | `ecosystems/envcontext` |
-| `extractToolRefs`, `attachIdentityTools`, `addEvidenceForDotnet`, `convertOSQueryResults` | `inventory/evidenceUtils` |
-| `addEvidenceForImports` | `ecosystems/jsEvidence` |
-| `getCppModules` | `ecosystems/cppEvidence` |
-| `parseCaxaMetadata` | `ecosystems/caxa` |
-| `analyzeDosaiCrypto`, `runDosaiCommand` | `inventory/dosai` |
-| `isPartialTree`, `recomputeScope` | `ecosystems/depsUtils` |
-| `getOSPackageForFile`, `collectExecutables`, `collectSharedLibs` | `ecosystems/osPackageResolver` |
-| `getPyModules`, `createUVLock`, `getPipFrozenTree`, `getPipTreeForPackages` | `ecosystems/pythonutils` |
-| `parsePodfileLock`, `parsePodfileTargets`, `parseCocoaDependency`, `executePodCommand`, `buildObjectForCocoaPod` | `ecosystems/parsers-misc` |
-| `getMavenCommand`, `getMillCommand` | `ecosystems/gradleutils` |
-| `getAtomCommand`, `executeAtom`, `findAppModules` | `ecosystems/atomUtils` |
+| v12 export                                                                                                          | v13 module                     |
+| ------------------------------------------------------------------------------------------------------------------- | ------------------------------ |
+| `isFeatureEnabled`, `hasAnyProjectType`, `shouldRunPredictiveBomAudit`, `isPackageManagerAllowed`, `extractPathEnv` | `core/env`                     |
+| `isValidDriveRoot`, `toCamel`                                                                                       | `core/paths`                   |
+| `isValidIriReference`                                                                                               | `parsers/iri`                  |
+| `getDefaultBomAuditCategories`                                                                                      | `ecosystems/auditCategories`   |
+| `getRuntimeInformation`, `retrieveCdxgenVersion`, `retrieveCdxgenPluginVersion`                                     | `ecosystems/envcontext`        |
+| `extractToolRefs`, `attachIdentityTools`, `addEvidenceForDotnet`, `convertOSQueryResults`                           | `inventory/evidenceUtils`      |
+| `addEvidenceForImports`                                                                                             | `ecosystems/jsEvidence`        |
+| `getCppModules`                                                                                                     | `ecosystems/cppEvidence`       |
+| `parseCaxaMetadata`                                                                                                 | `ecosystems/caxa`              |
+| `analyzeDosaiCrypto`, `runDosaiCommand`                                                                             | `inventory/dosai`              |
+| `isPartialTree`, `recomputeScope`                                                                                   | `ecosystems/depsUtils`         |
+| `getOSPackageForFile`, `collectExecutables`, `collectSharedLibs`                                                    | `ecosystems/osPackageResolver` |
+| `getPyModules`, `createUVLock`, `getPipFrozenTree`, `getPipTreeForPackages`                                         | `ecosystems/pythonutils`       |
+| `parsePodfileLock`, `parsePodfileTargets`, `parseCocoaDependency`, `executePodCommand`, `buildObjectForCocoaPod`    | `ecosystems/parsers-misc`      |
+| `getMavenCommand`, `getMillCommand`                                                                                 | `ecosystems/gradleutils`       |
+| `getAtomCommand`, `executeAtom`, `findAppModules`                                                                   | `ecosystems/atomUtils`         |
 
 ### JSR
 
@@ -125,11 +125,11 @@ export { createBom } from "jsr:@cdxgen/cdxgen";
 
 cdxgen records itself in `metadata.tools.components[].purl`. After the rename:
 
-| Field | Before (v12) | After (v13) |
-|---|---|---|
-| `purl` | `pkg:npm/%40cyclonedx/cdxgen@12.x` | `pkg:npm/%40cdxgen/cdxgen@13.x` |
-| `bom-ref` | `pkg:npm/@cyclonedx/cdxgen@12.x` | `pkg:npm/@cdxgen/cdxgen@13.x` |
-| `group` | `@cyclonedx` | `@cdxgen` |
+| Field     | Before (v12)                       | After (v13)                     |
+| --------- | ---------------------------------- | ------------------------------- |
+| `purl`    | `pkg:npm/%40cyclonedx/cdxgen@12.x` | `pkg:npm/%40cdxgen/cdxgen@13.x` |
+| `bom-ref` | `pkg:npm/@cyclonedx/cdxgen@12.x`   | `pkg:npm/@cdxgen/cdxgen@13.x`   |
+| `group`   | `@cyclonedx`                       | `@cdxgen`                       |
 
 **dep-scan and other tools that identify the generating tool by purl or
 `bom-ref`** will see the new strings. To handle the transition:
@@ -157,10 +157,10 @@ cdxgen v13 requires **Node.js >= 24.0.0**.
 Previous versions supported Node 20 and 22. If you are running an older Node,
 upgrade to Node 24 (current LTS) or Node 26 before installing v13.
 
-| cdxgen | Minimum Node | Notes |
-|--------|-------------|-------|
-| v12    | 20          | End of maintenance once v13 ships |
-| v13    | 24          | Active development target |
+| cdxgen | Minimum Node | Notes                             |
+| ------ | ------------ | --------------------------------- |
+| v12    | 20           | End of maintenance once v13 ships |
+| v13    | 24           | Active development target         |
 
 ## CycloneDX spec version changes
 
@@ -193,10 +193,10 @@ The spec floor is enforced on the `cdxgen` CLI, the `tracebom` CLI, and the
 
 ## Removed CLI flags and env vars
 
-| Flag | CLI | Status | Reason |
-|------|-----|--------|--------|
-| `--db-path` | `evinse` | Removed | Hidden flag whose own help text read "Unused". It was never read by any code path. |
-| `--spec-version 1.4` / `1.5` | `cdxgen`, `tracebom` | Values rejected | Below the v13 spec floor. See above. |
+| Flag                         | CLI                  | Status          | Reason                                                                             |
+| ---------------------------- | -------------------- | --------------- | ---------------------------------------------------------------------------------- |
+| `--db-path`                  | `evinse`             | Removed         | Hidden flag whose own help text read "Unused". It was never read by any code path. |
+| `--spec-version 1.4` / `1.5` | `cdxgen`, `tracebom` | Values rejected | Below the v13 spec floor. See above.                                               |
 
 No environment variables were formally deprecated in v12, so none are removed.
 
@@ -211,32 +211,32 @@ unchanged. (The old `helpers/utils` path no longer resolves.)
 The barrel is **deprecated as of v13**. Consumers should import from the
 specific leaf module instead:
 
-| New module | Theme |
-|---|---|
-| `ecosystems/purl` | purl build/parse, version compare, conan/nix purl helpers |
-| `ecosystems/spdx` | license-id normalisation, SPDX expressions, license data lookup |
-| `core/state` | eval-time data constants (frameworks, version, module tables) |
-| `core/paths` | path/OS detection helpers, `isValidDriveRoot`, `toCamel` |
-| `core/activity` | activity/dry-run/host-allowlist, `cdxgenAgent`, feature flags |
-| `core/fs` | safe wrappers, `safeSpawnSync`, file discovery, checksums |
-| `core/env` | runtime detection, env flags, command resolution, alias tables, `isFeatureEnabled`, `hasAnyProjectType` |
-| `ecosystems/deps` | dependency-tree assembly, component merge/dedupe, JAR namespace collection |
-| `ecosystems/ecosystems` | the `get*Metadata` family + registry fetch helpers |
-| `ecosystems/parsers-go` | Go ecosystem parsers (`parseGoMod*`, `parseGosum*`, etc.) |
-| `ecosystems/parsers-dotnet` | .NET ecosystem parsers (`parseCsProj*`, `parseNuspec*`, etc.) |
-| `ecosystems/parsers-rust` | Rust/cargo parsers (`parseCargo*`, cargo workspace internals) |
-| `ecosystems/parsers-jvm` | JVM parsers (`parsePom`, `parseMavenTree*`, `parseBazel*`, etc.) |
-| `ecosystems/parsers-python` | Python parsers (`parsePy*`, `parseReq*`, `parsePixi*`, etc.) |
-| `ecosystems/parsers-js` | JS/npm parsers (`parsePkgJson`, `parsePkgLock`, `parsePnpm*`, etc.) |
-| `ecosystems/parsers-misc` | All other parsers (`parseComposer*`, `parseConan*`, `parseSwift*`, etc.) |
+| New module                  | Theme                                                                                                   |
+| --------------------------- | ------------------------------------------------------------------------------------------------------- |
+| `ecosystems/purl`           | purl build/parse, version compare, conan/nix purl helpers                                               |
+| `ecosystems/spdx`           | license-id normalisation, SPDX expressions, license data lookup                                         |
+| `core/state`                | eval-time data constants (frameworks, version, module tables)                                           |
+| `core/paths`                | path/OS detection helpers, `isValidDriveRoot`, `toCamel`                                                |
+| `core/activity`             | activity/dry-run/host-allowlist, `cdxgenAgent`, feature flags                                           |
+| `core/fs`                   | safe wrappers, `safeSpawnSync`, file discovery, checksums                                               |
+| `core/env`                  | runtime detection, env flags, command resolution, alias tables, `isFeatureEnabled`, `hasAnyProjectType` |
+| `ecosystems/deps`           | dependency-tree assembly, component merge/dedupe, JAR namespace collection                              |
+| `ecosystems/ecosystems`     | the `get*Metadata` family + registry fetch helpers                                                      |
+| `ecosystems/parsers-go`     | Go ecosystem parsers (`parseGoMod*`, `parseGosum*`, etc.)                                               |
+| `ecosystems/parsers-dotnet` | .NET ecosystem parsers (`parseCsProj*`, `parseNuspec*`, etc.)                                           |
+| `ecosystems/parsers-rust`   | Rust/cargo parsers (`parseCargo*`, cargo workspace internals)                                           |
+| `ecosystems/parsers-jvm`    | JVM parsers (`parsePom`, `parseMavenTree*`, `parseBazel*`, etc.)                                        |
+| `ecosystems/parsers-python` | Python parsers (`parsePy*`, `parseReq*`, `parsePixi*`, etc.)                                            |
+| `ecosystems/parsers-js`     | JS/npm parsers (`parsePkgJson`, `parsePkgLock`, `parsePnpm*`, etc.)                                     |
+| `ecosystems/parsers-misc`   | All other parsers (`parseComposer*`, `parseConan*`, `parseSwift*`, etc.)                                |
 
 ## Removed container images
 
 The Node.js 20 images are removed, since cdxgen itself now requires Node.js >= 24:
 
-| Removed | Replacement |
-|---------|-------------|
-| `ghcr.io/cyclonedx/cdxgen-node20` | `ghcr.io/cyclonedx/cdxgen-alpine-node24` |
+| Removed                                  | Replacement                              |
+| ---------------------------------------- | ---------------------------------------- |
+| `ghcr.io/cyclonedx/cdxgen-node20`        | `ghcr.io/cyclonedx/cdxgen-alpine-node24` |
 | `ghcr.io/cyclonedx/cdxgen-alpine-node20` | `ghcr.io/cyclonedx/cdxgen-alpine-node24` |
 
 The rolling `ghcr.io/cyclonedx/cdxgen-node` alias previously pointed at the
@@ -275,10 +275,10 @@ excluded with `--omit=optional` or `--no-optional`.
 
 **Measured impact (npm pack + installed size):**
 
-| Metric | v12 (optional) | v13 (required) | Delta |
-|--------|---------------|----------------|-------|
-| Tarball (.tgz) | 2,072,434 bytes | 2,072,561 bytes | +127 bytes |
-| Installed node_modules | 574 MB | 574 MB | 0 MB |
+| Metric                 | v12 (optional)  | v13 (required)  | Delta      |
+| ---------------------- | --------------- | --------------- | ---------- |
+| Tarball (.tgz)         | 2,072,434 bytes | 2,072,561 bytes | +127 bytes |
+| Installed node_modules | 574 MB          | 574 MB          | 0 MB       |
 
 The installed footprint is unchanged because package managers (pnpm, npm)
 already installed optional dependencies by default. The change is semantic:
@@ -302,10 +302,10 @@ PyPI package names containing `.` or `_` are now normalized to `-` per
 [PEP 503](https://peps.python.org/pep-0503/), as required by the purl-spec.
 **Both the `purl` string and the derived `bom-ref` change.**
 
-| Before (v12) | After (v13) |
-|---|---|
-| `pkg:pypi/jaraco.classes@3.4.0` | `pkg:pypi/jaraco-classes@3.4.0` |
-| `pkg:pypi/jaraco.context@6.1.1` | `pkg:pypi/jaraco-context@6.1.1` |
+| Before (v12)                      | After (v13)                       |
+| --------------------------------- | --------------------------------- |
+| `pkg:pypi/jaraco.classes@3.4.0`   | `pkg:pypi/jaraco-classes@3.4.0`   |
+| `pkg:pypi/jaraco.context@6.1.1`   | `pkg:pypi/jaraco-context@6.1.1`   |
 | `pkg:pypi/jaraco.functools@4.4.0` | `pkg:pypi/jaraco-functools@4.4.0` |
 
 The component `name` field is **not** changed — only the `purl` and `bom-ref`.
@@ -315,8 +315,8 @@ The component `name` field is **not** changed — only the `purl` and `bom-ref`.
 Golang namespaces are lowercased per the purl-spec (golang paths are
 case-insensitive). For example:
 
-| Before (v12) | After (v13) |
-|---|---|
+| Before (v12)                                                   | After (v13)                                                    |
+| -------------------------------------------------------------- | -------------------------------------------------------------- |
 | `pkg:golang/github.com/ShiftLeftSecurity/atlassian-connect-go` | `pkg:golang/github.com/shiftleftsecurity/atlassian-connect-go` |
 
 The component `name` preserves its original case; only the `purl`/`bom-ref`
@@ -367,8 +367,8 @@ canonical forms. An unmigrated consumer that looks up
 
 **Affected:** anyone consuming cdxgen Nix flake (`flake.lock`) BOMs.
 
-| Before (v12) | After (v13) |
-|---|---|
+| Before (v12)              | After (v13)                                                            |
+| ------------------------- | ---------------------------------------------------------------------- |
 | `pkg:nix/nixpkgs@bd645e8` | `pkg:generic/nixpkgs@bd645e8?vcs_url=https://github.com/NixOS/nixpkgs` |
 
 `nix` is not a registered purl type, so a `pkg:nix/...` purl identified a
@@ -398,7 +398,7 @@ None of them squats an unregistered purl type:
   emitted as SHA-256 `hashes[]` entries; any other hash encoding is kept as a
   `cdx:zig:hash` property rather than guessing an algorithm.
 - **Gleam** (`gleam.toml`, `manifest.toml`) — `pkg:hex/...`. Gleam resolves
-  through Hex, and a Gleam package on Hex *is* a Hex package, so no new type is
+  through Hex, and a Gleam package on Hex _is_ a Hex package, so no new type is
   needed.
 - **Mojo** (`mojoproject.toml`) — Mojo's own packages are `pkg:generic/...`
   with `cdx:purl:proposedType=mojo`. Conda and PyPI packages pulled in through
@@ -418,11 +418,11 @@ Properties that predate the `cdx:*` convention are now prefixed with
 `internal:`, marking them as implementation detail rather than a modelled part
 of the property surface:
 
-| Before (v12) | After (v13) |
-|---|---|
-| `SrcFile` | `internal:SrcFile` |
-| `Namespaces` | `internal:Namespaces` |
-| `ImportedModules` | `internal:ImportedModules` |
+| Before (v12)           | After (v13)                     |
+| ---------------------- | ------------------------------- |
+| `SrcFile`              | `internal:SrcFile`              |
+| `Namespaces`           | `internal:Namespaces`           |
+| `ImportedModules`      | `internal:ImportedModules`      |
 | `LocalNodeModulesPath` | `internal:LocalNodeModulesPath` |
 
 The same applies to `CalledMethods`, `ExportedModules`, `GIT_BRANCH`,

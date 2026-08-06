@@ -25,9 +25,9 @@ A good way to think about cdxgen is:
 | `.github/`            | Repository automation                        | change workflows, templates, issue forms, or release automation               |
 | `lib/cli/index.js`    | Core BOM generation                          | add ecosystems, change detection, or alter BOM assembly                       |
 | `lib/core/`           | Lowest-level primitives                      | change logging, fs/env access, paths, activity tracking, or the HTTP client   |
-| `lib/parsers/`        | Standalone parsers                           | add a parser that needs nothing but `node:*` and core                        |
-| `lib/ecosystems/`     | Ecosystem logic and scanning utilities       | add lockfile parsing, registry metadata, or reusable scanning utilities      |
-| `lib/helpers/`        | Output-side modules                          | change BOM signing, export, annotation formatting, or remote integrations    |
+| `lib/parsers/`        | Standalone parsers                           | add a parser that needs nothing but `node:*` and core                         |
+| `lib/ecosystems/`     | Ecosystem logic and scanning utilities       | add lockfile parsing, registry metadata, or reusable scanning utilities       |
+| `lib/helpers/`        | Output-side modules                          | change BOM signing, export, annotation formatting, or remote integrations     |
 | `contrib/`            | Helper scripts and one-off maintenance tools | document or extend refresh utilities that are not part of the runtime package |
 | `lib/stages/pregen/`  | Environment preparation                      | change SDK installation or preflight behavior                                 |
 | `lib/stages/postgen/` | Final BOM shaping                            | change filtering, standards, metadata, formulation, or annotations            |
@@ -184,15 +184,15 @@ in `contrib/check-boundaries.js`, which also maps each package to its
 directories. An import from layer N may only target a package at a layer
 strictly below N, so there are no cycles and no same-layer cross-package edges.
 
-| Layer | Packages                                    |
-| ----- | ------------------------------------------- |
-| 0     | `core`                                      |
-| 1     | `parsers`                                   |
-| 2     | `inventory`, `helpers`                      |
-| 3     | `ecosystems`                                |
-| 4     | `stages`, `managers`                        |
-| 5     | `cli`, `evinser`, `validator`               |
-| 6     | `audit`, `server`                           |
+| Layer | Packages                      |
+| ----- | ----------------------------- |
+| 0     | `core`                        |
+| 1     | `parsers`                     |
+| 2     | `inventory`, `helpers`        |
+| 3     | `ecosystems`                  |
+| 4     | `stages`, `managers`          |
+| 5     | `cli`, `evinser`, `validator` |
+| 6     | `audit`, `server`             |
 
 `contrib/check-boundaries.js --strict` enforces this and must exit 0. If you are
 about to import `../../cli/index.js` inside an ecosystem or stage file, stop and
@@ -224,7 +224,7 @@ incomplete SBOM.
 | Change you want                               | First place to inspect                                        |
 | --------------------------------------------- | ------------------------------------------------------------- |
 | Add a new `--flag` or `--feature-flags` entry | `bin/cdxgen.js`                                               |
-| Add a new ecosystem                           | `lib/cli/index.js` and `lib/ecosystems/utils.js`                 |
+| Add a new ecosystem                           | `lib/cli/index.js` and `lib/ecosystems/utils.js`              |
 | Add a new query-pack table                    | `data/queries*.json`                                          |
 | Add a new audit rule                          | `data/rules/*.yaml` and `lib/stages/postgen/auditBom.poku.js` |
 | Change filtering behavior                     | `lib/stages/postgen/postgen.js`                               |

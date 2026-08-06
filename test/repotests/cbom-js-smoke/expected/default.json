@@ -4,6 +4,10 @@
     {
       "bom-ref": "cryptographic-asset:sha-256:",
       "cryptoProperties": {
+        "algorithmProperties": {
+          "algorithmFamily": "SHA-2",
+          "primitive": "kdf"
+        },
         "assetType": "algorithm",
         "oid": "2.16.840.1.101.3.4.2.1"
       },
@@ -79,6 +83,10 @@
     {
       "bom-ref": "cryptographic-asset:sha-512:",
       "cryptoProperties": {
+        "algorithmProperties": {
+          "algorithmFamily": "SHA-2",
+          "primitive": "hash"
+        },
         "assetType": "algorithm",
         "oid": "2.16.840.1.101.3.4.2.3"
       },

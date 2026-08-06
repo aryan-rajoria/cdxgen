@@ -246,15 +246,15 @@ reach a strictly lower layer. `contrib/check-boundaries.js` owns the table and
 enforces it: `node contrib/check-boundaries.js --strict` must report zero cycles
 and zero violations.
 
-| Layer | Directories |
-| ----- | ----------- |
-| 0 | `lib/core` |
-| 1 | `lib/parsers` |
-| 2 | `lib/inventory`, `lib/helpers` |
-| 3 | `lib/ecosystems` |
-| 4 | `lib/managers`, `lib/stages/pregen`, `lib/stages/postgen` |
-| 5 | `lib/cli`, `lib/evinser`, `lib/validator` |
-| 6 | `lib/server`, `lib/audit` |
+| Layer | Directories                                               |
+| ----- | --------------------------------------------------------- |
+| 0     | `lib/core`                                                |
+| 1     | `lib/parsers`                                             |
+| 2     | `lib/inventory`, `lib/helpers`                            |
+| 3     | `lib/ecosystems`                                          |
+| 4     | `lib/managers`, `lib/stages/pregen`, `lib/stages/postgen` |
+| 5     | `lib/cli`, `lib/evinser`, `lib/validator`                 |
+| 6     | `lib/server`, `lib/audit`                                 |
 
 `lib/third-party` is vendored and opts out of the rule.
 
@@ -347,12 +347,12 @@ All outbound HTTP is done through `cdxgenAgent`, exported from `lib/ecosystems/u
 
 ## Logging conventions
 
-| Function                                              | Purpose                             | Activation                                              |
-| ----------------------------------------------------- | ----------------------------------- | ------------------------------------------------------- |
-| `console.log` / `console.warn` / `console.error`      | Operational messages                | Always                                                  |
-| `thoughtLog(msg, args?)` from `lib/core/logger.js` | Internal reasoning / debug thinking | `CDXGEN_THINK_MODE=true` or `CDXGEN_DEBUG_MODE=verbose` |
-| `traceLog(type, args)` from `lib/core/logger.js`   | Structured trace of commands & HTTP | `CDXGEN_TRACE_MODE=true` or `CDXGEN_DEBUG_MODE=verbose` |
-| `DEBUG_MODE` constant from `lib/ecosystems/utils.js`     | Guards verbose `console.log` calls  | `CDXGEN_DEBUG_MODE=debug` or `debug`                    |
+| Function                                             | Purpose                             | Activation                                              |
+| ---------------------------------------------------- | ----------------------------------- | ------------------------------------------------------- |
+| `console.log` / `console.warn` / `console.error`     | Operational messages                | Always                                                  |
+| `thoughtLog(msg, args?)` from `lib/core/logger.js`   | Internal reasoning / debug thinking | `CDXGEN_THINK_MODE=true` or `CDXGEN_DEBUG_MODE=verbose` |
+| `traceLog(type, args)` from `lib/core/logger.js`     | Structured trace of commands & HTTP | `CDXGEN_TRACE_MODE=true` or `CDXGEN_DEBUG_MODE=verbose` |
+| `DEBUG_MODE` constant from `lib/ecosystems/utils.js` | Guards verbose `console.log` calls  | `CDXGEN_DEBUG_MODE=debug` or `debug`                    |
 
 Prefer `thoughtLog` over ad-hoc `console.log` for introspective messages inside core logic so they can be silenced in production.
 
