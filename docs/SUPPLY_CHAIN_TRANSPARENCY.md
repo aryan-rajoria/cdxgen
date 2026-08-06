@@ -93,7 +93,7 @@ It is not the final word on accuracy. Some ecosystems need child processes, temp
 
 ## Step 2: move to the permissions model only when needed
 
-Once the dry-run output looks reasonable, switch to the Node.js permissions model and allow only the paths and capabilities that match your reviewed workflow. cdxgen secure mode helps you think in those boundaries, and the `ghcr.io/cyclonedx/cdxgen-secure` image already starts from that posture.
+Once the dry-run output looks reasonable, switch to the Node.js permissions model and allow only the paths and capabilities that match your reviewed workflow. cdxgen secure mode helps you think in those boundaries, and the `ghcr.io/cdxgen/cdxgen-secure` image already starts from that posture.
 
 ```bash
 export CDXGEN_SECURE_MODE=true
@@ -130,7 +130,7 @@ docker run --rm \
   -v /srv/cdxgen-review/output:/out:rw \
   -v /srv/cdxgen-review/tmp:/tmp/cdxgen:rw \
   -e CDXGEN_TEMP_DIR=/tmp/cdxgen \
-  ghcr.io/cyclonedx/cdxgen-secure \
+  ghcr.io/cdxgen/cdxgen-secure \
   cdxgen -t js --bom-audit -o /out/bom.json /app
 ```
 

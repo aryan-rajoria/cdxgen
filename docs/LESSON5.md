@@ -52,20 +52,20 @@ Using the cdxgen container images could simplify the SBOM generation. However, b
 
 ### Use the default image with a specific type
 
-> The dedicated `ghcr.io/cyclonedx/cdxgen-node20` image was removed in cdxgen v13,
+> The dedicated `ghcr.io/cdxgen/cdxgen-node20` image was removed in cdxgen v13,
 > since cdxgen itself now requires Node.js >= 24. Use `-t node20` with the default
 > image instead — it installs Node.js 20 for the _target application_ only.
 
-The default image of cdxgen `ghcr.io/cyclonedx/cdxgen:latest` bundles node 24 or higher, which is incompatible with juice-shop. Pass the type `-t node20` to automatically install node.js 20 and use the same for the SBOM generation.
+The default image of cdxgen `ghcr.io/cdxgen/cdxgen:latest` bundles node 24 or higher, which is incompatible with juice-shop. Pass the type `-t node20` to automatically install node.js 20 and use the same for the SBOM generation.
 
 ```shell
-docker run --rm -e CDXGEN_DEBUG_MODE=debug -e "NPM_INSTALL_ARGS=--package-lock --legacy-peer-deps" -v /tmp:/tmp -v $(pwd):/app:rw -t ghcr.io/cyclonedx/cdxgen:latest -t node20 -r /app -o /app/bom.json
+docker run --rm -e CDXGEN_DEBUG_MODE=debug -e "NPM_INSTALL_ARGS=--package-lock --legacy-peer-deps" -v /tmp:/tmp -v $(pwd):/app:rw -t ghcr.io/cdxgen/cdxgen:latest -t node20 -r /app -o /app/bom.json
 ```
 
 For nerdctl users:
 
 ```shell
-nerdctl run --rm -e CDXGEN_DEBUG_MODE=debug -e "NPM_INSTALL_ARGS=--package-lock --legacy-peer-deps" -v /tmp:/tmp -v $(pwd):/app:rw -t ghcr.io/cyclonedx/cdxgen:latest -t node20 -r /app -o /app/bom.json
+nerdctl run --rm -e CDXGEN_DEBUG_MODE=debug -e "NPM_INSTALL_ARGS=--package-lock --legacy-peer-deps" -v /tmp:/tmp -v $(pwd):/app:rw -t ghcr.io/cdxgen/cdxgen:latest -t node20 -r /app -o /app/bom.json
 ```
 
 ## ML profile
@@ -73,7 +73,7 @@ nerdctl run --rm -e CDXGEN_DEBUG_MODE=debug -e "NPM_INSTALL_ARGS=--package-lock 
 To generate an SBOM designed for AI-driven analysis (e.g., with [cdxgenGPT](https://chatgpt.com/g/g-673bfeb4037481919be8a2cd1bf868d2-cyclonedx-generator-cdxgen)), include the `--profile ml` argument.
 
 ```shell
-docker run --rm -e CDXGEN_DEBUG_MODE=debug -e "NPM_INSTALL_ARGS=--package-lock --legacy-peer-deps" -v /tmp:/tmp -v $(pwd):/app:rw -t ghcr.io/cyclonedx/cdxgen:latest -t node20 --profile ml -r /app -o /app/bom.json
+docker run --rm -e CDXGEN_DEBUG_MODE=debug -e "NPM_INSTALL_ARGS=--package-lock --legacy-peer-deps" -v /tmp:/tmp -v $(pwd):/app:rw -t ghcr.io/cdxgen/cdxgen:latest -t node20 --profile ml -r /app -o /app/bom.json
 ```
 
 This process may take 5–10 minutes. Once complete, you can use the resulting SBOM file for AI-driven analysis, dataset creation, or ML model training.

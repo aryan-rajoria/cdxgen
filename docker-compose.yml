@@ -14,7 +14,7 @@ services:
     build:
       dockerfile: ./ci/Dockerfile
       context: .
-    # image: ghcr.io/cyclonedx/cdxgen
+    # image: ghcr.io/cdxgen/cdxgen
     ports:
       - "9090:9090"
     volumes:

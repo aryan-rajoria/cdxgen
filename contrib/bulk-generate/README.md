@@ -14,7 +14,7 @@ node index.js <csv file> <output directory>
 
 ```
 project,link,commit,image,language,cdxgen_vars
-astro,https://github.com/withastro/astro.git,9d6bcdb88fcb9df0c5c70e2b591bcf962ce55f63,ghcr.io/cyclonedx/cdxgen-alpine-node24:v13,js,,
+astro,https://github.com/withastro/astro.git,9d6bcdb88fcb9df0c5c70e2b591bcf962ce55f63,ghcr.io/cdxgen/cdxgen-alpine-node24:v13,js,,
 ```
 
 ## Image existance script

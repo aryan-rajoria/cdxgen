@@ -637,18 +637,18 @@ To obtain transitive dependencies and a complete dependency tree for dotnet proj
 This, however, requires the correct version of dotnet SDK to be installed. The official container image bundles version 8.0 of the SDK.
 
 ```shell
-docker run --rm -v /tmp:/tmp -v $(pwd):/app:rw -it ghcr.io/cyclonedx/cdxgen -r /app -o bom.json -t dotnet
+docker run --rm -v /tmp:/tmp -v $(pwd):/app:rw -it ghcr.io/cdxgen/cdxgen -r /app -o bom.json -t dotnet
 ```
 
 If the project requires a different version of the SDK, such as .Net core 3.1 or dotnet 6.0, then try with the below custom [images](https://github.com/cdxgen/cdxgen/ci/base-images).
 
 ```shell
-docker run --rm -v /tmp:/tmp -v $(pwd):/app:rw -it ghcr.io/cyclonedx/cdxgen-dotnet:v13 -r /app -o bom.json -t dotnet
+docker run --rm -v /tmp:/tmp -v $(pwd):/app:rw -it ghcr.io/cdxgen/cdxgen-dotnet:v13 -r /app -o bom.json -t dotnet
 ```
 
 If the project requires legacy frameworks such as .Net Framework 4.6/4.7, then a Windows operating system or container is required to generate the SBOM correctly. A workaround is to commit the project.assets.json and the lock files to the repository from Windows and run cdxgen from Linux as normal.
 
-For Java projects that require a specific runtime, use the custom images `ghcr.io/cyclonedx/cdxgen-java11:v13` (Java 11) or `ghcr.io/cyclonedx/cdxgen-java17:v13` (Java 17). Alternatively, use Java version aliases via CLI as shown.
+For Java projects that require a specific runtime, use the custom images `ghcr.io/cdxgen/cdxgen-java11:v13` (Java 11) or `ghcr.io/cdxgen/cdxgen-java17:v13` (Java 17). Alternatively, use Java version aliases via CLI as shown.
 
 ```shell
 cdxgen -t java11
@@ -664,7 +664,7 @@ cdxgen -t java26
 [Nydus](https://github.com/dragonflyoss/nydus) enhances the current OCI image specification by improving container launch speed, image space and network bandwidth efficiency, and data integrity. cdxgen container images are available in nydus format with the `-nydus` suffix.
 
 ```
-ghcr.io/cyclonedx/cdxgen:master-nydus
+ghcr.io/cdxgen/cdxgen:master-nydus
 ```
 
 ### Example invocation using nerdctl
@@ -672,7 +672,7 @@ ghcr.io/cyclonedx/cdxgen:master-nydus
 Refer to the nydus-demo.yml workflow for an example github action that demonstrates the use of nydus snapshotter to improve the performance of cdxgen.
 
 ```shell
-sudo nerdctl --snapshotter nydus run --rm -v $HOME/.m2:/root/.m2 -v $(pwd):/app ghcr.io/cyclonedx/cdxgen:master-nydus -p -t java /app
+sudo nerdctl --snapshotter nydus run --rm -v $HOME/.m2:/root/.m2 -v $(pwd):/app ghcr.io/cdxgen/cdxgen:master-nydus -p -t java /app
 ```
 
 ## Lima VM usage
@@ -919,7 +919,7 @@ need a cdxgen image
    |
    +--> just need a broad default image?
    |        |
-   |        +--> use ghcr.io/cyclonedx/cdxgen:master
+   |        +--> use ghcr.io/cdxgen/cdxgen:master
    |
    +--> need stricter runtime permissions?
    |        |
@@ -939,7 +939,7 @@ need a cdxgen image
 ```mermaid
 flowchart TD
     A[choose a cdxgen image] --> B{need the default broad toolset?}
-    B -->|yes| C[ghcr.io/cyclonedx/cdxgen:master]
+    B -->|yes| C[ghcr.io/cdxgen/cdxgen:master]
     B -->|no| D{need stronger permission defaults?}
     D -->|yes| E[cdxgen-secure or cdxgen-deno]
     D -->|no| F{need a specific SDK or runtime version?}
@@ -953,9 +953,9 @@ flowchart TD
 
 | Scenario                                                         | Recommended image                                                      |
 | ---------------------------------------------------------------- | ---------------------------------------------------------------------- |
-| you want the least thinking and broadest compatibility           | `ghcr.io/cyclonedx/cdxgen:master`                                      |
-| you want Node.js permission restrictions by default              | `ghcr.io/cyclonedx/cdxgen-secure:master`                               |
-| you prefer Deno runtime and permissions                          | `ghcr.io/cyclonedx/cdxgen-deno:master`                                 |
+| you want the least thinking and broadest compatibility           | `ghcr.io/cdxgen/cdxgen:master`                                      |
+| you want Node.js permission restrictions by default              | `ghcr.io/cdxgen/cdxgen-secure:master`                               |
+| you prefer Deno runtime and permissions                          | `ghcr.io/cdxgen/cdxgen-deno:master`                                 |
 | you need an exact Java, .NET, Python, Ruby, Go, or Swift runtime | the matching language-specific image from the table below              |
 | you care a lot about image size                                  | an Alpine variant if the ecosystem and native dependencies tolerate it |
 
@@ -967,9 +967,9 @@ These are the best starting point for most teams. They trade image size for conv
 
 | Image                                    | Best for                                              |
 | ---------------------------------------- | ----------------------------------------------------- |
-| `ghcr.io/cyclonedx/cdxgen:master`        | general use, local experimentation, broad CI coverage |
-| `ghcr.io/cyclonedx/cdxgen-deno:master`   | users who want Deno runtime behavior                  |
-| `ghcr.io/cyclonedx/cdxgen-secure:master` | environments that prefer stricter runtime permissions |
+| `ghcr.io/cdxgen/cdxgen:master`        | general use, local experimentation, broad CI coverage |
+| `ghcr.io/cdxgen/cdxgen-deno:master`   | users who want Deno runtime behavior                  |
+| `ghcr.io/cdxgen/cdxgen-secure:master` | environments that prefer stricter runtime permissions |
 
 ### 2. Language-specific images
 
@@ -990,7 +990,7 @@ They are a weaker choice when the workflow depends on native extensions or tooli
 If your repo is mostly lockfile-driven and does not need an exact old SDK, start with:
 
 ```bash
-docker run --rm -v $(pwd):/app ghcr.io/cyclonedx/cdxgen:master -r /app -t java -o bom.json
+docker run --rm -v $(pwd):/app ghcr.io/cdxgen/cdxgen:master -r /app -t java -o bom.json
 ```
 
 ### Scenario B: legacy Java project
@@ -998,7 +998,7 @@ docker run --rm -v $(pwd):/app ghcr.io/cyclonedx/cdxgen:master -r /app -t java -
 If the project only builds or resolves correctly on Java 11 or Java 17, use a matching image rather than hoping the default image behaves the same way.
 
 ```bash
-docker run --rm -v $(pwd):/app ghcr.io/cyclonedx/cdxgen-java11:v13 -r /app -t java -o bom.json
+docker run --rm -v $(pwd):/app ghcr.io/cdxgen/cdxgen-java11:v13 -r /app -t java -o bom.json
 ```
 
 ### Scenario C: security-sensitive environment
@@ -1006,13 +1006,13 @@ docker run --rm -v $(pwd):/app ghcr.io/cyclonedx/cdxgen-java11:v13 -r /app -t ja
 If the runtime environment itself is highly controlled, prefer an image whose permission posture matches that expectation.
 
 ```bash
-docker run --rm -v $(pwd):/app ghcr.io/cyclonedx/cdxgen-secure:master -r /app -t js -o bom.json
+docker run --rm -v $(pwd):/app ghcr.io/cdxgen/cdxgen-secure:master -r /app -t js -o bom.json
 ```
 
 ### Scenario D: exact Python version alignment
 
 ```bash
-docker run --rm -v $(pwd):/app ghcr.io/cyclonedx/cdxgen-python311:v13 -r /app -t py -o bom.json
+docker run --rm -v $(pwd):/app ghcr.io/cdxgen/cdxgen-python311:v13 -r /app -t py -o bom.json
 ```
 
 ## Special note for .NET Framework users
@@ -1023,7 +1023,7 @@ Classic .NET Framework support is a special case. If the project truly depends o
 
 If you are still undecided, use this order.
 
-1. start with `ghcr.io/cyclonedx/cdxgen:master`
+1. start with `ghcr.io/cdxgen/cdxgen:master`
 2. switch to a language-specific image only if runtime alignment clearly matters
 3. switch to `secure` or `deno` if the environment requires that permission model
 4. switch to Alpine only after confirming native-dependency behavior is acceptable
@@ -1034,46 +1034,46 @@ Below table summarizes all available container image versions. These images incl
 
 | Language | Version                      | Container Image Tags                                                                                                                                                                 | Comments                                                                                                                                  |
 | -------- | ---------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ----------------------------------------------------------------------------------------------------------------------------------------- |
-| Java     | 25                           | ghcr.io/cyclonedx/cdxgen:master                                                                                                                                                      | Default all-in-one container image with all the latest and greatest tools with Node 24 runtime. Permission model is opt-in.               |
-| Java     | 25                           | ghcr.io/cyclonedx/cdxgen-deno:master                                                                                                                                                 | Default all-in-one container image with all the latest and greatest tools with deno runtime. Uses deno permissions model by default.      |
-| Java     | 25                           | ghcr.io/cyclonedx/cdxgen-secure:master                                                                                                                                               | Secure all-in-one container image with all the latest and greatest tools with Node 24 runtime. Uses Node.js permissions model by default. |
-| Java     | 8                            | ghcr.io/cyclonedx/cdxgen-temurin-java8:v13                                                                                                                                           | Java 8 version.                                                                                                                           |
-| Java     | 11                           | ghcr.io/cyclonedx/cdxgen-java11-slim:v13, ghcr.io/cyclonedx/cdxgen-java11:v13                                                                                                        | Java 11 version.                                                                                                                          |
-| Java     | 17                           | ghcr.io/cyclonedx/cdxgen-java17-slim:v13, ghcr.io/cyclonedx/cdxgen-java17:v13                                                                                                        | Java 17 version.                                                                                                                          |
-| Java     | 21                           | ghcr.io/cyclonedx/cdxgen-temurin-java21:v13, ghcr.io/cyclonedx/cdxgen-alpine-java21:v13                                                                                              | Java 21 version.                                                                                                                          |
-| Java     | 24                           | ghcr.io/cyclonedx/cdxgen-temurin-java24:v13, ghcr.io/cyclonedx/cdxgen-alpine-java24:v13                                                                                              | Java 24 version.                                                                                                                          |
-| Java     | 26                           | ghcr.io/cyclonedx/cdxgen-temurin-java26:v13, ghcr.io/cyclonedx/cdxgen-alpine-java26:v13                                                                                              | Java 26 version.                                                                                                                          |
-| Dotnet   | .Net Framework 4.6 - 4.8     | ghcr.io/cyclonedx/cdxgen-debian-dotnet6:v13                                                                                                                                          | .Net Framework                                                                                                                            |
-| Dotnet   | .Net Core 2.1, 3.1, .Net 5.0 | ghcr.io/cyclonedx/cdxgen-debian-dotnet6:v13                                                                                                                                          | Invoke with --platform=linux/amd64 for better compatibility.                                                                              |
-| Dotnet   | .Net 6                       | ghcr.io/cyclonedx/cdxgen-debian-dotnet6:v13                                                                                                                                          | .Net 6                                                                                                                                    |
-| Dotnet   | .Net 7                       | ghcr.io/cyclonedx/cdxgen-dotnet7:v13 (amd64 only)                                                                                                                                    | .Net 7                                                                                                                                    |
-| Dotnet   | .Net 8                       | ghcr.io/cyclonedx/cdxgen-debian-dotnet8:v13, ghcr.io/cyclonedx/cdxgen-dotnet8:v13 (amd64 only)                                                                                       | .Net 8                                                                                                                                    |
-| Dotnet   | .Net 9                       | ghcr.io/cyclonedx/cdxgen-debian-dotnet9:v13, ghcr.io/cyclonedx/cdxgen-alpine-dotnet9:v13, ghcr.io/cyclonedx/cdxgen-dotnet9:v13 (amd64 only)                                          | .Net 9                                                                                                                                    |
-| Dotnet   | .Net 10                      | ghcr.io/cyclonedx/cdxgen-debian-dotnet10:v13, ghcr.io/cyclonedx/cdxgen-alpine-dotnet10:v13                                                                                           | .Net 10                                                                                                                                   |
-| php      | 8.3                          | ghcr.io/cyclonedx/cdxgen-debian-php83:v13                                                                                                                                            | php 8.3                                                                                                                                   |
-| php      | 8.4                          | ghcr.io/cyclonedx/cdxgen-debian-php84:v13, ghcr.io/cyclonedx/cdxgen-alpine-php84:v13                                                                                                 | php 8.4                                                                                                                                   |
-| php      | 8.5                          | ghcr.io/cyclonedx/cdxgen-debian-php85:v13, ghcr.io/cyclonedx/cdxgen-alpine-php85:v13                                                                                                 | php 8.5                                                                                                                                   |
-| Python   | 3.6                          | ghcr.io/cyclonedx/cdxgen-python36:v13                                                                                                                                                | No dependency tree                                                                                                                        |
-| Python   | 3.9                          | ghcr.io/cyclonedx/cdxgen-opensuse-python39:v13, ghcr.io/cyclonedx/cdxgen-python39:v13                                                                                                |                                                                                                                                           |
-| Python   | 3.10                         | ghcr.io/cyclonedx/cdxgen-opensuse-python310:v13, ghcr.io/cyclonedx/cdxgen-python310:v13                                                                                              |                                                                                                                                           |
-| Python   | 3.11                         | ghcr.io/cyclonedx/cdxgen-python311:v13                                                                                                                                               |                                                                                                                                           |
-| Python   | 3.12                         | ghcr.io/cyclonedx/cdxgen-python312:v13                                                                                                                                               |                                                                                                                                           |
-| Python   | 3.13                         | ghcr.io/cyclonedx/cdxgen-python313:v13                                                                                                                                               |                                                                                                                                           |
-| Node.js  | 24                           | ghcr.io/cyclonedx/cdxgen:master, ghcr.io/cyclonedx/cdxgen-alpine-node24:v13, ghcr.io/cyclonedx/cdxgen-node:v13                                                                       | Includes rolling alias `cdxgen-node`.                                                                                                     |
-| Node.js  | 25                           | ghcr.io/cyclonedx/cdxgen-alpine-node25:v13                                                                                                                                           |                                                                                                                                           |
-| Ruby     | 4.0.x                        | ghcr.io/cyclonedx/cdxgen:v13                                                                                                                                                         | Supports automatic Ruby installation for 3.4.x. Example: Pass `-t ruby3.4.1` to install Ruby 3.4.1.                                       |
-| Ruby     | 3.3.6                        | ghcr.io/cyclonedx/cdxgen-debian-ruby33:v13                                                                                                                                           | Supports automatic Ruby installation for 3.3.x. Example: Pass `-t ruby3.3.1` to install Ruby 3.3.1.                                       |
-| Ruby     | 3.4.x                        | ghcr.io/cyclonedx/cdxgen-debian-ruby34:v13                                                                                                                                           | Supports automatic Ruby installation for 3.4.x. Example: Pass `-t ruby3.4.0` to install Ruby 3.4.0.                                       |
-| Ruby     | 2.5.0                        | ghcr.io/cyclonedx/cdxgen-ruby25:v13                                                                                                                                                  | Supports automatic Ruby installation for 2.5.x. Example: Pass `-t ruby2.5.1` to install Ruby 2.5.1.                                       |
-| Ruby     | 2.6.10                       | ghcr.io/cyclonedx/cdxgen-debian-ruby26:v13                                                                                                                                           | Supports automatic Ruby installation for 2.6.x. Example: Pass `-t ruby2.6.1` to install Ruby 2.6.1.                                       |
-| Ruby     | 3.4.5                        | ghcr.io/cyclonedx/cdxgen-alpine-ruby34:v13                                                                                                                                           | Ruby 3.4.5                                                                                                                                |
-| Ruby     | 4.0.x                        | ghcr.io/cyclonedx/cdxgen-debian-ruby4:v13, ghcr.io/cyclonedx/cdxgen-alpine-ruby4:v13                                                                                                 | Ruby 4.0.x                                                                                                                                |
-| Ruby     | 1.8.x                        | ghcr.io/cyclonedx/debian-ruby18:master                                                                                                                                               | Base image for `bundle install` only. No cdxgen equivalent with Ruby 1.8.x. `--deep` mode and research profile unsupported.               |
-| Swift    | 6.3.x                        | ghcr.io/cyclonedx/cdxgen-debian-swift:v13                                                                                                                                            | Swift 6                                                                                                                                   |
-| golang   | 1.23                         | ghcr.io/cyclonedx/cdxgen-debian-golang123:v13, ghcr.io/cyclonedx/cdxgen-alpine-golang123:v13                                                                                         | Golang 1.23                                                                                                                               |
-| golang   | 1.24                         | ghcr.io/cyclonedx/cdxgen-debian-golang124:v13, ghcr.io/cyclonedx/cdxgen-alpine-golang124:v13                                                                                         | Golang 1.24                                                                                                                               |
-| golang   | 1.26                         | ghcr.io/cyclonedx/cdxgen-debian-golang126:v13, ghcr.io/cyclonedx/cdxgen-debian-golang:v13, ghcr.io/cyclonedx/cdxgen-alpine-golang126:v13, ghcr.io/cyclonedx/cdxgen-alpine-golang:v13 | Golang 1.26                                                                                                                               |
-| Rust     | 1                            | ghcr.io/cyclonedx/cdxgen-debian-rust, ghcr.io/cyclonedx/cdxgen-debian-rust1:v13                                                                                                      | This is a rolling version that will get the latest released version. Currently, 1.87.                                                     |
+| Java     | 25                           | ghcr.io/cdxgen/cdxgen:master                                                                                                                                                      | Default all-in-one container image with all the latest and greatest tools with Node 24 runtime. Permission model is opt-in.               |
+| Java     | 25                           | ghcr.io/cdxgen/cdxgen-deno:master                                                                                                                                                 | Default all-in-one container image with all the latest and greatest tools with deno runtime. Uses deno permissions model by default.      |
+| Java     | 25                           | ghcr.io/cdxgen/cdxgen-secure:master                                                                                                                                               | Secure all-in-one container image with all the latest and greatest tools with Node 24 runtime. Uses Node.js permissions model by default. |
+| Java     | 8                            | ghcr.io/cdxgen/cdxgen-temurin-java8:v13                                                                                                                                           | Java 8 version.                                                                                                                           |
+| Java     | 11                           | ghcr.io/cdxgen/cdxgen-java11-slim:v13, ghcr.io/cdxgen/cdxgen-java11:v13                                                                                                        | Java 11 version.                                                                                                                          |
+| Java     | 17                           | ghcr.io/cdxgen/cdxgen-java17-slim:v13, ghcr.io/cdxgen/cdxgen-java17:v13                                                                                                        | Java 17 version.                                                                                                                          |
+| Java     | 21                           | ghcr.io/cdxgen/cdxgen-temurin-java21:v13, ghcr.io/cdxgen/cdxgen-alpine-java21:v13                                                                                              | Java 21 version.                                                                                                                          |
+| Java     | 24                           | ghcr.io/cdxgen/cdxgen-temurin-java24:v13, ghcr.io/cdxgen/cdxgen-alpine-java24:v13                                                                                              | Java 24 version.                                                                                                                          |
+| Java     | 26                           | ghcr.io/cdxgen/cdxgen-temurin-java26:v13, ghcr.io/cdxgen/cdxgen-alpine-java26:v13                                                                                              | Java 26 version.                                                                                                                          |
+| Dotnet   | .Net Framework 4.6 - 4.8     | ghcr.io/cdxgen/cdxgen-debian-dotnet6:v13                                                                                                                                          | .Net Framework                                                                                                                            |
+| Dotnet   | .Net Core 2.1, 3.1, .Net 5.0 | ghcr.io/cdxgen/cdxgen-debian-dotnet6:v13                                                                                                                                          | Invoke with --platform=linux/amd64 for better compatibility.                                                                              |
+| Dotnet   | .Net 6                       | ghcr.io/cdxgen/cdxgen-debian-dotnet6:v13                                                                                                                                          | .Net 6                                                                                                                                    |
+| Dotnet   | .Net 7                       | ghcr.io/cdxgen/cdxgen-dotnet7:v13 (amd64 only)                                                                                                                                    | .Net 7                                                                                                                                    |
+| Dotnet   | .Net 8                       | ghcr.io/cdxgen/cdxgen-debian-dotnet8:v13, ghcr.io/cdxgen/cdxgen-dotnet8:v13 (amd64 only)                                                                                       | .Net 8                                                                                                                                    |
+| Dotnet   | .Net 9                       | ghcr.io/cdxgen/cdxgen-debian-dotnet9:v13, ghcr.io/cdxgen/cdxgen-alpine-dotnet9:v13, ghcr.io/cdxgen/cdxgen-dotnet9:v13 (amd64 only)                                          | .Net 9                                                                                                                                    |
+| Dotnet   | .Net 10                      | ghcr.io/cdxgen/cdxgen-debian-dotnet10:v13, ghcr.io/cdxgen/cdxgen-alpine-dotnet10:v13                                                                                           | .Net 10                                                                                                                                   |
+| php      | 8.3                          | ghcr.io/cdxgen/cdxgen-debian-php83:v13                                                                                                                                            | php 8.3                                                                                                                                   |
+| php      | 8.4                          | ghcr.io/cdxgen/cdxgen-debian-php84:v13, ghcr.io/cdxgen/cdxgen-alpine-php84:v13                                                                                                 | php 8.4                                                                                                                                   |
+| php      | 8.5                          | ghcr.io/cdxgen/cdxgen-debian-php85:v13, ghcr.io/cdxgen/cdxgen-alpine-php85:v13                                                                                                 | php 8.5                                                                                                                                   |
+| Python   | 3.6                          | ghcr.io/cdxgen/cdxgen-python36:v13                                                                                                                                                | No dependency tree                                                                                                                        |
+| Python   | 3.9                          | ghcr.io/cdxgen/cdxgen-opensuse-python39:v13, ghcr.io/cdxgen/cdxgen-python39:v13                                                                                                |                                                                                                                                           |
+| Python   | 3.10                         | ghcr.io/cdxgen/cdxgen-opensuse-python310:v13, ghcr.io/cdxgen/cdxgen-python310:v13                                                                                              |                                                                                                                                           |
+| Python   | 3.11                         | ghcr.io/cdxgen/cdxgen-python311:v13                                                                                                                                               |                                                                                                                                           |
+| Python   | 3.12                         | ghcr.io/cdxgen/cdxgen-python312:v13                                                                                                                                               |                                                                                                                                           |
+| Python   | 3.13                         | ghcr.io/cdxgen/cdxgen-python313:v13                                                                                                                                               |                                                                                                                                           |
+| Node.js  | 24                           | ghcr.io/cdxgen/cdxgen:master, ghcr.io/cdxgen/cdxgen-alpine-node24:v13, ghcr.io/cdxgen/cdxgen-node:v13                                                                       | Includes rolling alias `cdxgen-node`.                                                                                                     |
+| Node.js  | 25                           | ghcr.io/cdxgen/cdxgen-alpine-node25:v13                                                                                                                                           |                                                                                                                                           |
+| Ruby     | 4.0.x                        | ghcr.io/cdxgen/cdxgen:v13                                                                                                                                                         | Supports automatic Ruby installation for 3.4.x. Example: Pass `-t ruby3.4.1` to install Ruby 3.4.1.                                       |
+| Ruby     | 3.3.6                        | ghcr.io/cdxgen/cdxgen-debian-ruby33:v13                                                                                                                                           | Supports automatic Ruby installation for 3.3.x. Example: Pass `-t ruby3.3.1` to install Ruby 3.3.1.                                       |
+| Ruby     | 3.4.x                        | ghcr.io/cdxgen/cdxgen-debian-ruby34:v13                                                                                                                                           | Supports automatic Ruby installation for 3.4.x. Example: Pass `-t ruby3.4.0` to install Ruby 3.4.0.                                       |
+| Ruby     | 2.5.0                        | ghcr.io/cdxgen/cdxgen-ruby25:v13                                                                                                                                                  | Supports automatic Ruby installation for 2.5.x. Example: Pass `-t ruby2.5.1` to install Ruby 2.5.1.                                       |
+| Ruby     | 2.6.10                       | ghcr.io/cdxgen/cdxgen-debian-ruby26:v13                                                                                                                                           | Supports automatic Ruby installation for 2.6.x. Example: Pass `-t ruby2.6.1` to install Ruby 2.6.1.                                       |
+| Ruby     | 3.4.5                        | ghcr.io/cdxgen/cdxgen-alpine-ruby34:v13                                                                                                                                           | Ruby 3.4.5                                                                                                                                |
+| Ruby     | 4.0.x                        | ghcr.io/cdxgen/cdxgen-debian-ruby4:v13, ghcr.io/cdxgen/cdxgen-alpine-ruby4:v13                                                                                                 | Ruby 4.0.x                                                                                                                                |
+| Ruby     | 1.8.x                        | ghcr.io/cdxgen/debian-ruby18:master                                                                                                                                               | Base image for `bundle install` only. No cdxgen equivalent with Ruby 1.8.x. `--deep` mode and research profile unsupported.               |
+| Swift    | 6.3.x                        | ghcr.io/cdxgen/cdxgen-debian-swift:v13                                                                                                                                            | Swift 6                                                                                                                                   |
+| golang   | 1.23                         | ghcr.io/cdxgen/cdxgen-debian-golang123:v13, ghcr.io/cdxgen/cdxgen-alpine-golang123:v13                                                                                         | Golang 1.23                                                                                                                               |
+| golang   | 1.24                         | ghcr.io/cdxgen/cdxgen-debian-golang124:v13, ghcr.io/cdxgen/cdxgen-alpine-golang124:v13                                                                                         | Golang 1.24                                                                                                                               |
+| golang   | 1.26                         | ghcr.io/cdxgen/cdxgen-debian-golang126:v13, ghcr.io/cdxgen/cdxgen-debian-golang:v13, ghcr.io/cdxgen/cdxgen-alpine-golang126:v13, ghcr.io/cdxgen/cdxgen-alpine-golang:v13 | Golang 1.26                                                                                                                               |
+| Rust     | 1                            | ghcr.io/cdxgen/cdxgen-debian-rust, ghcr.io/cdxgen/cdxgen-debian-rust1:v13                                                                                                      | This is a rolling version that will get the latest released version. Currently, 1.87.                                                     |
 
 Replace `:v13` with a release version tag or sha256 hash for fine-grained control over the image tag.
 

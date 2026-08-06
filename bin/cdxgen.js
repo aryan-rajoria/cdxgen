@@ -1153,7 +1153,7 @@ const checkPermissions = (filePath, options) => {
       );
       if (readEnvironmentVariable("CDXGEN_IN_CONTAINER") !== "true") {
         console.log(
-          "TIP: Run cdxgen using the secure container image 'ghcr.io/cyclonedx/cdxgen-secure' for best experience.",
+          "TIP: Run cdxgen using the secure container image 'ghcr.io/cdxgen/cdxgen-secure' for best experience.",
         );
       }
     }

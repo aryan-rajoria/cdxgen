@@ -312,19 +312,19 @@ You can also use the cdxgen container image with node, deno, or bun runtime vers
 The default version uses Node.js 23
 
 ```bash
-docker run --rm -e CDXGEN_DEBUG_MODE=debug -v /tmp:/tmp -v $(pwd):/app:rw -t ghcr.io/cyclonedx/cdxgen:master -r /app -o /app/bom.json
+docker run --rm -e CDXGEN_DEBUG_MODE=debug -v /tmp:/tmp -v $(pwd):/app:rw -t ghcr.io/cdxgen/cdxgen:master -r /app -o /app/bom.json
 ```
 
-To use the deno version, use `ghcr.io/cyclonedx/cdxgen-deno` as the image name.
+To use the deno version, use `ghcr.io/cdxgen/cdxgen-deno` as the image name.
 
 ```bash
-docker run --rm -e CDXGEN_DEBUG_MODE=debug -v /tmp:/tmp -v $(pwd):/app:rw -t ghcr.io/cyclonedx/cdxgen-deno:master -r /app -o /app/bom.json
+docker run --rm -e CDXGEN_DEBUG_MODE=debug -v /tmp:/tmp -v $(pwd):/app:rw -t ghcr.io/cdxgen/cdxgen-deno:master -r /app -o /app/bom.json
 ```
 
-For the bun version, use `ghcr.io/cyclonedx/cdxgen-bun` as the image name.
+For the bun version, use `ghcr.io/cdxgen/cdxgen-bun` as the image name.
 
 ```bash
-docker run --rm -e CDXGEN_DEBUG_MODE=debug -v /tmp:/tmp -v $(pwd):/app:rw -t ghcr.io/cyclonedx/cdxgen-bun:master -r /app -o /app/bom.json
+docker run --rm -e CDXGEN_DEBUG_MODE=debug -v /tmp:/tmp -v $(pwd):/app:rw -t ghcr.io/cdxgen/cdxgen-bun:master -r /app -o /app/bom.json
 ```
 
 In deno applications, cdxgen could be directly imported without any conversion.
@@ -470,7 +470,7 @@ cdxgen --server
 Or use the container image.
 
 ```bash
-docker run --rm -v /tmp:/tmp -p 9090:9090 -v $(pwd):/app:rw -t ghcr.io/cyclonedx/cdxgen -r /app --server --server-host 0.0.0.0
+docker run --rm -v /tmp:/tmp -p 9090:9090 -v $(pwd):/app:rw -t ghcr.io/cdxgen/cdxgen -r /app --server --server-host 0.0.0.0
 ```
 
 Use curl or your favorite tool to pass arguments to the `/sbom` route.

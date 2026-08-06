@@ -1,6 +1,6 @@
 # Node.js Permissions Model
 
-cdxgen supports the Node.js permission [model](https://nodejs.org/api/permissions.html). We also offer a custom container image with the tag `ghcr.io/cyclonedx/cdxgen-secure` that uses permissions by default.
+cdxgen supports the Node.js permission [model](https://nodejs.org/api/permissions.html). We also offer a custom container image with the tag `ghcr.io/cdxgen/cdxgen-secure` that uses permissions by default.
 
 ## Secure mode vs dry-run mode
 
@@ -50,10 +50,10 @@ export NODE_OPTIONS='--permission --allow-fs-read=\* --allow-fs-write="/tmp/*" -
 node /Volumes/Work/CycloneDX/cdxgen/bin/cdxgen.js --evidence -o bom.json -t js "$(pwd)"
 ```
 
-Use the custom container image `ghcr.io/cyclonedx/cdxgen-secure` which comes configured with `NODE_OPTIONS` environment variable.
+Use the custom container image `ghcr.io/cdxgen/cdxgen-secure` which comes configured with `NODE_OPTIONS` environment variable.
 
 ```shell
-docker run --rm -v /tmp:/tmp -v $(pwd):/app:rw -t ghcr.io/cyclonedx/cdxgen-secure cdxgen -r /app -o /app/bom.json -t java
+docker run --rm -v /tmp:/tmp -v $(pwd):/app:rw -t ghcr.io/cdxgen/cdxgen-secure cdxgen -r /app -o /app/bom.json -t java
 ```
 
 ### Identifying NODE_OPTIONS

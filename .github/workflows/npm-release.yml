@@ -52,18 +52,29 @@ jobs:
         with:
           node-version-file: .nvmrc
           package-manager-cache: false
-          registry-url: https://registry.npmjs.org/
-          scope: '@cyclonedx'
+          # Deliberately no registry-url and no scope. Both are what a token
+          # based publish needs; either one makes setup-node write an .npmrc
+          # carrying `_authToken`, and a credential in that file competes with
+          # the OIDC exchange that trusted publishing depends on. The package
+          # is published to the default registry, which is npmjs.
       - name: Release npm package
+        # Trusted publishing: npm exchanges the Actions OIDC token (id-token:
+        # write, above) for a short-lived publish token, so no NODE_AUTH_TOKEN
+        # is set here. The trusted publisher is registered against
+        # @cdxgen/cdxgen for this repository and this workflow filename; both
+        # have to keep matching or the registry answers 404 with no
+        # explanation of which field is wrong.
         if: startsWith(github.ref, 'refs/tags/')
         run: |
           pnpm install:frozen
           NPM_CONFIG_PROVENANCE=true pnpm publish --access=public --no-git-checks
       - name: jsr publish
+        # JSR verifies the repository claim on the same OIDC token. A failure
+        # here leaves npm and JSR on different versions, so it fails the job
+        # rather than being swallowed as it was while JSR was best-effort.
         if: startsWith(github.ref, 'refs/tags/')
         run: |
           npx jsr publish --allow-dirty
-        continue-on-error: true
   containers-ruby-builder-amd64:
     if: github.repository == 'cdxgen/cdxgen'
     runs-on: 'ubuntu-24.04'

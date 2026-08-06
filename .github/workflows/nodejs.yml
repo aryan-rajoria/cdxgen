@@ -120,8 +120,8 @@ jobs:
         if: github.ref == 'refs/heads/master'
         run: |
           node bin/cdxgen.js -t js -t php -t jar -t ruby -t github -o $(pwd)/reports/sbom-build.cdx.json --include-formulation --export-proto --proto-bin-file $(pwd)/reports/sbom-build.cdx.proto --exclude "**/test/**" $(pwd)
-          docker pull ghcr.io/cyclonedx/cdxgen:master
-          node bin/cdxgen.js -t docker -o $(pwd)/reports/sbom-container-js.cdx.json ghcr.io/cyclonedx/cdxgen:master
+          docker pull ghcr.io/cdxgen/cdxgen:master
+          node bin/cdxgen.js -t docker -o $(pwd)/reports/sbom-container-js.cdx.json ghcr.io/cdxgen/cdxgen:master
           depscan --src $(pwd) --bom-dir $(pwd)/reports --reports-dir $(pwd)/reports --reachability-analyzer SemanticReachability --explain
         env:
           COLUMNS: 140

@@ -149,7 +149,7 @@ LABEL maintainer="cyclonedx" \
       org.opencontainers.image.licenses="Apache-2.0" \
       org.opencontainers.image.title="cdxgen" \
       org.opencontainers.image.description="Container image for cdxgen SBOM generator packing latest build tools." \
-      org.opencontainers.docker.cmd="docker run --rm -v /tmp:/tmp -p 9090:9090 -v $(pwd):/app:rw -t ghcr.io/cyclonedx/cdxgen -r /app --server"
+      org.opencontainers.docker.cmd="docker run --rm -v /tmp:/tmp -p 9090:9090 -v $(pwd):/app:rw -t ghcr.io/cdxgen/cdxgen -r /app --server"
 
 COPY . /opt/cdxgen
 

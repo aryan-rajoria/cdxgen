@@ -522,7 +522,7 @@ _TB = Trust Boundary (see Trust Boundaries section above)_
 
 ## Recommendations for Deployers
 
-1. **Use secure mode** — Set `CDXGEN_SECURE_MODE=true` and configure `NODE_OPTIONS` with the Node.js permission model, or use the `ghcr.io/cyclonedx/cdxgen-secure` container image.
+1. **Use secure mode** — Set `CDXGEN_SECURE_MODE=true` and configure `NODE_OPTIONS` with the Node.js permission model, or use the `ghcr.io/cdxgen/cdxgen-secure` container image.
 2. **Configure allowlists** — Set `CDXGEN_ALLOWED_HOSTS` and `CDXGEN_ALLOWED_COMMANDS` based on your project types. For HBOM in secure mode, run `hbom --dry-run` first and use the declared command set as the review baseline before enabling live collection.
 3. **Restrict paths deliberately** — When running HBOM in secure mode, set `CDXGEN_ALLOWED_PATHS` to the approved local inventory roots for that host profile (for example `/proc,/sys,/etc` on Linux where appropriate). In server mode, also set `CDXGEN_SERVER_ALLOWED_PATHS` and `CDXGEN_GIT_ALLOWED_HOSTS` (or `CDXGEN_SERVER_ALLOWED_HOSTS`).
 4. **Deploy server behind a proxy** — The cdxgen server has no built-in authentication. Use a reverse proxy (nginx, Envoy, etc.) with authentication and rate limiting.

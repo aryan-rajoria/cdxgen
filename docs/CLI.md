@@ -169,7 +169,7 @@ deno install --allow-read --allow-env --allow-run --allow-sys=uid,systemMemoryIn
 You can also use the cdxgen container image
 
 ```bash
-docker run --rm -v /tmp:/tmp -v $(pwd):/app:rw -t ghcr.io/cyclonedx/cdxgen -r /app -o /app/bom.json
+docker run --rm -v /tmp:/tmp -v $(pwd):/app:rw -t ghcr.io/cdxgen/cdxgen -r /app -o /app/bom.json
 ```
 
 ### Standalone release binaries
@@ -247,10 +247,10 @@ steps:
       ./cdx-audit-linux-amd64 --help
 ```
 
-To use the deno version, use `ghcr.io/cyclonedx/cdxgen-deno` as the image name.
+To use the deno version, use `ghcr.io/cdxgen/cdxgen-deno` as the image name.
 
 ```bash
-docker run --rm -v /tmp:/tmp -v $(pwd):/app:rw -t ghcr.io/cyclonedx/cdxgen-deno -r /app -o /app/bom.json
+docker run --rm -v /tmp:/tmp -v $(pwd):/app:rw -t ghcr.io/cdxgen/cdxgen-deno -r /app -o /app/bom.json
 ```
 
 In deno applications, cdxgen could be directly imported without any conversion.

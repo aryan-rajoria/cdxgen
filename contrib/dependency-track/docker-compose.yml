@@ -5,7 +5,7 @@ volumes:
 
 services:
   cdxgen:
-    image: ghcr.io/cyclonedx/cdxgen:11.9.0
+    image: ghcr.io/cdxgen/cdxgen:11.9.0
     ports:
       - "9090:9090"
     volumes:

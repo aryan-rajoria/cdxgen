@@ -144,11 +144,27 @@ This is the same class of consumer-side break as the PyPI name canonicalization
 (see [Package URL canonicalization](#package-url-purl-canonicalization) above) —
 both land in v13 as one story.
 
-### Out of scope
+### Container images move too
 
-Container image names (`ghcr.io/cyclonedx/cdxgen*`), the GitHub organization
-(`@cyclonedx`), and repository URLs are **unchanged** by this rename. Only the
-npm/JSR package identity changes.
+Container images follow the repository, because GitHub Container Registry
+namespaces are tied to the owning GitHub organization and cdxgen now lives at
+`github.com/cdxgen/cdxgen`. Every image moves from `ghcr.io/cyclonedx/*` to
+`ghcr.io/cdxgen/*`:
+
+| v12                                         | v13                                       |
+| ------------------------------------------- | ----------------------------------------- |
+| `ghcr.io/cyclonedx/cdxgen:v12`              | `ghcr.io/cdxgen/cdxgen:v13`               |
+| `ghcr.io/cyclonedx/cdxgen-secure:v12`       | `ghcr.io/cdxgen/cdxgen-secure:v13`        |
+| `ghcr.io/cyclonedx/cdxgen-deno:v12`         | `ghcr.io/cdxgen/cdxgen-deno:v13`          |
+| `ghcr.io/cyclonedx/cdxgen-bun:v12`          | `ghcr.io/cdxgen/cdxgen-bun:v13`           |
+| `ghcr.io/cyclonedx/cdxgen-<lang><ver>:v12`  | `ghcr.io/cdxgen/cdxgen-<lang><ver>:v13`   |
+
+The v12 images stay where they are and keep working; they are simply not
+updated past v12. Pipelines pinned to `ghcr.io/cyclonedx/cdxgen:v12` continue
+to run, but a pipeline tracking `:latest` or `:master` under the old namespace
+stops receiving updates and must be repointed.
+
+The full image catalogue is in [ci/images/README.md](ci/images/README.md).
 
 ## Node requirement
 
@@ -236,10 +252,10 @@ The Node.js 20 images are removed, since cdxgen itself now requires Node.js >= 2
 
 | Removed                                  | Replacement                              |
 | ---------------------------------------- | ---------------------------------------- |
-| `ghcr.io/cyclonedx/cdxgen-node20`        | `ghcr.io/cyclonedx/cdxgen-alpine-node24` |
-| `ghcr.io/cyclonedx/cdxgen-alpine-node20` | `ghcr.io/cyclonedx/cdxgen-alpine-node24` |
+| `ghcr.io/cdxgen/cdxgen-node20`        | `ghcr.io/cdxgen/cdxgen-alpine-node24` |
+| `ghcr.io/cdxgen/cdxgen-alpine-node20` | `ghcr.io/cdxgen/cdxgen-alpine-node24` |
 
-The rolling `ghcr.io/cyclonedx/cdxgen-node` alias previously pointed at the
+The rolling `ghcr.io/cdxgen/cdxgen-node` alias previously pointed at the
 Node.js 20 image and now points at `cdxgen-alpine-node24`. Note that this
 changes its base image from SUSE BCI to Alpine.
 
@@ -247,7 +263,7 @@ The `-t node20` **install-version project type** is unaffected and remains the
 supported way to build a target application that requires an older Node.js:
 
 ```shell
-docker run --rm -v $(pwd):/app:rw -t ghcr.io/cyclonedx/cdxgen:latest -t node20 -r /app -o /app/bom.json
+docker run --rm -v $(pwd):/app:rw -t ghcr.io/cdxgen/cdxgen:latest -t node20 -r /app -o /app/bom.json
 ```
 
 ## Install and package size changes
