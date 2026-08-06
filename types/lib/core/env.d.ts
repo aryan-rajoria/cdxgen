@@ -94,6 +94,8 @@ export declare const PROJECT_TYPE_ALIASES: {
     cocoa: string[];
     scala: string[];
     nix: string[];
+    zig: string[];
+    gleam: string[];
     caxa: string[];
     asar: string[];
     "vscode-extension": string[];

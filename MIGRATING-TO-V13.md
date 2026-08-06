@@ -363,6 +363,53 @@ canonical forms. An unmigrated consumer that looks up
    that assumed every component has a `pkg:`-prefixed `bom-ref` should handle
    non-purl refs gracefully.
 
+### Nix flake purls use `generic`
+
+**Affected:** anyone consuming cdxgen Nix flake (`flake.lock`) BOMs.
+
+| Before (v12) | After (v13) |
+|---|---|
+| `pkg:nix/nixpkgs@bd645e8` | `pkg:generic/nixpkgs@bd645e8?vcs_url=https://github.com/NixOS/nixpkgs` |
+
+`nix` is not a registered purl type, so a `pkg:nix/...` purl identified a
+package in a namespace no vulnerability database or advisory feed recognises.
+Flake inputs are now `pkg:generic` with a `vcs_url` qualifier built from the
+locked node's forge (`type`, `owner`, `repo`) and a `cdx:purl:proposedType=nix`
+property recording the intent, so a future upstream registration is a
+mechanical switch.
+
+To adapt: match `pkg:generic/` components carrying
+`cdx:purl:proposedType=nix` instead of matching on `pkg:nix/`. The full
+revision remains in `cdx:nix:revision`, the NAR hash in `cdx:nix:nar_hash`,
+and the forge download URL in `cdx:nix:download_url`.
+
+The root dependency edge also changes. It previously referenced
+`pkg:nix/flake@latest`, which matched no component in the BOM — a dangling
+`dependencies[].ref`. It now points at the real parent component
+(`application:<project>:latest`), so the graph is well-formed.
+
+## New ecosystems
+
+v13 adds Zig, Gleam and Mojo, plus bzlmod dependency extraction for Bazel.
+None of them squats an unregistered purl type:
+
+- **Zig** (`build.zig.zon`) — `pkg:generic/...` with a `download_url`
+  qualifier and `cdx:purl:proposedType=zig`. Multihash `1220…` digests are
+  emitted as SHA-256 `hashes[]` entries; any other hash encoding is kept as a
+  `cdx:zig:hash` property rather than guessing an algorithm.
+- **Gleam** (`gleam.toml`, `manifest.toml`) — `pkg:hex/...`. Gleam resolves
+  through Hex, and a Gleam package on Hex *is* a Hex package, so no new type is
+  needed.
+- **Mojo** (`mojoproject.toml`) — Mojo's own packages are `pkg:generic/...`
+  with `cdx:purl:proposedType=mojo`. Conda and PyPI packages pulled in through
+  `pixi.lock` keep their existing `pkg:conda` and `pkg:pypi` types.
+- **Bazel bzlmod** (`MODULE.bazel`, `MODULE.bazel.lock`) — dependencies
+  resolved through bzlmod map to their true ecosystem purl (`pkg:maven` and so
+  on) so advisories match. Only Bazel Central Registry modules use
+  `pkg:bazel/...`, which is the registered `bazel` type's intended use: its
+  rules prohibit a namespace and default `repository_url` to
+  `https://bcr.bazel.build`.
+
 ## atom 3 (native binaries)
 
 cdxgen v13 has upgraded the bundled [atom](https://github.com/AppThreat/atom)

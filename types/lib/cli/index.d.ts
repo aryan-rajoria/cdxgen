@@ -186,6 +186,32 @@ export declare function createCocoaBom(path: string, options: Object): Promise<O
  */
 export declare function createNixBom(path: string, options: Object): Promise<Object>;
 /**
+ * Function to create bom string for Zig projects.
+ *
+ * Zig moved package management into the build system, so the dependency list
+ * lives in `build.zig.zon` (ZON, not JSON). This generator parses that manifest
+ * only; resolving fetched archives requires the Zig toolchain and the global
+ * cache, which cdxgen does not assume.
+ *
+ * @param {string} path to the project
+ * @param {Object} options Parse options from the cli
+ * @returns {Promise<Object>} Promise resolving to BOM object
+ */
+export declare function createZigBom(path: string, options: Object): Promise<Object>;
+/**
+ * Function to create bom string for Gleam projects.
+ *
+ * Gleam resolves through Hex, so packages carry `pkg:hex/...` purls and no new
+ * purl type is introduced. The `manifest.toml` lock is the source of truth for
+ * resolved versions and the direct/transitive distinction; `gleam.toml` is the
+ * manifest.
+ *
+ * @param {string} path to the project
+ * @param {Object} options Parse options from the cli
+ * @returns {Promise<Object>} Promise resolving to BOM object
+ */
+export declare function createGleamBom(path: string, options: Object): Promise<Object>;
+/**
  * Function to create bom string for caxa SEA binaries
  *
  * @param {string} path to the project

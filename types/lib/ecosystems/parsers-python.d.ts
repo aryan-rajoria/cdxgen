@@ -113,4 +113,25 @@ export declare function parsePixiTomlFile(pixiToml: string): {};
  *
  */
 export declare function generatePixiLockFile(_path: any): void;
+/**
+ * Parse a Mojo `mojoproject.toml` manifest.
+ *
+ * Mojo projects are pixi-managed, so conda and PyPI dependencies pulled through
+ * pixi.lock already keep their correct registered types via the pixi path.
+ * Only Mojo's *own* packages — declared in `mojoproject.toml` — need special
+ * handling: `mojo` is not a registered purl type, so each is emitted as
+ * `pkg:generic/...` with a `cdx:purl:proposedType=mojo` property.
+ *
+ * The manifest is TOML. The `[project]` table carries the project's name and
+ * version; `[dependencies]` maps dependency names to version specifiers. A
+ * declared version range (e.g. `==0.1.0`, `>=0.2`) is normalised to its
+ * concrete version when one is present, otherwise the version is omitted.
+ *
+ * @param {string} mojoProjectFile Path to `mojoproject.toml`
+ * @returns {{ pkgList: object[], parentComponent: object }}
+ */
+export declare function parseMojoProject(mojoProjectFile: string): {
+    pkgList: object[];
+    parentComponent: object;
+};
 //# sourceMappingURL=parsers-python.d.ts.map

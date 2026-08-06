@@ -1,0 +1,11 @@
+{
+  "description": "Zig build.zig.zon parse coverage. Manifest-backed: ZON dependencies, no toolchain.",
+  "fixture": "../../test/data/zig-smoke",
+  "scenarios": [
+    {
+      "name": "default",
+      "projectType": ["zig"],
+      "options": {}
+    }
+  ]
+}

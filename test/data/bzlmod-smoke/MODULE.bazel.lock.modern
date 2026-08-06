@@ -1,0 +1,34 @@
+{
+  "lockFileVersion": 28,
+  "moduleExtensions": {
+    "@@rules_jvm_external+//:extensions.bzl%maven": {
+      "general": {
+        "bzlTransitiveDigest": "example=",
+        "usagesDigest": "example=",
+        "recordedInputs": [],
+        "generatedRepoSpecs": {
+          "guava": {
+            "repoRuleId": "@@rules_jvm_external+//private/rules/jvm_maven_import_external.bzl%jvm_maven_import_external",
+            "attributes": {
+              "artifact": "com.google.guava:guava:32.1.1-jre"
+            }
+          },
+          "slf4j_api": {
+            "repoRuleId": "@@rules_jvm_external+//private/rules/jvm_maven_import_external.bzl%jvm_maven_import_external",
+            "attributes": {
+              "group": "org.slf4j",
+              "artifact": "slf4j-api",
+              "version": "2.0.9"
+            }
+          },
+          "not_a_package": {
+            "repoRuleId": "@@bazel_tools//tools/build_defs/repo:http.bzl%http_file",
+            "attributes": {
+              "url": "https://example.com/file.tar.gz"
+            }
+          }
+        }
+      }
+    }
+  }
+}

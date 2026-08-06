@@ -1,4 +1,40 @@
 /**
+ * The set of purl types that carry validation rules in cdx-purl.
+ *
+ * cdx-purl's `build()` is permissive: it accepts *any* type string (even an
+ * unregistered one like `pkg:nix/...`) without throwing, because the "type"
+ * segment of a Package URL is not restricted by the spec. What distinguishes a
+ * *registered* type is that cdx-purl ships a rule table for it
+ * (`TYPE_RULES_SOURCE`, exposed as `TypedPurls`) — namespace requirements,
+ * permitted qualifiers, and so on. A purl built with an unregistered type
+ * round-trips but gets no type-specific normalization, and more importantly it
+ * identifies a package in a namespace no vulnerability database or advisory
+ * feed recognises.
+ *
+ * Ecosystems cdxgen supports that have no registered type (nix, zig, mojo, and
+ * gleam when it is not published via hex) must therefore emit `pkg:generic/...`
+ * with a `cdx:purl:proposedType` property instead of squatting a type. This set
+ * is the single source of truth for that decision, sourced directly from
+ * cdx-purl so it updates automatically when a type is registered upstream.
+ */
+export declare const REGISTERED_PURL_TYPES: Set<string>;
+/**
+ * Report whether a purl type is registered in cdx-purl's rule table.
+ *
+ * @param {string} type Purl type (the segment after `pkg:`)
+ * @returns {boolean} `true` when the type carries validation rules upstream
+ */
+export declare function purlTypeIsRegistered(type: string): boolean;
+/**
+ * Report whether a purl string uses a type that cdx-purl has registered rules
+ * for. Purls that fail to parse are treated as unregistered rather than
+ * throwing, because the caller is vetting untrusted output.
+ *
+ * @param {string} purlString Purl string to vet
+ * @returns {boolean} `true` when the purl's type is registered upstream
+ */
+export declare function purlTypeIsRegisteredString(purlString: string): boolean;
+/**
  * Encode a string for safe inclusion in a PackageURL, percent-encoding special characters
  * while preserving already-encoded `%40` sequences and keeping `:` and `/` unencoded.
  *
@@ -109,19 +145,33 @@ export declare function pypiBomRef(name: string, version?: string): string;
  */
 export declare function mavenPurl(group: string, name: string, version?: string, qualifiers?: object): string | null;
 /**
- * Build a canonical Nix purl from a name and version.
+ * Build a purl for a Nix flake input using the registered `generic` type.
+ *
+ * `nix` is not a registered purl type in cdx-purl, so emitting `pkg:nix/...`
+ * would squat a namespace no vulnerability database recognises. Nix inputs are
+ * therefore identified as generic packages, disambiguated by a `vcs_url`
+ * qualifier built from the flake lock, and tagged with a
+ * `cdx:purl:proposedType=nix` property on the component so the intended type is
+ * recoverable. If `nix` is ever registered upstream, callers can switch over
+ * without touching the property scheme.
+ *
+ * Callers pass the already-encoded qualifier values they derived from the lock
+ * node; this helper only owns purl construction.
  *
  * @param {string} name Package name
- * @param {string} [version] Package version
+ * @param {string} [version] Package version (typically the short revision)
+ * @param {object} [qualifiers] Optional qualifiers such as `{ vcs_url }`
  * @returns {string|null} Canonical purl, or null when invalid
  */
-export declare function nixPurl(name: string, version?: string): string | null;
+export declare function nixGenericPurl(name: string, version?: string, qualifiers?: object): string | null;
 /**
  * Identifier for a Nix flake project, whose version is not pinned by the flake
  * itself.
  *
- * A flake project is named after its directory, so the name can contain
- * characters a purl has to encode.
+ * A flake project is named after its directory. The bom-ref deliberately uses
+ * the `application:name:version` shape (matching `fallbackBomRef`) rather than a
+ * `pkg:` string, because `nix` is not a registered purl type and a bom-ref that
+ * looks like a purl but is not valid would mislead downstream tooling.
  *
  * @param {string} name Project name
  * @returns {string} bom-ref for the component

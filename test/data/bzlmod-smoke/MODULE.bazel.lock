@@ -1,0 +1,35 @@
+{
+  "lockFileVersion": 9,
+  "root": {
+    "name": "bzlmod-smoke",
+    "directDep": [
+      { "name": "rules_go", "version": "0.39.1", "repoName": "rules_go" },
+      { "name": "rules_jvm_external", "version": "5.3", "repoName": "rules_jvm" },
+      { "name": "bazel_skylib", "version": "1.7.1", "repoName": "bazel_skylib" }
+    ]
+  },
+  "modules": [
+    {
+      "name": "rules_go",
+      "version": "0.39.1",
+      "repoName": "rules_go",
+      "deps": [
+        { "name": "bazel_skylib", "version": "1.7.1", "repoName": "bazel_skylib" }
+      ]
+    },
+    {
+      "name": "rules_jvm_external",
+      "version": "5.3",
+      "repoName": "rules_jvm",
+      "deps": [
+        { "name": "bazel_skylib", "version": "1.7.1", "repoName": "bazel_skylib" }
+      ]
+    },
+    {
+      "name": "bazel_skylib",
+      "version": "1.7.1",
+      "repoName": "bazel_skylib",
+      "deps": []
+    }
+  ]
+}
