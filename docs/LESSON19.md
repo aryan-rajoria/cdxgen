@@ -189,9 +189,16 @@ If you add a new root-level 1.7 field, add it to `BOM_1_7_ONLY_FIELDS` in
 
 **`--export-proto`** — protobuf models `Citation.pointers` and
 `Citation.expressions` as wrapper messages around a repeated string, while
-canonical JSON uses bare arrays. `@cdxgen/cdx-proto` handles this from 2.1.0;
-against older releases cdxgen drops `citations` from the binary export only, and
-the JSON document still carries the provenance.
+canonical JSON uses bare arrays. `@cdxgen/cdx-proto` 2.1.0 converts between the
+two, so citations survive a binary round-trip unchanged:
+
+```bash
+cdxgen -t npm . -o bom.json --export-proto --proto-bin-file bom.bin
+```
+
+Note the `oneof`: the protobuf schema enforces the same "exactly one of
+`pointers` or `expressions`" rule as the JSON schema, so a citation carrying
+both is rejected at decode rather than silently truncated.
 
 ## What to take away
 

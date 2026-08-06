@@ -136,8 +136,8 @@ importers:
         specifier: 0.5.1
         version: 0.5.1
       '@cdxgen/cdx-proto':
-        specifier: 2.0.3
-        version: 2.0.3
+        specifier: 2.1.0
+        version: 2.1.0
       '@cdxgen/cdxgen-plugins-bin-darwin-amd64':
         specifier: 2.5.1
         version: 2.5.1
@@ -348,8 +348,8 @@ packages:
     engines: {node: '>=20'}
     hasBin: true
 
-  '@cdxgen/cdx-proto@2.0.3':
-    resolution: {integrity: sha512-B8OMpVoFB2YECPlrJYf9/FJodcnqPGKEy4qb096Mj6iAuz6QObWjg/WFGXLtpvbHjwVNp175vLwGyEFr8c42Dg==, tarball: https://registry.npmjs.org/@cdxgen/cdx-proto/-/cdx-proto-2.0.3.tgz}
+  '@cdxgen/cdx-proto@2.1.0':
+    resolution: {integrity: sha512-oUiPUhviKhpbFOIlnD7YO0VpDY93/x4ssU9vRMeAJ/vMeZMGJ8/rGrnYHexyUwLa0zs+pORVZ/zvkqeK407GYQ==, tarball: https://registry.npmjs.org/@cdxgen/cdx-proto/-/cdx-proto-2.1.0.tgz}
     engines: {node: '>=20'}
 
   '@cdxgen/cdx-purl@0.0.5':
@@ -1344,7 +1344,7 @@ snapshots:
   '@cdxgen/cdx-hbom@0.5.1':
     optional: true
 
-  '@cdxgen/cdx-proto@2.0.3':
+  '@cdxgen/cdx-proto@2.1.0':
     dependencies:
       '@bufbuild/protobuf': 2.12.0
     optional: true
