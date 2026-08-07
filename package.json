@@ -165,7 +165,6 @@
     "treeverse": "3.0.0",
     "undici": "8.9.0",
     "walk-up-path": "4.0.0",
-    "xml-js": "1.6.11",
     "yaml": "2.9.0",
     "yargs": "18.1.0"
   },
