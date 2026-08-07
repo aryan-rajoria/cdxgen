@@ -9,7 +9,7 @@ on:
       - 'index.cjs'
       - 'lib/**'
       - 'package.json'
-      - 'test/data/bun/**'
+      - 'test/data/**'
   push:
     branches:
       - master
@@ -23,7 +23,7 @@ on:
       - 'index.cjs'
       - 'lib/**'
       - 'package.json'
-      - 'test/data/bun/**'
+      - 'test/data/**'
   workflow_dispatch:
 
 concurrency:
@@ -57,6 +57,9 @@ jobs:
         run: |
           pnpm install:frozen
           mkdir -p bomresults
+      - name: Unit test suite runs under the bun runtime
+        shell: bash
+        run: pnpm run test:bun
       - name: cdxgen runs under the bun runtime (regression test for #4245)
         shell: bash
         run: |
