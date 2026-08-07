@@ -5,7 +5,7 @@
 # Test 3: pip install with --trace-http-urls (requires sudo + eBPF, Linux >= 5.8)
 set -e
 
-REPO_DIR="$(cd "$(dirname "$0")/../.." && pwd)"
+REPO_DIR="$(cd "$(dirname "$0")/../../.." && pwd)"
 TRACEBOM="$REPO_DIR/bin/tracebom.js"
 RESULTS_DIR="${REPO_DIR}/bomresults"
 mkdir -p "$RESULTS_DIR"
