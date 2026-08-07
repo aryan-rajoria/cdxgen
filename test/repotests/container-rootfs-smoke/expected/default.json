@@ -217,7 +217,7 @@
           "hashes": [
             {
               "alg": "SHA-256",
-              "content": "aa0bf50ac4c6025347eeed04460cc87ea88cd3bb1c54d76de17dfcf982af441b"
+              "content": "normalized"
             }
           ],
           "licenses": [
@@ -235,7 +235,7 @@
             },
             {
               "name": "internal:binary_path",
-              "value": "plugins/trivy/trivy-cdxgen-darwin-arm64"
+              "value": "plugins/trivy/trivy-cdxgen-normalized"
             }
           ],
           "purl": "pkg:generic/github.com/cdxgen/cdxgen-plugins-bin/trivy-cdxgen@0.0.0-normalized",
@@ -258,7 +258,7 @@
           "hashes": [
             {
               "alg": "SHA-256",
-              "content": "c35a1c9885df259a82d031c4b7ba557caf569befac6747a6574c59b078b46cb8"
+              "content": "normalized"
             }
           ],
           "licenses": [
@@ -276,7 +276,7 @@
             },
             {
               "name": "internal:binary_path",
-              "value": "plugins/trustinspector/trustinspector-cdxgen-darwin-arm64"
+              "value": "plugins/trustinspector/trustinspector-cdxgen-normalized"
             }
           ],
           "purl": "pkg:generic/github.com/cdxgen/cdxgen-plugins-bin/trustinspector-cdxgen@0.0.0-normalized",

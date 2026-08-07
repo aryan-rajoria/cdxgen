@@ -161,4 +161,10 @@ test/data/mcp-repotest/js-openapi.json
 # above would silently drop them and leave the tests that read them passing
 # only on the machine that created them.
 !test/data/**/*.cdx.json
+# Golden fixtures model a container rootfs, so they contain a node_modules tree
+# that is scan input rather than installed dependencies. The blanket
+# node_modules rule would drop it and shrink the expected component list on any
+# machine other than the one that wrote the golden.
+!test/repotests/**/fixture/**/node_modules/
+!test/repotests/**/fixture/**/node_modules/**
 test/data/rust-dataflow-repotest/target
