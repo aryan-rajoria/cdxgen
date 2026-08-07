@@ -1003,6 +1003,15 @@ jobs:
           CDXGEN_DEBUG_MODE=verbose ASTGEN_IGNORE_DIRS="" node bin/evinse.js -i bomresults/bom-svelte.json -o bomresults/bom-svelte.evinse.json -l js --with-data-flow test/repotests/sveltejs-examples
           CDXGEN_DEBUG_MODE=verbose ASTGEN_IGNORE_DIRS="" node bin/evinse.js -i bomresults/bom-svelte.json -o bomresults/bom-svelte.evinse.json -l js --with-reachables test/repotests/sveltejs-examples
         shell: bash
+      # atom's PHP frontend shells out to `php-parse`, a `#!/usr/bin/env php`
+      # script from @appthreat/atom-parsetools, so it needs an interpreter on
+      # PATH. The macOS runner images have not shipped one since macOS 12, and
+      # without it atom exits 1 and writes no slices. The Linux images already
+      # carry php.
+      - name: Install php for the evinse PHP frontend
+        if: runner.os == 'macOS'
+        run: brew install php
+        shell: bash
       - name: repotests evinse language coverage (python, php, c)
         run: |
           set -e
