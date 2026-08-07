@@ -1033,7 +1033,7 @@ jobs:
         shell: bash
       - name: repotests ha-android
         run: |
-          cd test/repotests/ha-android && ./gradlew assembleDebug || true && cd ../..
+          (cd test/repotests/ha-android && ./gradlew assembleDebug) || true
           bin/cdxgen.js -r -t java test/repotests/ha-android -o bomresults/bom-android.json
           CDXGEN_DEBUG_MODE=verbose bin/evinse.js -i bomresults/bom-android.json -o bomresults/bom-android.evinse.json -l java test/repotests/ha-android
         shell: bash
@@ -1083,7 +1083,7 @@ jobs:
           }
           EOF
           dotnet restore
-          cd ../..
+          cd ../../..
           bin/cdxgen.js -r -t dotnet test/repotests/dotnet-api-smoke -o bomresults/bom-dotnet-api-smoke.json --profile research --spec-version 1.6 --export-proto
           node --input-type=module <<'EOF'
           import { readFileSync } from "node:fs";
@@ -1186,7 +1186,7 @@ jobs:
           End Module
           EOF
           dotnet restore
-          cd ../../..
+          cd ../../../..
 
           dotnet new console -lang "F#" -o test/repotests/dotnet-language-smoke/fsapp
           cd test/repotests/dotnet-language-smoke/fsapp
@@ -1208,7 +1208,7 @@ jobs:
               0
           EOF
           dotnet restore
-          cd ../../..
+          cd ../../../..
 
           bin/cdxgen.js -t visualbasic test/repotests/dotnet-language-smoke/vbapp -o bomresults/bom-dotnet-vb-research.json --profile research --spec-version 1.6 --fail-on-error
           node bin/evinse.js -i bomresults/bom-dotnet-vb-research.json -o bomresults/bom-dotnet-vb-research.evinse.json -l vbnet --profile research test/repotests/dotnet-language-smoke/vbapp
@@ -1330,7 +1330,7 @@ jobs:
       - name: repotests expo mac
         if: matrix.os == 'macos-15'
         run: |
-          cd test/repotests/expo-test && npm ci --legacy-peer-deps && cd ios && pod install && cd ../../..
+          cd test/repotests/expo-test && npm ci --legacy-peer-deps && cd ios && pod install && cd ../../../..
                                                                                                   bin/cdxgen.js -t cocoapods                  test/repotests/expo-test -o bomresults/bom-expo-cocoapods.json
           COCOA_MERGE_SUBSPECS=false                                                              bin/cdxgen.js -t cocoapods                  test/repotests/expo-test -o bomresults/bom-expo-cocoapods-subs.json
                                      COCOA_RESOLVE_FROM_NODE=false                                bin/cdxgen.js -t cocoapods                  test/repotests/expo-test -o bomresults/bom-expo-cocoapods-no-node.json
@@ -1348,7 +1348,7 @@ jobs:
       - name: repotests expo not mac
         if: matrix.os != 'macos-15'
         run: |
-          cd test/repotests/expo-test && npm ci --legacy-peer-deps && cd ../..
+          cd test/repotests/expo-test && npm ci --legacy-peer-deps && cd ../../..
                                                                                                   bin/cdxgen.js -t cocoapods                  test/repotests/expo-test -o bomresults/bom-expo-cocoapods.json
           COCOA_MERGE_SUBSPECS=false                                                              bin/cdxgen.js -t cocoapods                  test/repotests/expo-test -o bomresults/bom-expo-cocoapods-subs.json
                                      COCOA_RESOLVE_FROM_NODE=false                                bin/cdxgen.js -t cocoapods                  test/repotests/expo-test -o bomresults/bom-expo-cocoapods-no-node.json
