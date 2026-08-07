@@ -1035,6 +1035,7 @@ jobs:
         run: |
           cd test/repotests/ha-android
           ./gradlew assembleDebug || true
+          ./gradlew --stop || true
           cd "$GITHUB_WORKSPACE"
           bin/cdxgen.js -r -t java test/repotests/ha-android -o bomresults/bom-android.json
           CDXGEN_DEBUG_MODE=verbose bin/evinse.js -i bomresults/bom-android.json -o bomresults/bom-android.evinse.json -l java test/repotests/ha-android
