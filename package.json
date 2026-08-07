@@ -133,8 +133,9 @@
     "lint:check": "biome check",
     "lint:errors": "biome check --diagnostic-level=error",
     "test": "poku",
-    "test:bun": "bun x poku",
+    "test:bun": "node contrib/alt-runtime-tests.js bun",
     "test:deno": "deno task test",
+    "test:deno:unit": "node contrib/alt-runtime-tests.js deno",
     "test:golden": "node contrib/golden-runner.js && node contrib/mutation-tests.js && node contrib/shuffle-tests.js && node contrib/cassette-metadata-tests.js && node contrib/fetch-parity-test.js",
     "test:rs-disable": "node contrib/rs-disable-golden-test.js",
     "watch": "poku --watch"

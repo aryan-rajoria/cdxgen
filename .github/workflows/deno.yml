@@ -11,7 +11,7 @@ on:
       - 'lib/**'
       - 'package.json'
       - 'test/deno/**'
-      - 'test/data/deno-project/**'
+      - 'test/data/**'
   push:
     branches:
       - master
@@ -27,7 +27,7 @@ on:
       - 'lib/**'
       - 'package.json'
       - 'test/deno/**'
-      - 'test/data/deno-project/**'
+      - 'test/data/**'
   workflow_dispatch:
 
 concurrency:
@@ -66,6 +66,9 @@ jobs:
       - name: Deno test suite runs under the Deno runtime
         shell: bash
         run: pnpm test:deno
+      - name: Unit test suite runs under the Deno runtime
+        shell: bash
+        run: pnpm run test:deno:unit
       - name: cdxgen runs under the deno runtime
         shell: bash
         run: |
