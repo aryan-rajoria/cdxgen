@@ -611,17 +611,6 @@ jobs:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1  # v7.0.1
         with:
           persist-credentials: false
-          repository: 'zoom/meetingsdk-vuejs-sample'
-          ref: 'v2.18.0'
-          path: 'test/repotests/meetingsdk-vuejs-sample'
-      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1  # v7.0.1
-        with:
-          persist-credentials: false
-          repository: 'kriasoft/react-app'
-          path: 'test/repotests/react-app'
-      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1  # v7.0.1
-        with:
-          persist-credentials: false
           repository: 'patrickjuchli/basic-ftp'
           path: 'test/repotests/basic-ftp'
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1  # v7.0.1
@@ -634,11 +623,6 @@ jobs:
           persist-credentials: false
           repository: 'DIYgod/RSSHub'
           path: 'test/repotests/RSSHub'
-      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1  # v7.0.1
-        with:
-          persist-credentials: false
-          repository: 'sveltejs/examples'
-          path: 'test/repotests/sveltejs-examples'
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1  # v7.0.1
         with:
           persist-credentials: false
@@ -851,12 +835,6 @@ jobs:
           mkdir -p "~/.rbenv/plugins"
           git clone https://github.com/rbenv/ruby-build.git --depth=1 "~/.rbenv/plugins/ruby-build"
         if: runner.os != 'Windows' && matrix.os != 'self-hosted-ubuntu'
-      - name: repotests react-app
-        run: |
-          FETCH_LICENSE=false bin/cdxgen.js -t nodejs8 test/repotests/react-app -o bomresults/react-app.json --fail-on-error
-          FETCH_LICENSE=false bin/cdxgen.js -t nodejs8 test/repotests/react-app -o bomresults/react-app.spdx.json --format spdx --fail-on-error
-          node bin/evinse.js -i bomresults/react-app.json -o bomresults/react-app.evinse.json -l js --with-data-flow test/repotests/react-app
-        shell: bash
       - name: repotests basic-ftp
         run: |
           FETCH_LICENSE=false bin/cdxgen.js -t nodejs10 test/repotests/basic-ftp -o bomresults/basic-ftp.json --fail-on-error
@@ -979,89 +957,6 @@ jobs:
 #          cd ..
 #          bin/cdxgen.js -t python pixi-sample -o bomresults/bom-pixi.json -p --fail-on-error
 #        shell: bash
-      - name: repotests shiftleft-java-example
-        run: |
-          bin/cdxgen.js -r -t java test/repotests/shiftleft-java-example -o bomresults/bom-java.json --generate-key-and-sign
-          node bin/evinse.js -i bomresults/bom-java.json -o bomresults/bom-java.evinse.json -l java --with-data-flow test/repotests/shiftleft-java-example
-          SBOM_SIGN_ALGORITHM=RS512 SBOM_SIGN_PRIVATE_KEY=bomresults/private.key SBOM_SIGN_PUBLIC_KEY=bomresults/public.key bin/cdxgen.js -r -t github test/repotests/shiftleft-java-example -o bomresults/bom-github.json
-        shell: bash
-      - name: repotests shiftleft-ts-example
-        run: |
-          FETCH_LICENSE=false bin/cdxgen.js -t javascript test/repotests/shiftleft-ts-example -o bomresults/bom-ts-1.json --include-formulation
-          node bin/evinse.js -i bomresults/bom-ts-1.json -o bomresults/bom-ts.evinse.json -l js --with-data-flow test/repotests/shiftleft-ts-example
-          FETCH_LICENSE=true bin/cdxgen.js -t js test/repotests/shiftleft-ts-example --required-only -o bomresults/bom-ts-2.json --fail-on-error
-          FETCH_LICENSE=1 bin/cdxgen.js -r -t javascript test/repotests/shiftleft-ts-example -o bomresults/bom-ts-3.json --fail-on-error
-        shell: bash
-      - name: repotests meetingsdk-vuejs-sample
-        run: |
-          FETCH_LICENSE=false bin/cdxgen.js -t js test/repotests/meetingsdk-vuejs-sample -o bomresults/bom-vue.json
-          node bin/evinse.js -i bomresults/bom-vue.json -o bomresults/bom-vue.evinse.json -l js --with-data-flow test/repotests/meetingsdk-vuejs-sample
-        shell: bash
-      - name: repotests sveltejs-examples
-        run: |
-          CDXGEN_DEBUG_MODE=verbose ASTGEN_IGNORE_DIRS="" FETCH_LICENSE=false bin/cdxgen.js -t js test/repotests/sveltejs-examples -o bomresults/bom-svelte.json
-          CDXGEN_DEBUG_MODE=verbose ASTGEN_IGNORE_DIRS="" node bin/evinse.js -i bomresults/bom-svelte.json -o bomresults/bom-svelte.evinse.json -l js --with-data-flow test/repotests/sveltejs-examples
-          CDXGEN_DEBUG_MODE=verbose ASTGEN_IGNORE_DIRS="" node bin/evinse.js -i bomresults/bom-svelte.json -o bomresults/bom-svelte.evinse.json -l js --with-reachables test/repotests/sveltejs-examples
-        shell: bash
-      # atom's PHP frontend shells out to `php-parse`, a `#!/usr/bin/env php`
-      # script from @appthreat/atom-parsetools, so it needs an interpreter on
-      # PATH. The macOS runner images have not shipped one since macOS 12, and
-      # without it atom exits 1 and writes no slices. The Linux images already
-      # carry php.
-      - name: Install php for the evinse PHP frontend
-        if: runner.os == 'macOS'
-        run: brew install php
-        shell: bash
-      - name: repotests evinse language coverage (python, php, c)
-        run: |
-          set -e
-          # In-repo fixtures exercising the atom 3 frontends that previously had
-          # no evinse CI coverage. PHP is the one that would regress silently:
-          # it depends on cdxgen bypassing the dispatcher's PHP_PARSER_BIN
-          # clobber, so a broken bypass shows up here as zero slices.
-          #
-          # Ruby is deliberately absent: atom 3's Ruby frontend requires Ruby
-          # 4.0.x and this runner ships 3.x, so it emits zero slices and any
-          # assertion here would be ceremonial. Ruby coverage belongs in the
-          # ruby4 container image job.
-          #
-          # atom caches ASTs in a .chen directory inside the source tree and a
-          # stale cache from an interrupted run makes the next run fail; start
-          # from a clean tree so a CI failure means a real failure.
-          find test/data/evinse-python-repotest test/data/evinse-php-repotest test/data/evinse-cpp-repotest -name .chen -type d -exec rm -rf {} + 2>/dev/null || true
-
-          # evinse warns and exits 0 when atom produces nothing, so each
-          # language asserts a minimum usages-slice count instead of just a
-          # zero exit.
-          assert_slices() {
-            node -e '
-              const { existsSync, readFileSync } = require("node:fs");
-              const [label, file, minimum] = process.argv.slice(1);
-              if (!existsSync(file)) {
-                console.error(`${label}: no usages slices file was written; atom did not run.`);
-                process.exit(1);
-              }
-              const count = (JSON.parse(readFileSync(file, "utf8")).objectSlices || []).length;
-              if (count < Number(minimum)) {
-                console.error(`${label}: ${count} object slice(s), expected at least ${minimum}.`);
-                process.exit(1);
-              }
-              console.log(`${label}: ${count} object slice(s).`);
-            ' "$1" "$2" "$3"
-          }
-
-          bin/cdxgen.js -t php test/data/evinse-php-repotest -o bomresults/bom-php-evinse.json --fail-on-error
-          node bin/evinse.js -i bomresults/bom-php-evinse.json -o bomresults/bom-php.evinse.json -l php --with-reachables --usages-slices-file bomresults/php-usages.slices.json test/data/evinse-php-repotest
-          assert_slices php bomresults/php-usages.slices.json 3
-
-          bin/cdxgen.js -t c test/data/evinse-cpp-repotest -o bomresults/bom-c-evinse.json --fail-on-error
-          node bin/evinse.js -i bomresults/bom-c-evinse.json -o bomresults/bom-c.evinse.json -l c --with-reachables --usages-slices-file bomresults/c-usages.slices.json test/data/evinse-cpp-repotest
-          assert_slices c bomresults/c-usages.slices.json 4
-
-          bin/cdxgen.js -t python test/data/evinse-python-repotest -o bomresults/bom-python-evinse.json --fail-on-error
-          node bin/evinse.js -i bomresults/bom-python-evinse.json -o bomresults/bom-python.evinse.json -l python --with-reachables --usages-slices-file bomresults/python-usages.slices.json test/data/evinse-python-repotest
-          assert_slices python bomresults/python-usages.slices.json 6
-        shell: bash
       - name: repotests vulnerable_net_core
         run: |
           FETCH_LICENSE=true bin/cdxgen.js -r -t csharp test/repotests/vulnerable_net_core -o bomresults/bom-csharp2.json --include-formulation
@@ -1615,6 +1510,151 @@ jobs:
         with:
           name: bomresults
           path: bomresults
+
+  evinse-tests:
+    strategy:
+      fail-fast: false
+      matrix:
+        java-version: ['24']
+        os: ['ubuntu-24.04-arm', 'windows-latest', 'macos-15']
+    runs-on: ${{ matrix.os }}
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1  # v7.0.1
+        with:
+          persist-credentials: false
+      - name: Set up JDK ${{ matrix.java-version }}
+        uses: actions/setup-java@03ad4de0992f5dab5e18fcb136590ce7c4a0ac95  # v5.6.0
+        with:
+          distribution: 'temurin'
+          java-version: ${{ matrix.java-version }}
+      - name: Setup pnpm
+        uses: pnpm/action-setup@0ebf47130e4866e96fce0953f49152a61190b271  # v6.0.9
+      - name: Use Node.js
+        uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020  # v7.0.0
+        with:
+          node-version-file: .nvmrc
+          package-manager-cache: false
+      - name: Set up Python
+        uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97  # v7.0.0
+        with:
+          python-version: '3.13'
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1  # v7.0.1
+        with:
+          persist-credentials: false
+          repository: 'ShiftLeftSecurity/shiftleft-java-example'
+          path: 'test/repotests/shiftleft-java-example'
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1  # v7.0.1
+        with:
+          persist-credentials: false
+          repository: 'ShiftLeftSecurity/shiftleft-ts-example'
+          path: 'test/repotests/shiftleft-ts-example'
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1  # v7.0.1
+        with:
+          persist-credentials: false
+          repository: 'zoom/meetingsdk-vuejs-sample'
+          ref: 'v2.18.0'
+          path: 'test/repotests/meetingsdk-vuejs-sample'
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1  # v7.0.1
+        with:
+          persist-credentials: false
+          repository: 'sveltejs/examples'
+          path: 'test/repotests/sveltejs-examples'
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1  # v7.0.1
+        with:
+          persist-credentials: false
+          repository: 'kriasoft/react-app'
+          path: 'test/repotests/react-app'
+      - name: pnpm install
+        run: |
+          pnpm install:frozen
+          mkdir -p bomresults
+        env:
+          CI: true
+          CDXGEN_TEMP_DIR: ${{ runner.temp }}/cdxgen-repotests
+      - name: repotests react-app
+        run: |
+          FETCH_LICENSE=false bin/cdxgen.js -t nodejs8 test/repotests/react-app -o bomresults/react-app.json --fail-on-error
+          FETCH_LICENSE=false bin/cdxgen.js -t nodejs8 test/repotests/react-app -o bomresults/react-app.spdx.json --format spdx --fail-on-error
+          node bin/evinse.js -i bomresults/react-app.json -o bomresults/react-app.evinse.json -l js --with-data-flow test/repotests/react-app
+        shell: bash
+      - name: repotests shiftleft-java-example
+        run: |
+          bin/cdxgen.js -r -t java test/repotests/shiftleft-java-example -o bomresults/bom-java.json --generate-key-and-sign
+          node bin/evinse.js -i bomresults/bom-java.json -o bomresults/bom-java.evinse.json -l java --with-data-flow test/repotests/shiftleft-java-example
+          SBOM_SIGN_ALGORITHM=RS512 SBOM_SIGN_PRIVATE_KEY=bomresults/private.key SBOM_SIGN_PUBLIC_KEY=bomresults/public.key bin/cdxgen.js -r -t github test/repotests/shiftleft-java-example -o bomresults/bom-github.json
+        shell: bash
+      - name: repotests shiftleft-ts-example
+        run: |
+          FETCH_LICENSE=false bin/cdxgen.js -t javascript test/repotests/shiftleft-ts-example -o bomresults/bom-ts-1.json --include-formulation
+          node bin/evinse.js -i bomresults/bom-ts-1.json -o bomresults/bom-ts.evinse.json -l js --with-data-flow test/repotests/shiftleft-ts-example
+          FETCH_LICENSE=true bin/cdxgen.js -t js test/repotests/shiftleft-ts-example --required-only -o bomresults/bom-ts-2.json --fail-on-error
+          FETCH_LICENSE=1 bin/cdxgen.js -r -t javascript test/repotests/shiftleft-ts-example -o bomresults/bom-ts-3.json --fail-on-error
+        shell: bash
+      - name: repotests meetingsdk-vuejs-sample
+        run: |
+          FETCH_LICENSE=false bin/cdxgen.js -t js test/repotests/meetingsdk-vuejs-sample -o bomresults/bom-vue.json
+          node bin/evinse.js -i bomresults/bom-vue.json -o bomresults/bom-vue.evinse.json -l js --with-data-flow test/repotests/meetingsdk-vuejs-sample
+        shell: bash
+      - name: repotests sveltejs-examples
+        run: |
+          CDXGEN_DEBUG_MODE=verbose ASTGEN_IGNORE_DIRS="" FETCH_LICENSE=false bin/cdxgen.js -t js test/repotests/sveltejs-examples -o bomresults/bom-svelte.json
+          CDXGEN_DEBUG_MODE=verbose ASTGEN_IGNORE_DIRS="" node bin/evinse.js -i bomresults/bom-svelte.json -o bomresults/bom-svelte.evinse.json -l js --with-data-flow test/repotests/sveltejs-examples
+          CDXGEN_DEBUG_MODE=verbose ASTGEN_IGNORE_DIRS="" node bin/evinse.js -i bomresults/bom-svelte.json -o bomresults/bom-svelte.evinse.json -l js --with-reachables test/repotests/sveltejs-examples
+        shell: bash
+      - name: Install php for the evinse PHP frontend
+        if: runner.os == 'macOS'
+        run: brew install php
+        shell: bash
+      - name: repotests evinse language coverage (python, php, c)
+        run: |
+          set -e
+          # In-repo fixtures exercising the atom 3 frontends that previously had
+          # no evinse CI coverage. PHP is the one that would regress silently:
+          # it depends on cdxgen bypassing the dispatcher's PHP_PARSER_BIN
+          # clobber, so a broken bypass shows up here as zero slices.
+          #
+          # Ruby is deliberately absent: atom 3's Ruby frontend requires Ruby
+          # 4.0.x and this runner ships 3.x, so it emits zero slices and any
+          # assertion here would be ceremonial. Ruby coverage belongs in the
+          # ruby4 container image job.
+          #
+          # atom caches ASTs in a .chen directory inside the source tree and a
+          # stale cache from an interrupted run makes the next run fail; start
+          # from a clean tree so a CI failure means a real failure.
+          find test/data/evinse-python-repotest test/data/evinse-php-repotest test/data/evinse-cpp-repotest -name .chen -type d -exec rm -rf {} + 2>/dev/null || true
+
+          # evinse warns and exits 0 when atom produces nothing, so each
+          # language asserts a minimum usages-slice count instead of just a
+          # zero exit.
+          assert_slices() {
+            node -e '
+              const { existsSync, readFileSync } = require("node:fs");
+              const [label, file, minimum] = process.argv.slice(1);
+              if (!existsSync(file)) {
+                console.error(`${label}: no usages slices file was written; atom did not run.`);
+                process.exit(1);
+              }
+              const count = (JSON.parse(readFileSync(file, "utf8")).objectSlices || []).length;
+              if (count < Number(minimum)) {
+                console.error(`${label}: ${count} object slice(s), expected at least ${minimum}.`);
+                process.exit(1);
+              }
+              console.log(`${label}: ${count} object slice(s).`);
+            ' "$1" "$2" "$3"
+          }
+
+          bin/cdxgen.js -t php test/data/evinse-php-repotest -o bomresults/bom-php-evinse.json --fail-on-error
+          node bin/evinse.js -i bomresults/bom-php-evinse.json -o bomresults/bom-php.evinse.json -l php --with-reachables --usages-slices-file bomresults/php-usages.slices.json test/data/evinse-php-repotest
+          assert_slices php bomresults/php-usages.slices.json 3
+
+          bin/cdxgen.js -t c test/data/evinse-cpp-repotest -o bomresults/bom-c-evinse.json --fail-on-error
+          node bin/evinse.js -i bomresults/bom-c-evinse.json -o bomresults/bom-c.evinse.json -l c --with-reachables --usages-slices-file bomresults/c-usages.slices.json test/data/evinse-cpp-repotest
+          assert_slices c bomresults/c-usages.slices.json 4
+
+          bin/cdxgen.js -t python test/data/evinse-python-repotest -o bomresults/bom-python-evinse.json --fail-on-error
+          node bin/evinse.js -i bomresults/bom-python-evinse.json -o bomresults/bom-python.evinse.json -l python --with-reachables --usages-slices-file bomresults/python-usages.slices.json test/data/evinse-python-repotest
+          assert_slices python bomresults/python-usages.slices.json 6
+        shell: bash
 
   go-dataflow-fixture-hosted:
     runs-on: ubuntu-24.04
