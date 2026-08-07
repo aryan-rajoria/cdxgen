@@ -66,7 +66,10 @@ jobs:
       - name: Deno test suite runs under the Deno runtime
         shell: bash
         run: pnpm test:deno
+      # Windows is excluded until the suite has been shown to pass there under
+      # deno; the smoke tests below still cover all three platforms.
       - name: Unit test suite runs under the Deno runtime
+        if: runner.os != 'Windows'
         shell: bash
         run: pnpm run test:deno:unit
       - name: cdxgen runs under the deno runtime

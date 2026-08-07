@@ -15,7 +15,9 @@
  *   stays visible and shrinks as the causes are fixed.
  */
 import { spawnSync } from "node:child_process";
-import { globSync, readFileSync } from "node:fs";
+import { existsSync, globSync, readFileSync } from "node:fs";
+import { createRequire } from "node:module";
+import { dirname, join } from "node:path";
 import process from "node:process";
 
 /**
@@ -52,16 +54,42 @@ const KNOWN_GAPS = {
 /** Permissions the suite needs when Deno spawns each test file. */
 const DENO_ALLOW = "read,run,env,net,write,sys";
 
+/**
+ * Locate Poku's CLI entry point.
+ *
+ * The entry is run directly rather than through npx, which on Windows is a
+ * batch file and cannot be spawned without a shell. Poku does not export the
+ * entry as a subpath, so its package root is found by walking up from the
+ * module it does export.
+ *
+ * @returns {string} Absolute path to Poku's CLI entry point
+ */
+function resolvePokuBin() {
+  let dir = dirname(createRequire(import.meta.url).resolve("poku"));
+  while (dir !== dirname(dir)) {
+    const manifest = join(dir, "package.json");
+    if (existsSync(manifest)) {
+      const pkg = JSON.parse(readFileSync(manifest, "utf-8"));
+      if (pkg.name === "poku") {
+        return join(dir, pkg.bin.poku);
+      }
+    }
+    dir = dirname(dir);
+  }
+  throw new Error("Unable to locate the poku CLI entry point");
+}
+
 const runtime = process.argv[2];
 if (!Object.hasOwn(KNOWN_GAPS, runtime)) {
   console.error(`Usage: node contrib/alt-runtime-tests.js <bun|deno>`);
   process.exit(2);
 }
 
-const files = [
-  ...globSync("lib/**/*.poku.js"),
-  ...globSync("bin/**/*.poku.js"),
-].sort();
+// Globs come back with the host separator, while the held-back lists below are
+// written with forward slashes, so paths are normalised before either is used.
+const files = [...globSync("lib/**/*.poku.js"), ...globSync("bin/**/*.poku.js")]
+  .map((f) => f.replaceAll("\\", "/"))
+  .sort();
 
 const gaps = KNOWN_GAPS[runtime];
 const mocked = files.filter((f) => /["']esmock["']/.test(readFileSync(f, "utf-8")));
@@ -74,11 +102,11 @@ for (const [file, why] of Object.entries(gaps)) {
   console.log(`  held back: ${file} — ${why}`);
 }
 
-const args = ["poku", ...running];
+const args = [resolvePokuBin(), ...running];
 if (runtime === "deno") {
   args.push(`--denoAllow=${DENO_ALLOW}`);
 }
-const result = spawnSync("npx", args, {
+const result = spawnSync(process.execPath, args, {
   stdio: "inherit",
   env: { ...process.env, POKU_RUNTIME: runtime },
 });

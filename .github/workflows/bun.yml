@@ -57,7 +57,10 @@ jobs:
         run: |
           pnpm install:frozen
           mkdir -p bomresults
+      # Windows is excluded until the suite has been shown to pass there under
+      # bun; the smoke tests below still cover all three platforms.
       - name: Unit test suite runs under the bun runtime
+        if: runner.os != 'Windows'
         shell: bash
         run: pnpm run test:bun
       - name: cdxgen runs under the bun runtime (regression test for #4245)

@@ -157,4 +157,8 @@ test/data/mcp-repotest/js-openapi.json
 .chen/
 *.atom
 *.cdx.json
+# Checked-in fixtures share the extension that generated SBOMs use, so the rule
+# above would silently drop them and leave the tests that read them passing
+# only on the machine that created them.
+!test/data/**/*.cdx.json
 test/data/rust-dataflow-repotest/target
