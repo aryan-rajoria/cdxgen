@@ -90,7 +90,6 @@
     "@babel/traverse": "npm:@babel/traverse@^7.29.7",
     "ajv": "npm:ajv@^8.20.0",
     "ajv-formats": "npm:ajv-formats@^3.0.1",
-    "cheerio": "npm:cheerio@^1.2.0",
     "edn-data": "npm:edn-data@1.2.0",
     "glob": "npm:glob@^13.0.6",
     "got": "npm:got@^14.6.6",

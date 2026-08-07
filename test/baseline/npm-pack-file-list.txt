@@ -214,6 +214,7 @@ lib/parsers/gguf.js
 lib/parsers/gitAiNotes.js
 lib/parsers/huggingfaceManifest.js
 lib/parsers/huggingfaceUtils.js
+lib/parsers/htmlExtract.js
 lib/parsers/iri.js
 lib/parsers/npmrc.js
 lib/parsers/ollama.js
@@ -576,6 +577,8 @@ types/lib/parsers/huggingfaceManifest.d.ts
 types/lib/parsers/huggingfaceManifest.d.ts.map
 types/lib/parsers/huggingfaceUtils.d.ts
 types/lib/parsers/huggingfaceUtils.d.ts.map
+types/lib/parsers/htmlExtract.d.ts
+types/lib/parsers/htmlExtract.d.ts.map
 types/lib/parsers/iri.d.ts
 types/lib/parsers/iri.d.ts.map
 types/lib/parsers/npmrc.d.ts

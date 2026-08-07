@@ -151,7 +151,6 @@
     "@npmcli/package-json": "8.0.0",
     "ajv": "8.20.0",
     "ajv-formats": "3.0.1",
-    "cheerio": "1.2.0",
     "common-ancestor-path": "2.0.0",
     "edn-data": "1.2.2",
     "glob": "13.0.6",
