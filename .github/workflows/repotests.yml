@@ -447,7 +447,7 @@ jobs:
         run: rm -rf /tmp/docker-images-* /tmp/atom-*  /tmp/mvn-deps*
   cli-tests:
     strategy:
-      fail-fast: true
+      fail-fast: false
       matrix:
         java-version: ['24']
         os: ['self-hosted-ubuntu', 'ubuntu-24.04-arm', 'windows-latest', 'macos-15']
