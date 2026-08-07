@@ -99,7 +99,6 @@
     "semver": "npm:semver@^7.8.5",
     "ssri": "npm:ssri@^14.0.0",
     "tar": "npm:tar@^7.5.20",
-    "xml-js": "npm:xml-js@^1.6.11",
     "yargs": "npm:yargs@^18.0.0",
     "body-parser": "npm:body-parser@^2.3.0",
     "compression": "npm:compression@^1.8.1",
