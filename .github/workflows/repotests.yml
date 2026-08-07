@@ -203,7 +203,7 @@ jobs:
         run: |
           cd test/data/npm-hidden-lockfile-repotest && npm ci
           node ../../../bin/cdxgen.js -t js . -o ../../../bomresults/bom-npm-hidden-lockfile-fixture.json --deep --no-install-deps --no-babel --no-banner --fail-on-error
-          cd ../../../
+          cd "$GITHUB_WORKSPACE"
           jq -e '(.components | length) == 1' bomresults/bom-npm-hidden-lockfile-fixture.json
           jq -e 'any(.components[]; .purl == "pkg:npm/is-number@7.0.0" and .description == "Returns true if a number or string value is a finite number. Useful for regex matches, parsing, user input, etc." and any((.licenses // [])[]; (.license.id // .license.name // "") == "MIT") and any((.tags // [])[]; . == "numeric") and any((.externalReferences // [])[]; .type == "issue-tracker" and .url == "https://github.com/jonschlinkert/is-number/issues"))' bomresults/bom-npm-hidden-lockfile-fixture.json
         shell: bash
@@ -430,7 +430,7 @@ jobs:
           mkdir -p gomod-example
           cd gomod-example
           curl -LO https://raw.githubusercontent.com/anchore/syft/main/go.mod
-          cd ..
+          cd "$GITHUB_WORKSPACE"
           bin/cdxgen.js -r -t go gomod-example -o bomresults/bom-gomod.json
         shell: bash
       - name: repotests shiftleft-go-example
@@ -1033,7 +1033,9 @@ jobs:
         shell: bash
       - name: repotests ha-android
         run: |
-          (cd test/repotests/ha-android && ./gradlew assembleDebug) || true
+          cd test/repotests/ha-android
+          ./gradlew assembleDebug || true
+          cd "$GITHUB_WORKSPACE"
           bin/cdxgen.js -r -t java test/repotests/ha-android -o bomresults/bom-android.json
           CDXGEN_DEBUG_MODE=verbose bin/evinse.js -i bomresults/bom-android.json -o bomresults/bom-android.evinse.json -l java test/repotests/ha-android
         shell: bash
@@ -1083,7 +1085,7 @@ jobs:
           }
           EOF
           dotnet restore
-          cd ../../..
+          cd "$GITHUB_WORKSPACE"
           bin/cdxgen.js -r -t dotnet test/repotests/dotnet-api-smoke -o bomresults/bom-dotnet-api-smoke.json --profile research --spec-version 1.6 --export-proto
           node --input-type=module <<'EOF'
           import { readFileSync } from "node:fs";
@@ -1186,7 +1188,7 @@ jobs:
           End Module
           EOF
           dotnet restore
-          cd ../../../..
+          cd "$GITHUB_WORKSPACE"
 
           dotnet new console -lang "F#" -o test/repotests/dotnet-language-smoke/fsapp
           cd test/repotests/dotnet-language-smoke/fsapp
@@ -1208,7 +1210,7 @@ jobs:
               0
           EOF
           dotnet restore
-          cd ../../../..
+          cd "$GITHUB_WORKSPACE"
 
           bin/cdxgen.js -t visualbasic test/repotests/dotnet-language-smoke/vbapp -o bomresults/bom-dotnet-vb-research.json --profile research --spec-version 1.6 --fail-on-error
           node bin/evinse.js -i bomresults/bom-dotnet-vb-research.json -o bomresults/bom-dotnet-vb-research.evinse.json -l vbnet --profile research test/repotests/dotnet-language-smoke/vbapp
@@ -1330,7 +1332,7 @@ jobs:
       - name: repotests expo mac
         if: matrix.os == 'macos-15'
         run: |
-          cd test/repotests/expo-test && npm ci --legacy-peer-deps && cd ios && pod install && cd ../../../..
+          cd test/repotests/expo-test && npm ci --legacy-peer-deps && cd ios && pod install && cd "$GITHUB_WORKSPACE"
                                                                                                   bin/cdxgen.js -t cocoapods                  test/repotests/expo-test -o bomresults/bom-expo-cocoapods.json
           COCOA_MERGE_SUBSPECS=false                                                              bin/cdxgen.js -t cocoapods                  test/repotests/expo-test -o bomresults/bom-expo-cocoapods-subs.json
                                      COCOA_RESOLVE_FROM_NODE=false                                bin/cdxgen.js -t cocoapods                  test/repotests/expo-test -o bomresults/bom-expo-cocoapods-no-node.json
@@ -1348,7 +1350,7 @@ jobs:
       - name: repotests expo not mac
         if: matrix.os != 'macos-15'
         run: |
-          cd test/repotests/expo-test && npm ci --legacy-peer-deps && cd ../../..
+          cd test/repotests/expo-test && npm ci --legacy-peer-deps && cd "$GITHUB_WORKSPACE"
                                                                                                   bin/cdxgen.js -t cocoapods                  test/repotests/expo-test -o bomresults/bom-expo-cocoapods.json
           COCOA_MERGE_SUBSPECS=false                                                              bin/cdxgen.js -t cocoapods                  test/repotests/expo-test -o bomresults/bom-expo-cocoapods-subs.json
                                      COCOA_RESOLVE_FROM_NODE=false                                bin/cdxgen.js -t cocoapods                  test/repotests/expo-test -o bomresults/bom-expo-cocoapods-no-node.json
@@ -1448,7 +1450,7 @@ jobs:
           curl -LO https://github.com/owasp-dep-scan/dosai/releases/download/v0.1.1/Dosai.exe
           curl -LO https://github.com/owasp-dep-scan/dosai/releases/download/v0.1.1/Dosai
           curl -LO https://github.com/owasp-dep-scan/dosai/releases/download/v0.1.1/Dosai-osx-arm64
-          cd ..
+          cd "$GITHUB_WORKSPACE"
           bin/cdxgen.js -t dotnet --lifecycle post-build -o bomresults/bom-binary.json bintests
           source ci/assertions.sh
           assert_non_cdxgen_tool_identity_bom bomresults/bom-binary.json
@@ -1460,7 +1462,7 @@ jobs:
           curl -LO https://github.com/containerd/containerd/releases/download/v2.0.0-rc.0/containerd-static-2.0.0-rc.0-linux-amd64.tar.gz
           tar -xvf containerd-static-2.0.0-rc.0-linux-amd64.tar.gz
           rm containerd-static-2.0.0-rc.0-linux-amd64.tar.gz
-          cd ..
+          cd "$GITHUB_WORKSPACE"
           bin/cdxgen.js -t go --lifecycle post-build -o bomresults/bom-go-binary.json gobintests
           assert_non_cdxgen_tool_identity_bom bomresults/bom-go-binary.json
         shell: bash
@@ -1683,7 +1685,7 @@ jobs:
           go mod download all
           go mod tidy
           go list -deps ./... >/dev/null
-          cd ../../..
+          cd "$GITHUB_WORKSPACE"
 
           GOLEM_CMD="$(node --input-type=module <<'EOF'
           import { resolvePluginBinary } from "./lib/inventory/plugins.js";
@@ -1844,7 +1846,7 @@ jobs:
           if [ -d "test/data/rust-dataflow-repotest" ]; then
             cd test/data/rust-dataflow-repotest
             cargo fetch || true
-            cd ../../..
+            cd "$GITHUB_WORKSPACE"
           fi
 
           RUSI_CMD="$(node --input-type=module <<'EOF'

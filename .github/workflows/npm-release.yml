@@ -376,7 +376,7 @@ jobs:
       - name: Attach cdx sbom
         run: |
           pnpm install:frozen
-          cd latest-cdxgen && pnpm install:frozen && cd ..
+          cd latest-cdxgen && pnpm install:frozen && cd "$GITHUB_WORKSPACE"
           tags="${STEPS_META_OUTPUTS_TAGS}"
           first_tag=$(echo "$tags" | head -n 1)
           node bin/cdxgen.js -t docker -o cdxgen-oci-image.cdx.json "$first_tag"
@@ -568,7 +568,7 @@ jobs:
       - name: Attach cdx sbom
         run: |
           pnpm install:frozen
-          cd latest-cdxgen && pnpm install:frozen && cd ..
+          cd latest-cdxgen && pnpm install:frozen && cd "$GITHUB_WORKSPACE"
           tags="${STEPS_META_OUTPUTS_TAGS}"
           first_tag=$(echo "$tags" | head -n 1)
           node bin/cdxgen.js -t docker -o cdxgen-secure-oci-image.cdx.json "$first_tag"
@@ -760,7 +760,7 @@ jobs:
       - name: Attach cdx sbom
         run: |
           pnpm install:frozen
-          cd latest-cdxgen && pnpm install:frozen && cd ..
+          cd latest-cdxgen && pnpm install:frozen && cd "$GITHUB_WORKSPACE"
           tags="${STEPS_META_OUTPUTS_TAGS}"
           first_tag=$(echo "$tags" | head -n 1)
           node bin/cdxgen.js -t docker -o cdxgen-deno-oci-image.cdx.json "$first_tag"
@@ -1009,7 +1009,7 @@ jobs:
       - name: Attach cdx sbom
         run: |
           pnpm install:frozen
-          cd latest-cdxgen && pnpm install:frozen && cd ..
+          cd latest-cdxgen && pnpm install:frozen && cd "$GITHUB_WORKSPACE"
           tags="${STEPS_META_OUTPUTS_TAGS}"
           first_tag=$(echo "$tags" | head -n 1)
           node bin/cdxgen.js -t docker -o cdxgen-bun-oci-image.cdx.json "$first_tag"
