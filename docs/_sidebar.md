@@ -38,6 +38,8 @@
 - [AI Prompt for New Ecosystem Contributions](AI_ECOSYSTEM_PROMPT.md)
 - [Testing Guide](TESTING.md)
 - [cdxrs protocol](CDXRS_PROTOCOL.md)
+- [Benchmarks](BENCHMARKS.md)
+- [Deprecations](DEPRECATIONS.md)
 - **Guides**
 - [Troubleshooting](TROUBLESHOOTING.md)
 - [Large and Complex Projects](MONOREPO.md)

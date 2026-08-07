@@ -15,3 +15,13 @@
 # a load-bearing justification that was reviewed entry-by-entry. If it grows
 # without a real reason tied to a deliverable, that is a signal of either a
 # genuine regression or a normalizer gap, not a documentation task.
+
+# Re-audited at the v13.0.0 release gate, after every deliverable landed. The
+# file is still empty: no v12-vs-v13 delta has needed a justification. That is
+# the intended end state, not an oversight.
+#
+# The one behavioural difference known to be intentional — v13 discovering
+# components from a distribution's PEP 770 `.dist-info/sboms/` directory that
+# v12 cannot see — appears as an addition rather than a delta on an existing
+# pointer, so it does not need an entry here. It is recorded in
+# docs/BENCHMARKS.md and MIGRATING-TO-V13.md.

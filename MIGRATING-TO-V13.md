@@ -522,3 +522,49 @@ you care about wall time.
 See [`docs/ENV.md`](docs/ENV.md) for the Atom/Evinse env-var table
 (`ATOM_CMD`, `ATOM_HOME`, `ATOM_JAVA_HOME`, `ATOM_DEBUG`, `PHP_PARSER_BIN`,
 `ATOM_JVM_ARGS`, `ATOM_SLICE_DEPTH`).
+
+## New CLI flags
+
+| Flag | Purpose |
+| ---- | ------- |
+| `--tlp-classification` | Record a Traffic Light Protocol classification under `metadata.distributionConstraints.tlp` (CycloneDX 1.7+). Present in v12 but hidden; now documented. A weak classification (`CLEAR`, `GREEN`, `AMBER`) also redacts known sensitive property values. |
+| `--tea-fetch <tei>` | Retrieve a supplier's SBOM over the Transparency Exchange API and merge it. See [Lesson 20](docs/LESSON20.md). |
+| `--tea-publish <url>` | Publish the generated BOM as a TEA Artifact. Targets the **draft** publisher API and will change. |
+| `--tea-leaf-identifier`, `--tea-collection-name`, `--tea-reason`, `--tea-author-name`, `--tea-author-email`, `--tea-artifact-url`, `--tea-token` | Supporting options for `--tea-publish`. |
+| `--experimental-mcp-pinning` | Record an explicit pinning state for MCP server components. Off by default; property names carry no stability promise. |
+
+`--tea-publish` uses exit status **3** for a publish failure, distinct from
+other errors. The BOM is written to disk before the publish is attempted, so a
+failure never costs you the SBOM — gate CI on `3` as "generated but not
+distributed" rather than as a build failure.
+
+## What appears in a BOM that did not before
+
+These change component counts or add fields, so they are the ones most likely
+to surprise a diff after upgrading.
+
+- **CycloneDX 1.7 `citations`** — a root-level array recording that cdxgen
+  collected the inventory, plus audit findings when `--bom-audit` ran. Stripped
+  automatically at `--spec-version 1.6` and below. See
+  [Lesson 19](docs/LESSON19.md).
+- **PEP 770 embedded SBOMs** — components a Python distribution declares in its
+  own `.dist-info/sboms/` directory now appear, as dependencies *of* that
+  distribution. On the project's own test fixture this took the component count
+  from 1 to 2.
+- **`algorithmFamily` and `ellipticCurve`** on cryptographic assets, with the
+  deprecated free-text `curve` retained when a curve cannot be mapped to the
+  1.7 enum.
+- **New ecosystems** — Zig, Gleam, Mojo and bzlmod, listed above.
+
+## Performance
+
+Small projects are roughly 45% faster than v12 and use less memory; the packed
+tarball grew ~0.4 MB. Numbers, methodology and what is still unmeasured are in
+[docs/BENCHMARKS.md](docs/BENCHMARKS.md).
+
+## Deprecations
+
+The Rust fallback paths are **not** scheduled for removal, reversing the
+original v13 plan — measurement did not justify making the binary mandatory.
+See [docs/DEPRECATIONS.md](docs/DEPRECATIONS.md) for the full schedule and the
+criteria that would have to hold before anything is removed.
