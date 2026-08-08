@@ -17,17 +17,17 @@ importers:
   .:
     dependencies:
       '@babel/parser':
-        specifier: 7.29.7
-        version: 7.29.7
+        specifier: 8.0.4
+        version: 8.0.4
       '@babel/traverse':
-        specifier: 7.29.7
-        version: 7.29.7
+        specifier: 8.0.4
+        version: 8.0.4
       '@cdxgen/cdx-purl':
         specifier: 0.0.5
         version: 0.0.5
       '@cdxgen/cdxgen-plugins-bin':
-        specifier: 2.5.1
-        version: 2.5.1
+        specifier: 3.0.0
+        version: 3.0.0
       '@iarna/toml':
         specifier: 2.2.5
         version: 2.2.5
@@ -118,11 +118,11 @@ importers:
         version: 7.0.2
     optionalDependencies:
       '@appthreat/atom':
-        specifier: 3.0.3
-        version: 3.0.3
+        specifier: 3.1.1
+        version: 3.1.1
       '@appthreat/atom-parsetools':
-        specifier: 1.2.2
-        version: 1.2.2
+        specifier: 1.3.0
+        version: 1.3.0
       '@bufbuild/protobuf':
         specifier: 2.13.0
         version: 2.13.0
@@ -133,35 +133,35 @@ importers:
         specifier: 2.1.0
         version: 2.1.0
       '@cdxgen/cdxgen-plugins-bin-darwin-amd64':
-        specifier: 2.5.1
-        version: 2.5.1
+        specifier: 3.0.0
+        version: 3.0.0
       '@cdxgen/cdxgen-plugins-bin-darwin-arm64':
-        specifier: 2.5.1
-        version: 2.5.1
+        specifier: 3.0.0
+        version: 3.0.0
       '@cdxgen/cdxgen-plugins-bin-linux-amd64':
-        specifier: 2.5.1
-        version: 2.5.1
+        specifier: 3.0.0
+        version: 3.0.0
       '@cdxgen/cdxgen-plugins-bin-linux-arm':
-        specifier: 2.5.1
-        version: 2.5.1
+        specifier: 3.0.0
+        version: 3.0.0
       '@cdxgen/cdxgen-plugins-bin-linux-arm64':
-        specifier: 2.5.1
-        version: 2.5.1
+        specifier: 3.0.0
+        version: 3.0.0
       '@cdxgen/cdxgen-plugins-bin-linux-ppc64':
-        specifier: 2.5.1
-        version: 2.5.1
+        specifier: 3.0.0
+        version: 3.0.0
       '@cdxgen/cdxgen-plugins-bin-linuxmusl-amd64':
-        specifier: 2.5.1
-        version: 2.5.1
+        specifier: 3.0.0
+        version: 3.0.0
       '@cdxgen/cdxgen-plugins-bin-linuxmusl-arm64':
-        specifier: 2.5.1
-        version: 2.5.1
+        specifier: 3.0.0
+        version: 3.0.0
       '@cdxgen/cdxgen-plugins-bin-windows-amd64':
-        specifier: 2.5.1
-        version: 2.5.1
+        specifier: 3.0.0
+        version: 3.0.0
       '@cdxgen/cdxgen-plugins-bin-windows-arm64':
-        specifier: 2.5.1
-        version: 2.5.1
+        specifier: 3.0.0
+        version: 3.0.0
       '@cdxgen/safer-exec':
         specifier: 0.15.0
         version: 0.15.0
@@ -183,96 +183,99 @@ packages:
   '@appthreat/atom-common@1.1.0':
     resolution: {integrity: sha512-vGZpJdy9e0l83o8XwDAsQUDpkMVzR4DLb7mbi5npu8Nz/R+2m5oyHlpBGuLYBKm5+KkjTInXP9eNTcMa0Mn3Uw==, tarball: https://registry.npmjs.org/@appthreat/atom-common/-/atom-common-1.1.0.tgz}
 
-  '@appthreat/atom-darwin-amd64@3.0.3':
-    resolution: {integrity: sha512-t/fsT4GDd3gNYvn0eYsuKsL6RJyvBZYH028Cz7sGeJTcnWRzQ21xY59l4GUU7AKmQSmx5ZXjCkmA9TDSLeGyog==, tarball: https://registry.npmjs.org/@appthreat/atom-darwin-amd64/-/atom-darwin-amd64-3.0.3.tgz}
+  '@appthreat/atom-darwin-amd64@3.1.1':
+    resolution: {integrity: sha512-ZHRMoQRl1iL/2fdvzggPDXJir/wp7JXZuFGa92WBBZdqFXmp1slR4lkMOjznbEDJgn6Ia9rPMIEoRvd5Cer+RQ==, tarball: https://registry.npmjs.org/@appthreat/atom-darwin-amd64/-/atom-darwin-amd64-3.1.1.tgz}
     cpu: [x64]
     os: [darwin]
 
-  '@appthreat/atom-darwin-arm64@3.0.3':
-    resolution: {integrity: sha512-s/OSc5LWQS/nARsWE630r4FYmJDkoRXCPu/4gkXwoBXLhOOYgn8ZCyUr+dovxrPb7CZinya+yJHJB0xfYnDpOQ==, tarball: https://registry.npmjs.org/@appthreat/atom-darwin-arm64/-/atom-darwin-arm64-3.0.3.tgz}
+  '@appthreat/atom-darwin-arm64@3.1.1':
+    resolution: {integrity: sha512-ugnw2oVyysxUeHJfzNOYMznH1Cg41wSV4YjEZflB7m8Yj0Y1NlCrjP7sL4qkE/uYw8Vp4uFLc6XJMTHNahwmvg==, tarball: https://registry.npmjs.org/@appthreat/atom-darwin-arm64/-/atom-darwin-arm64-3.1.1.tgz}
     cpu: [arm64]
     os: [darwin]
 
-  '@appthreat/atom-linux-amd64-musl@3.0.3':
-    resolution: {integrity: sha512-1wxO0BloQcXKEhrsE97ZJVJzea+G2f0XDXU8yT1P1bcNGRYrWO+98VwL3T5pWtZ/1uDkCbtc05UuVxjSToxfJA==, tarball: https://registry.npmjs.org/@appthreat/atom-linux-amd64-musl/-/atom-linux-amd64-musl-3.0.3.tgz}
+  '@appthreat/atom-jar@3.1.1':
+    resolution: {integrity: sha512-xJ0PHsTaMjQfERKBhbqd5Yu5vo/F9aJjVLl5gasOn4fVPcvhuEcn3RQKp8cf9fNPQEjszTQ1zA3LLKRURpGJ7g==, tarball: https://registry.npmjs.org/@appthreat/atom-jar/-/atom-jar-3.1.1.tgz}
+
+  '@appthreat/atom-linux-amd64-musl@3.1.1':
+    resolution: {integrity: sha512-vl6SntDbB4+A31wau7j8/ju/PPpffVACjO0IBjU0/f4RYLw8M6bw1d7SdDhT8rKTrOLcpcwS6lX9Kj2z2XJkUQ==, tarball: https://registry.npmjs.org/@appthreat/atom-linux-amd64-musl/-/atom-linux-amd64-musl-3.1.1.tgz}
     cpu: [x64]
     os: [linux]
     libc: [musl]
 
-  '@appthreat/atom-linux-amd64@3.0.3':
-    resolution: {integrity: sha512-+LruyRicWs7Sft2cMTnW6sha43LVGqJRRgdvXXHLDzWeSvzR7A69ADDfcb4QeSQIJUR3916oZVr+G3HBMil23w==, tarball: https://registry.npmjs.org/@appthreat/atom-linux-amd64/-/atom-linux-amd64-3.0.3.tgz}
+  '@appthreat/atom-linux-amd64@3.1.1':
+    resolution: {integrity: sha512-Ch3KQSZN3F5AyRTnuYpwjAeC3NkgnBz+eOhlOOFQnhx/UG/LBRUpqdRKyPSW2lkDqxakLAPPsQoaR/FOb06I3w==, tarball: https://registry.npmjs.org/@appthreat/atom-linux-amd64/-/atom-linux-amd64-3.1.1.tgz}
     cpu: [x64]
     os: [linux]
     libc: [glibc]
 
-  '@appthreat/atom-linux-arm64-musl@3.0.3':
-    resolution: {integrity: sha512-oZW88xbhyMV9shlHAdwBH7i/DP8qZK2h1qNdGKbg22uCKEI8DIriU80MO8vv50C8TjSudCMsPxD5258S3W4Cpw==, tarball: https://registry.npmjs.org/@appthreat/atom-linux-arm64-musl/-/atom-linux-arm64-musl-3.0.3.tgz}
+  '@appthreat/atom-linux-arm64-musl@3.1.1':
+    resolution: {integrity: sha512-N64df8QU7toTG4m5ed0kY8ZfmQ1A4XTOz5nprxxoVIypPOAEZjmjvRdEJ/nFFH/qa0dk3LUlfvMNUXCk7DPk6w==, tarball: https://registry.npmjs.org/@appthreat/atom-linux-arm64-musl/-/atom-linux-arm64-musl-3.1.1.tgz}
     cpu: [arm64]
     os: [linux]
     libc: [musl]
 
-  '@appthreat/atom-linux-arm64@3.0.3':
-    resolution: {integrity: sha512-IgTFNlYUGdMvQWjw86Zry1N+prr2QCISEdeZnOhSxQ3C0fDuV3nzgHZVvhf+k4xaY9EBBlz0k7Oobx3RB2c6Vw==, tarball: https://registry.npmjs.org/@appthreat/atom-linux-arm64/-/atom-linux-arm64-3.0.3.tgz}
+  '@appthreat/atom-linux-arm64@3.1.1':
+    resolution: {integrity: sha512-nV/R3GwwBuUwM1KcT+iMxXTaoY3N5ralw/wErBRTVNAsH70fKhmwjdsceK9tFgVhsawM9sQAAiMACSX1Lnu53w==, tarball: https://registry.npmjs.org/@appthreat/atom-linux-arm64/-/atom-linux-arm64-3.1.1.tgz}
     cpu: [arm64]
     os: [linux]
     libc: [glibc]
 
-  '@appthreat/atom-parsetools@1.2.2':
-    resolution: {integrity: sha512-uH93lVI2H53x3ZbcXWUBhcm25Kv4Iz+bWHtrghCn5YHtsm223kGRKqDx3hqmfUNybz+ZqFs1WhHFW7ah4HIqEA==, tarball: https://registry.npmjs.org/@appthreat/atom-parsetools/-/atom-parsetools-1.2.2.tgz}
-    engines: {node: '>=16.0.0'}
+  '@appthreat/atom-parsetools@1.3.0':
+    resolution: {integrity: sha512-rWhxcslJ0a2qetwNpvZyXohXYqSnCBRQ00CEnGR70G6I2jAiEnx2M0X/qsoY5TkQKOdgLUjx4Fs82357qSD3OA==, tarball: https://registry.npmjs.org/@appthreat/atom-parsetools/-/atom-parsetools-1.3.0.tgz}
+    engines: {node: '>=22.0.0'}
     hasBin: true
 
-  '@appthreat/atom-windows-amd64@3.0.3':
-    resolution: {integrity: sha512-nl+658vXHiqBjPclosDnBw9p5FV1dsdsw/txnG0XX2gl1OlrPlioUPXDcG1pUCOcEh1/V9vv9jQoVOJTXrMavA==, tarball: https://registry.npmjs.org/@appthreat/atom-windows-amd64/-/atom-windows-amd64-3.0.3.tgz}
+  '@appthreat/atom-windows-amd64@3.1.1':
+    resolution: {integrity: sha512-gwdigo5HkrStBl0UM6jfytvwCGPnGNbt1tGu7so/UFoxIm8w43sVusyBmRKXXW0YeHVS7jgDfhVWPeLXYWGGPw==, tarball: https://registry.npmjs.org/@appthreat/atom-windows-amd64/-/atom-windows-amd64-3.1.1.tgz}
     cpu: [x64]
     os: [win32]
 
-  '@appthreat/atom-windows-arm64@3.0.3':
-    resolution: {integrity: sha512-BwvJwpy5tSsNSIM8UMAjPvffsgHOfrrJlTUVomJZNiQZi1bU3YUQhgs4TWdsw4WkHxWfLZDAkRWIUWX1XLiPhw==, tarball: https://registry.npmjs.org/@appthreat/atom-windows-arm64/-/atom-windows-arm64-3.0.3.tgz}
+  '@appthreat/atom-windows-arm64@3.1.1':
+    resolution: {integrity: sha512-jtNOU2Lxw0YGTmfba04o7OiwOWERrzogNHeYJTLQXYJ3MNEvg9TITXic+lgfRG1ZoqOe4ENp2s9cbcAHwsLNbw==, tarball: https://registry.npmjs.org/@appthreat/atom-windows-arm64/-/atom-windows-arm64-3.1.1.tgz}
     cpu: [arm64]
     os: [win32]
 
-  '@appthreat/atom@3.0.3':
-    resolution: {integrity: sha512-3vEx6EvxqhbMDpaGcm8m+J3d3nMPEDzt3vDYCMVkgMxI/nXXYZ2xA9r1PczizdBapcWXbhW8xG/LiV/m/QSG+Q==, tarball: https://registry.npmjs.org/@appthreat/atom/-/atom-3.0.3.tgz}
+  '@appthreat/atom@3.1.1':
+    resolution: {integrity: sha512-PXUUQCLuMd4P3Vgf7nQSGcXjlFh33WFmfSUMQs+ofMthXGela1lHqi8G5EgviYPvrCEl2npSLU1s1WS1r8MhxQ==, tarball: https://registry.npmjs.org/@appthreat/atom/-/atom-3.1.1.tgz}
     engines: {node: '>=18'}
     hasBin: true
 
-  '@babel/code-frame@7.29.7':
-    resolution: {integrity: sha512-Aup7aUOfpbAUg2ROOJN6Iw5f9DMBlzu0mIkm/malLQFN/YQgO48wCj0Kxa3sEHJvPVFg7siR+qRInwXd2qhQKw==, tarball: https://registry.npmjs.org/@babel/code-frame/-/code-frame-7.29.7.tgz}
-    engines: {node: '>=6.9.0'}
+  '@babel/code-frame@8.0.0':
+    resolution: {integrity: sha512-dYYg153EyN2Ekbqw2zAsbd6/JR+9N2SEoC7YV2GyyqMM7x9bLDTjBD6XBhSMLH0wtIVyJj03jWNriQhaN+eoCw==, tarball: https://registry.npmjs.org/@babel/code-frame/-/code-frame-8.0.0.tgz}
+    engines: {node: ^22.18.0 || >=24.11.0}
 
-  '@babel/generator@7.29.7':
-    resolution: {integrity: sha512-DkXD5OJQaAQIdZ1bt3UZdEnHAn9Imd3IVBdX03UFe+ony9Ojw5pzr9YVKGDY1jt+Gcn/FnGkNf8r+Vj5NOJWtQ==, tarball: https://registry.npmjs.org/@babel/generator/-/generator-7.29.7.tgz}
-    engines: {node: '>=6.9.0'}
+  '@babel/generator@8.0.0':
+    resolution: {integrity: sha512-NT9NrVwJsbSV6Y2FSstWa71EETOnzrjkL5/wX3D2mYHtKM+qvqB1DvR4D0Setb/gDBsHzRICifwEWMO8CnTF6g==, tarball: https://registry.npmjs.org/@babel/generator/-/generator-8.0.0.tgz}
+    engines: {node: ^22.18.0 || >=24.11.0}
 
-  '@babel/helper-globals@7.29.7':
-    resolution: {integrity: sha512-3nQVUAtvkKH9zahfWgw96Jc/uFOmjACE1kQz82E2lqWmHBgjzbNlsC22nuQTfahmWeQtTq5nQ/4Nnd2A1wj4zA==, tarball: https://registry.npmjs.org/@babel/helper-globals/-/helper-globals-7.29.7.tgz}
-    engines: {node: '>=6.9.0'}
+  '@babel/helper-globals@8.0.0':
+    resolution: {integrity: sha512-lLozHOM6sWWlxNo8CYqHy4MBZeTvHXNgVPBfPOGsjPKUzHC2Az9QwB6gxdQmpwHl6GlQtbGgS+lj5887guDiLw==, tarball: https://registry.npmjs.org/@babel/helper-globals/-/helper-globals-8.0.0.tgz}
+    engines: {node: ^22.18.0 || >=24.11.0}
 
-  '@babel/helper-string-parser@7.29.7':
-    resolution: {integrity: sha512-Pb5ijPrZ89GDH8223L4UP8i6QApWxs04RbPQJTeWDV0/keR2E36MeKnyr6LYmUUvqRRI+Iv87SuF1W6ErINzYw==, tarball: https://registry.npmjs.org/@babel/helper-string-parser/-/helper-string-parser-7.29.7.tgz}
-    engines: {node: '>=6.9.0'}
+  '@babel/helper-string-parser@8.0.0':
+    resolution: {integrity: sha512-6mJgmFFFIIO82vvoLt9XtRC7/TkzXfts1t/SpRX4IHSzMgqoPYCWesVu1udUPUWioAE/2fcG6WuI8zrkE1gwrg==, tarball: https://registry.npmjs.org/@babel/helper-string-parser/-/helper-string-parser-8.0.0.tgz}
+    engines: {node: ^22.18.0 || >=24.11.0}
 
-  '@babel/helper-validator-identifier@7.29.7':
-    resolution: {integrity: sha512-qehxGkRj55h/ff8EMaJ+cYhyaKlHIxqYDn682wQD7RNp9UujOQsHog2uS0r2vzr4pW+sXf90NeeayjcNaX3fFg==, tarball: https://registry.npmjs.org/@babel/helper-validator-identifier/-/helper-validator-identifier-7.29.7.tgz}
-    engines: {node: '>=6.9.0'}
+  '@babel/helper-validator-identifier@8.0.4':
+    resolution: {integrity: sha512-4wFaiLd0bVo4cIoTXI3zKI038NIWE/cr3jvBjejOVYVxV/m8Ltav1USiGzG1fmS5J2RhgEOgXNNK46cRPnRsrg==, tarball: https://registry.npmjs.org/@babel/helper-validator-identifier/-/helper-validator-identifier-8.0.4.tgz}
+    engines: {node: ^22.18.0 || >=24.11.0}
 
-  '@babel/parser@7.29.7':
-    resolution: {integrity: sha512-hnORnjP/1P/zFEndoeX+n+t1RwWRJiJpM/jO7FW32Kn9r5+sJB2JWOdYo4L6k78j15eCwY3Gm/7364B1EMwtNg==, tarball: https://registry.npmjs.org/@babel/parser/-/parser-7.29.7.tgz}
-    engines: {node: '>=6.0.0'}
+  '@babel/parser@8.0.4':
+    resolution: {integrity: sha512-srpptsAkEbbNIC/q8nT7o+m6CQe8CJUTV/t7MYc9NnWlgYVtHOb7JH6SorxMhN0kuRJjVqXbKClG6xSbPtzz+g==, tarball: https://registry.npmjs.org/@babel/parser/-/parser-8.0.4.tgz}
+    engines: {node: ^22.18.0 || >=24.11.0}
     hasBin: true
 
-  '@babel/template@7.29.7':
-    resolution: {integrity: sha512-puq+Gf35oI24FeN11LkoUQFqv9uwNeWpxXZi/Ji3rRIoKAzKnxRaZ+Gkj0vKS9ZCiTESfng1N9LyOyXvo+m+Gg==, tarball: https://registry.npmjs.org/@babel/template/-/template-7.29.7.tgz}
-    engines: {node: '>=6.9.0'}
+  '@babel/template@8.0.0':
+    resolution: {integrity: sha512-eAD0QW/AlbamBbw0FeGiwasbCVPq5ncW0HNVyLP3B9czqLyh4gvw+5JTSNt6le9+ziAU7mqDZsKTHf3jTb4chQ==, tarball: https://registry.npmjs.org/@babel/template/-/template-8.0.0.tgz}
+    engines: {node: ^22.18.0 || >=24.11.0}
 
-  '@babel/traverse@7.29.7':
-    resolution: {integrity: sha512-EhlfNQtZ+NK22w5BM61ciuiq1m58ed33Wr1Xan//ZRTy6hgjnwyCffRYwzsGXdASJSUJ1guZILsErh1eQcl+zw==, tarball: https://registry.npmjs.org/@babel/traverse/-/traverse-7.29.7.tgz}
-    engines: {node: '>=6.9.0'}
+  '@babel/traverse@8.0.4':
+    resolution: {integrity: sha512-bZnmqzGG8UZneG1lLxBoWIH0G6Gr1D846Yu4/3XnY6FhCndMR49u26nTY08u/dAxWmLWF9vGQOuC+84FfIUoeg==, tarball: https://registry.npmjs.org/@babel/traverse/-/traverse-8.0.4.tgz}
+    engines: {node: ^22.18.0 || >=24.11.0}
 
-  '@babel/types@7.29.7':
-    resolution: {integrity: sha512-4zBIxpPzowiZpusoFkyGVwakdRJUyuH5PxQ/PrqghfdFWWasvnCdPfQXHrenDai+gyLARulZjZowCOj6fjT4pA==, tarball: https://registry.npmjs.org/@babel/types/-/types-7.29.7.tgz}
-    engines: {node: '>=6.9.0'}
+  '@babel/types@8.0.4':
+    resolution: {integrity: sha512-eY+Yn3dCqTGmyiq2QRU66lA5FL8lqqqvecHt0fF3uHONIa7ToYsaCiWV8lOKqAs0Rb2SjixiKFROngnulPtt2g==, tarball: https://registry.npmjs.org/@babel/types/-/types-8.0.4.tgz}
+    engines: {node: ^22.18.0 || >=24.11.0}
 
   '@biomejs/biome@2.5.5':
     resolution: {integrity: sha512-r1S8nFsAG1MY+vJFZALzIvwXAJv6ejDQ0mxP21Tgr9YK3ZFtjrvbBwDdNhx1rUqvccEIeNg20cYCNzl6Cr69pQ==, tarball: https://registry.npmjs.org/@biomejs/biome/-/biome-2.5.5.tgz}
@@ -350,64 +353,64 @@ packages:
     resolution: {integrity: sha512-ESyBl4GaIsZH04v+Bt9LFEVoUtULRvwTWKS7iGYWp3GupFSP40ZTqmOhAFp1Do1n4B67XD7xb7l7P9mnUIuAWg==, tarball: https://registry.npmjs.org/@cdxgen/cdx-purl/-/cdx-purl-0.0.5.tgz}
     engines: {bun: '>=1.0.0', deno: '>=1.40.0', node: '>=20'}
 
-  '@cdxgen/cdxgen-plugins-bin-darwin-amd64@2.5.1':
-    resolution: {integrity: sha512-f1XFP66ioCOo/xe+gCnZhbCU8DFV+uBPRC+meneQo+lrr325ih8R7QVup86LpSkIhS8fzJP+wVAVEUwWQFblQA==, tarball: https://registry.npmjs.org/@cdxgen/cdxgen-plugins-bin-darwin-amd64/-/cdxgen-plugins-bin-darwin-amd64-2.5.1.tgz}
+  '@cdxgen/cdxgen-plugins-bin-darwin-amd64@3.0.0':
+    resolution: {integrity: sha512-fJIopzyUV7Sq0BxI/MtYGuNz5D0lBFvMt7FiVwVitMAx1nrn1Ftnj3/8w5Fkb0H2b95TaiO0r1dAUeFHAW0GQQ==, tarball: https://registry.npmjs.org/@cdxgen/cdxgen-plugins-bin-darwin-amd64/-/cdxgen-plugins-bin-darwin-amd64-3.0.0.tgz}
     cpu: [x64]
     os: [darwin]
 
-  '@cdxgen/cdxgen-plugins-bin-darwin-arm64@2.5.1':
-    resolution: {integrity: sha512-BHFq06qcZXxxQbkcbZ+aDgBqOFnkmCXhhkhxCwRSvLCKLVGL4EtGx0u7zr5D4T7+3lpuciXD+qpy6PiGgxdCWQ==, tarball: https://registry.npmjs.org/@cdxgen/cdxgen-plugins-bin-darwin-arm64/-/cdxgen-plugins-bin-darwin-arm64-2.5.1.tgz}
+  '@cdxgen/cdxgen-plugins-bin-darwin-arm64@3.0.0':
+    resolution: {integrity: sha512-nitbcajsHB1O1kEUoh+e0bozQeTEwZwdatZf0ykE8ZRZXiGZkyAHjCtROZbKcbjsSnuUodHxdU2VIC4LjZ94oQ==, tarball: https://registry.npmjs.org/@cdxgen/cdxgen-plugins-bin-darwin-arm64/-/cdxgen-plugins-bin-darwin-arm64-3.0.0.tgz}
     cpu: [arm64]
     os: [darwin]
 
-  '@cdxgen/cdxgen-plugins-bin-linux-amd64@2.5.1':
-    resolution: {integrity: sha512-OUinsO0g/DYmxkfxhzGU/T84QaUftPA4WN9rcab7h3grG5nJZ/ntQDBdj+LcbcvYKPQIEnNjYlXe31heyS4R4A==, tarball: https://registry.npmjs.org/@cdxgen/cdxgen-plugins-bin-linux-amd64/-/cdxgen-plugins-bin-linux-amd64-2.5.1.tgz}
+  '@cdxgen/cdxgen-plugins-bin-linux-amd64@3.0.0':
+    resolution: {integrity: sha512-6im+GlWEy2ZgA/TZVVzErCuZHvh3b3w7KzSu1VXnBbIx+j9IebWMyhEHw4SrQV4WwziK974UTqidNyBmx/rm4Q==, tarball: https://registry.npmjs.org/@cdxgen/cdxgen-plugins-bin-linux-amd64/-/cdxgen-plugins-bin-linux-amd64-3.0.0.tgz}
     cpu: [x64]
     os: [linux]
     libc: glibc
 
-  '@cdxgen/cdxgen-plugins-bin-linux-arm64@2.5.1':
-    resolution: {integrity: sha512-NjxXYNzqMAv0M5lBDNZZniYvJRgzJlHVsucR2R2DNK7lHzALBWeYdY6FhBSztX6SmK3Ictq8T7g+w1k0vMnxoA==, tarball: https://registry.npmjs.org/@cdxgen/cdxgen-plugins-bin-linux-arm64/-/cdxgen-plugins-bin-linux-arm64-2.5.1.tgz}
+  '@cdxgen/cdxgen-plugins-bin-linux-arm64@3.0.0':
+    resolution: {integrity: sha512-BRRt02s4aQdhDn9AYPZJdk5ScouPzK58weuDZamDE5p7Paxh5QCEn5eFfaNCMa782bi3ZSmUpyb/GDOB6+Gstw==, tarball: https://registry.npmjs.org/@cdxgen/cdxgen-plugins-bin-linux-arm64/-/cdxgen-plugins-bin-linux-arm64-3.0.0.tgz}
     cpu: [arm64]
     os: [linux]
     libc: glibc
 
-  '@cdxgen/cdxgen-plugins-bin-linux-arm@2.5.1':
-    resolution: {integrity: sha512-I3LtLJ/DvKRvwnz4apFLAO+9/fJMPU9RB4WxwBqTjVa7sFcbnpRHE9EMjsuu0MsYAEIDoich0Qk6/83PrGe5zA==, tarball: https://registry.npmjs.org/@cdxgen/cdxgen-plugins-bin-linux-arm/-/cdxgen-plugins-bin-linux-arm-2.5.1.tgz}
+  '@cdxgen/cdxgen-plugins-bin-linux-arm@3.0.0':
+    resolution: {integrity: sha512-sD4jEQRPxSNa3+unCcLh8UITxnzHg10BwYnVPgZBGnPBwHczucOKTRzhH0Tj2FGzIIKhbwcjDInuQgrkyjWSTQ==, tarball: https://registry.npmjs.org/@cdxgen/cdxgen-plugins-bin-linux-arm/-/cdxgen-plugins-bin-linux-arm-3.0.0.tgz}
     cpu: [arm]
     os: [linux]
     libc: glibc
 
-  '@cdxgen/cdxgen-plugins-bin-linux-ppc64@2.5.1':
-    resolution: {integrity: sha512-9vWIQ63HLTAuezn3qT9OlBgh4bJVEF3WX69omF0VeovHzn0FRDKp8xKSpV/OZoBFrX4JjKc7DrC/ZTFpbPPCqg==, tarball: https://registry.npmjs.org/@cdxgen/cdxgen-plugins-bin-linux-ppc64/-/cdxgen-plugins-bin-linux-ppc64-2.5.1.tgz}
+  '@cdxgen/cdxgen-plugins-bin-linux-ppc64@3.0.0':
+    resolution: {integrity: sha512-VRz8p8nkFv/0rQWKSnpCsBNlfw4l+RVKI/VJNLOigxVG79DcgcmO+gxYIhpqAduOW5OGKKPYoeDp56w3Dcv9fw==, tarball: https://registry.npmjs.org/@cdxgen/cdxgen-plugins-bin-linux-ppc64/-/cdxgen-plugins-bin-linux-ppc64-3.0.0.tgz}
     cpu: [ppc64]
     os: [linux]
     libc: glibc
 
-  '@cdxgen/cdxgen-plugins-bin-linuxmusl-amd64@2.5.1':
-    resolution: {integrity: sha512-jBjaqRicd1OmdexiMJq9+JfR6cN+5wzJyidI/muRD4Ug3g6hJm5DlanGd+0YdPNT0dygbWzNJThHdTYT10xElA==, tarball: https://registry.npmjs.org/@cdxgen/cdxgen-plugins-bin-linuxmusl-amd64/-/cdxgen-plugins-bin-linuxmusl-amd64-2.5.1.tgz}
+  '@cdxgen/cdxgen-plugins-bin-linuxmusl-amd64@3.0.0':
+    resolution: {integrity: sha512-p1CIs1KviOtawuPd8DVvM+xPUfEC5aS4M9Km+PhMgCNPTwI3FJSR+jcRHDP7rptqOnwitykddSKPF1FQOInb6Q==, tarball: https://registry.npmjs.org/@cdxgen/cdxgen-plugins-bin-linuxmusl-amd64/-/cdxgen-plugins-bin-linuxmusl-amd64-3.0.0.tgz}
     cpu: [x64]
     os: [linux]
     libc: musl
 
-  '@cdxgen/cdxgen-plugins-bin-linuxmusl-arm64@2.5.1':
-    resolution: {integrity: sha512-8OsShzF20WUHxL0zJ8+mMLFoxnVctnJLUeC2f6PLUIxH91iiKX9FsZAZGZzBmaZSAoaQ+Jk2ewLG5YAYrTgQ9Q==, tarball: https://registry.npmjs.org/@cdxgen/cdxgen-plugins-bin-linuxmusl-arm64/-/cdxgen-plugins-bin-linuxmusl-arm64-2.5.1.tgz}
+  '@cdxgen/cdxgen-plugins-bin-linuxmusl-arm64@3.0.0':
+    resolution: {integrity: sha512-cOcsVfcRPv9q+uUtnfW0f7l2Y4ZD7Lm5Gnks/CWTjm+gDsU7EYz2y4FVIkRakpJmIPfgKzFsllxPSo66yE7VBQ==, tarball: https://registry.npmjs.org/@cdxgen/cdxgen-plugins-bin-linuxmusl-arm64/-/cdxgen-plugins-bin-linuxmusl-arm64-3.0.0.tgz}
     cpu: [arm64]
     os: [linux]
     libc: musl
 
-  '@cdxgen/cdxgen-plugins-bin-windows-amd64@2.5.1':
-    resolution: {integrity: sha512-iXeBq5/PQ/zGlRwjK2M27D8J75qQbY7s2pcGrBE9sdwTNq72fttAGzTVyn0vsoZ2xaIddne5IpKUKVKzJY1uBg==, tarball: https://registry.npmjs.org/@cdxgen/cdxgen-plugins-bin-windows-amd64/-/cdxgen-plugins-bin-windows-amd64-2.5.1.tgz}
+  '@cdxgen/cdxgen-plugins-bin-windows-amd64@3.0.0':
+    resolution: {integrity: sha512-tTePYRD382OGH6ZUCv57j6ckFVcxBqTAmwFqSktGOSs70hwduJFkY72erbAq7fIMbcptCgqGRQf4IbE99ObJ3w==, tarball: https://registry.npmjs.org/@cdxgen/cdxgen-plugins-bin-windows-amd64/-/cdxgen-plugins-bin-windows-amd64-3.0.0.tgz}
     cpu: [x64]
     os: [win32]
 
-  '@cdxgen/cdxgen-plugins-bin-windows-arm64@2.5.1':
-    resolution: {integrity: sha512-D8N0e/lZyFptLQmSz/ObfnWqdQHAwpJkP4D3xcLXFsNMdQj2P5ijhdOiHh8C6HssL16aN1XDNwmfCH2a4iNxgA==, tarball: https://registry.npmjs.org/@cdxgen/cdxgen-plugins-bin-windows-arm64/-/cdxgen-plugins-bin-windows-arm64-2.5.1.tgz}
+  '@cdxgen/cdxgen-plugins-bin-windows-arm64@3.0.0':
+    resolution: {integrity: sha512-V+0sEL52C6NGrjmrlZiDU6k36WpYPcGkCYOUr0VzNmMdvMjUJ9C+oCasBfUUb+rQVPFVxhsxaTOJRTIWEKTOmg==, tarball: https://registry.npmjs.org/@cdxgen/cdxgen-plugins-bin-windows-arm64/-/cdxgen-plugins-bin-windows-arm64-3.0.0.tgz}
     cpu: [arm64]
     os: [win32]
 
-  '@cdxgen/cdxgen-plugins-bin@2.5.1':
-    resolution: {integrity: sha512-hzp2v5+pDC0hpW/sB4Dez0GcDdqTp9g6JzuBw+rOdDtkGuWjhAzkiqN6KSjGJbliypVN4BU/jwF+4zofnUtyLg==, tarball: https://registry.npmjs.org/@cdxgen/cdxgen-plugins-bin/-/cdxgen-plugins-bin-2.5.1.tgz}
+  '@cdxgen/cdxgen-plugins-bin@3.0.0':
+    resolution: {integrity: sha512-GyI0T5MMuFZYuwu5cY+6j/Hg+aviScgv/YLye9po0AcIh5utlcmx6RfftugDhND3oF5RUp3lZG1vpFjtHWFhNQ==, tarball: https://registry.npmjs.org/@cdxgen/cdxgen-plugins-bin/-/cdxgen-plugins-bin-3.0.0.tgz}
 
   '@cdxgen/safer-exec-darwin-amd64@0.15.0':
     resolution: {integrity: sha512-xCl/eenMrnk/76GQyHGVUE9DclkkC+idplBBYznLkVqyJSdBoRSkk6mxfUPQeCihnH2eSf6X7pykNGWqLzWQGQ==, tarball: https://registry.npmjs.org/@cdxgen/safer-exec-darwin-amd64/-/safer-exec-darwin-amd64-0.15.0.tgz}
@@ -493,6 +496,9 @@ packages:
 
   '@sinonjs/samsam@10.0.2':
     resolution: {integrity: sha512-8lVwD1Df1BmzoaOLhMcGGcz/Jyr5QY2KSB75/YK1QgKzoabTeLdIVyhXNZK9ojfSKSdirbXqdbsXXqP9/Ve8+A==, tarball: https://registry.npmjs.org/@sinonjs/samsam/-/samsam-10.0.2.tgz}
+
+  '@types/jsesc@2.5.1':
+    resolution: {integrity: sha512-9VN+6yxLOPLOav+7PwjZbxiID2bVaeq0ED4qSQmdQTdjnXJSaCVKTR58t15oqH1H5t8Ng2ZX1SabJVoN9Q34bw==, tarball: https://registry.npmjs.org/@types/jsesc/-/jsesc-2.5.1.tgz}
 
   '@typescript/typescript-aix-ppc64@7.0.2':
     resolution: {integrity: sha512-MTKKkWB7p/0E9xi1d1tHtZ5PiLkGEMIq88pK2CubZjOsLtYTLqhgIgi6zepFa+9GHZ6h05NMCkQxGKiPXMxXtQ==, tarball: https://registry.npmjs.org/@typescript/typescript-aix-ppc64/-/typescript-aix-ppc64-7.0.2.tgz}
@@ -613,6 +619,10 @@ packages:
     engines: {node: '>=16.20.0'}
     cpu: [x64]
     os: [win32]
+
+  '@typescript/typescript6@6.0.2':
+    resolution: {integrity: sha512-mbCddXd+jm7hfx7w2YU64/Av4/NqqeG3GoRZgxPcgoTxYjhrcfJRw9ULch71SS4G+Q3bOXFhRvPqjguN0Hyp5w==, tarball: https://registry.npmjs.org/@typescript/typescript6/-/typescript6-6.0.2.tgz}
+    hasBin: true
 
   ajv-formats@3.0.1:
     resolution: {integrity: sha512-8iUql50EUR+uUcdRQ3HDqa6EVyo3docL8g5WJ3FNcWmu62IbkGUue/pEyLBW8VGKKucTPgqeks4fIU1DA4yowQ==, tarball: https://registry.npmjs.org/ajv-formats/-/ajv-formats-3.0.1.tgz}
@@ -796,11 +806,11 @@ packages:
     resolution: {integrity: sha512-T2UbfbBEF32wiepXIsMlTW9+dDYC6wMh/t/vYA4tuOMKqWz/n3vr1NFSxQiyP+zk2mXsoMA/i/7qV6LKut1t1A==, tarball: https://registry.npmjs.org/hasown/-/hasown-2.0.4.tgz}
     engines: {node: '>= 0.4'}
 
-  hermes-estree@0.36.1:
-    resolution: {integrity: sha512-guv1nQ6IJ7S83NRFPWc3SA7IBZrdNC9kapwOq6uXvF4wP+sDCgjzQbKPCoyYmoyZRzztF/n/c36l/rccCZSiCw==, tarball: https://registry.npmjs.org/hermes-estree/-/hermes-estree-0.36.1.tgz}
+  hermes-estree@0.37.0:
+    resolution: {integrity: sha512-Frp4+A518C4zZgB2+Qo1srlM3y6nbrFbNNzBF3g7tEuQXHXTb2h39V25JQLNHotxclkD+AZTN/JCCpiTFlhIGg==, tarball: https://registry.npmjs.org/hermes-estree/-/hermes-estree-0.37.0.tgz}
 
-  hermes-parser@0.36.1:
-    resolution: {integrity: sha512-GApNk4zLHi2UWoWZZkx7LNCOSzLSc5lB55pZ/PhK7ycFeg7u5LcF88p/WbpIi1XUDtE0MpHE3uRR3u3KB7TjSQ==, tarball: https://registry.npmjs.org/hermes-parser/-/hermes-parser-0.36.1.tgz}
+  hermes-parser@0.37.0:
+    resolution: {integrity: sha512-8PuWcyaF6VHQHL2dbU+QEIkbtHYQrTX/6+ep4VcBLJ3f/ehevowr5Zj8LQfYXQQGFG2O+df7hIMtt4PkkhfK3Q==, tarball: https://registry.npmjs.org/hermes-parser/-/hermes-parser-0.37.0.tgz}
 
   hosted-git-info@10.1.1:
     resolution: {integrity: sha512-DeOnSPAvOndYKfw075gt8yZzQ7S2hNztw34zBTfhIzLhmBTswIBg5/y+pqu/VD5cYWm5goAFTusDmUEmKZ0PEQ==, tarball: https://registry.npmjs.org/hosted-git-info/-/hosted-git-info-10.1.1.tgz}
@@ -825,8 +835,8 @@ packages:
     resolution: {integrity: sha512-FFUtZMpoZ8RqHS3XeXEmHWLA4thH+ZxCv2lOiPIn1Xc7CxrqhWzNSDzD+/chS/zbYezmiwWLdQC09JdQKmthOw==, tarball: https://registry.npmjs.org/isexe/-/isexe-4.0.0.tgz}
     engines: {node: '>=20'}
 
-  js-tokens@4.0.0:
-    resolution: {integrity: sha512-RdJUflcE3cUzKiMqQgsCu06FPu9UdIJO0beYbPhHN4k6apgJtifcoCtT9bcxOpYBtpD2kCM6Sbzg4CausW/PKQ==, tarball: https://registry.npmjs.org/js-tokens/-/js-tokens-4.0.0.tgz}
+  js-tokens@10.0.0:
+    resolution: {integrity: sha512-lM/UBzQmfJRo9ABXbPWemivdCW8V2G8FHaHdypQaIy523snUjog0W71ayWXTjiR+ixeMyVHN2XcpnTd/liPg/Q==, tarball: https://registry.npmjs.org/js-tokens/-/js-tokens-10.0.0.tgz}
 
   jsesc@3.1.0:
     resolution: {integrity: sha512-/sM3dO2FOzXjKQhJuo0Q173wf2KOo8t4I8vHy6lF9poUp7bKT0/NHE8fPX23PwfhnykfqnC2xRxOnVw5XuGIaA==, tarball: https://registry.npmjs.org/jsesc/-/jsesc-3.1.0.tgz}
@@ -919,6 +929,10 @@ packages:
     resolution: {integrity: sha512-W67iLl4J2EXEGTbfeHCffrjDfitvLANg0UlX3wFUUSTx92KXRFegMHUVgSqE+wvhAbi4WqjGg9czysTV2Epbew==, tarball: https://registry.npmjs.org/object-inspect/-/object-inspect-1.13.4.tgz}
     engines: {node: '>= 0.4'}
 
+  obug@2.1.4:
+    resolution: {integrity: sha512-4a+OsYv9UktOJKE+l1A4OufDgdRF9PifWj+tJnHURo/P+WOxpG4GzUFL9qCalmWauao6ogiG+QvnCovwPoyAWA==, tarball: https://registry.npmjs.org/obug/-/obug-2.1.4.tgz}
+    engines: {node: '>=12.20.0'}
+
   on-finished@2.4.1:
     resolution: {integrity: sha512-oVlzkg3ENAhCk2zdv7IJwd/QUD4z2RxRwpkcGY8psCVcCYZNq4wYnVWALHM+brtuJjePWiYF/ClmuDr8Ch5+kg==, tarball: https://registry.npmjs.org/on-finished/-/on-finished-2.4.1.tgz}
     engines: {node: '>= 0.8'}
@@ -938,9 +952,6 @@ packages:
   path-scurry@2.0.2:
     resolution: {integrity: sha512-3O/iVVsJAPsOnpwWIeD+d6z/7PmqApyQePUtCndjatj/9I5LylHvt5qluFaBT3I5h3r1ejfR056c+FCv+NnNXg==, tarball: https://registry.npmjs.org/path-scurry/-/path-scurry-2.0.2.tgz}
     engines: {node: 18 || 20 || >=22}
-
-  picocolors@1.1.1:
-    resolution: {integrity: sha512-xceH2snhtb5M9liqDsmEw56le376mTZkEX/jEb/RxNFyegNul7eNslCXP9FDj/Lcu0X8KEyMceP2ntpaHrDEVA==, tarball: https://registry.npmjs.org/picocolors/-/picocolors-1.1.1.tgz}
 
   poku@4.5.0:
     resolution: {integrity: sha512-QhlSibx5/N81TQbm25ykeqnYcZ4kNGJtMoNbtrfXzUwbg2El6/GhMc4Wmdwsa19G/s/hStJSSVLBJF0B8zsXFg==, tarball: https://registry.npmjs.org/poku/-/poku-4.5.0.tgz}
@@ -1122,96 +1133,98 @@ snapshots:
   '@appthreat/atom-common@1.1.0':
     optional: true
 
-  '@appthreat/atom-darwin-amd64@3.0.3':
+  '@appthreat/atom-darwin-amd64@3.1.1':
     optional: true
 
-  '@appthreat/atom-darwin-arm64@3.0.3':
+  '@appthreat/atom-darwin-arm64@3.1.1':
     optional: true
 
-  '@appthreat/atom-linux-amd64-musl@3.0.3':
+  '@appthreat/atom-jar@3.1.1':
     optional: true
 
-  '@appthreat/atom-linux-amd64@3.0.3':
+  '@appthreat/atom-linux-amd64-musl@3.1.1':
     optional: true
 
-  '@appthreat/atom-linux-arm64-musl@3.0.3':
+  '@appthreat/atom-linux-amd64@3.1.1':
     optional: true
 
-  '@appthreat/atom-linux-arm64@3.0.3':
+  '@appthreat/atom-linux-arm64-musl@3.1.1':
     optional: true
 
-  '@appthreat/atom-parsetools@1.2.2':
+  '@appthreat/atom-linux-arm64@3.1.1':
+    optional: true
+
+  '@appthreat/atom-parsetools@1.3.0':
     dependencies:
       '@appthreat/atom-common': 1.1.0
-      '@babel/parser': 7.29.7
-      hermes-parser: 0.36.1
-      typescript: 6.0.3
+      '@babel/parser': 8.0.4
+      '@typescript/typescript6': 6.0.2
+      hermes-parser: 0.37.0
     optional: true
 
-  '@appthreat/atom-windows-amd64@3.0.3':
+  '@appthreat/atom-windows-amd64@3.1.1':
     optional: true
 
-  '@appthreat/atom-windows-arm64@3.0.3':
+  '@appthreat/atom-windows-arm64@3.1.1':
     optional: true
 
-  '@appthreat/atom@3.0.3':
+  '@appthreat/atom@3.1.1':
     optionalDependencies:
-      '@appthreat/atom-darwin-amd64': 3.0.3
-      '@appthreat/atom-darwin-arm64': 3.0.3
-      '@appthreat/atom-linux-amd64': 3.0.3
-      '@appthreat/atom-linux-amd64-musl': 3.0.3
-      '@appthreat/atom-linux-arm64': 3.0.3
-      '@appthreat/atom-linux-arm64-musl': 3.0.3
-      '@appthreat/atom-windows-amd64': 3.0.3
-      '@appthreat/atom-windows-arm64': 3.0.3
+      '@appthreat/atom-darwin-amd64': 3.1.1
+      '@appthreat/atom-darwin-arm64': 3.1.1
+      '@appthreat/atom-jar': 3.1.1
+      '@appthreat/atom-linux-amd64': 3.1.1
+      '@appthreat/atom-linux-amd64-musl': 3.1.1
+      '@appthreat/atom-linux-arm64': 3.1.1
+      '@appthreat/atom-linux-arm64-musl': 3.1.1
+      '@appthreat/atom-windows-amd64': 3.1.1
+      '@appthreat/atom-windows-arm64': 3.1.1
     optional: true
 
-  '@babel/code-frame@7.29.7':
+  '@babel/code-frame@8.0.0':
     dependencies:
-      '@babel/helper-validator-identifier': 7.29.7
-      js-tokens: 4.0.0
-      picocolors: 1.1.1
+      '@babel/helper-validator-identifier': 8.0.4
+      js-tokens: 10.0.0
 
-  '@babel/generator@7.29.7':
+  '@babel/generator@8.0.0':
     dependencies:
-      '@babel/parser': 7.29.7
-      '@babel/types': 7.29.7
+      '@babel/parser': 8.0.4
+      '@babel/types': 8.0.4
       '@jridgewell/gen-mapping': 0.3.13
       '@jridgewell/trace-mapping': 0.3.31
+      '@types/jsesc': 2.5.1
       jsesc: 3.1.0
 
-  '@babel/helper-globals@7.29.7': {}
+  '@babel/helper-globals@8.0.0': {}
 
-  '@babel/helper-string-parser@7.29.7': {}
+  '@babel/helper-string-parser@8.0.0': {}
 
-  '@babel/helper-validator-identifier@7.29.7': {}
+  '@babel/helper-validator-identifier@8.0.4': {}
 
-  '@babel/parser@7.29.7':
+  '@babel/parser@8.0.4':
     dependencies:
-      '@babel/types': 7.29.7
+      '@babel/types': 8.0.4
 
-  '@babel/template@7.29.7':
+  '@babel/template@8.0.0':
     dependencies:
-      '@babel/code-frame': 7.29.7
-      '@babel/parser': 7.29.7
-      '@babel/types': 7.29.7
+      '@babel/code-frame': 8.0.0
+      '@babel/parser': 8.0.4
+      '@babel/types': 8.0.4
 
-  '@babel/traverse@7.29.7':
+  '@babel/traverse@8.0.4':
     dependencies:
-      '@babel/code-frame': 7.29.7
-      '@babel/generator': 7.29.7
-      '@babel/helper-globals': 7.29.7
-      '@babel/parser': 7.29.7
-      '@babel/template': 7.29.7
-      '@babel/types': 7.29.7
-      debug: 4.4.3
-    transitivePeerDependencies:
-      - supports-color
+      '@babel/code-frame': 8.0.0
+      '@babel/generator': 8.0.0
+      '@babel/helper-globals': 8.0.0
+      '@babel/parser': 8.0.4
+      '@babel/template': 8.0.0
+      '@babel/types': 8.0.4
+      obug: 2.1.4
 
-  '@babel/types@7.29.7':
+  '@babel/types@8.0.4':
     dependencies:
-      '@babel/helper-string-parser': 7.29.7
-      '@babel/helper-validator-identifier': 7.29.7
+      '@babel/helper-string-parser': 8.0.0
+      '@babel/helper-validator-identifier': 8.0.4
 
   '@biomejs/biome@2.5.5':
     optionalDependencies:
@@ -1264,37 +1277,37 @@ snapshots:
 
   '@cdxgen/cdx-purl@0.0.5': {}
 
-  '@cdxgen/cdxgen-plugins-bin-darwin-amd64@2.5.1':
+  '@cdxgen/cdxgen-plugins-bin-darwin-amd64@3.0.0':
     optional: true
 
-  '@cdxgen/cdxgen-plugins-bin-darwin-arm64@2.5.1':
+  '@cdxgen/cdxgen-plugins-bin-darwin-arm64@3.0.0':
     optional: true
 
-  '@cdxgen/cdxgen-plugins-bin-linux-amd64@2.5.1':
+  '@cdxgen/cdxgen-plugins-bin-linux-amd64@3.0.0':
     optional: true
 
-  '@cdxgen/cdxgen-plugins-bin-linux-arm64@2.5.1':
+  '@cdxgen/cdxgen-plugins-bin-linux-arm64@3.0.0':
     optional: true
 
-  '@cdxgen/cdxgen-plugins-bin-linux-arm@2.5.1':
+  '@cdxgen/cdxgen-plugins-bin-linux-arm@3.0.0':
     optional: true
 
-  '@cdxgen/cdxgen-plugins-bin-linux-ppc64@2.5.1':
+  '@cdxgen/cdxgen-plugins-bin-linux-ppc64@3.0.0':
     optional: true
 
-  '@cdxgen/cdxgen-plugins-bin-linuxmusl-amd64@2.5.1':
+  '@cdxgen/cdxgen-plugins-bin-linuxmusl-amd64@3.0.0':
     optional: true
 
-  '@cdxgen/cdxgen-plugins-bin-linuxmusl-arm64@2.5.1':
+  '@cdxgen/cdxgen-plugins-bin-linuxmusl-arm64@3.0.0':
     optional: true
 
-  '@cdxgen/cdxgen-plugins-bin-windows-amd64@2.5.1':
+  '@cdxgen/cdxgen-plugins-bin-windows-amd64@3.0.0':
     optional: true
 
-  '@cdxgen/cdxgen-plugins-bin-windows-arm64@2.5.1':
+  '@cdxgen/cdxgen-plugins-bin-windows-arm64@3.0.0':
     optional: true
 
-  '@cdxgen/cdxgen-plugins-bin@2.5.1': {}
+  '@cdxgen/cdxgen-plugins-bin@3.0.0': {}
 
   '@cdxgen/safer-exec-darwin-amd64@0.15.0':
     optional: true
@@ -1391,6 +1404,8 @@ snapshots:
       '@sinonjs/commons': 3.0.1
       type-detect: 4.1.0
 
+  '@types/jsesc@2.5.1': {}
+
   '@typescript/typescript-aix-ppc64@7.0.2':
     optional: true
 
@@ -1449,6 +1464,11 @@ snapshots:
     optional: true
 
   '@typescript/typescript-win32-x64@7.0.2':
+    optional: true
+
+  '@typescript/typescript6@6.0.2':
+    dependencies:
+      '@typescript/old': typescript@6.0.3
     optional: true
 
   ajv-formats@3.0.1(ajv@8.20.0):
@@ -1551,6 +1571,7 @@ snapshots:
   debug@4.4.3:
     dependencies:
       ms: 2.1.3
+    optional: true
 
   depd@2.0.0:
     optional: true
@@ -1653,12 +1674,12 @@ snapshots:
       function-bind: 1.1.2
     optional: true
 
-  hermes-estree@0.36.1:
+  hermes-estree@0.37.0:
     optional: true
 
-  hermes-parser@0.36.1:
+  hermes-parser@0.37.0:
     dependencies:
-      hermes-estree: 0.36.1
+      hermes-estree: 0.37.0
     optional: true
 
   hosted-git-info@10.1.1:
@@ -1686,7 +1707,7 @@ snapshots:
 
   isexe@4.0.0: {}
 
-  js-tokens@4.0.0: {}
+  js-tokens@10.0.0: {}
 
   jsesc@3.1.0: {}
 
@@ -1732,7 +1753,8 @@ snapshots:
   ms@2.0.0:
     optional: true
 
-  ms@2.1.3: {}
+  ms@2.1.3:
+    optional: true
 
   negotiator@0.6.4:
     optional: true
@@ -1762,6 +1784,8 @@ snapshots:
   object-inspect@1.13.4:
     optional: true
 
+  obug@2.1.4: {}
+
   on-finished@2.4.1:
     dependencies:
       ee-first: 1.1.1
@@ -1783,8 +1807,6 @@ snapshots:
     dependencies:
       lru-cache: 11.5.2
       minipass: 7.1.3
-
-  picocolors@1.1.1: {}
 
   poku@4.5.0: {}
 
