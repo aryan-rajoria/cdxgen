@@ -99,7 +99,7 @@
     "jsonata": "npm:jsonata@2.2.2",
     "@iarna/toml": "npm:@iarna/toml@2.2.5",
     "@cdxgen/safer-exec": "npm:@cdxgen/safer-exec@0.15.0",
-    "@cdxgen/cdxgen-plugins-bin": "npm:@cdxgen/cdxgen-plugins-bin@3.0.0",
+    "@cdxgen/cdxgen-plugins-bin": "npm:@cdxgen/cdxgen-plugins-bin@3.0.1",
     "undici": "npm:undici@8.9.0",
     "@appthreat/atom-parsetools": "npm:@appthreat/atom-parsetools@1.3.0"
   }
