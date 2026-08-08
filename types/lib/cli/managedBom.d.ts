@@ -1,0 +1,88 @@
+export declare const hasDotnetProjectIndicators: (src: any, options?: {}) => boolean;
+export declare const shouldCollectDosaiCrypto: (src: any, options?: {}) => boolean;
+/**
+ * Function to create bom string for Projects that use Pixi package manager.
+ * createPixiBom is based on createPythonBom.
+ * Pixi package manager utilizes many languages like python, rust, C/C++, ruby, etc.
+ * It produces a Lockfile which help produce reproducible envs across operating systems.
+ * This code will look at the operating system of our machine and create a BOM specific to that machine.
+ *
+ *
+ * @param {String} path
+ * @param {Object} options
+ * @returns {Object | null} BOM object, or `null` when `pixi.lock` is absent and `options.installDeps` is false
+ */
+export declare function createPixiBom(path: string, options: Object): Object | null;
+/**
+ * Function to create bom string for Python projects
+ *
+ * @param {string} path to the project
+ * @param {Object} options Parse options from the cli
+ * @returns {Promise<Object>} Promise resolving to BOM object
+ */
+export declare function createPythonBom(path: string, options: Object): Promise<Object>;
+/**
+ * Function to create bom string for GitHub action workflows
+ *
+ * @param {string} path to the project
+ * @param {Object} options Parse options from the cli
+ * @returns {Object} BOM object
+ */
+export declare function createGitHubBom(path: string, options: Object): Object;
+/**
+ * Function to create bom string for cloudbuild yaml
+ *
+ * @param {string} path to the project
+ * @param {Object} options Parse options from the cli
+ * @returns {Object} BOM object
+ */
+export declare function createCloudBuildBom(path: string, options: Object): Object;
+/**
+ * Function to create bom string for Jenkins plugins
+ *
+ * @param {string} path to the project
+ * @param {Object} options Parse options from the cli
+ * @returns {Promise<Object>} Promise resolving to BOM object
+ */
+export declare function createJenkinsBom(path: string, options: Object): Promise<Object>;
+/**
+ * Function to create bom string for Helm charts
+ *
+ * @param {string} path to the project
+ * @param {Object} options Parse options from the cli
+ * @returns {Object} BOM object
+ */
+export declare function createHelmBom(path: string, options: Object): Object;
+/**
+ * Function to create bom string for php projects
+ *
+ * @param {string} path to the project
+ * @param {Object} options Parse options from the cli
+ * @returns {Object} BOM object
+ */
+export declare function createPHPBom(path: string, options: Object): Object;
+/**
+ * Function to create bom string for ruby projects
+ *
+ * @param {string} path to the project
+ * @param {Object} options Parse options from the cli
+ * @returns {Promise<Object>} Promise resolving to BOM object
+ */
+export declare function createRubyBom(path: string, options: Object): Promise<Object>;
+/**
+ * Function to create bom string for csharp projects
+ *
+ * @param {string} path to the project
+ * @param {Object} options Parse options from the cli
+ * @returns {Promise<Object|undefined>} Promise resolving to BOM object
+ */
+export declare function createCsharpBom(path: string, options: Object): Promise<Object | undefined>;
+/**
+ * Function to create bom object for cryptographic certificate files
+ *
+ * @param {string} path to the project
+ * @param {Object} options Parse options from the cli
+ * @returns {Promise<Object>} Promise resolving to BOM object
+ */
+export declare function createCryptoCertsBom(path: string, options: Object): Promise<Object>;
+//# sourceMappingURL=managedBom.d.ts.map
