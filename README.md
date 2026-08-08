@@ -117,6 +117,24 @@ Sections include:
 
 ## Installing
 
+> [!IMPORTANT]
+> **The npm package was renamed in v13.** v13 and later are published as
+> [`@cdxgen/cdxgen`][npmjs-cdxgen]. v12 and earlier are published as
+> [`@cyclonedx/cdxgen`][npmjs-cdxgen-v12], which stays on npm and continues to
+> receive fixes on the `release/12.0.x` branch, but does not receive v13
+> features.
+>
+> Upgrading means changing the package name, not just the version:
+>
+> ```shell
+> npm uninstall -g @cyclonedx/cdxgen
+> npm install -g @cdxgen/cdxgen --ignore-scripts --min-release-age=2
+> ```
+>
+> The `cdxgen` command, the CLI flags, and the container images are unchanged.
+> If you import cdxgen as a library, update the specifier:
+> `import { createBom } from "@cdxgen/cdxgen"`.
+
 Install the npm package without the optional binary plugins for basic SBOM generation.
 
 **npm**:
@@ -872,12 +890,12 @@ Copy the below block to your markdown files to show your ❤️ for cdxgen.
 <!-- LINK LABELS -->
 <!-- Badges -->
 
-[badge-github-contributors]: https://img.shields.io/github/contributors/cyclonedx/cdxgen
-[badge-github-license]: https://img.shields.io/github/license/cyclonedx/cdxgen
-[badge-github-releases]: https://img.shields.io/github/v/release/cyclonedx/cdxgen
-[badge-jsr]: https://img.shields.io/jsr/v/%40cyclonedx/cdxgen
-[badge-npm]: https://img.shields.io/npm/v/%40cyclonedx%2Fcdxgen
-[badge-npm-downloads]: https://img.shields.io/npm/dy/%40cyclonedx%2Fcdxgen
+[badge-github-contributors]: https://img.shields.io/github/contributors/cdxgen/cdxgen
+[badge-github-license]: https://img.shields.io/github/license/cdxgen/cdxgen
+[badge-github-releases]: https://img.shields.io/github/v/release/cdxgen/cdxgen
+[badge-jsr]: https://img.shields.io/jsr/v/%40cdxgen/cdxgen
+[badge-npm]: https://img.shields.io/npm/v/%40cdxgen%2Fcdxgen
+[badge-npm-downloads]: https://img.shields.io/npm/dy/%40cdxgen%2Fcdxgen
 [badge-swh]: https://archive.softwareheritage.org/badge/origin/https://github.com/cdxgen/cdxgen/
 
 <!-- cdxgen github project -->
@@ -914,6 +932,7 @@ Copy the below block to your markdown files to show your ❤️ for cdxgen.
 [jwt-libraries]: https://jwt.io/libraries
 [librariesio]: https://libraries.io/npm/@cyclonedx%2Fcdxgen
 [npmjs-cdxgen]: https://www.npmjs.com/package/@cdxgen/cdxgen
+[npmjs-cdxgen-v12]: https://www.npmjs.com/package/@cyclonedx/cdxgen
 [podman-github-rootless]: https://github.com/containers/podman/blob/master/docs/tutorials/rootless_tutorial.md
 [podman-github-remote]: https://github.com/containers/podman/blob/master/docs/tutorials/mac_win_client.md
 [swh-cdxgen]: https://archive.softwareheritage.org/browse/origin/?origin_url=https://github.com/cdxgen/cdxgen
