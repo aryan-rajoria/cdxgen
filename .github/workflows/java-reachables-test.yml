@@ -54,28 +54,28 @@ jobs:
         with:
           persist-credentials: false
           repository: 'DependencyTrack/dependency-track'
-          path: 'test/repotests/dependency-track'
+          path: 'repotests/dependency-track'
           ref: '4.11.1'
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1  # v7.0.1
         with:
           persist-credentials: false
           repository: 'DependencyTrack/frontend'
-          path: 'test/repotests/frontend'
+          path: 'repotests/frontend'
           ref: '4.13.0'
       - name: compile
         run: |
-          cd test/repotests/dependency-track
+          cd repotests/dependency-track
           mvn -q clean compile -DskipTests -Dmaven.test.skip=true
       - name: reachables tests - java
         run: |
-          node bin/cdxgen.js -p -t java --profile research -o test/repotests/dependency-track/bom.json test/repotests/dependency-track
-          ls -ltr test/repotests/dependency-track/
-          cp -rf test/repotests/dependency-track/*.json bomresults/
+          node bin/cdxgen.js -p -t java --profile research -o repotests/dependency-track/bom.json repotests/dependency-track
+          ls -ltr repotests/dependency-track/
+          cp -rf repotests/dependency-track/*.json bomresults/
         env:
           CDXGEN_DEBUG_MODE: verbose
       - name: reachables tests - js
         run: |
-          node bin/cdxgen.js -p -t js --profile research -o test/repotests/frontend/bom.json test/repotests/frontend
+          node bin/cdxgen.js -p -t js --profile research -o repotests/frontend/bom.json repotests/frontend
       - uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a  # v7.0.1
         with:
           name: bomresults
@@ -99,24 +99,24 @@ jobs:
 #        with:
 #          persist-credentials: false
 #          repository: 'bionomia/bionomia'
-#          path: 'test/repotests/bionomia'
+#          path: 'repotests/bionomia'
 #          ref: '5ada8b5f4a5f68561a7195e2badc2f744dc4676e'
 #      - uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 # v5.0.0
 #        with:
 #          persist-credentials: false
 #          repository: 'OWASP/railsgoat'
-#          path: 'test/repotests/railsgoat'
+#          path: 'repotests/railsgoat'
 #          ref: 'c1e8ff1e3b24a1c48fcfc9fbee0f65dc296b49d9'
 #      - name: generate reachables sbom - bionomia
 #        run: |
 #          mkdir -p $GITHUB_WORKSPACE/rubyresults/bionomia
-#          cd test/repotests/bionomia
+#          cd repotests/bionomia
 #          docker run --rm -v /tmp:/tmp -v $(pwd):/app:rw -t ghcr.io/cdxgen/cdxgen-debian-ruby33:v13 -r /app -o /app/bom.json -t ruby --profile research
 #          cp bom.json *.slices.json $GITHUB_WORKSPACE/rubyresults/bionomia
 #      - name: generate reachables sbom - railsgoat
 #        run: |
 #          mkdir -p $GITHUB_WORKSPACE/rubyresults/railsgoat
-#          cd test/repotests/railsgoat
+#          cd repotests/railsgoat
 #          docker run --rm -v /tmp:/tmp -v $(pwd):/app:rw -t ghcr.io/cdxgen/cdxgen-debian-ruby26:v13 -r /app -o /app/bom.json -t ruby --profile research
 #          cp bom.json *.slices.json $GITHUB_WORKSPACE/rubyresults/railsgoat
 #      - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
@@ -138,7 +138,7 @@ jobs:
 #        with:
 #          persist-credentials: false
 #          repository: 'playframework/play-samples'
-#          path: 'test/repotests/play-samples'
+#          path: 'repotests/play-samples'
 #          ref: '0dccba17856e89dbb5e457ab760efb14cc691395'
 #      - name: setup paths
 #        run: |
@@ -147,19 +147,19 @@ jobs:
 #      - name: generate reachables sbom - play-scala-rest-api-example
 #        run: |
 #          mkdir -p $GITHUB_WORKSPACE/scalaresults/play-scala-rest-api-example
-#          cd test/repotests/play-samples/play-scala-rest-api-example
+#          cd repotests/play-samples/play-scala-rest-api-example
 #          docker run --rm -v /tmp:/tmp -v $(pwd):/app:rw -t ghcr.io/cdxgen/cdxgen-temurin-java21:v13 -r /app -o /app/bom.json -t scala --profile research
 #          cp *.json $GITHUB_WORKSPACE/scalaresults/play-scala-rest-api-example
 #      - name: generate reachables sbom - play-scala-slick-example
 #        run: |
 #          mkdir -p $GITHUB_WORKSPACE/scalaresults/play-scala-slick-example
-#          cd test/repotests/play-samples/play-scala-slick-example
+#          cd repotests/play-samples/play-scala-slick-example
 #          docker run --rm -v /tmp:/tmp -v $(pwd):/app:rw -t ghcr.io/cdxgen/cdxgen-temurin-java21:v13 -r /app -o /app/bom.json -t scala --profile research
 #          cp *.json $GITHUB_WORKSPACE/scalaresults/play-scala-slick-example
 #      - name: generate reachables sbom - play-scala-starter-example/
 #        run: |
 #          mkdir -p $GITHUB_WORKSPACE/scalaresults/play-scala-starter-example
-#          cd test/repotests/play-samples/play-scala-starter-example
+#          cd repotests/play-samples/play-scala-starter-example
 #          docker run --rm -v /tmp:/tmp -v $(pwd):/app:rw -t ghcr.io/cdxgen/cdxgen-temurin-java21:v13 -r /app -o /app/bom.json -t scala --profile research
 #          cp *.json $GITHUB_WORKSPACE/scalaresults/play-scala-starter-example
 #      - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
