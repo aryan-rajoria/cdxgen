@@ -1,0 +1,6 @@
+[submodule "dep"]
+	path = third_party/dep
+	url = ../dep
+[submodule "libs/contrib"]
+	path = libs/contrib
+	url = ../../org/contrib

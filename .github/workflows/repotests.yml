@@ -702,6 +702,12 @@ jobs:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1  # v7.0.1
         with:
           persist-credentials: false
+          repository: 'google/leveldb'
+          ref: '1.23'
+          path: 'test/repotests/leveldb'
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1  # v7.0.1
+        with:
+          persist-credentials: false
           repository: 'hritik14/broken-mvn-wrapper'
           path: 'test/repotests/broken-mvn-wrapper'
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1  # v7.0.1
@@ -1030,6 +1036,14 @@ jobs:
       - name: repotests Jackalope
         run: |
           bin/cdxgen.js -r -t c test/repotests/Jackalope -o bomresults/bom-Jackalope.json --bom-audit
+        shell: bash
+      - name: repotests leveldb
+        run: |
+          cmake -S test/repotests/leveldb -B test/repotests/leveldb/build -DLEVELDB_BUILD_TESTS=OFF -DLEVELDB_BUILD_BENCHMARKS=OFF
+          bin/cdxgen.js -r -t c test/repotests/leveldb -o bomresults/bom-leveldb.json --fail-on-error
+          jq -e '(.components | length) > 0' bomresults/bom-leveldb.json
+          jq -e 'all(.components[]; (.purl // "") | test("%24%7B|\\$\\{") | not)' bomresults/bom-leveldb.json
+          jq -e 'any(.components[]; (.purl // "") | startswith("pkg:github/google/"))' bomresults/bom-leveldb.json
         shell: bash
       - name: repotests ha-android
         run: |

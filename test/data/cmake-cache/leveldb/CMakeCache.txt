@@ -1,0 +1,43 @@
+# This is the CMakeCache file. For build comments, see the end of this file.
+# The format is:
+# KEY:TYPE=VALUE
+# where TYPE may be BOOL, PATH, FILEPATH, STRING, INTERNAL, STATIC, UNINITIALIZED
+
+//Value of the CMAKE_PROJECT_NAME variable.
+CMAKE_PROJECT_NAME:STATIC=leveldb
+
+//Value of the CMAKE_PROJECT_VERSION variable.
+CMAKE_PROJECT_VERSION:STATIC=1.23.0
+
+//Value of the CMAKE_PROJECT_VERSION variable.
+CMAKE_PROJECT_VERSION_MAJOR:STATIC=1
+
+//Value of the CMAKE_PROJECT_VERSION variable.
+CMAKE_PROJECT_VERSION_MINOR:STATIC=23
+
+//Value of the CMAKE_PROJECT_VERSION variable.
+CMAKE_PROJECT_VERSION_PATCH:STATIC=0
+
+//Value of the CMAKE_PROJECT_VERSION variable.
+CMAKE_PROJECT_VERSION_TWEAK:STATIC=
+
+//Path to CMake source directory.
+CMAKE_HOME_DIRECTORY:INTERNAL=/home/build/leveldb
+
+///////////////////////////
+// leveldb_SOURCE_DIR
+leveldb_SOURCE_DIR:STATIC=/home/build/leveldb
+
+///////////////////////////
+// leveldb_BINARY_DIR
+leveldb_BINARY_DIR:STATIC=/home/build/leveldb/build
+
+///////////////////////////
+// leveldb_IS_TOP_LEVEL
+leveldb_IS_TOP_LEVEL:STATIC=ON
+
+//Details about finding Threads.
+FIND_PACKAGE_MESSAGE_DETAILS_Threads:INTERNAL=[TRUE][v()]
+
+//CPack package vendor.
+CPACK_PACKAGE_VENDOR:INTERNAL=Google
