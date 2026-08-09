@@ -154,5 +154,23 @@ export declare function resolveCmakeContext(path: string, options: Object): {
  * @returns {string|null}
  */
 export declare function buildDependentPurl(resolvedUrl: string, version?: string): string | null;
+/**
+ * Collapse components that name the same CMake package at different versions.
+ *
+ * `find_package(Boost 1.54)` in one `CMakeLists.txt` and `find_package(Boost
+ * 1.64)` in another state two minimum requirements for a single dependency, not
+ * two dependencies. A build that satisfies both links one Boost, the higher of
+ * the two, so that requirement becomes the component version and the full set
+ * is kept under `cdx:cmake:versionRequirements`.
+ *
+ * Matching is on name alone, case-insensitively. Components carrying a
+ * `cdx:cmake:depKind` property are left alone: a FetchContent dependency or a
+ * submodule is pinned to a commit that was really checked out, and two such
+ * pins are genuinely two things.
+ *
+ * @param {Object[]} pkgList Components scraped from CMake-like files
+ * @returns {Object[]} Components with one entry per package name, in first-seen order
+ */
+export declare function collapseCmakeVersions(pkgList: Object[]): Object[];
 export { GIT_COMMAND, toRepoRelative };
 //# sourceMappingURL=cmakeResolver.d.ts.map
