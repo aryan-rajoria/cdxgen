@@ -1,0 +1,11 @@
+// alpha and beta name each other's hash. A content-addressed graph cannot
+// really contain a cycle, but a hand-written or tampered cache can, and the
+// resolver must terminate rather than recurse until the stack runs out.
+.{
+    .name = .zp_cycle,
+    .version = "0.0.0",
+    .dependencies = .{
+        .alpha = .{ .url = "https://example.invalid/alpha.tar.gz", .hash = "alpha-1.0.0-AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA" },
+    },
+    .paths = .{ "build.zig.zon" },
+}

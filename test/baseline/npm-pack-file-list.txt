@@ -122,6 +122,7 @@ lib/ecosystems/parsers-misc.js
 lib/ecosystems/parsers-python.js
 lib/ecosystems/parsers-rust.js
 lib/ecosystems/parsers-zig.js
+lib/ecosystems/zigResolver.js
 lib/ecosystems/pep770.js
 lib/ecosystems/pylockutils.js
 lib/ecosystems/pythonutils.js
@@ -402,6 +403,8 @@ types/lib/ecosystems/parsers-rust.d.ts
 types/lib/ecosystems/parsers-rust.d.ts.map
 types/lib/ecosystems/parsers-zig.d.ts
 types/lib/ecosystems/parsers-zig.d.ts.map
+types/lib/ecosystems/zigResolver.d.ts
+types/lib/ecosystems/zigResolver.d.ts.map
 types/lib/ecosystems/pep770.d.ts
 types/lib/ecosystems/pep770.d.ts.map
 types/lib/ecosystems/pylockutils.d.ts

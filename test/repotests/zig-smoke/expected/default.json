@@ -137,7 +137,28 @@
       "version": "0.10.0"
     }
   ],
-  "dependencies": [],
+  "dependencies": [
+    {
+      "dependsOn": [
+        "pkg:generic/known_folders@0.5.0_download_url_https:%2F%2Fgithub.com%2Fziglibs%2Fknown-folders%2Farchive%2Frefs%2Ftags%2F0.5.0.tar.gz",
+        "pkg:generic/my_local_helper",
+        "pkg:generic/zig_clap@0.10.0_download_url_https:%2F%2Fgithub.com%2FHejsil%2Fzig-clap%2Farchive%2Fabc1234.tar.gz"
+      ],
+      "ref": "application:zig_smoke:0.2.1"
+    },
+    {
+      "dependsOn": [],
+      "ref": "pkg:generic/known_folders@0.5.0_download_url_https:%2F%2Fgithub.com%2Fziglibs%2Fknown-folders%2Farchive%2Frefs%2Ftags%2F0.5.0.tar.gz"
+    },
+    {
+      "dependsOn": [],
+      "ref": "pkg:generic/my_local_helper"
+    },
+    {
+      "dependsOn": [],
+      "ref": "pkg:generic/zig_clap@0.10.0_download_url_https:%2F%2Fgithub.com%2FHejsil%2Fzig-clap%2Farchive%2Fabc1234.tar.gz"
+    }
+  ],
   "metadata": {
     "authors": [],
     "component": {
@@ -145,6 +166,10 @@
       "description": "Zig project: zig_smoke",
       "name": "zig_smoke",
       "properties": [
+        {
+          "name": "cdx:zig:fingerprint",
+          "value": "0x1f2e3d4c5b6a7988"
+        },
         {
           "name": "cdx:zig:minimum_zig_version",
           "value": "0.14.0"

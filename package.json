@@ -199,7 +199,7 @@
     "connect": "3.7.0",
     "jsonata": "2.2.2"
   },
-  "packageManager": "pnpm@11.18.0",
+  "packageManager": "pnpm@11.21.0",
   "engines": {
     "node": ">=24",
     "pnpm": ">=11"

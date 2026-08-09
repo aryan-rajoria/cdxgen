@@ -97,9 +97,10 @@ export declare function createNixBom(path: string, options: Object): Promise<Obj
  * Function to create bom string for Zig projects.
  *
  * Zig moved package management into the build system, so the dependency list
- * lives in `build.zig.zon` (ZON, not JSON). This generator parses that manifest
- * only; resolving fetched archives requires the Zig toolchain and the global
- * cache, which cdxgen does not assume.
+ * lives in `build.zig.zon` (ZON, not JSON). The resolver walks the full
+ * dependency graph by locating each dependency's manifest through the in-tree
+ * `zig-pkg/` directory or the global cache, producing both a flat component
+ * list and a CycloneDX `dependencies[]` edge list.
  *
  * @param {string} path to the project
  * @param {Object} options Parse options from the cli

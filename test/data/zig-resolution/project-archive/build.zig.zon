@@ -1,0 +1,16 @@
+// A project whose only dependency lives in the global cache as a .tar.gz
+// archive. There is deliberately no in-tree zig-pkg/ directory, so the
+// resolver can only succeed by reading build.zig.zon from inside the archive.
+.{
+    .name = .zp_archive,
+    .version = "0.0.0",
+    .fingerprint = 0x2f8a1c4d5e6b7a90,
+    .minimum_zig_version = "0.16.0",
+    .dependencies = .{
+        .clap = .{
+            .url = "https://github.com/Hejsil/zig-clap/archive/refs/tags/0.12.0.tar.gz",
+            .hash = "clap-0.12.0-oBajB2LpAQD1BQpAukHcuwhIUoHWYNy2DzU6lDW2v2N8",
+        },
+    },
+    .paths = .{ "build.zig", "build.zig.zon" },
+}

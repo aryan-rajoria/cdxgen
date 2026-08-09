@@ -39,6 +39,22 @@ export declare function parseBuildZigZon(zonFile: string): {
     parentComponent: object;
 };
 /**
+ * Parse ZON content (already read from a file or extracted from an archive)
+ * into a package list and parent component.
+ *
+ * The content-based entry point lets the resolver parse manifests read from
+ * `.tar.gz` cache archives without writing them to a temp file.
+ *
+ * @param {string} content Raw ZON source
+ * @param {string} [sourceLabel] Path or label used in `internal:SrcFile`
+ *   evidence. When omitted, `"<zon-content>"` is used.
+ * @returns {{ pkgList: object[], parentComponent: object }} parsed packages
+ */
+export declare function parseBuildZigZonContent(content: string, sourceLabel?: string): {
+    pkgList: object[];
+    parentComponent: object;
+};
+/**
  * Tokenize a ZON source string.
  *
  * The tokenizer is intentionally separate from the parser so each literal form
