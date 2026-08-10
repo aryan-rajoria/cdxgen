@@ -156,6 +156,7 @@ COPY . /opt/cdxgen
 RUN cd /opt/cdxgen && corepack enable pnpm && pnpm config set global-bin-dir /opt/bin \
     && pnpm install:prod && pnpm link && pnpm cache delete \
     && pnpm bin && pnpm bin -g \
+    && rm -f /opt/cdxgen/pnpm-workspace.yaml \
     && mkdir -p ${NODE_COMPILE_CACHE} \
     && chown -R cyclonedx:cyclonedx /opt/cdxgen ${NODE_COMPILE_CACHE} ${CDXGEN_TEMP_DIR} \
     && chmod a-w -R /opt \

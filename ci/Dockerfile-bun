@@ -144,6 +144,7 @@ RUN set -e; \
     && microdnf clean all
 COPY . /opt/cdxgen
 RUN cd /opt/cdxgen && bun install --no-cache --production \
+    && rm -f /opt/cdxgen/pnpm-workspace.yaml \
     && chown -R cyclonedx:cyclonedx /opt/cdxgen \
     && chmod a-w -R /opt \
     && rm -rf /var/cache/yum \

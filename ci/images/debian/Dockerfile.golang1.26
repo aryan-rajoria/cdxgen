@@ -119,7 +119,7 @@ RUN set -e; \
  && corepack enable \
  && corepack pnpm install:prod \
       --no-optional \
- && corepack pnpm cache delete \
+ && corepack pnpm cache delete && rm -f /opt/cdxgen/pnpm-workspace.yaml \
  && mkdir -p ${NODE_COMPILE_CACHE} \
  && node /opt/cdxgen/bin/cdxgen.js --help \
  && rm -rf $HOME/.npmrc $HOME/.pip /root/.cache/node \
