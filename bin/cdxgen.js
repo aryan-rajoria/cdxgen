@@ -1913,14 +1913,34 @@ const writeCycloneDxOutput = (jsonFile, bomJson, options) => {
   if (options.validate && bomNSData?.bomJson) {
     thoughtLog("Wait, let's check the generated BOM file for any issues.");
     const validation = await validateBomWithRustFallback(bomNSData.bomJson);
+    const validationTarget = `cyclonedx-${bomNSData.bomJson.specVersion || options.specVersion}`;
     if (!validation.valid) {
+      recordActivity({
+        kind: "validate",
+        reason: `The BOM failed schema validation using the ${validation.source} validator.`,
+        status: "failed",
+        target: validationTarget,
+      });
       if (cleanup) {
         cleanupSourceDir(srcDir);
       }
       process.exit(1);
     } else {
+      recordActivity({
+        kind: "validate",
+        reason: `Validated the BOM against the CycloneDX schema using the ${validation.source} validator.`,
+        status: "completed",
+        target: validationTarget,
+      });
       thoughtLog("✅ BOM file looks valid.");
     }
+  } else if (bomNSData?.bomJson) {
+    recordActivity({
+      kind: "validate",
+      reason: "Validation is disabled with --no-validate.",
+      status: "blocked",
+      target: `cyclonedx-${bomNSData.bomJson.specVersion || options.specVersion}`,
+    });
   }
   if (
     outputPlan.formats.has("spdx") &&
