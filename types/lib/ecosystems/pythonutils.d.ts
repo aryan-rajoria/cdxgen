@@ -51,9 +51,9 @@ export declare function createUVLock(basePath: string, options: Object): void;
  */
 export declare function getPipFrozenTree(basePath: string, reqOrSetupFile: string, tempVenvDir: string, parentComponent: Object, projectRoot: any, getTreeWithPluginFn: any): Object;
 export declare function getPipTreeForPackages(basePath: any, pkgList: any, tempVenvDir: any, parentComponent: any, getTreeWithPluginFn: any): {
-    failedPkgList?: undefined;
     rootList?: undefined;
     dependenciesList?: undefined;
+    failedPkgList?: undefined;
 } | {
     failedPkgList: any[];
     rootList: {

@@ -204,6 +204,26 @@ CDXGEN_PLUGINS_DIR=/tmp/cdxgen-local-plugins npx poku lib/inventory/cdxrs.poku.j
 | `--no-cache`            | CLI flag alias for `CDXGEN_NO_CACHE=true`                                                                                                                                                                 |
 | `--cache-ttl <secs>`    | CLI flag alias for `CDXGEN_CACHE_TTL=<secs>`                                                                                                                                                              |
 
+## Batch transport selection
+
+`prefetchJson` in `lib/inventory/fetchBatch.js` dispatches a batch to one of two
+transports, and callers do not choose between them:
+
+| Batch contains                                          | Transport                     |
+| ------------------------------------------------------- | ----------------------------- |
+| JSON requests only, binary available                     | `cdxrs fetch` subprocess      |
+| Any request with `responseType: "text"` or `"buffer"`    | JS pool (`cdxgenAgent`)       |
+| No binary, or `CDXGEN_RS_DISABLE=fetch`, or `--no-rust`  | JS pool                       |
+
+The envelope types a result body as JSON, so a non-JSON body has no
+representation in it. Rather than parse HTML as JSON and record a failure, such
+a batch goes to the JS pool, which passes `responseType` straight to the agent.
+The pool applies the same global and per-host concurrency and rate policy, so
+the batching win is unchanged; only the on-disk cache below is skipped.
+
+Two batches rely on this: Maven POMs and the pkg.go.dev pages behind
+`getGoPkgLicense` and `getGoPkgVCSUrl`.
+
 ## Metadata cache
 
 `cdxrs fetch` writes an on-disk conditional cache under

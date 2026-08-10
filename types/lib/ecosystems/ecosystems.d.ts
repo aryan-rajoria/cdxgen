@@ -161,6 +161,31 @@ export declare function getRepoLicense(repoUrl: any, repoMetadata: any): Promise
     url: any;
 } | undefined>;
 /**
+ * Prefetch the pkg.go.dev pages for a list of Go modules.
+ *
+ * Go was the last ecosystem making one round trip per module with the URL known
+ * up front: `getGoPkgLicense` and `getGoPkgVCSUrl` are both called from inside
+ * the parsers' loops, so a module list of any size was fetched strictly one at a
+ * time. Both pages are HTML, which is why these requests carry
+ * `responseType: "text"` and so run on the JS pool rather than through cdxrs.
+ *
+ * Callers must pass exactly the modules their loop will look up. A superset
+ * issues requests the serial path never made; a subset only loses some of the
+ * batching.
+ *
+ * @param {Array<{group?: string, name?: string}>} modules Modules about to be
+ *   resolved. Duplicates and entries without a name are fine.
+ * @returns {Promise<void>}
+ */
+export declare function prefetchGoPkgMetadata(modules: Array<{
+    group?: string;
+    name?: string;
+}>): Promise<void>;
+/**
+ * Discard prefetched pkg.go.dev documents. Tests only.
+ */
+export declare function resetGoPkgPrefetch(): void;
+/**
  * Method to get go pkg license from go.dev site.
  *
  * @param {Object} repoMetadata Repo metadata
