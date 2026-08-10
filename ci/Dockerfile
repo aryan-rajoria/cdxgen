@@ -154,8 +154,19 @@ LABEL maintainer="cyclonedx" \
 COPY . /opt/cdxgen
 
 RUN cd /opt/cdxgen && corepack enable pnpm && pnpm config set global-bin-dir /opt/bin \
-    && pnpm install:prod && pnpm link && pnpm cache delete \
-    && pnpm bin && pnpm bin -g \
+    && pnpm install:prod && pnpm cache delete \
+    && chmod +x /opt/cdxgen/bin/*.js \
+    && for name in aibom cbom cdxgen cdxgen-secure obom saasbom spdxgen; do ln -sf /opt/cdxgen/bin/cdxgen.js /opt/bin/$name; done \
+    && ln -sf /opt/cdxgen/bin/audit.js /opt/bin/cdx-audit \
+    && ln -sf /opt/cdxgen/bin/convert.js /opt/bin/cdx-convert \
+    && ln -sf /opt/cdxgen/bin/validate.js /opt/bin/cdx-validate \
+    && ln -sf /opt/cdxgen/bin/verify.js /opt/bin/cdx-verify \
+    && ln -sf /opt/cdxgen/bin/sign.js /opt/bin/cdx-sign \
+    && ln -sf /opt/cdxgen/bin/repl.js /opt/bin/cdxi \
+    && ln -sf /opt/cdxgen/bin/evinse.js /opt/bin/evinse \
+    && ln -sf /opt/cdxgen/bin/hbom.js /opt/bin/hbom \
+    && ln -sf /opt/cdxgen/bin/tracebom.js /opt/bin/tracebom \
+    && cdxgen --version \
     && rm -f /opt/cdxgen/pnpm-workspace.yaml \
     && mkdir -p ${NODE_COMPILE_CACHE} \
     && chown -R cyclonedx:cyclonedx /opt/cdxgen ${NODE_COMPILE_CACHE} ${CDXGEN_TEMP_DIR} \

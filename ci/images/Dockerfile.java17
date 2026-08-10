@@ -64,8 +64,8 @@ RUN set -e; \
           gawk \
           git-core \
           make \
-          nodejs22 \
-          npm22 \
+          nodejs24 \
+          npm24 \
           python311 \
           python311-pip \
           unzip \

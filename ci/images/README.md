@@ -20,10 +20,9 @@ Below table summarizes all available container image versions. These images incl
 | Java       | 21                           | ghcr.io/cdxgen/cdxgen-temurin-java21:v13, ghcr.io/cdxgen/cdxgen-alpine-java21:v13                                                                                                                                   | Java 21 version. Includes Temurin (Ubuntu-based) and Alpine-based variants.                            |
 | Java       | 24                           | ghcr.io/cdxgen/cdxgen-temurin-java24:v13, ghcr.io/cdxgen/cdxgen-alpine-java24:v13                                                                                                                                   | Java 24 version. Includes Temurin (Ubuntu-based) and Alpine-based variants.                            |
 | Java       | 26                           | ghcr.io/cdxgen/cdxgen-temurin-java26:v13, ghcr.io/cdxgen/cdxgen-alpine-java26:v13                                                                                                                                   | Java 26 version. Includes Temurin (Ubuntu-based) and Alpine-based variants.                            |
-| Dotnet     | .Net Framework 4.6 - 4.8     | ghcr.io/cdxgen/cdxgen-debian-dotnet6:v13                                                                                                                                                                               | Uses mono to support old .NET Framework builds.                                                        |
-| Dotnet     | .Net Core 2.1, 3.1, .Net 5.0 | ghcr.io/cdxgen/cdxgen-debian-dotnet6:v13                                                                                                                                                                               | Invoke with `--platform=linux/amd64` for better compatibility.                                         |
-| Dotnet     | .Net 6                       | ghcr.io/cdxgen/cdxgen-debian-dotnet6:v13                                                                                                                                                                               | .Net 6 version.                                                                                        |
-| Dotnet     | .Net 7                       | ghcr.io/cdxgen/cdxgen-dotnet7:v13 (amd64 only)                                                                                                                                                                         | .Net 7 version. Only available on `amd64`.                                                             |
+| Dotnet     | .Net Framework 4.6 - 4.8     | ghcr.io/cdxgen/cdxgen-debian-dotnet8:v13                                                                                                                                                                               | Uses mono to support old .NET Framework builds.                                                        |
+| Dotnet     | .Net Core 2.1, 3.1, .Net 5.0 | ghcr.io/cdxgen/cdxgen-debian-dotnet8:v13                                                                                                                                                                               | Invoke with `--platform=linux/amd64` for better compatibility.                                         |
+| Dotnet     | .Net 6, .Net 7               | ghcr.io/cdxgen/cdxgen-debian-dotnet8:v13                                                                                                                                                                               | Uses the .Net 8 SDK with roll-forward.                                                                                        |
 | Dotnet     | .Net 8                       | ghcr.io/cdxgen/cdxgen-debian-dotnet8:v13, ghcr.io/cdxgen/cdxgen-dotnet8:v13 (amd64 only)                                                                                                                            | .Net 8 version. Debian and SLE-based variants.                                                         |
 | Dotnet     | .Net 9                       | ghcr.io/cdxgen/cdxgen-debian-dotnet9:v13, ghcr.io/cdxgen/cdxgen-alpine-dotnet9:v13, ghcr.io/cdxgen/cdxgen-dotnet9:v13 (amd64 only)                                                                               | .Net 9 version. Debian, Alpine, and SLE-based variants.                                                |
 | Dotnet     | .Net 10                      | ghcr.io/cdxgen/cdxgen-ubuntu-dotnet10:v13, ghcr.io/cdxgen/cdxgen-alpine-dotnet10:v13                                                                                                                                | .Net 10 version. Ubuntu and Alpine-based variants.                                                     |
@@ -112,7 +111,7 @@ docker run --rm -e CDXGEN_DEBUG_MODE=verbose -v /tmp:/tmp -v $HOME/.m2:$HOME/.m2
 
 ### .Net Framework, .Net Core 3.1, and .Net 6.0 applications
 
-Use the custom image `ghcr.io/cdxgen/cdxgen-debian-dotnet6:v13`.
+Use the custom image `ghcr.io/cdxgen/cdxgen-debian-dotnet8:v13`.
 
 Example invocation:
 
@@ -121,21 +120,13 @@ Example invocation:
 A bundled version of [nuget](./nuget/) and mono is used to support .Net framework apps.
 
 ```shell
-docker run --rm --platform=linux/amd64 -e CDXGEN_DEBUG_MODE=verbose -v /tmp:/tmp -v $(pwd):/app:rw -t ghcr.io/cdxgen/cdxgen-debian-dotnet6:v13 -r /app -o /app/bom.json -t dotnet
+docker run --rm --platform=linux/amd64 -e CDXGEN_DEBUG_MODE=verbose -v /tmp:/tmp -v $(pwd):/app:rw -t ghcr.io/cdxgen/cdxgen-debian-dotnet8:v13 -r /app -o /app/bom.json -t dotnet
 ```
 
 Dotnet 3.1 or Dotnet 6.0 (debian)
 
 ```shell
-docker run --rm --platform=linux/amd64 -e CDXGEN_DEBUG_MODE=verbose -v /tmp:/tmp -v $(pwd):/app:rw -t ghcr.io/cdxgen/cdxgen-debian-dotnet6:v13 -r /app -o /app/bom.json -t dotnet
-```
-
-Dotnet 7.0 (SLE)
-
-Only SLE version is available for dotnet 7. Use this image only as a last resort, when the project doesn't restore with the debian dotnet 8 version.
-
-```shell
-docker run --rm --platform=linux/amd64 -e CDXGEN_DEBUG_MODE=verbose -v /tmp:/tmp -v $(pwd):/app:rw -t ghcr.io/cdxgen/cdxgen-dotnet7:v13 -r /app -o /app/bom.json -t dotnet
+docker run --rm --platform=linux/amd64 -e CDXGEN_DEBUG_MODE=verbose -v /tmp:/tmp -v $(pwd):/app:rw -t ghcr.io/cdxgen/cdxgen-debian-dotnet8:v13 -r /app -o /app/bom.json -t dotnet
 ```
 
 Dotnet 8.0 (debian)
@@ -342,10 +333,10 @@ A workaround could be to use the debian container images instead of SLE images. 
 
 ### .Net framework issues
 
-Old .Net framework applications (<= 4.7) are well known for their dislike of linux and hence may not restore/build easily. To troubleshoot, try running the `nuget restore` command manually using the `debian-dotnet6` image as shown.
+Old .Net framework applications (<= 4.7) are well known for their dislike of linux and hence may not restore/build easily. To troubleshoot, try running the `nuget restore` command manually using the `debian-dotnet8` image as shown.
 
 ```shell
-docker run --rm -v /tmp:/tmp -v $(pwd):/app:rw -w /app -it ghcr.io/cdxgen/debian-dotnet6:master nuget restore -Verbosity detailed /app/<solution file name>
+docker run --rm -v /tmp:/tmp -v $(pwd):/app:rw -w /app -it ghcr.io/cdxgen/debian-dotnet8:master nuget restore -Verbosity detailed /app/<solution file name>
 ```
 
 If you see any mono-related crashes, there isn't a lot that can be done other than using the correct version of Windows for the restore step.
@@ -355,7 +346,7 @@ If you see any mono-related crashes, there isn't a lot that can be done other th
 Assemblies that are present in the Global Assembly Cache can be referred to and used directly without specifying a version number. This style of includes is common with namespaces such as `System.`, `Microsoft.`, and `Mono.`. Use the command `gacutil -l` to [obtain](https://learn.microsoft.com/en-us/dotnet/framework/app-domains/how-to-view-the-contents-of-the-gac#view-the-assemblies-in-the-gac) the version details for libraries from GAC.
 
 ```shell
-docker run --rm -v /tmp:/tmp -v $(pwd):/app:rw -w /app -it ghcr.io/cdxgen/debian-dotnet6:master gacutil -l
+docker run --rm -v /tmp:/tmp -v $(pwd):/app:rw -w /app -it ghcr.io/cdxgen/debian-dotnet8:master gacutil -l
 ```
 
 Sample output:

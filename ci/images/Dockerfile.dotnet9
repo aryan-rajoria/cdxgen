@@ -49,8 +49,8 @@ RUN set -e; \
           git-core \
           java-21-openjdk-devel \
           make \
-          nodejs22 \
-          npm22 \
+          nodejs24 \
+          npm24 \
           python311 \
           python311-pip \
           unzip \

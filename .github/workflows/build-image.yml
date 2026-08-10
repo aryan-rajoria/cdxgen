@@ -47,8 +47,6 @@ jobs:
         platform: [ amd64, arm64 ]
         # Some images don't work on linux/arm64
         exclude:
-          - imagefile: ci/images/Dockerfile.dotnet7
-            platform: arm64
           - imagefile: ci/images/Dockerfile.dotnet8
             platform: arm64
           - imagefile: ci/images/Dockerfile.dotnet9
