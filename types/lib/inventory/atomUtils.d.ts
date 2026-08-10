@@ -91,6 +91,24 @@ export declare function resolveDirectAtomBinaryPath(): string | undefined;
  */
 export declare function getAtomCommand(): any;
 /**
+ * Compute the maximum heap atom may grow to, in bytes.
+ *
+ * Neither of atom's two runtimes bounds itself to anything a machine can
+ * comfortably back: a GraalVM native image defaults to
+ * `MaximumHeapSizePercent=80` of physical memory, and HotSpot to a quarter of
+ * it. Both use a collector that grows the heap in preference to collecting, so
+ * on a large host atom reserves tens of gigabytes and the machine, not atom,
+ * is what runs out of memory.
+ *
+ * The ceiling is therefore the smaller of half of physical memory and
+ * `ATOM_MAX_HEAP_CAP_BYTES`, with a floor so that a small container still gets
+ * a workable heap. `ATOM_MAX_HEAP` overrides the whole calculation and accepts
+ * a plain byte count or a `k`/`m`/`g` suffix.
+ *
+ * @returns {number|undefined} Heap ceiling in bytes, or `undefined` to leave the runtime default in place
+ */
+export declare function atomMaxHeapBytes(): number | undefined;
+/**
  * Execute the atom tool against a source directory or file with the given arguments.
  *
  * Resolves the atom binary via `getAtomCommand`, sets up the required environment

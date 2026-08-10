@@ -674,12 +674,6 @@ jobs:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1  # v7.0.1
         with:
           persist-credentials: false
-          repository: 'chabbasaad/Reporting-Windows-Application'
-          ref: 'master'
-          path: 'repotests/Reporting-Windows-Application'
-      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1  # v7.0.1
-        with:
-          persist-credentials: false
           repository: 'appthreat/blint'
           ref: 'v1.0.34'
           path: 'repotests/blint'
@@ -1309,7 +1303,6 @@ jobs:
       - name: repotests SimpleFrameworkApp
         run: |
           bin/cdxgen.js -r -t dotnet-framework repotests/SimpleFrameworkApp -o bomresults/bom-dotnet-framework.json --bom-audit
-          bin/cdxgen.js -r -t dotnet-framework repotests/Reporting-Windows-Application -o bomresults/bom-dotnet-framework-reporting.json --deep
         shell: bash
       - name: Set up JDK
         uses: actions/setup-java@03ad4de0992f5dab5e18fcb136590ce7c4a0ac95  # v5.6.0
@@ -1581,6 +1574,12 @@ jobs:
           persist-credentials: false
           repository: 'kriasoft/react-app'
           path: 'repotests/react-app'
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1  # v7.0.1
+        with:
+          persist-credentials: false
+          repository: 'chabbasaad/Reporting-Windows-Application'
+          ref: 'master'
+          path: 'repotests/Reporting-Windows-Application'
       - name: pnpm install
         run: |
           pnpm install:frozen
@@ -1593,6 +1592,10 @@ jobs:
           FETCH_LICENSE=false bin/cdxgen.js -t nodejs8 repotests/react-app -o bomresults/react-app.json --fail-on-error
           FETCH_LICENSE=false bin/cdxgen.js -t nodejs8 repotests/react-app -o bomresults/react-app.spdx.json --format spdx --fail-on-error
           node bin/evinse.js -i bomresults/react-app.json -o bomresults/react-app.evinse.json -l js --with-data-flow repotests/react-app
+        shell: bash
+      - name: repotests Reporting-Windows-Application
+        run: |
+          bin/cdxgen.js -r -t dotnet-framework repotests/Reporting-Windows-Application -o bomresults/bom-dotnet-framework-reporting.json --deep
         shell: bash
       - name: repotests shiftleft-java-example
         run: |
