@@ -110,35 +110,29 @@ export declare function validatePurlSource(purlString: string): {
     details: string;
 } | null;
 /**
- * Resolve a git repository URL from a package URL by querying package registries.
- *
- * Supported purl types:
- * - npm    -> registry.npmjs.org
- * - pypi   -> pypi.org
- * - gem    -> rubygems.org
- * - cargo  -> crates.io
- * - pub    -> pub.dev
- * - github -> github.com/{namespace}/{name}
- * - bitbucket -> bitbucket.org/{namespace}/{name}
- * - maven  -> repo1.maven.org POM scm metadata
- * - composer -> repo.packagist.org p2 metadata
- * - generic -> qualifiers: vcs_url, download_url
- *
- * `fetchPomXmlAsJson` is injected rather than imported because it is
- * maven-specific and lives a layer above this module. Every maven resolution
- * needs it, so it is required rather than optional: omitting it would silently
- * turn every maven purl into an unresolvable one.
- *
- * @param {string} purlString package URL string
- * @param {{ fetchPomXmlAsJson?: Function }} [helpers] injected registry fetchers
- * @returns {Promise<{repoUrl:string|undefined, registry:string|undefined, type:string}|undefined>} resolution result
+ * Discard prefetched registry documents. Tests only.
  */
-export declare function resolveGitUrlFromPurl(purlString: string, helpers?: {
-    fetchPomXmlAsJson?: Function;
-}): Promise<{
-    repoUrl: string | undefined;
-    registry: string | undefined;
-    type: string;
+export declare function resetGitUrlSourcePrefetch(): void;
+/**
+ * Prefetch the registry documents a list of purls will be resolved from.
+ *
+ * `resolveGitUrlFromPurl` takes a single purl, so on its own it can only ever
+ * make one request at a time. Callers that know the whole list up front — the
+ * predictive audit knows every target before it starts — can hand it over here
+ * and have the documents fetched in one round instead.
+ *
+ * @param {Array<string>} purlStrings Purls about to be resolved. Duplicates,
+ *   empties and unparseable entries are fine.
+ * @returns {Promise<void>}
+ */
+export declare function prefetchGitUrlSources(purlStrings: Array<string>): Promise<void>;
+export declare function resolveGitUrlFromPurl(purlString: any, helpers?: {}): Promise<{
+    type: any;
+    registry: any;
+    repoUrl: string;
+    version: any;
+    namespace: any;
+    name: any;
 } | undefined>;
 /**
  * Clean up cloned source directories.
