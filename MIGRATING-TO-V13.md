@@ -268,37 +268,24 @@ docker run --rm -v $(pwd):/app:rw -t ghcr.io/cdxgen/cdxgen:latest -t node20 -r /
 
 ## Install and package size changes
 
-`@cdxgen/cdxgen-plugins-bin` is now a **direct (required) dependency** of
-`@cdxgen/cdxgen`. In v12 it was an optional dependency that could be
-excluded with `--omit=optional` or `--no-optional`.
+`@cdxgen/cdxgen-plugins-bin` and its per-platform binary packages (e.g.
+`@cdxgen/cdxgen-plugins-bin-darwin-arm64`) are **optional dependencies**, as
+they were in v12, and are selected automatically based on your runtime
+platform.
 
 **What this means for you:**
 
-- `npm install @cdxgen/cdxgen` will always install the plugins-bin
-  meta-package.
-- The per-platform binary packages (e.g.
-  `@cdxgen/cdxgen-plugins-bin-darwin-arm64`) remain **optional** and are
-  selected automatically based on your runtime platform.
+- `npm install @cdxgen/cdxgen --omit=optional` (or `--no-optional`) is a
+  supported install. cdxgen falls back to its JavaScript implementations for
+  every plugin-backed feature, and v13's JavaScript paths are faster than the
+  v12 ones they replaced.
+- A missing plugins directory is no longer reported as an install problem. Run
+  with `CDXGEN_DEBUG_MODE=debug` to see which implementation was selected.
+- Set `CDXGEN_PLUGINS_DIR` to point cdxgen at a plugins directory you manage
+  yourself.
 
-> **Important:** the meta-package is a stub — it ships no plugin binaries and
-> declares no dependencies. The actual `plugins/` directory lives only in the
-> per-platform packages, which are still optional. Promoting the meta-package
-> therefore does **not** by itself guarantee that plugin binaries are present;
-> installing with `--omit=optional` will still leave you without them. If your
-> platform has a published binary package and it is missing, cdxgen now warns
-> about a likely install-integrity problem. On platforms with no published
-> binary package, plugin-backed features are skipped silently, as before.
-
-**Measured impact (npm pack + installed size):**
-
-| Metric                 | v12 (optional)  | v13 (required)  | Delta      |
-| ---------------------- | --------------- | --------------- | ---------- |
-| Tarball (.tgz)         | 2,072,434 bytes | 2,072,561 bytes | +127 bytes |
-| Installed node_modules | 574 MB          | 574 MB          | 0 MB       |
-
-The installed footprint is unchanged because package managers (pnpm, npm)
-already installed optional dependencies by default. The change is semantic:
-the package can no longer be excluded.
+Skipping the optional dependencies keeps roughly 570 MB of platform binaries
+out of `node_modules`.
 
 ## Rust-backed stages
 
