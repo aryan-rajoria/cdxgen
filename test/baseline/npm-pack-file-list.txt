@@ -236,6 +236,7 @@ lib/stages/postgen/postgen.js
 lib/stages/postgen/ruleEngine.js
 lib/stages/postgen/sortBom.js
 lib/stages/postgen/spdxConverter.js
+lib/stages/postgen/specVersionCompat.js
 lib/stages/pregen/envAudit.js
 lib/stages/pregen/pregen.js
 lib/third-party/README.md
@@ -629,6 +630,8 @@ types/lib/stages/postgen/sortBom.d.ts
 types/lib/stages/postgen/sortBom.d.ts.map
 types/lib/stages/postgen/spdxConverter.d.ts
 types/lib/stages/postgen/spdxConverter.d.ts.map
+types/lib/stages/postgen/specVersionCompat.d.ts
+types/lib/stages/postgen/specVersionCompat.d.ts.map
 types/lib/stages/pregen/envAudit.d.ts
 types/lib/stages/pregen/envAudit.d.ts.map
 types/lib/stages/pregen/pregen.d.ts

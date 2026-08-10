@@ -189,7 +189,7 @@ If you add a new root-level 1.7 field, add it to `BOM_1_7_ONLY_FIELDS` in
 
 **`--export-proto`** — protobuf models `Citation.pointers` and
 `Citation.expressions` as wrapper messages around a repeated string, while
-canonical JSON uses bare arrays. `@cdxgen/cdx-proto` 2.1.0 converts between the
+canonical JSON uses bare arrays. `@cdxgen/cdx-proto` 2.2.0 converts between the
 two, so citations survive a binary round-trip unchanged:
 
 ```bash

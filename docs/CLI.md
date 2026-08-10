@@ -14,7 +14,7 @@ The package ships multiple CLI entry points. Use this table as the top-level nav
 | `aibom`        | Generate AI-BOM-oriented inventories from source, Hugging Face references, Modelfiles, or GGUF artifacts | yes                       | [AI_BOM.md](AI_BOM.md)             |
 | `hbom`         | Generate a CycloneDX hardware BOM for the current host, with optional protobuf export                    | yes (`hbom`, `hbom-slim`) | [HBOM.md](HBOM.md)                 |
 | `cdx-audit`    | Explainable upstream dependency risk prioritization from existing BOMs                                   | yes                       | [CDX_AUDIT.md](CDX_AUDIT.md)       |
-| `cdx-convert`  | Convert CycloneDX JSON or protobuf to SPDX 3.0.1 JSON-LD                                                 | yes                       | [CDX_CONVERT.md](CDX_CONVERT.md)   |
+| `cdx-convert`  | Convert CycloneDX JSON or protobuf to SPDX 3.0.1 JSON-LD, or to another CycloneDX spec version            | yes                       | [CDX_CONVERT.md](CDX_CONVERT.md)   |
 | `cdx-sign`     | Sign a CycloneDX BOM                                                                                     | yes                       | [CDX_SIGN.md](CDX_SIGN.md)         |
 | `cdx-validate` | Validate structure, compliance, and signatures                                                           | yes                       | [CDX_VALIDATE.md](CDX_VALIDATE.md) |
 | `cdx-verify`   | Verify BOM signatures                                                                                    | yes                       | [CDX_VERIFY.md](CDX_VERIFY.md)     |
@@ -462,7 +462,16 @@ cdx-convert -i bom.cdx -o bom.spdx.json
 
 `cdx-convert` supports CycloneDX 1.6 and 1.7 inputs and exports SPDX 3.0.1.
 
-Refer to [cdx-convert — CycloneDX to SPDX](CDX_CONVERT.md) for complete usage.
+Pass `--to` with a CycloneDX specification version to convert between CycloneDX
+versions instead. Fields the target version does not define are listed on stderr
+before the file is written:
+
+```shell
+cdx-convert -i bom.json --to 1.6              # writes bom-1_6.json
+cdx-convert -i bom.json --to 1.6 -o old.cdx   # writes protobuf
+```
+
+Refer to [cdx-convert — CycloneDX converter](CDX_CONVERT.md) for complete usage.
 
 ## Dynamic Process Tracing (Dynamic SBOM)
 

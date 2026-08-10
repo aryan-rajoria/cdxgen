@@ -130,8 +130,8 @@ importers:
         specifier: 0.5.1
         version: 0.5.1
       '@cdxgen/cdx-proto':
-        specifier: 2.1.0
-        version: 2.1.0
+        specifier: 2.2.0
+        version: 2.2.0
       '@cdxgen/cdxgen-plugins-bin-darwin-amd64':
         specifier: 3.0.1
         version: 3.0.1
@@ -334,9 +334,6 @@ packages:
     cpu: [x64]
     os: [win32]
 
-  '@bufbuild/protobuf@2.12.0':
-    resolution: {integrity: sha512-B/XlCaFIP8LOwzo+bz5uFzATYokcwCKQcghqnlfwSmM5eX/qTkvDBnDPs+gXtX/RyjxJ4DRikECcPJbyALA8FA==, tarball: https://registry.npmjs.org/@bufbuild/protobuf/-/protobuf-2.12.0.tgz}
-
   '@bufbuild/protobuf@2.13.0':
     resolution: {integrity: sha512-acq7c49vxfm1ggJ95P70TX7ABDM0vxr1SYD3BB0o0jnBLB4OAqeHyKuN+cD3w80gXEDQ2zxHpR6CUeA+O/aU9g==, tarball: https://registry.npmjs.org/@bufbuild/protobuf/-/protobuf-2.13.0.tgz}
 
@@ -345,9 +342,10 @@ packages:
     engines: {node: '>=20'}
     hasBin: true
 
-  '@cdxgen/cdx-proto@2.1.0':
-    resolution: {integrity: sha512-oUiPUhviKhpbFOIlnD7YO0VpDY93/x4ssU9vRMeAJ/vMeZMGJ8/rGrnYHexyUwLa0zs+pORVZ/zvkqeK407GYQ==, tarball: https://registry.npmjs.org/@cdxgen/cdx-proto/-/cdx-proto-2.1.0.tgz}
+  '@cdxgen/cdx-proto@2.2.0':
+    resolution: {integrity: sha512-gLYOq0YJiJKrozIBjRu7DAfisJNXp2uoH15W9yZEAl2OPRhUoePh4N8AdGLW1ap8oYw3RpXD4R5AJe1A7z0/sg==, tarball: https://registry.npmjs.org/@cdxgen/cdx-proto/-/cdx-proto-2.2.0.tgz}
     engines: {node: '>=20'}
+    hasBin: true
 
   '@cdxgen/cdx-purl@0.0.5':
     resolution: {integrity: sha512-ESyBl4GaIsZH04v+Bt9LFEVoUtULRvwTWKS7iGYWp3GupFSP40ZTqmOhAFp1Do1n4B67XD7xb7l7P9mnUIuAWg==, tarball: https://registry.npmjs.org/@cdxgen/cdx-purl/-/cdx-purl-0.0.5.tgz}
@@ -1261,18 +1259,15 @@ snapshots:
   '@biomejs/cli-win32-x64@2.5.5':
     optional: true
 
-  '@bufbuild/protobuf@2.12.0':
-    optional: true
-
   '@bufbuild/protobuf@2.13.0':
     optional: true
 
   '@cdxgen/cdx-hbom@0.5.1':
     optional: true
 
-  '@cdxgen/cdx-proto@2.1.0':
+  '@cdxgen/cdx-proto@2.2.0':
     dependencies:
-      '@bufbuild/protobuf': 2.12.0
+      '@bufbuild/protobuf': 2.13.0
     optional: true
 
   '@cdxgen/cdx-purl@0.0.5': {}

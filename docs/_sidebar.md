@@ -2,7 +2,7 @@
 - [CLI Usage](CLI.md)
 - [HBOM Guide](HBOM.md)
 - [cdx-audit — Predictive supply-chain audit](CDX_AUDIT.md)
-- [cdx-convert — CycloneDX to SPDX](CDX_CONVERT.md)
+- [cdx-convert — CycloneDX converter](CDX_CONVERT.md)
 - [cdx-sign — Sign a CycloneDX BOM](CDX_SIGN.md)
 - [cdx-validate — SCVS & CRA](CDX_VALIDATE.md)
 - [Validation rules](VALIDATION_RULES.md)

@@ -169,7 +169,7 @@ The repository is not only one generator command.
 | `hbom`         | `bin/hbom.js`     | generate hardware BOMs using the optional HBOM collector                                         |
 | `cdx-audit`    | `bin/audit.js`    | run predictive dependency audit from existing BOMs                                               |
 | `cdx-validate` | `bin/validate.js` | run schema, deep, and compliance validation                                                      |
-| `cdx-convert`  | `bin/convert.js`  | convert CycloneDX to SPDX                                                                        |
+| `cdx-convert`  | `bin/convert.js`  | convert CycloneDX to SPDX or another CycloneDX spec version                                      |
 | `cdx-sign`     | `bin/sign.js`     | sign BOMs                                                                                        |
 | `cdx-verify`   | `bin/verify.js`   | verify BOM signatures                                                                            |
 | `evinse`       | `bin/evinse.js`   | enrich BOMs with evidence and service data                                                       |
