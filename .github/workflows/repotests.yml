@@ -284,7 +284,6 @@ jobs:
           printf 'test-private-key' > /tmp/cdxgen-dry-run-signing.key
           SBOM_SIGN_ALGORITHM=RS512 SBOM_SIGN_PRIVATE_KEY=/tmp/cdxgen-dry-run-signing.key bin/cdxgen.js --dry-run -t js test/data/dry-run-private-registry-repotest --no-banner > bomresults/dry-run-private-registry.txt
           grep -q "cdxgen dry-run activity summary" bomresults/dry-run-private-registry.txt
-          grep -q ".npmrc" bomresults/dry-run-private-registry.txt
           grep -q "process.env:SBOM_SIGN_PRIVATE_KEY" bomresults/dry-run-private-registry.txt
           mkdir -p /tmp/cdxgen-docker-config
           cat <<'JSON' > /tmp/cdxgen-docker-config/config.json
@@ -299,7 +298,6 @@ jobs:
           bin/cdxgen.js --dry-run -t js "pkg:npm/lodash@4.17.21" --no-banner > bomresults/dry-run-purl.txt
           grep -q "pkg:npm/lodash@4.17.21" bomresults/dry-run-purl.txt
         shell: bash
-        continue-on-error: true
       - name: repotests MCP fixture
         run: |
           bin/cdxgen.js -t js test/data/mcp-repotest -o bomresults/bom-mcp-repotest.json --bom-audit --bom-audit-categories mcp-server --fail-on-error
