@@ -415,4 +415,25 @@ export declare function executePodCommand(parameters: string[], path: string, op
  * @returns {Object} An object representing the pod in SBOM-format
  */
 export declare function buildObjectForCocoaPod(dependency: Object, options: Object, type?: string): Object;
+/**
+ * Discard prefetched podspecs. Tests only.
+ */
+export declare function resetCocoaPodspecPrefetch(): void;
+/**
+ * Prefetch the remote podspecs a full CocoaPods scan is about to read.
+ *
+ * The probe is speculative — up to four URLs per pod — so batching all of them
+ * at once would issue requests the serial path never makes: a pod whose podspec
+ * sits on `main` is one request there and would be four here. Instead each
+ * candidate position is its own round, and a round carries only the pods that
+ * every earlier round missed. That is the same set of requests the serial path
+ * makes, in the same order of preference, with the pods within a round
+ * overlapped rather than queued. Rounds are bounded at four however many pods
+ * there are.
+ *
+ * @param {Array<Object>} dependencies Pod metadata objects, each optionally
+ *   carrying a `cdx:pods:podspecLocation` property.
+ * @returns {Promise<void>}
+ */
+export declare function prefetchCocoaPodspecs(dependencies: Array<Object>): Promise<void>;
 //# sourceMappingURL=parsers-misc.d.ts.map

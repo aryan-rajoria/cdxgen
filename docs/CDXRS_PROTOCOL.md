@@ -211,18 +211,30 @@ transports, and callers do not choose between them:
 
 | Batch contains                                          | Transport                     |
 | ------------------------------------------------------- | ----------------------------- |
-| JSON requests only, binary available                     | `cdxrs fetch` subprocess      |
+| Plain JSON requests only, binary available               | `cdxrs fetch` subprocess      |
 | Any request with `responseType: "text"` or `"buffer"`    | JS pool (`cdxgenAgent`)       |
+| Any request carrying its own `headers`                   | JS pool                       |
 | No binary, or `CDXGEN_RS_DISABLE=fetch`, or `--no-rust`  | JS pool                       |
 
-The envelope types a result body as JSON, so a non-JSON body has no
-representation in it. Rather than parse HTML as JSON and record a failure, such
-a batch goes to the JS pool, which passes `responseType` straight to the agent.
+The protocol carries a URL, an `accept` value and an opaque `authRealm`, and
+types a result body as JSON. Two kinds of request therefore have no faithful
+representation in it:
+
+- a non-JSON `responseType`, because the envelope has nowhere to put HTML.
+  Rather than parse HTML as JSON and record a failure, the batch goes to the
+  pool, which passes `responseType` straight to the agent. Maven POMs, the
+  pkg.go.dev pages behind `getGoPkgLicense`/`getGoPkgVCSUrl`, and CocoaPods
+  podspecs rely on this;
+- request-specific `headers`, because cdxrs derives its own `Authorization`
+  from `GITHUB_TOKEN` and would silently drop any other credential, turning an
+  authenticated lookup into an anonymous one. `forgeEnricher` relies on this to
+  carry `--forge-token` and `GITLAB_TOKEN`.
+
 The pool applies the same global and per-host concurrency and rate policy, so
 the batching win is unchanged; only the on-disk cache below is skipped.
 
-Two batches rely on this: Maven POMs and the pkg.go.dev pages behind
-`getGoPkgLicense` and `getGoPkgVCSUrl`.
+Within the pool, a credential the caller attached to a request wins over the
+ambient `GITHUB_TOKEN`. The ambient token is a fallback, never an override.
 
 ## Metadata cache
 
