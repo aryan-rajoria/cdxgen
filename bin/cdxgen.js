@@ -26,6 +26,10 @@ import {
 } from "../lib/cli/cliOptions.js";
 import { createBom, submitBom } from "../lib/cli/index.js";
 import { TRACE_MODE, thoughtEnd, thoughtLog } from "../lib/core/logger.js";
+import {
+  PROJECT_CONFIG_FILENAMES,
+  sanitizeProjectConfig,
+} from "../lib/core/projectConfig.js";
 import { fetchPomXmlAsJson } from "../lib/ecosystems/ecosystems.js";
 import { normalizeHuggingFaceReference } from "../lib/ecosystems/remote/huggingface.js";
 import {
@@ -53,7 +57,6 @@ import {
   setActivityContext,
   setDryRunMode,
   shouldRunPredictiveBomAudit,
-  toCamel,
 } from "../lib/ecosystems/utils.js";
 import { signBom, verifyBom } from "../lib/helpers/bomSigner.js";
 import {
@@ -114,15 +117,11 @@ import { prepareEnv } from "../lib/stages/pregen/pregen.js";
 import { validateSpdx } from "../lib/validator/bomValidator.js";
 import { validateBomWithRustFallback } from "../lib/validator/index.js";
 
-// Support for config files
-const configPaths = [
-  ".cdxgenrc",
-  ".cdxgen.json",
-  ".cdxgen.yml",
-  ".cdxgen.yaml",
-];
+// Support for config files. The config file lives in the directory under
+// analysis, so it carries that directory's trust level; see
+// sanitizeProjectConfig for the boundary this applies.
 let config = {};
-for (const configPattern of configPaths) {
+for (const configPattern of PROJECT_CONFIG_FILENAMES) {
   const configPath = join(process.cwd(), configPattern);
   if (!safeExistsSync(configPath)) {
     continue;
@@ -136,14 +135,17 @@ for (const configPattern of configPaths) {
     if (isSecureMode || DEBUG_MODE) {
       console.log(`Config file '${configPath}' loaded successfully.`);
     }
-    const sensitiveOptions = ["server-url", "include-formulation"];
-    for (const opt of sensitiveOptions) {
-      if (config[opt] !== undefined || config[toCamel(opt)] !== undefined) {
-        const foundKey = config[opt] !== undefined ? opt : toCamel(opt);
-        console.warn(
-          `SECURE MODE: Config file sets '${foundKey}'. Verify this is intentional.`,
-        );
-      }
+    const sanitized = sanitizeProjectConfig(config, dirname(configPath));
+    config = sanitized.config;
+    for (const entry of sanitized.rejected) {
+      console.warn(
+        `\x1b[1;35mConfig file '${configPath}' sets '${entry}', which points outside the project directory. Ignoring it. Pass the option on the command line if this is intentional.\x1b[0m`,
+      );
+    }
+    for (const foundKey of sanitized.announced) {
+      console.warn(
+        `Config file '${configPath}' sets '${foundKey}'. Verify this is intentional.`,
+      );
     }
   } catch (_e) {
     console.log("Invalid config file", configPath);

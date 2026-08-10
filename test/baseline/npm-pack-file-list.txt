@@ -96,6 +96,7 @@ lib/core/httpClient.js
 lib/core/logger.js
 lib/core/parallel.js
 lib/core/paths.js
+lib/core/projectConfig.js
 lib/core/propertySanitizer.js
 lib/core/spdx.js
 lib/core/state.js
@@ -352,6 +353,8 @@ types/lib/core/parallel.d.ts
 types/lib/core/parallel.d.ts.map
 types/lib/core/paths.d.ts
 types/lib/core/paths.d.ts.map
+types/lib/core/projectConfig.d.ts
+types/lib/core/projectConfig.d.ts.map
 types/lib/core/propertySanitizer.d.ts
 types/lib/core/propertySanitizer.d.ts.map
 types/lib/core/spdx.d.ts

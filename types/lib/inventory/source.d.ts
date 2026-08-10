@@ -1,6 +1,13 @@
 export declare const PURL_REGISTRY_LOOKUP_WARNING = "Resolved repository URL from package registry metadata. This source can be inaccurate or malicious; review before trusting results.";
 export declare const SUPPORTED_PURL_SOURCE_TYPES: string[];
 /**
+ * Validate git ref names used as branch/tag values.
+ *
+ * @param {string|undefined} refName branch or tag name
+ * @returns {boolean} true if safe
+ */
+export declare function isSafeGitRefName(refName: string | undefined): boolean;
+/**
  * Execute git with hardened defaults.
  *
  * @param {string[]} args git arguments
