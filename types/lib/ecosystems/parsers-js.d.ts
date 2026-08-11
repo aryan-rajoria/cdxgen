@@ -26,6 +26,8 @@ export declare function detectRootNpmExtension(rootPath: string): {
     duplicate: boolean;
 } | null;
 /**
+ * Parse nodejs package lock file
+ *
  * @param {string} pkgLockFile package-lock.json file
  * @param {object} options Command line options
  */
