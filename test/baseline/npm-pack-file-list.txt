@@ -272,6 +272,7 @@ lib/third-party/arborist/lib/relpath.js
 lib/third-party/arborist/lib/shrinkwrap.js
 lib/third-party/arborist/lib/spec-from-lock.js
 lib/third-party/arborist/lib/tree-check.js
+lib/third-party/arborist/lib/validate-npm-package-name.js
 lib/third-party/arborist/lib/version-from-tgz.js
 lib/third-party/arborist/lib/yarn-lock.js
 lib/validator/bomValidator.js

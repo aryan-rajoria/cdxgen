@@ -89,6 +89,7 @@ const ALLOWLIST = [
 
   // --- cdxgen-local stubs (never fetched from upstream) ---
   { path: "lib/bin-links.js", source: "preserve", reason: "local dependency-free reimplementation of bin-links getPaths; node.js imports it" },
+  { path: "lib/validate-npm-package-name.js", source: "preserve", reason: "local dependency-free reimplementation of validate-npm-package-name; package-extensions.js imports it" },
   { path: "lib/proc-log.js", source: "stub", reason: "no-op stub for proc-log; arborist uses it for logging only" },
   { path: "lib/npm-extension.js", source: "stub", reason: "no-op stub; upstream loads and executes arbitrary .npm-extension code, which cdxgen refuses" },
 ];

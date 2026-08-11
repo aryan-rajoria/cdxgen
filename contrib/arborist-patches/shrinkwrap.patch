@@ -1,5 +1,5 @@
 TARGET: lib/shrinkwrap.js
-REASON: Two deviations:
+REASON: Three deviations:
   1. proc-log: upstream uses proc-log for logging; cdxgen stubs it as a no-op
      local module (./proc-log.js) to avoid adding a runtime dep.
   2. Shrinkwrap#commit writes the lockfile and yarn.lock to disk (writeFile
@@ -7,6 +7,11 @@ REASON: Two deviations:
      are removed so the vendored tree is structurally read-only.  commit() is
      kept as a no-op so loadActual/loadVirtual — which never call it — are
      unaffected.
+  3. Shrinkwrap#toString serialises a lockfile for writing, which is the only
+     use of json-stringify-nice in the vendored tree.  With the write paths
+     already gone it is unreachable, so it is removed along with the
+     dependency; save() calls commit() directly for the side effect toString()
+     was being kept for.
 
 ---
 SEARCH:
@@ -32,10 +37,9 @@ SEARCH:
     // This must be called before the lockfile conversion check below since it sets properties as part of `commit()`
     const json = this.toString(options);
 REPLACE:
-    // toString() sets properties as part of commit(), so it must run before
-    // the lockfile conversion check below.  Its serialised output is unused
-    // here because save() no longer writes.
-    this.toString(options);
+    // commit() sets properties, so it must run before the lockfile conversion
+    // check below.
+    this.commit();
 
 ---
 SEARCH:
@@ -57,3 +61,21 @@ SEARCH:
     ]);
 REPLACE:
     return Promise.resolve([]);
+
+---
+SEARCH:
+import stringify from "json-stringify-nice";
+REPLACE:
+
+---
+SEARCH:
+  toString(options = {}) {
+    const data = this.toJSON();
+    const { format = true } = options;
+    const defaultIndent = this.indent || 2;
+    const indent = format === true ? defaultIndent : format || 0;
+    const eol = format ? this.newline || "\n" : "";
+    return stringify(data, swKeyOrder, indent).replace(/\n/g, eol);
+  }
+
+REPLACE:

@@ -402,6 +402,12 @@ const args = _yargs
     description:
       "Install dependencies automatically for some projects. Defaults to true but disabled for containers and oci scans. Use --no-install-deps to disable this feature.",
   })
+  .option("package-extensions", {
+    type: "boolean",
+    default: true,
+    description:
+      "Apply npm packageExtensions manifest repairs on --deep scans. Defaults to true, matching npm. Pass --no-package-extensions to produce a BOM that reflects manifests as published.",
+  })
   .option("validate", {
     type: "boolean",
     default: true,

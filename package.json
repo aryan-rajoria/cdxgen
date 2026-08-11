@@ -157,7 +157,6 @@
     "common-ancestor-path": "2.0.0",
     "edn-data": "1.2.2",
     "glob": "13.0.6",
-    "json-stringify-nice": "1.1.4",
     "node-stream-zip": "1.16.0",
     "npm-package-arg": "14.0.0",
     "parse-conflict-json": "6.0.0",
@@ -166,7 +165,6 @@
     "tar": "7.5.22",
     "treeverse": "3.0.0",
     "undici": "8.10.0",
-    "validate-npm-package-name": "8.0.0",
     "walk-up-path": "4.0.0",
     "yaml": "2.9.0",
     "yargs": "18.1.0"

@@ -48,7 +48,6 @@ declare class Shrinkwrap {
     addEdge(edge: any): void;
     commit(): any;
     toJSON(): any;
-    toString(options?: {}): any;
     save(options?: {}): Promise<never[]>;
 }
 export default Shrinkwrap;

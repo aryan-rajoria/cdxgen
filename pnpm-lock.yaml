@@ -58,9 +58,6 @@ importers:
       glob:
         specifier: 13.0.6
         version: 13.0.6
-      json-stringify-nice:
-        specifier: 1.1.4
-        version: 1.1.4
       node-stream-zip:
         specifier: 1.16.0
         version: 1.16.0
@@ -85,9 +82,6 @@ importers:
       undici:
         specifier: 8.10.0
         version: 8.10.0
-      validate-npm-package-name:
-        specifier: 8.0.0
-        version: 8.0.0
       walk-up-path:
         specifier: 4.0.0
         version: 4.0.0
@@ -847,9 +841,6 @@ packages:
 
   json-schema-traverse@1.0.0:
     resolution: {integrity: sha512-NM8/P9n3XjXhIZn1lLhkFaACTOURQXjWhV4BA/RnOv8xvgqtqpAX9IO4mRQxSx1Rlo4tqzeqb0sOlruaOy3dug==, tarball: https://registry.npmjs.org/json-schema-traverse/-/json-schema-traverse-1.0.0.tgz}
-
-  json-stringify-nice@1.1.4:
-    resolution: {integrity: sha512-5Z5RFW63yxReJ7vANgW6eZFGWaQvnPE3WNmZoOJrSkGju2etKA2L5rrOa1sm877TVTFt57A80BH1bArcmlLfPw==, tarball: https://registry.npmjs.org/json-stringify-nice/-/json-stringify-nice-1.1.4.tgz}
 
   jsonata@2.2.2:
     resolution: {integrity: sha512-XDFH2PuaAXv0AXJEWwElXbqADmKFGKMLMkFb+qOz0EhjQW2EIJ6pgtordLU+4u3IVERyBfqy6bi6kZKEncvRqA==, tarball: https://registry.npmjs.org/jsonata/-/jsonata-2.2.2.tgz}
@@ -1706,8 +1697,6 @@ snapshots:
   json-parse-even-better-errors@6.0.0: {}
 
   json-schema-traverse@1.0.0: {}
-
-  json-stringify-nice@1.1.4: {}
 
   jsonata@2.2.2:
     optional: true

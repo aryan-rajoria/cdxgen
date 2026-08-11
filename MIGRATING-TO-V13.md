@@ -565,9 +565,22 @@ is unchanged. Two behaviours differ:
 - **`packageExtensions` in a project's `package.json` are applied.** This is an
   upstream 10.x feature for repairing third-party manifests declaratively. Where
   an extension adds a dependency, that dependency now appears in the SBOM. No
-  flag is needed.
-- **`.npm-extension.{mjs,cjs}` files are ignored.** npm loads and executes these
-  while reading a tree; cdxgen does not run project code to build an SBOM. If a
-  project relies on one to repair manifests, the repairs it makes are absent
-  from an `npm ls`-style scan of the working tree. Scans driven by a lockfile
-  are unaffected, because npm records the repaired dependencies in the lockfile.
+  flag is needed. The BOM records the repair with `cdx:npm:packageExtensionsHash`
+  on the root component and `cdx:npm:packageExtensionsApplied` on each affected
+  dependency. Pass `--no-package-extensions` with `--deep` to produce a BOM that
+  reflects manifests as published.
+- **`.npm-extension.{mjs,cjs}` files are detected and declared, never executed.**
+  npm loads and executes these while reading a tree; cdxgen does not run
+  project-supplied code to build an SBOM. When a root `.npm-extension` file is
+  present, cdxgen hashes it with npm's own algorithm and emits
+  `cdx:npm:extensionHash`, `cdx:npm:extensionFormat`, and
+  `cdx:npm:extensionApplied` on the root component.
+
+  The repairs such a file makes are recorded in the lockfile, so cdxgen takes
+  them from there rather than executing anything. When the on-disk hash matches
+  the lockfile's `npmExtensionHash`, the SBOM reflects the repaired dependencies
+  (`cdx:npm:extensionApplied: true`), and on `--deep` the affected packages also
+  carry `cdx:npm:extensionFieldsApplied`. When the file has changed since the
+  lockfile was written the hashes differ and the graph is reported as
+  `unverified`; when the lockfile records no extension at all it is reported as
+  `false`, meaning repairs may be missing.
