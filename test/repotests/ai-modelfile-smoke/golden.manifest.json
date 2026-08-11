@@ -1,0 +1,11 @@
+{
+  "description": "AI-BOM coverage from a local Ollama Modelfile. Toolchain- and network-free: the `ai` project type parses the Modelfile text directly into a machine-learning-model component plus an ollama service. No Hugging Face API call (the FROM reference is a model tag, not a HF repo id).",
+  "fixture": ".",
+  "scenarios": [
+    {
+      "name": "default",
+      "projectType": ["ai"],
+      "options": {}
+    }
+  ]
+}

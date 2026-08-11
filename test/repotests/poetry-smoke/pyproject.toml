@@ -1,0 +1,9 @@
+[project]
+name = "poetry-smoke"
+version = "2.5.0"
+description = "Poetry smoke test fixture for cdxgen golden tests."
+
+[tool.poetry]
+name = "poetry-smoke"
+version = "2.5.0"
+description = "Poetry smoke test fixture for cdxgen golden tests."

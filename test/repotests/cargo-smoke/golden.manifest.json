@@ -1,0 +1,10 @@
+{
+  "fixture": ".",
+  "scenarios": [
+    {
+      "name": "default",
+      "projectType": ["cargo"],
+      "options": {}
+    }
+  ]
+}

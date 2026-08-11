@@ -115,7 +115,7 @@ Node.js shows how one generator can combine several layers of evidence: static s
 | alternate front door  | short-circuits into `createPixiBom()` when Pixi files are present                                            |
 | lockfile support      | understands Poetry, PDM, uv, and generic `pylock*.toml` inputs                                               |
 | requirements support  | falls back to `requirements*.txt` and `requirements/*.txt` when lockfile-first paths are absent              |
-| metadata shaping      | extracts a parent component from `pyproject.toml` and attaches `SrcFile` metadata                            |
+| metadata shaping      | extracts a parent component from `pyproject.toml` and attaches `internal:SrcFile` metadata                   |
 | deeper tree option    | can build a frozen dependency tree when installs are allowed                                                 |
 | safer fallback        | can use export-based flows such as `poetry export` or `pdm export` when install-time behavior is not desired |
 | formulation support   | collects formulation items from deeper Python environment resolution                                         |

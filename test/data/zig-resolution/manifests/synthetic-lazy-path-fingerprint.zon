@@ -1,0 +1,19 @@
+.{
+    .name = .myproject,
+    .version = "1.2.3",
+    .fingerprint = 0x1234567890abcdef,
+    .minimum_zig_version = "0.14.0",
+    .dependencies = .{
+        .known_folders = .{
+            .url = "https://github.com/ziglibs/known-folders/archive/aa24df42183ad415d10bc0a33e6238c437fc0f59.tar.gz",
+            .hash = "known_folders-0.0.0-Fy-PJtLDAADGDOwYwMkVydMSTp_aPpiCK_CCLkKcpTZM",
+        },
+        .zap = .{
+            .url = "https://github.com/zigzap/zap/archive/refs/tags/v0.9.0.tar.gz",
+            .hash = "1220b5ca5b0f0e0f0c9e1e1a4b5c6d7e8f90123456789abcdef0123456789abcd",
+            .lazy = true,
+        },
+        .local_lib = .{ .path = "libs/local" },
+    },
+    .paths = .{ "build.zig", "src" },
+}

@@ -4,10 +4,13 @@
     ".*/**",
     "*.poku.js",
     "lib/**/*.poku.js",
+    "bin/**/*.poku.js",
     "types/**/*",
     "contrib/**"
   ],
   "compilerOptions": {
+    "target": "ES2024",
+    "lib": ["ES2024"],
     "allowJs": true,
     // Generate d.ts files
     "declaration": true,

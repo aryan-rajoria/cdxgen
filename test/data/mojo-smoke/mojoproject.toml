@@ -1,0 +1,8 @@
+[project]
+name = "mojo-smoke"
+version = "0.3.0"
+description = "A small Mojo project fixture for cdxgen"
+
+[dependencies]
+algorithm = "==0.1.0"
+mojo-lib = "0.2.1"

@@ -1,0 +1,27 @@
+# Expected v12-vs-v13 BOM deltas.
+#
+# Every entry MUST have:
+#   - scenario: <project>/<scenario-name>
+#   - pointer:  <json-pointer-ish path or "*" for any>
+#   - reason:   <one-line explanation of why this delta is expected>
+#   - deliverable: <deliverable number that introduced the change>
+#
+# Deliverable 01 (Node 24 floor, CycloneDX 1.6 spec floor, plugins-bin
+# promotion, node20 image removal) changed NO BOM generation logic. Its one
+# postgen.js edit was verified semantically identical. The tool version is
+# normalized away by sbom-normalize.js.
+#
+# Therefore: this file should be EMPTY or nearly empty. Every entry here is
+# a load-bearing justification that was reviewed entry-by-entry. If it grows
+# without a real reason tied to a deliverable, that is a signal of either a
+# genuine regression or a normalizer gap, not a documentation task.
+
+# Re-audited at the v13.0.0 release gate, after every deliverable landed. The
+# file is still empty: no v12-vs-v13 delta has needed a justification. That is
+# the intended end state, not an oversight.
+#
+# The one behavioural difference known to be intentional — v13 discovering
+# components from a distribution's PEP 770 `.dist-info/sboms/` directory that
+# v12 cannot see — appears as an addition rather than a delta on an existing
+# pointer, so it does not need an entry here. It is recorded in
+# docs/BENCHMARKS.md and MIGRATING-TO-V13.md.

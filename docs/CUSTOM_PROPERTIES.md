@@ -4,17 +4,39 @@ This page documents the current `cdx:` custom properties emitted by cdxgen, the 
 
 ## Scope
 
-- Source of truth: non-test source files under `lib/**` (including `lib/helpers/utils.js` and `lib/helpers/ciParsers/*`).
+- Source of truth: non-test source files under `lib/**` (including `lib/ecosystems/utils.js` and `lib/inventory/ciParsers/*`).
 - These are cdxgen-specific properties added to CycloneDX objects (components, workflows, tasks, metadata, and services).
 - They are intended to enrich analysis and policy decisions; they are not CycloneDX core fields.
 
-## Legacy compatibility properties
+## `internal:` properties
 
-- This page inventories the current namespaced `cdx:*` custom properties. It does **not** treat older unnamespaced compatibility properties as part of the preferred property surface.
-- Current legacy examples still seen in some outputs include `SrcFile`, `ImportedModules`, and `LocalNodeModulesPath`.
-- Prefer standard CycloneDX modeling first: use `evidence.occurrences[].location` and `evidence.identity[].methods[].value` for discovery/source evidence, and use BOM metadata properties such as `cdx:bom:componentSrcFiles` for aggregated manifest-origin signals.
-- Treat `LocalNodeModulesPath` as environment-specific and potentially sensitive; downstream policies should avoid depending on it.
-- Expect these legacy keys to remain compatibility-oriented and less stable than the namespaced `cdx:*` inventory below.
+- Properties that predate the namespaced `cdx:*` convention now carry an
+  `internal:` prefix — `internal:SrcFile`, `internal:Namespaces`,
+  `internal:ImportedModules`, `internal:LocalNodeModulesPath` and the rest of
+  the list below. The prefix marks them as cdxgen implementation detail rather
+  than a modelled part of the property surface.
+- Prefer standard CycloneDX modeling first: use
+  `evidence.occurrences[].location` and `evidence.identity[].methods[].value`
+  for discovery and source evidence, and BOM metadata properties such as
+  `cdx:bom:componentSrcFiles` for aggregated manifest-origin signals.
+- Treat `internal:LocalNodeModulesPath` as environment-specific and potentially
+  sensitive; downstream policies should avoid depending on it.
+- Expect `internal:*` keys to be less stable than the namespaced `cdx:*`
+  inventory below.
+
+The full set: `internal:CalledMethods`, `internal:ExportedModules`,
+`internal:GIT_BRANCH`, `internal:GradleModule`, `internal:GradleProfileName`,
+`internal:ImportedModules`, `internal:ImportedSymbols`,
+`internal:LocalNodeModulesPath`, `internal:ModuleGoVersion`,
+`internal:Namespaces`, `internal:PackageFiles`, `internal:PackageMaintainer`,
+`internal:PackageVendor`, `internal:PkgProvides`, `internal:ResolvedUrl`,
+`internal:ServiceName`, `internal:SrcFile`, `internal:SrcGoMod`,
+`internal:SrcPath`, `internal:binary_path`, `internal:localScanPath`,
+`internal:privadoCLIVersion`, `internal:privadoCoreVersion`,
+`internal:privado_violations`.
+
+Container image properties keep their existing `oci:` namespace, and
+`java:modules` keeps its own, because both were already namespaced.
 
 ## How to read these properties
 
@@ -58,6 +80,11 @@ CycloneDX custom properties are emitted as name/value pairs, so consumers should
 | `cdx:dotnet:*`                                                                             | .NET / NuGet / assemblies                                                           | Target framework, project guid, assembly identity/version, hint path, Azure Functions version                                                                                                                | Verify framework support policy, detect assembly/package identity mismatches, analyze implicit GAC/hint-path sourced dependencies                                                                                              | [Package manager and language ecosystems](#inventory-packages)       | [5](#example-5)                  |
 | `cdx:maven:*`, `cdx:gradle:*`                                                              | Java (Maven/Gradle)                                                                 | Effective component scope, shaded namespace evidence, Gradle root path context                                                                                                                               | Identify shadowed/relocated classes (obfuscation or vendoring risk), enforce dependency-scope policy, track monorepo/root provenance                                                                                           | [Package manager and language ecosystems](#inventory-packages)       | [5](#example-5)                  |
 | `cdx:nix:*`                                                                                | Nix flakes                                                                          | Input source URLs, lock revision/ref/hash/time, flake directory                                                                                                                                              | Validate immutable lock intent, detect unexpected source URL changes, support reproducibility/provenance checks                                                                                                                | [Package manager and language ecosystems](#inventory-packages)       | [4](#example-4)                  |
+| `cdx:zig:*`                                                                                | Zig (`build.zig.zon`)                                                               | Fetch URL, content hash, local path dependencies, minimum toolchain version, lazy (optional) dependencies, package fingerprint                                                                               | Detect unpinned or locally-sourced dependencies, verify content-addressed fetches, enforce a minimum toolchain baseline, flag optional/lazy deps, track package identity across forks                                    | [Package manager and language ecosystems](#inventory-packages)       | [4](#example-4)                  |
+| `cdx:gleam:*`                                                                              | Gleam                                                                               | Build target (BEAM/JavaScript), direct vs transitive origin, development scope, Hex build type                                                                                                               | Separate runtime from test-only dependencies, review the JavaScript-target surface, audit non-Hex build types                                                                                                                  | [Package manager and language ecosystems](#inventory-packages)       | [3](#example-3)                  |
+| `cdx:mojo:*`                                                                               | Mojo (`mojoproject.toml`)                                                           | Declared Mojo package dependencies alongside the conda/PyPI packages pixi resolves                                                                                                                           | Distinguish Mojo's own packages from the conda/PyPI packages carried in the same lock                                                                                                                                          | [Package manager and language ecosystems](#inventory-packages)       | [3](#example-3)                  |
+| `cdx:bazel:*`                                                                              | Bazel bzlmod                                                                        | Source ecosystem of each resolved dependency, BCR module name and registry URL, generated repository name                                                                                                    | Confirm dependencies were mapped to their true ecosystem rather than a Bazel-shaped identity, enforce an approved module registry, trace a component back to the repository the build sees                                     | [Package manager and language ecosystems](#inventory-packages)       | [4](#example-4)                  |
+| `cdx:purl:proposedType`                                                                    | Ecosystems with no registered purl type                                             | The purl type cdxgen would use if one were registered upstream (`zig`, `mojo`, `nix`)                                                                                                                        | Group `pkg:generic` components by their real ecosystem, and migrate matching rules mechanically once a type is registered                                                                                                      | [Package manager and language ecosystems](#inventory-packages)       | [3](#example-3)                  |
 | `cdx:swift:*`                                                                              | Swift Package Manager                                                               | Logical package naming and local checkout paths                                                                                                                                                              | Identify local checkout dependencies vs remote source dependencies; enforce source-origin controls                                                                                                                             | [Package manager and language ecosystems](#inventory-packages)       | [3](#example-3)                  |
 | `cdx:pods:*`                                                                               | CocoaPods                                                                           | Podspec location, project directory, pod/subspec mapping                                                                                                                                                     | Distinguish local/path/git pod sourcing, trace subspec-enabled feature surface, improve provenance for iOS supply chains                                                                                                       | [Package manager and language ecosystems](#inventory-packages)       | [3](#example-3)                  |
 | `cdx:pub:*`                                                                                | Dart pub                                                                            | Non-default registry URL                                                                                                                                                                                     | Enforce approved package registry policy and detect mirror/private feed usage                                                                                                                                                  | [Package manager and language ecosystems](#inventory-packages)       | [3](#example-3)                  |
@@ -67,6 +94,7 @@ CycloneDX custom properties are emitted as name/value pairs, so consumers should
 | `cdx:crypto:*`                                                                             | Rootfs/host trust material enrichment                                               | Trust domain, source type, fingerprint, key IDs, key strength, user IDs, and certificate lifecycle metadata                                                                                                  | Audit repository trust anchors, CA-store content, and filesystem trust drift; distinguish package-signing keyrings from CA bundles                                                                                             | [Cross-cutting BOM/service/build metadata](#inventory-cross-cutting) | [5](#example-5)                  |
 | `cdx:dosai:*`                                                                              | Dosai source-level crypto analysis (CBOM)                                           | Dosai asset/operation/material metadata: internal ID, strength, reachability, entry-point count, data-flow slice IDs, and storage kind (for example `hardcoded`)                                             | Identify hard-coded cryptographic material, audit crypto reachability from entry points, and review data-flow provenance for crypto operations detected by static analysis                                                     | [Cross-cutting BOM/service/build metadata](#inventory-cross-cutting) | [5](#example-5)                  |
 | `cdx:osquery:category`                                                                     | Host/package discovery via osquery                                                  | Query/source category for discovered packages                                                                                                                                                                | Separate inventory confidence by collection method and tune host-level evidence policies                                                                                                                                       | [Cross-cutting BOM/service/build metadata](#inventory-cross-cutting) | [5](#example-5)                  |
+| `cdx:purl:*`                                                                               | Cross-cutting purl provenance                                                       | Records where an ingested purl was invalid and had to be repaired or dropped                                                                                                                                 | Detect upstream tools emitting non-compliant purls; audit identity cdxgen did not author                                                                                                                                       | [Cross-cutting BOM/service/build metadata](#inventory-cross-cutting) | [5](#example-5)                  |
 | `cdx:darwin:codesign:*`, `cdx:darwin:notarization:*`, `cdx:darwin:gatekeeper:*`            | macOS host trust enrichment                                                         | Code-sign identifier/team ID/authority/runtime info, notarization assessment/source/origin, and Gatekeeper policy status                                                                                     | Review signed-software provenance, identify unsigned or weakly trusted apps, and correlate execution policy with launchd/software inventory                                                                                    | [Cross-cutting BOM/service/build metadata](#inventory-cross-cutting) | [5](#example-5)                  |
 | `cdx:windows:authenticode:*`, `cdx:windows:wdac:*`                                         | Windows host trust enrichment                                                       | Authenticode validation/signer/timestamp metadata and WDAC active-policy inventory                                                                                                                           | Confirm signer trust, identify unsigned persistence binaries, and inventory WDAC enforcement state                                                                                                                             | [Cross-cutting BOM/service/build metadata](#inventory-cross-cutting) | [5](#example-5)                  |
 | `cdx:lolbas:*`                                                                             | Windows osquery / OBOM enrichment                                                   | LOLBAS-derived ATT&CK tactics/techniques, functions, contexts, and risk tags parsed from Windows host telemetry                                                                                              | Highlight Windows proxy-execution helpers in run keys, tasks, WMI, services, and live process data                                                                                                                             | [Cross-cutting BOM/service/build metadata](#inventory-cross-cutting) | [5](#example-5)                  |
@@ -332,9 +360,15 @@ The grouped lists below remain the authoritative inventory. The compact tables, 
 - **Go:** `cdx:go:creation_time`, `cdx:go:deprecated`, `cdx:go:indirect`, `cdx:go:local_dir`, `cdx:go:toolchain`
 - **Golem Go Evinse:** `cdx:golem:toolVersion`, `cdx:golem:callGraphMode`, `cdx:golem:dataFlowMode`, `cdx:golem:dataFlowCallGraphMode`, `cdx:golem:noRecurse`, `cdx:golem:includeAllFlows`, `cdx:golem:packageCount`, `cdx:golem:moduleCount`, `cdx:golem:fileCount`, `cdx:golem:generatedFileCount`, `cdx:golem:importCount`, `cdx:golem:declarationCount`, `cdx:golem:usageCount`, `cdx:golem:runtimeUsageCount`, `cdx:golem:testUsageCount`, `cdx:golem:benchmarkUsageCount`, `cdx:golem:fuzzUsageCount`, `cdx:golem:exampleUsageCount`, `cdx:golem:buildDirectiveCount`, `cdx:golem:nativeArtifactCount`, `cdx:golem:securitySignalCount`, `cdx:golem:goModReplaceCount`, `cdx:golem:goModExcludeCount`, `cdx:golem:vendorModuleCount`, `cdx:golem:workspaceModuleCount`, `cdx:golem:privateModuleHintCount`, `cdx:golem:licenseFileModuleCount`, `cdx:golem:callGraphNodeCount`, `cdx:golem:callGraphEdgeCount`, `cdx:golem:buildDirectiveKinds`, `cdx:golem:nativeArtifactKinds`, `cdx:golem:securitySignalCategories`, `cdx:golem:securitySignalSeverities`, `cdx:golem:generatorKinds`, `cdx:golem:goDirectiveVersion`, `cdx:golem:toolchainDirective`, `cdx:golem:goWorkPresent`, `cdx:golem:vendorDirectoryPresent`, `cdx:golem:goGenerateCount`, `cdx:golem:goEmbedCount`, `cdx:golem:replaceModule`, `cdx:golem:replaceTargetPathKind`, `cdx:golem:localReplacementPresent`, `cdx:golem:excludeModule`, `cdx:golem:vendored`, `cdx:golem:privateModuleCandidate`, `cdx:golem:licenseFileCount`, `cdx:golem:licenseFiles`, `cdx:golem:replacementModule`, `cdx:golem:localReplacement`, `cdx:golem:modulePath`, `cdx:golem:goVersion`, `cdx:golem:mainModule`, `cdx:golem:securitySignalCategory`, `cdx:golem:securitySignalSeverity`, `cdx:golem:importDirect`, `cdx:golem:importAliasKind`, `cdx:golem:symbolKind`, `cdx:golem:usageKind`, `cdx:golem:usageScope`, `cdx:golem:usageScopes`, `cdx:golem:testOnly`, `cdx:golem:importOccurrenceCount`, `cdx:golem:symbolCallOccurrenceCount`, `cdx:golem:symbolReferenceOccurrenceCount`, `cdx:golem:occurrenceEvidenceKinds`
 - **Collider:** `cdx:collider:dependencyKind`, `cdx:collider:hasWrapHash`, `cdx:collider:origin`, `cdx:collider:originHost`, `cdx:collider:originSanitized`, `cdx:collider:originScheme`, `cdx:collider:wrapHash`, `cdx:collider:wrapHashInvalid`
-- **.NET:** `cdx:dotnet:assembly_name`, `cdx:dotnet:assembly_version`, `cdx:dotnet:azure_functions_version`, `cdx:dotnet:hint_path`, `cdx:dotnet:project_guid`, `cdx:dotnet:target_framework`
+- **.NET:** `cdx:dotnet:assembly_name`, `cdx:dotnet:assembly_version`, `cdx:dotnet:azure_functions_version`, `cdx:dotnet:hint_path`, `cdx:dotnet:output_type`, `cdx:dotnet:project_guid`, `cdx:dotnet:target_framework`
 - **Java:** `cdx:maven:shaded`, `cdx:maven:unshadedNamespaces`, `cdx:gradle:GradleRootPath`
-- **Nix:** `cdx:nix:flake_dir`, `cdx:nix:input_url`, `cdx:nix:last_modified`, `cdx:nix:nar_hash`, `cdx:nix:ref`, `cdx:nix:revision`
+- **Nix:** `cdx:nix:download_url`, `cdx:nix:flake_dir`, `cdx:nix:input_url`, `cdx:nix:last_modified`, `cdx:nix:nar_hash`, `cdx:nix:ref`, `cdx:nix:revision`, `cdx:nix:vcs_url`
+- **Zig:** `cdx:zig:fingerprint`, `cdx:zig:hash`, `cdx:zig:lazy`, `cdx:zig:local`, `cdx:zig:minimum_zig_version`, `cdx:zig:path`, `cdx:zig:url`, `cdx:zig:version`
+- **Gleam:** `cdx:gleam:build_type`, `cdx:gleam:dependency`, `cdx:gleam:scope`, `cdx:gleam:target`
+- **Mojo:** `cdx:mojo:dependency`
+- **Bazel bzlmod:** `cdx:bazel:ecosystem`, `cdx:bazel:module`, `cdx:bazel:repo_name`, `cdx:bazel:repository_url`
+- **C/C++ (CMake):** `cdx:cmake:depKind`, `cdx:cmake:resolvedVia`, `cdx:cmake:sourceDir`, `cdx:cmake:uninitialised`, `cdx:cmake:versionRequirements`
+- **Unregistered purl types:** `cdx:purl:proposedType`
 - **Swift:** `cdx:swift:localCheckoutPath`, `cdx:swift:packageName`
 - **CocoaPods:** `cdx:pods:PodName`, `cdx:pods:Subspec`, `cdx:pods:podspecLocation`, `cdx:pods:projectDir`
 - **Dart pub:** `cdx:pub:registry`
@@ -342,7 +376,7 @@ The grouped lists below remain the authoritative inventory. The compact tables, 
 
 #### Decision-oriented sub-groups
 
-- **Provenance / source:** `cdx:npm:isRegistryDependency`, `cdx:npm:resolvedPath`, `cdx:pypi:registry`, `cdx:pypi:resolved_from`, `cdx:gem:remote`, `cdx:gem:remoteRevision`, `cdx:cargo:git`, `cdx:cargo:gitRev`, `cdx:cargo:path`, `cdx:cargo:registry`, `cdx:go:local_dir`, `cdx:golem:localReplacement`, `cdx:golem:replacementModule`, `cdx:golem:privateModuleCandidate`, `cdx:golem:vendored`, `cdx:nix:input_url`, `cdx:swift:localCheckoutPath`, `cdx:pods:projectDir`, `cdx:pub:registry`, `cdx:deno:source`, `cdx:collider:origin`, `cdx:collider:originScheme`, `cdx:collider:originHost`, `cdx:collider:originSanitized`
+- **Provenance / source:** `cdx:npm:isRegistryDependency`, `cdx:npm:resolvedPath`, `cdx:pypi:registry`, `cdx:pypi:resolved_from`, `cdx:gem:remote`, `cdx:gem:remoteRevision`, `cdx:cargo:git`, `cdx:cargo:gitRev`, `cdx:cargo:path`, `cdx:cargo:registry`, `cdx:go:local_dir`, `cdx:golem:localReplacement`, `cdx:golem:replacementModule`, `cdx:golem:privateModuleCandidate`, `cdx:golem:vendored`, `cdx:nix:input_url`, `cdx:swift:localCheckoutPath`, `cdx:pods:projectDir`, `cdx:pub:registry`, `cdx:deno:source`, `cdx:collider:origin`, `cdx:collider:originScheme`, `cdx:collider:originHost`, `cdx:collider:originSanitized`, `cdx:cmake:sourceDir`, `cdx:cmake:resolvedVia`, `cdx:cmake:depKind`
 - **Execution surface:** `cdx:npm:hasInstallScript`, `cdx:npm:risky_scripts`, `cdx:npm:native_addon`, `cdx:npm:native_deps`, `cdx:gem:executables`, `cdx:gem:extensions`, `cdx:cargo:features`, `cdx:cargo:hasBuildScript`, `cdx:cargo:hasNativeBuild`, `cdx:cargo:nativeBuildIndicators`, `cdx:cargo:buildScriptCapabilities`, `cdx:cargo:buildScriptIndicators`, `cdx:rust:buildTool`, `cdx:maturin:*`, `cdx:golem:goGenerateCount`, `cdx:golem:goEmbedCount`, `cdx:golem:nativeArtifactCount`, `cdx:golem:securitySignalCategory`, `cdx:golem:securitySignalSeverity`, `cdx:rusi:usageKind`, `cdx:rusi:cryptoFindingCategory`, `cdx:rusi:cryptoFindingSeverity`
 - **Privilege / trust:** `cdx:npm:nameMismatchError`, `cdx:npm:versionMismatchError`, `cdx:gem:yanked`, `cdx:gem:mfaRequired`, `cdx:cargo:yanked`, `cdx:cargo:trustedPublishing`, `cdx:go:deprecated`, `cdx:golem:securitySignalSeverity`, `cdx:golem:localReplacement`, `cdx:maven:shaded`, `cdx:collider:originSanitized`, `cdx:rusi:securitySignalSeverity`
 - **Reproducibility / drift:** `cdx:pypi:latest_version`, `cdx:gem:remoteBranch`, `cdx:gem:remoteTag`, `cdx:cargo:priorVersion`, `cdx:cargo:publishTime`, `cdx:cargo:priorPublishTime`, `cdx:cargo:publisherDrift`, `cdx:cargo:releaseGapDays`, `cdx:cargo:releaseGapBaselineDays`, `cdx:cargo:releaseCadenceCompressionRatio`, `cdx:nix:nar_hash`, `cdx:nix:revision`, `cdx:nix:last_modified`, `cdx:go:creation_time`, `cdx:collider:hasWrapHash`, `cdx:collider:wrapHash`, `cdx:collider:wrapHashInvalid`
@@ -351,7 +385,7 @@ The grouped lists below remain the authoritative inventory. The compact tables, 
 #### Compact operational reference
 
 | Key                                       | Scope                 | Value type             | Typical values                                         | When emitted                                                                                                                                      | Why it matters                                                                                                                                                                   | Policy readiness |
-| ----------------------------------------- | --------------------- | ---------------------- | ------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ---------------- |
+| ----------------------------------------- | --------------------- | ---------------------- | ------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ---------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
 | `cdx:npm:hasInstallScript`                | component             | boolean string         | `"true"`, `"false"`                                    | When risky npm lifecycle hooks are present                                                                                                        | Captures install-time code execution risk                                                                                                                                        | Hard deny        |
 | `cdx:npm:bin`                             | component             | list string            | `license-report, ng`                                   | When npm package metadata declares one or more executable `bin` commands                                                                          | Lets consumers identify CLI execution surface; cdxgen also uses it to match script-invoked commands to the owning package and keep such components required                      | Warning / triage |
 | `cdx:npm:has_binary`                      | component             | boolean string         | `"true"`                                               | When npm package metadata declares a `bin` entry                                                                                                  | Quick boolean for packages exposing executable commands                                                                                                                          | Warning / triage |
@@ -486,7 +520,16 @@ The grouped lists below remain the authoritative inventory. The compact tables, 
 | `cdx:collider:hasWrapHash`                | component             | boolean string         | `"true"`, `"false"`                                    | When Collider lockfile wrap hash metadata is present and valid                                                                                    | Fast integrity gate for wrap-hash-pinned reproducibility                                                                                                                         | Hard deny        |
 | `cdx:collider:wrapHash`                   | component             | string                 | `sha256:abc123...`                                     | When Collider lockfile records the wrap file digest                                                                                               | Exact immutable wrap fingerprint for verification and incident correlation                                                                                                       | Warning / triage |
 | `cdx:collider:wrapHashInvalid`            | component             | boolean string         | `"true"`                                               | When Collider lockfile contains a malformed wrap hash                                                                                             | High-signal integrity issue indicating a stale, malformed, or tampered lock entry                                                                                                | Hard deny        |
+| `cdx:cmake:depKind`                       | component             | string                 | `fetch`, `submodule`, `find_package`                   | On C/C++ components whose dependency kind was resolved from CMakeCache.txt or git submodule status                                                | Distinguishes FetchContent deps, git submodules, and find_package resolutions so policy can treat unregistry-sourced C/C++ deps differently                                      | Warning / triage |
+| `cdx:cmake:resolvedVia`                   | component             | string                 | `cmake-cache`, `gitclone-script`, `git-submodule`      | On C/C++ components whose version was resolved from a build artifact rather than scraped from source                                              | Provenance signal showing how the version was determined; useful for confidence-weighted policy                                                                                   | Context only     |
+| `cdx:cmake:sourceDir`                     | component             | path string            | `third_party/benchmark`, `_deps/tinyjson-src`          | On C/C++ components resolved from CMakeCache.txt or git submodules, the repo-relative source directory                                            | Locates the dependency within the project tree for boundary-aware analysis                                                                                                       | Context only     |
+| `cdx:cmake:uninitialised`                 | component             | boolean string         | `"true"`                                               | On git submodule components whose working tree is not populated (the normal case for `--depth 1` clones)                                          | Signals that the submodule version is a commit SHA with no tag, since `git describe` cannot run on uninitialised submodules                                                       | Context only     |
+| `cdx:cmake:versionRequirements`           | component             | pipe-separated versions | `1.54\|1.64`                                           | On a C/C++ component that several CMake-like files require at different minimum versions                                                          | Records every requirement behind the single component version, which is the highest of them, so a policy can see the range the build spans                                        | Context only     |
 | `cdx:dotnet:hint_path`                    | component             | path string            | `..\\..\\lib\\external.dll`                            | When .NET assembly references use `HintPath`                                                                                                      | Useful for local/GAC/side-loaded binary provenance                                                                                                                               | Warning / triage |
+| `cdx:dotnet:output_type`                  | component             | string                 | `Exe`, `WinExe`                                        | When an MSBuild project declares a non-`Library` `OutputType`                                                                                     | Distinguish executable projects from libraries when scoping reachability or runtime-exposure policy                                                                              | Context only     | Emitted as a property rather than a purl qualifier: `nuget` does not define `output_type`, so the previous `?output_type=` purl was invalid. `Library` is reflected in `component.type` instead. |
+| `cdx:purl:sanitized_from`                 | component             | purl string            | `pkg:generic/x@1?arch=arm64`                           | When cdxgen ingests a component whose purl came from external metadata and was not a valid Package URL                                            | Detect upstream tools emitting invalid purls; audit where cdxgen repaired or dropped identity it did not author                                                                  | Warning / triage | The original, invalid purl. cdxgen rebuilds a canonical purl from the component identity where possible, otherwise drops the purl and assigns a fallback `bom-ref`.                              |
+| `cdx:caxa:arch`                           | component             | string                 | `arm64`, `x64`                                         | On the parent component of a caxa-packaged standalone binary (`-t caxa`)                                                                          | Confirm a shipped binary matches the intended target architecture                                                                                                                | Context only     | Emitted by `@cdxgen/caxa` and ingested by cdxgen. Previously an `arch` purl qualifier, which the `generic` type does not permit.                                                                 |
+| `cdx:caxa:platform`                       | component             | string                 | `linux`, `darwin`, `win32`                             | On the parent component of a caxa-packaged standalone binary (`-t caxa`)                                                                          | Confirm a shipped binary matches the intended target platform                                                                                                                    | Context only     | Emitted by `@cdxgen/caxa` and ingested by cdxgen. Previously a `platform` purl qualifier, which the `generic` type does not permit.                                                              |
 | `cdx:maven:shaded`                        | component             | boolean string         | `"true"`, `"false"`                                    | When shaded/relocated bytecode is detected                                                                                                        | Can signal vendoring, obfuscation, or namespace relocation risk                                                                                                                  | Warning / triage |
 | `cdx:nix:revision`                        | component             | string                 | git commit SHA                                         | When flake lock contains a revision                                                                                                               | Important reproducibility anchor                                                                                                                                                 | Hard deny        |
 | `cdx:nix:nar_hash`                        | component             | string                 | `sha256-...`                                           | When flake lock contains content hash                                                                                                             | Important integrity and reproducibility anchor                                                                                                                                   | Hard deny        |
@@ -645,6 +688,7 @@ These properties are safe for policy because they are small values, counts, cate
 | `cdx:rusi:crypto:sourceLocation` | Source file and line where the crypto asset was detected. |
 | `cdx:rusi:crypto:provider`       | Crypto provider or library name.                          |
 | `cdx:rusi:crypto:operation`      | Crypto operation type.                                    |
+| `cdx:rusi:crypto:kind`           | Detected asset kind as rusi reported it, kept because `cryptoProperties.algorithmProperties.primitive` accepts only the CycloneDX enum. |
 | `cdx:rusi:crypto:symbol`         | Safe symbol name associated with the crypto asset.        |
 | `cdx:rusi:crypto:function`       | Function name for related crypto material.                |
 | `cdx:rusi:crypto:confidence`     | Confidence level of the crypto material detection.        |
@@ -800,7 +844,10 @@ These properties are safe for policy because they are small values, counts, cate
 - `cdx:gtfobins:reference`
 - `cdx:gtfobins:riskTags`
 - `cdx:gtfobins:sourceRef`
+- `cdx:caxa:arch`
+- `cdx:caxa:platform`
 - `cdx:osquery:category`
+- `cdx:purl:sanitized_from`
 - `cdx:service:httpMethod`
 - `cdx:dosai:crypto:id`
 - `cdx:dosai:crypto:strength`
@@ -1008,6 +1055,468 @@ These properties are safe for policy because they are small values, counts, cate
 - Chromium-browser extensions can include capability booleans derived from manifest + Babel source analysis: `cdx:chrome-extension:capability:fileAccess`, `cdx:chrome-extension:capability:deviceAccess`, `cdx:chrome-extension:capability:network`, `cdx:chrome-extension:capability:bluetooth`, `cdx:chrome-extension:capability:accessibility`, `cdx:chrome-extension:capability:codeInjection`, and `cdx:chrome-extension:capability:fingerprinting`.
 - Vendor-specific fields are namespaced explicitly: Edge (`cdx:chrome-extension:edge:*`) and Brave (`cdx:chrome-extension:brave:*`).
 - Chrome extensions discovered via osquery (`-t os`) use `pkg:chrome-extension` and may also carry `cdx:osquery:category`.
+
+<a id="inventory-remaining"></a>
+
+### Remaining emitted keys, by namespace
+
+The groups above describe the keys that carry policy meaning. This index closes
+the gap: it lists every other property cdxgen can emit, so the document covers
+the full emitted surface. `lib/customProperties.poku.js` fails the build when a
+property is emitted that appears nowhere in this file.
+
+**`cdx:agent:*`**
+
+- `cdx:agent:authHints`
+- `cdx:agent:credentialRiskIndicators`
+- `cdx:agent:description`
+- `cdx:agent:disallowedTools`
+- `cdx:agent:hasMcpReferences`
+- `cdx:agent:hasNonOfficialMcpReference`
+- `cdx:agent:hiddenComponentKinds`
+- `cdx:agent:hiddenEndpointCount`
+- `cdx:agent:hiddenMcpHosts`
+- `cdx:agent:hiddenMcpUrls`
+- `cdx:agent:inventorySource`
+- `cdx:agent:mcpPackageRefs`
+- `cdx:agent:mode`
+- `cdx:agent:model`
+- `cdx:agent:permission`
+- `cdx:agent:providerNames`
+- `cdx:agent:providerOverride`
+- `cdx:agent:role`
+- `cdx:agent:tools`
+
+**`cdx:ai:*`**
+
+- `cdx:ai:codegen:signals:count`
+- `cdx:ai:safetensors:parameterCount`
+- `cdx:ai:safetensors:parameterCountLabel`
+- `cdx:ai:safetensors:tensorType`
+
+**`cdx:asar:*`**
+
+- `cdx:asar:embeddedManifests`
+- `cdx:asar:hasDynamicFetch`
+- `cdx:asar:hasDynamicImport`
+- `cdx:asar:hasEval`
+- `cdx:asar:hasNestedArchives`
+- `cdx:asar:integrityAlgorithm`
+- `cdx:asar:manifestInventoryComplete`
+- `cdx:asar:nestedArchiveCount`
+
+**`cdx:audit:*`**
+
+- `cdx:audit:attack:tactics`
+- `cdx:audit:attack:techniques`
+- `cdx:audit:category`
+- `cdx:audit:confidence`
+- `cdx:audit:dispatch:edge`
+- `cdx:audit:dispatch:receiverFiles`
+- `cdx:audit:dispatch:receiverNames`
+- `cdx:audit:engine`
+- `cdx:audit:location:bomRef`
+- `cdx:audit:location:file`
+- `cdx:audit:location:purl`
+- `cdx:audit:mitigation`
+- `cdx:audit:name`
+- `cdx:audit:nextAction`
+- `cdx:audit:ruleId`
+- `cdx:audit:score`
+- `cdx:audit:severity`
+- `cdx:audit:target:purl`
+- `cdx:audit:target:repoUrl`
+- `cdx:audit:topFinding:ruleId`
+- `cdx:audit:upstreamGuidance`
+
+**`cdx:cargo:*`**
+
+- `cdx:cargo:hasWorkspaceMembers`
+- `cdx:cargo:publisherSetPartialDrift`
+
+**`cdx:chrome-extension:*`**
+
+- `cdx:chrome-extension:description`
+
+**`cdx:container:*`**
+
+- `cdx:container:unpackagedExecutableCount`
+- `cdx:container:unpackagedSharedLibraryCount`
+
+**`cdx:crewai:*`**
+
+- `cdx:crewai:assignedAgent`
+- `cdx:crewai:backstory`
+- `cdx:crewai:description`
+- `cdx:crewai:expectedOutput`
+- `cdx:crewai:goal`
+- `cdx:crewai:role`
+
+**`cdx:crypto:*`**
+
+- `cdx:crypto:primitive`
+- `cdx:crypto:sourceLocation`
+- `cdx:crypto:sourceType`
+
+**`cdx:dosai:*`**
+
+- `cdx:dosai:allowAnonymous`
+- `cdx:dosai:authorizationPolicyCount`
+- `cdx:dosai:authorizationRequired`
+- `cdx:dosai:endpointKind`
+- `cdx:dosai:location`
+- `cdx:dosai:requiredClaimCount`
+- `cdx:dosai:requiredScopeCount`
+- `cdx:dosai:roleCount`
+
+**`cdx:dynamic:*`**
+
+- `cdx:dynamic:filePath`
+- `cdx:dynamic:httpQuery`
+
+**`cdx:embeddedSbom:*`**
+
+- `cdx:embeddedSbom:format`
+- `cdx:embeddedSbom:source`
+
+**`cdx:tea:*`**
+
+- `cdx:tea:collection`
+- `cdx:tea:source`
+
+**`cdx:file:*`**
+
+- `cdx:file:hasHiddenUnicode`
+- `cdx:file:hiddenUnicodeCodePoints`
+- `cdx:file:hiddenUnicodeCommentCodePoints`
+- `cdx:file:hiddenUnicodeInComments`
+- `cdx:file:hiddenUnicodeLineNumbers`
+- `cdx:file:kind`
+
+**`cdx:github:*`**
+
+- `cdx:github:action:buildCacheDisableInput`
+- `cdx:github:action:buildCacheDisableValue`
+- `cdx:github:action:buildCacheEcosystem`
+- `cdx:github:action:disablesBuildCache`
+- `cdx:github:checkout:checksOutUntrustedRef`
+- `cdx:github:checkout:forkContextRefs`
+- `cdx:github:checkout:ref`
+- `cdx:github:checkout:referencesForkContext`
+- `cdx:github:checkout:repository`
+- `cdx:github:checkout:untrustedRefContexts`
+- `cdx:github:job:hasExplicitPermissionsBlock`
+- `cdx:github:step:exfiltrationIndicators`
+- `cdx:github:step:hasSensitiveOperations`
+- `cdx:github:step:isPublishCommand`
+- `cdx:github:step:legacyPublishTokenSources`
+- `cdx:github:step:likelyExfiltration`
+- `cdx:github:step:publishEcosystem`
+- `cdx:github:step:sensitiveOperations`
+- `cdx:github:step:usesLegacyPublishToken`
+- `cdx:github:workflow:hasAnyExplicitPermissionsBlock`
+- `cdx:github:workflow:hasExplicitPermissionsBlock`
+
+**`cdx:gtfobins:*`**
+
+- `cdx:gtfobins:matchFields`
+- `cdx:gtfobins:names`
+- `cdx:gtfobins:queryCategory`
+
+**`cdx:hbom:*`**
+
+- `cdx:hbom:addressSizes`
+- `cdx:hbom:analysis:actionableDiagnosticCount`
+- `cdx:hbom:analysis:commandDiagnosticCount`
+- `cdx:hbom:analysis:commandErrorCount`
+- `cdx:hbom:analysis:commandErrorIds`
+- `cdx:hbom:analysis:diagnosticIssues`
+- `cdx:hbom:analysis:installHintCount`
+- `cdx:hbom:analysis:missingCommandCount`
+- `cdx:hbom:analysis:missingCommandIds`
+- `cdx:hbom:analysis:missingCommands`
+- `cdx:hbom:analysis:partialSupportCount`
+- `cdx:hbom:analysis:partialSupportIds`
+- `cdx:hbom:analysis:permissionDeniedCommands`
+- `cdx:hbom:analysis:permissionDeniedCount`
+- `cdx:hbom:analysis:permissionDeniedIds`
+- `cdx:hbom:analysis:privilegeHintCount`
+- `cdx:hbom:analysis:requiresPrivileged`
+- `cdx:hbom:analysis:timeoutCount`
+- `cdx:hbom:analysis:timeoutIds`
+- `cdx:hbom:architecture`
+- `cdx:hbom:busInfo`
+- `cdx:hbom:cameraModelId`
+- `cdx:hbom:capacity`
+- `cdx:hbom:channel`
+- `cdx:hbom:chargePercent`
+- `cdx:hbom:collectorProfile`
+- `cdx:hbom:connected`
+- `cdx:hbom:connectionState`
+- `cdx:hbom:connectionType`
+- `cdx:hbom:coreCount`
+- `cdx:hbom:cycleCount`
+- `cdx:hbom:defaultInput`
+- `cdx:hbom:defaultOutput`
+- `cdx:hbom:deviceNode`
+- `cdx:hbom:devicePath`
+- `cdx:hbom:driver`
+- `cdx:hbom:duplex`
+- `cdx:hbom:evidence:command`
+- `cdx:hbom:evidence:commandCount`
+- `cdx:hbom:evidence:commandDiagnostic`
+- `cdx:hbom:evidence:file`
+- `cdx:hbom:evidence:fileCount`
+- `cdx:hbom:fanCount`
+- `cdx:hbom:fileVault`
+- `cdx:hbom:firmwareVersion`
+- `cdx:hbom:hardwareClass`
+- `cdx:hbom:health`
+- `cdx:hbom:identifierPolicy`
+- `cdx:hbom:interface`
+- `cdx:hbom:interfaceName`
+- `cdx:hbom:isCharging`
+- `cdx:hbom:isEncrypted`
+- `cdx:hbom:isRemovable`
+- `cdx:hbom:isVirtual`
+- `cdx:hbom:linkRateMbps`
+- `cdx:hbom:linkStatus`
+- `cdx:hbom:logicalCpuCount`
+- `cdx:hbom:maximumCapacity`
+- `cdx:hbom:memoryOnlineSize`
+- `cdx:hbom:minorType`
+- `cdx:hbom:mountPath`
+- `cdx:hbom:mountPoint`
+- `cdx:hbom:path`
+- `cdx:hbom:phyMode`
+- `cdx:hbom:physicalCpuCount`
+- `cdx:hbom:platform`
+- `cdx:hbom:powerSource`
+- `cdx:hbom:productId`
+- `cdx:hbom:receptacleStatus`
+- `cdx:hbom:resolution`
+- `cdx:hbom:rssi`
+- `cdx:hbom:sampleRate`
+- `cdx:hbom:secureBootAuthorityKeyId`
+- `cdx:hbom:secureBootCertificateAuthorityKeyId`
+- `cdx:hbom:secureBootCertificatePath`
+- `cdx:hbom:secureBootCertificateSerial`
+- `cdx:hbom:secureBootCertificateSha1`
+- `cdx:hbom:secureBootCertificateSubjectKeyId`
+- `cdx:hbom:secureBootDbAuthorityKeyId`
+- `cdx:hbom:secureBootDbPath`
+- `cdx:hbom:secureBootDbSerial`
+- `cdx:hbom:secureBootDbSha1`
+- `cdx:hbom:secureBootDbSubjectKeyId`
+- `cdx:hbom:secureBootDbxAuthorityKeyId`
+- `cdx:hbom:secureBootDbxPath`
+- `cdx:hbom:secureBootDbxSerial`
+- `cdx:hbom:secureBootDbxSha1`
+- `cdx:hbom:secureBootDbxSubjectKeyId`
+- `cdx:hbom:secureBootSerial`
+- `cdx:hbom:secureBootSha1`
+- `cdx:hbom:secureBootSubjectKeyId`
+- `cdx:hbom:securityMode`
+- `cdx:hbom:size`
+- `cdx:hbom:sizeBytes`
+- `cdx:hbom:smartStatus`
+- `cdx:hbom:speed`
+- `cdx:hbom:speedMbps`
+- `cdx:hbom:state`
+- `cdx:hbom:status`
+- `cdx:hbom:targetArchitecture`
+- `cdx:hbom:targetPlatform`
+- `cdx:hbom:temperatureCelsius`
+- `cdx:hbom:transport`
+- `cdx:hbom:uuid`
+- `cdx:hbom:vendorId`
+- `cdx:hbom:volumeUuid`
+- `cdx:hbom:watts`
+- `cdx:hbom:wearPercentageUsed`
+
+**`cdx:hostview:*`**
+
+- `cdx:hostview:hardwareComponentCount`
+- `cdx:hostview:kernel_modules:count`
+- `cdx:hostview:linkedHardwareComponentCount`
+- `cdx:hostview:linkedRuntimeCategory`
+- `cdx:hostview:linkedRuntimeCategoryCount`
+- `cdx:hostview:mode`
+- `cdx:hostview:mount_hardening:count`
+- `cdx:hostview:runtime-storage:count`
+- `cdx:hostview:runtimeAddressCount`
+- `cdx:hostview:runtimeAnchorCount`
+- `cdx:hostview:runtimeComponentCount`
+- `cdx:hostview:topologyLinkCount`
+
+**`cdx:huggingface:*`**
+
+- `cdx:huggingface:citationDetected`
+- `cdx:huggingface:co2EmissionsGrams`
+- `cdx:huggingface:co2Geo`
+- `cdx:huggingface:co2HardwareUsed`
+- `cdx:huggingface:co2Source`
+- `cdx:huggingface:co2TrainingType`
+- `cdx:huggingface:createdAt`
+- `cdx:huggingface:datasetDescription`
+- `cdx:huggingface:language`
+- `cdx:huggingface:languageBcp47`
+- `cdx:huggingface:lastModified`
+- `cdx:huggingface:maskToken`
+- `cdx:huggingface:widgetExampleCount`
+
+**`cdx:invalid-purl:*`**
+
+- `cdx:invalid-purl`
+
+**`cdx:langgraph:*`**
+
+- `cdx:langgraph:dependencies`
+- `cdx:langgraph:envFile`
+
+**`cdx:license:*`**
+
+- `cdx:license:category`
+- `cdx:license:complianceAlert`
+- `cdx:license:deprecated`
+- `cdx:license:foss`
+- `cdx:license:fsfLibre`
+- `cdx:license:osiApproved`
+
+**`cdx:maturin:*`**
+
+- `cdx:maturin:bindings`
+- `cdx:maturin:buildBackend`
+- `cdx:maturin:compatibility`
+- `cdx:maturin:features`
+- `cdx:maturin:manifestPath`
+- `cdx:maturin:moduleName`
+- `cdx:maturin:strip`
+
+**`cdx:mcp:*`**
+
+- `cdx:mcp:agentReference`
+- `cdx:mcp:auth:protectedResourceMetadata`
+- `cdx:mcp:auth:requiresOAuth`
+- `cdx:mcp:auth:supportsDCR`
+- `cdx:mcp:authMode`
+- `cdx:mcp:catalogSource`
+- `cdx:mcp:command`
+- `cdx:mcp:composition`
+- `cdx:mcp:configFormat`
+- `cdx:mcp:configKey`
+- `cdx:mcp:configuredEndpoints`
+- `cdx:mcp:configuredServiceCount`
+- `cdx:mcp:configuredServiceNames`
+- `cdx:mcp:credentialExposedServiceCount`
+- `cdx:mcp:credentialExposureFieldCount`
+- `cdx:mcp:credentialIndicatorCount`
+- `cdx:mcp:credentialReferenceCount`
+- `cdx:mcp:description`
+- `cdx:mcp:exposureType`
+- `cdx:mcp:hasTunnelReference`
+- `cdx:mcp:inventorySource`
+- `cdx:mcp:modelFamilies`
+- `cdx:mcp:modelNames`
+- `cdx:mcp:package`
+- `cdx:mcp:packageName`
+- `cdx:mcp:packageRefs`
+- `cdx:mcp:pinning`
+- `cdx:mcp:promptCount`
+- `cdx:mcp:providerFamilies`
+- `cdx:mcp:providerNames`
+- `cdx:mcp:resourceCount`
+- `cdx:mcp:resourceUri`
+- `cdx:mcp:reviewNeeded`
+- `cdx:mcp:role`
+- `cdx:mcp:sdkImports`
+- `cdx:mcp:serviceRef`
+- `cdx:mcp:sourceLine`
+- `cdx:mcp:toolAnnotations`
+- `cdx:mcp:usageConfidence`
+- `cdx:mcp:usageSignals`
+
+**`cdx:npm:*`**
+
+- `cdx:npm:manifestSource`
+- `cdx:npm:manifestSourceType`
+
+**`cdx:nuget:*`**
+
+- `cdx:nuget:declared_version_range`
+
+**`cdx:os:*`**
+
+- `cdx:os:repo:architectures`
+- `cdx:os:repo:baseurl`
+- `cdx:os:repo:components`
+- `cdx:os:repo:kind`
+- `cdx:os:repo:metalink`
+- `cdx:os:repo:mirrorlist`
+- `cdx:os:repo:release`
+
+**`cdx:pylock:*`**
+
+- `cdx:pylock:file:path`
+- `cdx:pylock:file:registry`
+- `cdx:pylock:file:size`
+- `cdx:pylock:file:source_type`
+- `cdx:pylock:file:subdirectory`
+- `cdx:pylock:file:upload_time`
+
+**`cdx:pypi:*`**
+
+- `cdx:pypi:editable`
+
+**`cdx:pyproject:*`**
+
+- `cdx:pyproject:dependencyGroupMember`
+- `cdx:pyproject:extra`
+
+**`cdx:sbt:*`**
+
+- `cdx:sbt:package:development`
+
+**`cdx:service:*`**
+
+- `cdx:service:DefaultStart`
+- `cdx:service:Provides`
+- `cdx:service:RequiredStart`
+- `cdx:service:manager`
+- `cdx:service:packageName`
+- `cdx:service:packageRef`
+- `cdx:service:unitType`
+
+**`cdx:skill:*`**
+
+- `cdx:skill:compatibility`
+- `cdx:skill:description`
+- `cdx:skill:license`
+- `cdx:skill:metadata`
+
+**`cdx:tool:*`**
+
+- `cdx:tool:aliases`
+- `cdx:tool:author`
+- `cdx:tool:category`
+- `cdx:tool:triggers`
+- `cdx:tool:version`
+
+**`cdx:trustinspector:*`**
+
+- `cdx:trustinspector:kind`
+
+**`cdx:validate:*`**
+
+- `cdx:validate:category`
+- `cdx:validate:engine`
+- `cdx:validate:mitigation`
+- `cdx:validate:ruleId`
+- `cdx:validate:scvsLevels`
+- `cdx:validate:severity`
+- `cdx:validate:standard`
+- `cdx:validate:standardRefs`
+- `cdx:validate:status`
 
 ## Consumer-oriented views
 

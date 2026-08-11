@@ -50,8 +50,8 @@ RUN set -e; \
           git-core \
           java-21-openjdk-devel \
           make \
-          nodejs22 \
-          npm22 \
+          nodejs24 \
+          npm24 \
           python311 \
           python311-pip \
           unzip \
@@ -121,7 +121,7 @@ RUN set -e; \
  && cd /opt/cdxgen \
  && corepack enable \
  && corepack pnpm install:prod \
- && corepack pnpm cache delete \
+ && corepack pnpm cache delete && rm -f /opt/cdxgen/pnpm-workspace.yaml \
  && curl -L $GITHUB_URL/owasp-dep-scan/dosai/releases/latest/download/Dosai${DOSAI_ARCH_SUFFIX} \
       -o /usr/local/bin/dosai \
  && chmod +x /usr/local/bin/dosai \

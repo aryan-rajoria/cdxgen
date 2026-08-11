@@ -35,6 +35,8 @@ name: Build images
 
 on:
   push:
+    branches:
+      - 'release/**'
     tags:
       - 'v*'
   schedule:
@@ -62,12 +64,6 @@ jobs:
       fail-fast: false
       matrix:
         image:
-
-          - lang: dotnet6
-            distro: debian
-
-          - lang: dotnet7
-            skip-arm: true
 
           - lang: dotnet8
             skip-arm: true
@@ -152,15 +148,10 @@ jobs:
             distro: temurin
             fix-qemu: true
 
-          - lang: node20
-            cdxgen-image:
-              additional-image: cdxgen-node
-
-          - lang: node20
-            distro: alpine
-
           - lang: node24
             distro: alpine
+            cdxgen-image:
+              additional-image: cdxgen-node
           - lang: node25
             distro: alpine
           - lang: node26

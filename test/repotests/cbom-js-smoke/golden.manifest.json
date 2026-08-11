@@ -1,0 +1,18 @@
+{
+  "description": "NOT CBOM ecosystem coverage. Real crypto detection requires `--profile research` and runs via atom-based reachable slicing in the evinser pass AFTER createBom returns (bin/cdxgen.js:1681); the golden runner calls createBom directly and structurally cannot reach it. What this scenario actually covers: `collectSourceCryptoComponents` reached through createMultiXBom via a synthetic [\"js\",\"mcp\"] projectType (the multi-type route is the only one that enters that loop). Its value is narrow and purely normalizer-facing -- it is the only golden containing `cryptographic-asset` components, which carry NO purl and use OID-derived bom-refs, so it guards bom-ref derivation for purl-less components. Do not cite it as evidence that crypto detection works.",
+  "fixture": ".",
+  "scenarios": [
+    {
+      "name": "default",
+      "projectType": [
+        "js",
+        "mcp"
+      ],
+      "options": {
+        "includeCrypto": true,
+        "evidence": true,
+        "deep": true
+      }
+    }
+  ]
+}

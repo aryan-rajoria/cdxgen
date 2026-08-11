@@ -1,0 +1,10 @@
+{
+  "description": ".NET csproj parse coverage (central package management style). Exercises the dotnet parser with explicit PackageReference versions.",
+  "scenarios": [
+    {
+      "name": "default",
+      "projectType": ["dotnet"],
+      "options": {}
+    }
+  ]
+}

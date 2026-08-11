@@ -20,20 +20,20 @@ import yargs from "yargs";
 import { hideBin } from "yargs/helpers";
 
 import {
-  getNonCycloneDxErrorMessage,
-  isCycloneDxBom,
-} from "../lib/helpers/bomUtils.js";
-import {
-  importProtobomModule,
-  isProtoBomPath,
-} from "../lib/helpers/protobomLoader.js";
-import {
   dirNameStr,
   retrieveCdxgenVersion,
   safeExistsSync,
   safeMkdirSync,
   safeWriteSync,
-} from "../lib/helpers/utils.js";
+} from "../lib/ecosystems/utils.js";
+import {
+  getNonCycloneDxErrorMessage,
+  isCycloneDxBom,
+} from "../lib/inventory/bomUtils.js";
+import {
+  importProtobomModule,
+  isProtoBomPath,
+} from "../lib/inventory/protobomLoader.js";
 import { getBomWithOras } from "../lib/managers/oci.js";
 import { shouldFail, validateBomAdvanced } from "../lib/validator/index.js";
 import { render as renderReport } from "../lib/validator/reporters/index.js";
@@ -71,7 +71,7 @@ const args = _yargs
     type: "boolean",
     default: true,
     description:
-      "Run the deep purl/ref/metadata checks from lib/helpers/bomValidator.js. Pass --no-deep to skip.",
+      "Run the deep purl/ref/metadata checks from lib/validator/bomValidator.js. Pass --no-deep to skip.",
   })
   .option("benchmark", {
     alias: "b",
@@ -213,7 +213,7 @@ if (inputIsLocalProtoBom && publicKeyStr) {
   process.exit(args.requireSignature ? 4 : 1);
 }
 
-const report = validateBomAdvanced(bomJson, {
+const report = await validateBomAdvanced(bomJson, {
   schema: args.schema,
   deep: args.deep,
   benchmarks: splitCsv(args.benchmark),

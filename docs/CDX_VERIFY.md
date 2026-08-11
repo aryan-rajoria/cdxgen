@@ -26,7 +26,7 @@ cdx-verify -i bom.json --public-key public.pem
 cdx-verify -i bom.json --public-key public.pem --no-deep
 
 # Verify a BOM attached to an OCI image
-cdx-verify -i ghcr.io/cyclonedx/cdxgen:master --public-key public.pem
+cdx-verify -i ghcr.io/cdxgen/cdxgen:master --public-key public.pem
 ```
 
 ## CLI reference

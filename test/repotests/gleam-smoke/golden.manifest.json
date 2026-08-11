@@ -1,0 +1,11 @@
+{
+  "description": "Gleam gleam.toml + manifest.toml parse coverage. Lock-backed: resolved Hex packages, no toolchain.",
+  "fixture": "../../data/gleam-smoke",
+  "scenarios": [
+    {
+      "name": "default",
+      "projectType": ["gleam"],
+      "options": {}
+    }
+  ]
+}

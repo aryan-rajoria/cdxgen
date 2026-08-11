@@ -29,7 +29,7 @@ Generate and analyze **SBOM**, **CBOM**, **OBOM**, **SaaSBOM**, **CDXA**, and **
 
 ### Compliance and platform teams
 
-- Convert BOMs to SPDX with [cdx-convert](CDX_CONVERT.md)
+- Convert BOMs to SPDX or another CycloneDX version with [cdx-convert](CDX_CONVERT.md)
 - Sign and verify BOMs with [cdx-sign](CDX_SIGN.md) and [cdx-verify](CDX_VERIFY.md)
 - Review [Permissions](PERMISSIONS.md) and [Configuring Allowlists](ALLOWED_HOSTS_AND_COMMANDS.md) for hardened environments
 

@@ -131,23 +131,23 @@ For every finding, include:
 
 These repo-specific findings were identified while calibrating this skill and should be treated as known review heuristics.
 
-- Self-generated BOMs for this repository currently expose three unnamespaced custom property names: `SrcFile`, `ImportedModules`, and `LocalNodeModulesPath`.
+- Self-generated BOMs for this repository currently expose three unnamespaced custom property names: `internal:SrcFile`, `internal:ImportedModules`, and `internal:LocalNodeModulesPath`.
 
-### Iteration 1: legacy `SrcFile` property
+### Iteration 1: legacy `internal:SrcFile` property
 
-- Current cdxgen output emits unnamespaced `SrcFile` properties.
+- Current cdxgen output emits unnamespaced `internal:SrcFile` properties.
 - In self-generated BOMs this often duplicates `evidence.identity[].methods[].value`.
 - When the intent is to show where a component was found, `evidence.occurrences[].location` is the more semantically correct field.
 
-### Iteration 2: legacy `ImportedModules` property
+### Iteration 2: legacy `internal:ImportedModules` property
 
-- Current cdxgen output emits unnamespaced `ImportedModules`.
+- Current cdxgen output emits unnamespaced `internal:ImportedModules`.
 - The value is packed as CSV-like text and mixes module names with symbol-like data.
 - This is hard for downstream tooling to interpret and should be reviewed against `evidence.occurrences` plus `symbol`, or replaced with a clearly namespaced property if no standard field fits.
 
-### Iteration 3: legacy `LocalNodeModulesPath` property
+### Iteration 3: legacy `internal:LocalNodeModulesPath` property
 
-- Current cdxgen output emits unnamespaced `LocalNodeModulesPath`.
+- Current cdxgen output emits unnamespaced `internal:LocalNodeModulesPath`.
 - It can contain absolute host paths, which are environment-specific and potentially sensitive.
 - Treat this as a strong signal for removal or redesign rather than a property to preserve.
 

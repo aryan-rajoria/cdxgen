@@ -7,17 +7,18 @@ import process from "node:process";
 import yargs from "yargs";
 import { hideBin } from "yargs/helpers";
 
-import { verifyNode } from "../lib/helpers/bomSigner.js";
-import {
-  getNonCycloneDxErrorMessage,
-  isCycloneDxBom,
-} from "../lib/helpers/bomUtils.js";
-import { isProtoBomPath } from "../lib/helpers/protobomLoader.js";
+import { readEnvironmentVariable } from "../lib/core/activity.js";
 import {
   dirNameStr,
   retrieveCdxgenVersion,
   safeExistsSync,
-} from "../lib/helpers/utils.js";
+} from "../lib/ecosystems/utils.js";
+import { verifyNode } from "../lib/helpers/bomSigner.js";
+import {
+  getNonCycloneDxErrorMessage,
+  isCycloneDxBom,
+} from "../lib/inventory/bomUtils.js";
+import { isProtoBomPath } from "../lib/inventory/protobomLoader.js";
 import { getBomWithOras } from "../lib/managers/oci.js";
 
 const dirName = dirNameStr;
@@ -73,7 +74,7 @@ if (args.version) {
   process.exit(0);
 }
 
-if (process.env?.CDXGEN_NODE_OPTIONS) {
+if (readEnvironmentVariable("CDXGEN_NODE_OPTIONS")) {
   process.env.NODE_OPTIONS = `${process.env.NODE_OPTIONS || ""} ${process.env.CDXGEN_NODE_OPTIONS}`;
 }
 

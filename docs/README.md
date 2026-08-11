@@ -9,19 +9,19 @@ Install the npm package when you want the full multi-command CLI surface.
 **npm**:
 
 ```shell
-npm install -g @cyclonedx/cdxgen --omit=optional --ignore-scripts --min-release-age=2
+npm install -g @cdxgen/cdxgen --omit=optional --ignore-scripts --min-release-age=2
 ```
 
 **pnpm**:
 
 ```shell
-pnpm add -g @cyclonedx/cdxgen --omit=optional --ignore-scripts --minimum-release-age=2880
+pnpm add -g @cdxgen/cdxgen --omit=optional --ignore-scripts --minimum-release-age=2880
 ```
 
 **bun**:
 
 ```shell
-bun install -g @cyclonedx/cdxgen --ignore-scripts
+bun install -g @cdxgen/cdxgen --ignore-scripts
 ```
 
 If you are a [Homebrew](https://brew.sh/) user, you can also install [cdxgen](https://formulae.brew.sh/formula/cdxgen) via:
@@ -299,7 +299,7 @@ cdxgen --server
 Or use the container image.
 
 ```bash
-docker run --rm -v /tmp:/tmp -p 9090:9090 -v $(pwd):/app:rw -t ghcr.io/cyclonedx/cdxgen -r /app --server --server-host 0.0.0.0
+docker run --rm -v /tmp:/tmp -p 9090:9090 -v $(pwd):/app:rw -t ghcr.io/cdxgen/cdxgen -r /app --server --server-host 0.0.0.0
 ```
 
 Use curl or your favourite tool to pass arguments to the `/sbom` route.
@@ -331,18 +331,18 @@ curl -H "Content-Type: application/json" http://localhost:9090/sbom -XPOST -d $'
 
 #### **Integration as Library**
 
-cdxgen is [ESM only](https://gist.github.com/sindresorhus/a39789f98801d908bbc7ff3ecc99d99c) and could be imported and used with both deno and Node.js >= 20
+cdxgen is [ESM only](https://gist.github.com/sindresorhus/a39789f98801d908bbc7ff3ecc99d99c) and could be imported and used with both deno and Node.js >= 24
 
 Minimal example:
 
 ```ts
-import { createBom, submitBom } from "npm:@cyclonedx/cdxgen@^9.9.0";
+import { createBom, submitBom } from "npm:@cdxgen/cdxgen@^9.9.0";
 ```
 
 See the [Deno Readme](https://github.com/cdxgen/cdxgen/blob/master/contrib/deno/README.md) for detailed instructions.
 
 ```javascript
-import { createBom, submitBom } from "@cyclonedx/cdxgen";
+import { createBom, submitBom } from "@cdxgen/cdxgen";
 // bomNSData would contain bomJson
 const bomNSData = await createBom(filePath, options);
 // Submission to dependency track server
@@ -366,7 +366,7 @@ To generate test public/private key pairs, you can run cdxgen by passing the arg
 Use the bundled `cdx-verify` command, which supports verifying a single signature added at the bom level.
 
 ```shell
-npm install -g @cyclonedx/cdxgen --omit=optional --ignore-scripts --min-release-age=2
+npm install -g @cdxgen/cdxgen --omit=optional --ignore-scripts --min-release-age=2
 cdx-verify -i bom.json --public-key public.key
 ```
 
@@ -377,7 +377,7 @@ Use the bundled `cdx-verify` command, which supports verifying a single signatur
 You can run it directly using pnpm (no global install needed):
 
 ```shell
-pnpm dlx @cyclonedx/cdxgen cdx-verify -i bom.json --public-key public.key
+pnpm dlx @cdxgen/cdxgen cdx-verify -i bom.json --public-key public.key
 ```
 
 ### Custom verification tool (Node.js example)

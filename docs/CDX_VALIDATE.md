@@ -226,8 +226,8 @@ still needs manual attention.
 import {
   validateBomAdvanced,
   shouldFail,
-} from "@cyclonedx/cdxgen/lib/validator/index.js";
-import { render } from "@cyclonedx/cdxgen/lib/validator/reporters/index.js";
+} from "@cdxgen/cdxgen/lib/validator/index.js";
+import { render } from "@cdxgen/cdxgen/lib/validator/reporters/index.js";
 
 const bom = JSON.parse(await readFile("bom.json", "utf8"));
 const report = validateBomAdvanced(bom, {

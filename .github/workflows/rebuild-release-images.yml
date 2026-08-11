@@ -6,7 +6,7 @@ on:
   workflow_dispatch:
     inputs:
       versions:
-        description: 'Comma-separated or single version to rebuild (e.g., v12.0.0, v12.6.0). If empty, standard automatic selection is used.'
+        description: 'Comma-separated or single version to rebuild (e.g., v13.0.0, v13.1.0). If empty, standard automatic selection is used.'
         required: false
         default: ''
 

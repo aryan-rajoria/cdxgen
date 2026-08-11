@@ -4,12 +4,12 @@ LABEL maintainer="cyclonedx" \
       org.opencontainers.image.authors="Prabhu Subramanian <prabhu@appthreat.com>" \
       org.opencontainers.image.source="https://github.com/cdxgen/cdxgen" \
       org.opencontainers.image.url="https://github.com/cdxgen/cdxgen" \
-      org.opencontainers.image.version="12.7.x" \
+      org.opencontainers.image.version="13.0.x" \
       org.opencontainers.image.vendor="cyclonedx" \
       org.opencontainers.image.licenses="Apache-2.0" \
       org.opencontainers.image.title="cdxgen" \
       org.opencontainers.image.description="Container image for cdxgen SBOM generator" \
-      org.opencontainers.docker.cmd="docker run --rm -v /tmp:/tmp -p 9090:9090 -v $(pwd):/app:rw -t ghcr.io/cyclonedx/cdxgen-ppc64 -r /app --server"
+      org.opencontainers.docker.cmd="docker run --rm -v /tmp:/tmp -p 9090:9090 -v $(pwd):/app:rw -t ghcr.io/cdxgen/cdxgen-ppc64 -r /app --server"
 
 ARG SBT_VERSION=1.12.9
 # renovate: datasource=maven lookupName=org.apache.maven:maven
@@ -101,7 +101,7 @@ RUN set -e; \
     && gem --version \
     && bundler --version
 COPY . /opt/cdxgen
-RUN cd /opt/cdxgen && corepack enable && corepack pnpm install:prod && corepack pnpm cache delete \
+RUN cd /opt/cdxgen && corepack enable && corepack pnpm install:prod && corepack pnpm cache delete && rm -f /opt/cdxgen/pnpm-workspace.yaml \
     && chown -R cyclonedx:cyclonedx /opt/cdxgen \
     && chmod a-w -R /opt \
     && rm -rf /root/.cache /var/cache/yum /root/.cargo \

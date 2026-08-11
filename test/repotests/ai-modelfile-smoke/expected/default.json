@@ -1,0 +1,215 @@
+{
+  "bomFormat": "CycloneDX",
+  "components": [
+    {
+      "bom-ref": "file:Modelfile:",
+      "evidence": {
+        "occurrences": [
+          {
+            "location": "Modelfile"
+          }
+        ]
+      },
+      "group": "",
+      "name": "Modelfile",
+      "properties": [
+        {
+          "name": "cdx:ai:kind",
+          "value": "model-config-file"
+        },
+        {
+          "name": "cdx:ai:source",
+          "value": "source-code-analysis"
+        },
+        {
+          "name": "cdx:file:kind",
+          "value": "model-config-file"
+        }
+      ],
+      "tags": [
+        "ai",
+        "model-config-file",
+        "ollama",
+        "modelfile"
+      ],
+      "type": "file",
+      "version": ""
+    },
+    {
+      "bom-ref": "pkg:generic/ollama/llama3.2:1b",
+      "evidence": {
+        "occurrences": [
+          {
+            "location": "Modelfile"
+          }
+        ]
+      },
+      "group": "ollama",
+      "licenses": [
+        {
+          "license": {
+            "id": "MIT",
+            "url": "https://opensource.org/licenses/MIT"
+          }
+        }
+      ],
+      "name": "llama3.2:1b",
+      "properties": [
+        {
+          "name": "cdx:ai:artifactFormat",
+          "value": "modelfile"
+        },
+        {
+          "name": "cdx:ai:confidence",
+          "value": "high"
+        },
+        {
+          "name": "cdx:ai:kind",
+          "value": "model"
+        },
+        {
+          "name": "cdx:ai:modelFamily",
+          "value": "llama"
+        },
+        {
+          "name": "cdx:ai:provider",
+          "value": "ollama"
+        },
+        {
+          "name": "cdx:ai:reviewNeeded",
+          "value": "true"
+        },
+        {
+          "name": "cdx:ai:runtime",
+          "value": "ollama"
+        },
+        {
+          "name": "cdx:ai:source",
+          "value": "local-config"
+        }
+      ],
+      "purl": "pkg:generic/ollama/llama3.2:1b",
+      "tags": [
+        "ai",
+        "ollama",
+        "modelfile"
+      ],
+      "type": "machine-learning-model",
+      "version": ""
+    }
+  ],
+  "dependencies": [
+    {
+      "dependsOn": [
+        "file:Modelfile:",
+        "pkg:generic/ollama/llama3.2:1b"
+      ],
+      "ref": "component:ollama:observed"
+    },
+    {
+      "dependsOn": [
+        "pkg:generic/ollama/llama3.2:1b"
+      ],
+      "ref": "file:Modelfile:"
+    }
+  ],
+  "metadata": {
+    "authors": [],
+    "component": {
+      "bom-ref": "pkg:generic/ai-modelfile-smoke@latest",
+      "group": "",
+      "name": "ai-modelfile-smoke",
+      "purl": "pkg:generic/ai-modelfile-smoke@latest",
+      "type": "application",
+      "version": "latest"
+    },
+    "lifecycles": [
+      {
+        "phase": "pre-build"
+      }
+    ],
+    "timestamp": "1970-01-01T00:00:00.000Z",
+    "tools": {
+      "components": [
+        {
+          "authors": [
+            {
+              "name": "OWASP Foundation"
+            }
+          ],
+          "bom-ref": "pkg:npm/%40cdxgen/cdxgen@0.0.0-normalized",
+          "group": "@cdxgen",
+          "name": "cdxgen",
+          "publisher": "OWASP Foundation",
+          "purl": "pkg:npm/%40cdxgen/cdxgen@0.0.0-normalized",
+          "type": "application",
+          "version": "0.0.0-normalized"
+        }
+      ]
+    }
+  },
+  "serialNumber": "urn:uuid:00000000-0000-0000-0000-000000000000",
+  "services": [
+    {
+      "bom-ref": "component:ollama:observed",
+      "endpoints": [],
+      "group": "ollama",
+      "name": "ollama-service",
+      "properties": [
+        {
+          "name": "cdx:ai:confidence",
+          "value": "high"
+        },
+        {
+          "name": "cdx:ai:deployment",
+          "value": "implicit"
+        },
+        {
+          "name": "cdx:ai:kind",
+          "value": "inference-service"
+        },
+        {
+          "name": "cdx:ai:modelCount",
+          "value": "1"
+        },
+        {
+          "name": "cdx:ai:modelFamily",
+          "value": "llama"
+        },
+        {
+          "name": "cdx:ai:modelId",
+          "value": "llama3.2:1b"
+        },
+        {
+          "name": "cdx:ai:modelSelection",
+          "value": "explicit"
+        },
+        {
+          "name": "cdx:ai:reviewNeeded",
+          "value": "true"
+        },
+        {
+          "name": "cdx:ai:runtime",
+          "value": "ollama"
+        },
+        {
+          "name": "cdx:ai:source",
+          "value": "source-code-analysis"
+        },
+        {
+          "name": "cdx:ai:transportSecurity",
+          "value": "unknown"
+        }
+      ],
+      "provider": {
+        "name": "ollama"
+      },
+      "tags": [
+        "ai"
+      ],
+      "version": "observed"
+    }
+  ],
+  "specVersion": "1.7",
+  "version": 1
+}

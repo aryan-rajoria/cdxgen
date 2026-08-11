@@ -2,8 +2,8 @@
 version: "0.1.2"
 level: pair
 components:
-  lib/helpers/ciParsers: pair
-  lib/helpers/table.js: pair
+  lib/inventory/ciParsers: pair
+  lib/inventory/table.js: pair
   lib: assist
   test: assist
   bin: assist

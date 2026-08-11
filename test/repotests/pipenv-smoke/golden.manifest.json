@@ -1,0 +1,10 @@
+{
+  "description": "Pipenv Pipfile.lock parse coverage. Lockfile-backed: pinned resolved graph.",
+  "scenarios": [
+    {
+      "name": "default",
+      "projectType": ["pipenv"],
+      "options": {}
+    }
+  ]
+}

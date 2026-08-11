@@ -1,0 +1,11 @@
+{
+  "description": ".NET project.assets.json parse coverage (the modern restore manifest). Distinct from dotnet-eshop (csproj-only): exercises parseCsProjData over a committed obj/project.assets.json so no `dotnet restore` runs at golden time.",
+  "fixture": ".",
+  "scenarios": [
+    {
+      "name": "default",
+      "projectType": ["dotnet"],
+      "options": {}
+    }
+  ]
+}

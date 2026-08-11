@@ -15,7 +15,7 @@ import { basename, dirname, join } from "node:path";
 import process from "node:process";
 import { fileURLToPath } from "node:url";
 
-import { getTmpDir } from "../../lib/helpers/utils.js";
+import { getTmpDir } from "../../lib/core/fs.js";
 
 let url = import.meta?.url;
 if (url && !url.startsWith("file://")) {

@@ -25,8 +25,8 @@ Add support for the <ecosystem> ecosystem in cdxgen.
 
 Requirements:
 - Use pure ESM and existing cdxgen conventions.
-- Add or update aliases in lib/helpers/utils.js.
-- Add parser support in lib/helpers/utils.js or a focused helper module if the logic is large enough.
+- Add or update aliases in lib/ecosystems/utils.js.
+- Add parser support in lib/ecosystems/utils.js or a focused helper module if the logic is large enough.
 - Add create<Language>Bom() wiring in lib/cli/index.js.
 - Use PackageURL rather than manual purl concatenation.
 - Use safeExistsSync / safeSpawnSync instead of raw fs or child-process helpers.

@@ -91,7 +91,7 @@ The sandbox blocks network access by default, restricts write paths to the OS te
 
 ## Limitations
 
-- `@cdxgen/safer-exec` must be installed (it is an optional dependency of `@cyclonedx/cdxgen`)
+- `@cdxgen/safer-exec` must be installed (it is an optional dependency of `@cdxgen/cdxgen`)
 - Windows has no safer-exec binary; `tracebom` falls back gracefully with an empty component list
 - The traced command runs in an isolated sandbox — some programs may behave differently under sandbox restrictions
 - HTTP URL tracing (`--trace-http-urls`) requires Linux kernel >= 5.8 with eBPF support and CAP_BPF / CAP_PERFMON capabilities (effectively root)

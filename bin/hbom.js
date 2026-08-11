@@ -7,19 +7,7 @@ import yargs from "yargs";
 import { hideBin } from "yargs/helpers";
 
 import { createHBom } from "../lib/cli/index.js";
-import { printActivitySummary } from "../lib/helpers/display.js";
-import { getOutputDirectory } from "../lib/helpers/exportUtils.js";
-import {
-  ensureNoMixedHbomProjectTypes,
-  ensureSupportedHbomSpecVersion,
-  hasHbomProjectType,
-} from "../lib/helpers/hbom.js";
-import { getHbomSummary } from "../lib/helpers/hbomAnalysis.js";
-import { thoughtLog } from "../lib/helpers/logger.js";
-import {
-  importProtobomModule,
-  isProtoBomPath,
-} from "../lib/helpers/protobomLoader.js";
+import { thoughtLog } from "../lib/core/logger.js";
 import {
   DEBUG_MODE,
   isDryRun,
@@ -29,7 +17,19 @@ import {
   safeWriteSync,
   setActivityContext,
   setDryRunMode,
-} from "../lib/helpers/utils.js";
+} from "../lib/ecosystems/utils.js";
+import { getOutputDirectory } from "../lib/helpers/exportUtils.js";
+import { printActivitySummary } from "../lib/inventory/display.js";
+import {
+  ensureNoMixedHbomProjectTypes,
+  ensureSupportedHbomSpecVersion,
+  hasHbomProjectType,
+} from "../lib/inventory/hbom.js";
+import { getHbomSummary } from "../lib/inventory/hbomAnalysis.js";
+import {
+  importProtobomModule,
+  isProtoBomPath,
+} from "../lib/inventory/protobomLoader.js";
 import { validateBom } from "../lib/validator/bomValidator.js";
 
 function determineHbomCommandName() {
@@ -454,7 +454,7 @@ async function runDiagnosticsCommand() {
     );
   }
   const { bomJson } = await createHBom(process.cwd(), options);
-  if (options.validate && !validateBom(bomJson)) {
+  if (options.validate && !(await validateBom(bomJson))) {
     process.exit(1);
   }
   const output = JSON.stringify(bomJson, null, options.pretty ? 2 : null);

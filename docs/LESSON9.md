@@ -69,7 +69,7 @@ jq '
   | {
       name,
       purl,
-      srcFile: ((.properties // [])[] | select(.name == "SrcFile") | .value),
+      srcFile: ((.properties // [])[] | select(.name == "internal:SrcFile") | .value),
       functions: ((.properties // [])[] | select(.name == "cdx:gtfobins:functions") | .value),
       privilegedContexts: ((.properties // [])[] | select(.name == "cdx:gtfobins:privilegedContexts") | .value),
       riskTags: ((.properties // [])[] | select(.name == "cdx:gtfobins:riskTags") | .value),

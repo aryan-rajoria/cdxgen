@@ -10,9 +10,9 @@ export declare function loadRules(rulesDir: string): Promise<any[]>;
  * @param {Object} bomJson - Full CycloneDX BOM object
  * @returns {Promise<Array>} Array of matched findings
  */
-export declare function evaluateRule(rule: Object, bomJson: Object): Promise<any[]>;
+export declare function evaluateRule(rule: Object, bomJson: Object, options?: {}): Promise<any[]>;
 /**
  * Evaluate all rules against a BOM
  */
-export declare function evaluateRules(rules: any, bomJson: any): Promise<any[]>;
+export declare function evaluateRules(rules: any, bomJson: any, options?: {}): Promise<any[]>;
 //# sourceMappingURL=ruleEngine.d.ts.map

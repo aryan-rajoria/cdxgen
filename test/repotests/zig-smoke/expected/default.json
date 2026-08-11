@@ -1,0 +1,217 @@
+{
+  "bomFormat": "CycloneDX",
+  "components": [
+    {
+      "bom-ref": "pkg:generic/known_folders@0.5.0_download_url_https:%2F%2Fgithub.com%2Fziglibs%2Fknown-folders%2Farchive%2Frefs%2Ftags%2F0.5.0.tar.gz",
+      "evidence": {
+        "identity": [
+          {
+            "concludedValue": "$ROOT/build.zig.zon",
+            "confidence": 1,
+            "field": "purl",
+            "methods": [
+              {
+                "confidence": 1,
+                "technique": "manifest-analysis",
+                "value": "$ROOT/build.zig.zon"
+              }
+            ]
+          }
+        ]
+      },
+      "group": "",
+      "hashes": [
+        {
+          "alg": "SHA-256",
+          "content": "c7e77f2e8e4a8b6f8b1c1d2e3f4a5b6c7d8e9f0a1b2c3d4e5f6a7b8c9d0e1f2a"
+        }
+      ],
+      "name": "known_folders",
+      "properties": [
+        {
+          "name": "cdx:purl:proposedType",
+          "value": "zig"
+        },
+        {
+          "name": "cdx:zig:hash",
+          "value": "1220c7e77f2e8e4a8b6f8b1c1d2e3f4a5b6c7d8e9f0a1b2c3d4e5f6a7b8c9d0e1f2a"
+        },
+        {
+          "name": "cdx:zig:url",
+          "value": "https://github.com/ziglibs/known-folders/archive/refs/tags/0.5.0.tar.gz"
+        },
+        {
+          "name": "internal:SrcFile",
+          "value": "$ROOT/build.zig.zon"
+        }
+      ],
+      "purl": "pkg:generic/known_folders@0.5.0?download_url=https:%2F%2Fgithub.com%2Fziglibs%2Fknown-folders%2Farchive%2Frefs%2Ftags%2F0.5.0.tar.gz",
+      "scope": "required",
+      "type": "library",
+      "version": "0.5.0"
+    },
+    {
+      "bom-ref": "pkg:generic/my_local_helper",
+      "evidence": {
+        "identity": [
+          {
+            "concludedValue": "$ROOT/build.zig.zon",
+            "confidence": 1,
+            "field": "purl",
+            "methods": [
+              {
+                "confidence": 1,
+                "technique": "manifest-analysis",
+                "value": "$ROOT/build.zig.zon"
+              }
+            ]
+          }
+        ]
+      },
+      "group": "",
+      "name": "my_local_helper",
+      "properties": [
+        {
+          "name": "cdx:purl:proposedType",
+          "value": "zig"
+        },
+        {
+          "name": "cdx:zig:local",
+          "value": "true"
+        },
+        {
+          "name": "cdx:zig:path",
+          "value": "../my-local-helper"
+        },
+        {
+          "name": "internal:SrcFile",
+          "value": "$ROOT/build.zig.zon"
+        }
+      ],
+      "purl": "pkg:generic/my_local_helper",
+      "scope": "required",
+      "type": "library",
+      "version": ""
+    },
+    {
+      "bom-ref": "pkg:generic/zig_clap@0.10.0_download_url_https:%2F%2Fgithub.com%2FHejsil%2Fzig-clap%2Farchive%2Fabc1234.tar.gz",
+      "evidence": {
+        "identity": [
+          {
+            "concludedValue": "$ROOT/build.zig.zon",
+            "confidence": 1,
+            "field": "purl",
+            "methods": [
+              {
+                "confidence": 1,
+                "technique": "manifest-analysis",
+                "value": "$ROOT/build.zig.zon"
+              }
+            ]
+          }
+        ]
+      },
+      "group": "",
+      "name": "zig_clap",
+      "properties": [
+        {
+          "name": "cdx:purl:proposedType",
+          "value": "zig"
+        },
+        {
+          "name": "cdx:zig:hash",
+          "value": "clap-0.10.0-oBajB4Y3AwAcRZ8FTHkTAJKAKmSCrRuMSJKKVaLcrgKs"
+        },
+        {
+          "name": "cdx:zig:url",
+          "value": "https://github.com/Hejsil/zig-clap/archive/abc1234.tar.gz"
+        },
+        {
+          "name": "internal:SrcFile",
+          "value": "$ROOT/build.zig.zon"
+        }
+      ],
+      "purl": "pkg:generic/zig_clap@0.10.0?download_url=https:%2F%2Fgithub.com%2FHejsil%2Fzig-clap%2Farchive%2Fabc1234.tar.gz",
+      "scope": "required",
+      "type": "library",
+      "version": "0.10.0"
+    }
+  ],
+  "dependencies": [
+    {
+      "dependsOn": [
+        "pkg:generic/known_folders@0.5.0_download_url_https:%2F%2Fgithub.com%2Fziglibs%2Fknown-folders%2Farchive%2Frefs%2Ftags%2F0.5.0.tar.gz",
+        "pkg:generic/my_local_helper",
+        "pkg:generic/zig_clap@0.10.0_download_url_https:%2F%2Fgithub.com%2FHejsil%2Fzig-clap%2Farchive%2Fabc1234.tar.gz"
+      ],
+      "ref": "application:zig_smoke:0.2.1"
+    },
+    {
+      "dependsOn": [],
+      "ref": "pkg:generic/known_folders@0.5.0_download_url_https:%2F%2Fgithub.com%2Fziglibs%2Fknown-folders%2Farchive%2Frefs%2Ftags%2F0.5.0.tar.gz"
+    },
+    {
+      "dependsOn": [],
+      "ref": "pkg:generic/my_local_helper"
+    },
+    {
+      "dependsOn": [],
+      "ref": "pkg:generic/zig_clap@0.10.0_download_url_https:%2F%2Fgithub.com%2FHejsil%2Fzig-clap%2Farchive%2Fabc1234.tar.gz"
+    }
+  ],
+  "metadata": {
+    "authors": [],
+    "component": {
+      "bom-ref": "application:zig_smoke:0.2.1",
+      "description": "Zig project: zig_smoke",
+      "name": "zig_smoke",
+      "properties": [
+        {
+          "name": "cdx:zig:fingerprint",
+          "value": "0x1f2e3d4c5b6a7988"
+        },
+        {
+          "name": "cdx:zig:minimum_zig_version",
+          "value": "0.14.0"
+        },
+        {
+          "name": "cdx:zig:version",
+          "value": "0.2.1"
+        },
+        {
+          "name": "internal:SrcFile",
+          "value": "$ROOT/build.zig.zon"
+        }
+      ],
+      "type": "application",
+      "version": "0.2.1"
+    },
+    "lifecycles": [
+      {
+        "phase": "pre-build"
+      }
+    ],
+    "timestamp": "1970-01-01T00:00:00.000Z",
+    "tools": {
+      "components": [
+        {
+          "authors": [
+            {
+              "name": "OWASP Foundation"
+            }
+          ],
+          "bom-ref": "pkg:npm/%40cdxgen/cdxgen@0.0.0-normalized",
+          "group": "@cdxgen",
+          "name": "cdxgen",
+          "publisher": "OWASP Foundation",
+          "purl": "pkg:npm/%40cdxgen/cdxgen@0.0.0-normalized",
+          "type": "application",
+          "version": "0.0.0-normalized"
+        }
+      ]
+    }
+  },
+  "serialNumber": "urn:uuid:00000000-0000-0000-0000-000000000000",
+  "specVersion": "1.7",
+  "version": 1
+}

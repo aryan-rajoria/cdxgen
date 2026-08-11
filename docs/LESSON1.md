@@ -11,7 +11,7 @@ Ensure the following tools are installed.
 ```
 Java >= 21
 Maven
-Node.js > 20
+Node.js >= 24
 ```
 
 ## Getting started
@@ -19,7 +19,7 @@ Node.js > 20
 Install cdxgen
 
 ```shell
-sudo npm install -g @cyclonedx/cdxgen
+sudo npm install -g @cdxgen/cdxgen
 ```
 
 Clone and compile dependency track

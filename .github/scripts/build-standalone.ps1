@@ -1,6 +1,12 @@
 $ErrorActionPreference = "Stop"
 Set-StrictMode -Version Latest
 
+# `$ErrorActionPreference` governs PowerShell errors, not the exit codes of
+# native commands. Without this, a failed `pnpm install` or a binary that
+# crashes on `--version` is ignored and the script carries on to report some
+# later, unrelated symptom. The bash sibling gets this from `set -e`.
+$PSNativeCommandUseErrorActionPreference = $true
+
 $defaultTargets = @(
   "aibom",
   "cdxgen",
@@ -80,7 +86,67 @@ function Invoke-BinaryBuildFromStage {
   node (Join-Path $StagingDir "bin/cdxgen.js") @commonSbomArgs -o ".${Output}-postbuild.cdx.json"
   & ".\$Output.exe" --version
   & ".\$Output.exe" --help
+  if ($Output -in @("cbom", "saasbom")) {
+    Invoke-AtomSmokeTest -Output $Output
+  }
   Assert-BinarySizeLimit -Output $Output
+}
+
+# See the run_atom_smoke_test comment in build-standalone.sh for why this
+# fixture discriminates: the C tree carries no build manifest, so its entire
+# component inventory comes from `atom parsedeps`. The disabled-atom control
+# run keeps that property honest.
+function Get-BomComponentCount {
+  param([Parameter(Mandatory = $true)][string]$Path)
+  if (-not (Test-Path $Path)) { return 0 }
+  $bom = Get-Content -Path $Path -Raw | ConvertFrom-Json
+  return @($bom.components).Count
+}
+
+function Invoke-AtomSmokeTest {
+  param([Parameter(Mandatory = $true)][string]$Output)
+
+  $fixture = "test/data/evinse-cpp-repotest"
+  $smokeOut = ".${Output}-atom-smoke.json"
+  $controlOut = ".${Output}-atom-smoke-control.json"
+  $atomPkg = Resolve-AtomPlatformPackageName
+  $kind = Get-AtomPayloadKindForPackage -PackageName $atomPkg
+  if ($kind -eq "jar") {
+    $java = Get-Command java -ErrorAction SilentlyContinue
+    if (-not $java) {
+      Write-Host "atom smoke test: jar flavour ($atomPkg), JDK unavailable, skipped."
+      return
+    }
+  }
+  Write-Host "atom smoke test: .\$Output.exe against $fixture (provider=$atomPkg, kind=$kind)"
+
+  if (Test-Path $controlOut) { Remove-Item $controlOut -Force }
+  $previousAtomCmd = $env:ATOM_CMD
+  try {
+    $env:ATOM_CMD = "cmd.exe /c exit 1"
+    & ".\$Output.exe" -t c $fixture -o $controlOut *> $null
+  } finally {
+    if ($null -eq $previousAtomCmd) { Remove-Item Env:\ATOM_CMD -ErrorAction SilentlyContinue }
+    else { $env:ATOM_CMD = $previousAtomCmd }
+  }
+  $controlCount = Get-BomComponentCount -Path $controlOut
+  if (Test-Path $controlOut) { Remove-Item $controlOut -Force }
+  if ($controlCount -ne 0) {
+    throw "atom smoke test FAILED: the negative control produced $controlCount component(s) with atom disabled, so this fixture no longer proves atom ran."
+  }
+
+  if (Test-Path $smokeOut) { Remove-Item $smokeOut -Force }
+  & ".\$Output.exe" -t c $fixture -o $smokeOut --fail-on-error
+  $exitCode = $LASTEXITCODE
+  if ($exitCode -ne 0) {
+    throw "atom smoke test FAILED: .$Output.exe exited with code $exitCode."
+  }
+  $smokeCount = Get-BomComponentCount -Path $smokeOut
+  if (Test-Path $smokeOut) { Remove-Item $smokeOut -Force }
+  if ($smokeCount -eq 0) {
+    throw "atom smoke test FAILED: no components produced; the atom payload is missing or did not run."
+  }
+  Write-Host "atom smoke test: $smokeCount component(s) from atom, 0 from the disabled-atom control."
 }
 
 function Promote-OptionalDependencies {
@@ -108,7 +174,65 @@ function Promote-OptionalDependencies {
     $packageJson["dependencies"][$packageName] = $packageVersion
     $packageJson["optionalDependencies"].Remove($packageName)
   }
+  # Everything still in optionalDependencies is not wanted by this profile.
+  # Dropping it here is what lets the install run with optional resolution
+  # enabled; see the comment in promote_optional_dependencies in
+  # build-standalone.sh for why `--no-optional` cannot be used with atom 3.
+  $packageJson.Remove("optionalDependencies")
   $packageJson | ConvertTo-Json -Depth 20 | Set-Content -Path $packageJsonFile -Encoding utf8
+}
+
+function Resolve-AtomPlatformPackageName {
+  $targetOs = if ($env:TARGET_OS) { $env:TARGET_OS } else { "windows" }
+  $targetArch = if ($env:TARGET_ARCH) { $env:TARGET_ARCH } else {
+    if ([System.Runtime.InteropServices.RuntimeInformation]::ProcessArchitecture -eq [System.Runtime.InteropServices.Architecture]::Arm64) { "arm64" } else { "amd64" }
+  }
+  $targetLibc = if ($env:TARGET_LIBC) { $env:TARGET_LIBC } else { "gnu" }
+  $packageName = $null
+  if ($targetOs -eq "linux") {
+    if ($targetArch -eq "amd64") {
+      $packageName = if ($targetLibc -eq "musl") { "@appthreat/atom-linux-amd64-musl" } else { "@appthreat/atom-linux-amd64" }
+    } elseif ($targetArch -eq "arm64") {
+      $packageName = if ($targetLibc -eq "musl") { "@appthreat/atom-linux-arm64-musl" } else { "@appthreat/atom-linux-arm64" }
+    }
+  } elseif ($targetOs -eq "darwin") {
+    if ($targetArch -eq "amd64") { $packageName = "@appthreat/atom-darwin-amd64" }
+    elseif ($targetArch -eq "arm64") { $packageName = "@appthreat/atom-darwin-arm64" }
+  } elseif ($targetOs -eq "windows") {
+    if ($targetArch -eq "amd64") { $packageName = "@appthreat/atom-windows-amd64" }
+    elseif ($targetArch -eq "arm64") { $packageName = "@appthreat/atom-windows-arm64" }
+  }
+  if (-not $packageName) {
+    throw "Unmapped atom platform triple: $targetOs/$targetArch/$targetLibc"
+  }
+  return $packageName
+}
+
+function Get-AtomPayloadKindForPackage {
+  param([string]$PackageName)
+  switch ($PackageName) {
+    { $_ -in @("@appthreat/atom-linux-amd64", "@appthreat/atom-linux-arm64", "@appthreat/atom-darwin-arm64", "@appthreat/atom-linux-amd64-musl", "@appthreat/atom-windows-amd64") } { return "native" }
+    default { return "jar" }
+  }
+}
+
+function Assert-AtomPayloadPresent {
+  param(
+    [Parameter(Mandatory = $true)]
+    [string]$StagingDir,
+    [Parameter(Mandatory = $true)]
+    [string]$PackageName
+  )
+  $kind = Get-AtomPayloadKindForPackage -PackageName $PackageName
+  if ($kind -eq "native") {
+    $payloadPath = Join-Path $StagingDir "node_modules/$PackageName/bin/atom.exe"
+  } else {
+    $payloadPath = Join-Path $StagingDir "node_modules/$PackageName/plugins"
+  }
+  if (-not (Test-Path $payloadPath)) {
+    throw "Standalone atom payload missing: $payloadPath (kind=$kind). The dispatcher would be payload-less."
+  }
+  Write-Host "Standalone atom payload present: $payloadPath (kind=$kind)."
 }
 
 function Resolve-PlatformPluginPackageName {
@@ -141,6 +265,29 @@ function Copy-RuntimeSources {
   Copy-Item -Path package.json, pnpm-lock.yaml -Destination $StagingDir -Force
   if (Test-Path .pnpmfile.cjs) {
     Copy-Item -Path .pnpmfile.cjs -Destination $StagingDir -Force
+  }
+  # pnpm 11 reads `overrides` from pnpm-workspace.yaml rather than the `pnpm`
+  # field of package.json. Without it here the staging install disagrees with
+  # the lockfile it was given (ERR_PNPM_LOCKFILE_CONFIG_MISMATCH under
+  # --frozen-lockfile) and produces an incomplete node_modules otherwise. The
+  # `packages:` key is filtered defensively: the repo has no workspace members
+  # today, but a staging tree can never have them, and a `packages:` glob that
+  # matches nothing there fails the install. Kept in step with
+  # copy_runtime_sources in build-standalone.sh.
+  if (Test-Path pnpm-workspace.yaml) {
+    $skippingPackages = $false
+    $workspaceLines = foreach ($line in Get-Content -Path pnpm-workspace.yaml) {
+      if ($line -match '^packages:') {
+        $skippingPackages = $true
+        continue
+      }
+      if ($skippingPackages -and $line -match '^\s*-') {
+        continue
+      }
+      $skippingPackages = $false
+      $line
+    }
+    Set-Content -Path (Join-Path $StagingDir "pnpm-workspace.yaml") -Value $workspaceLines -Encoding utf8
   }
   Copy-Item -Path bin, data, lib -Destination $StagingDir -Force -Recurse
   if (Test-Path plugins) {
@@ -198,6 +345,10 @@ function Install-ProfileDependencies {
       "proto-reader" { $selectedOptionalPackages = @("@cdxgen/cdx-proto", "@bufbuild/protobuf") }
       "hbom-runtime" { $selectedOptionalPackages = @("@cdxgen/cdx-hbom", "@cdxgen/cdx-proto", "@bufbuild/protobuf", (Resolve-PlatformPluginPackageName)) }
       "hbom-slim" { $selectedOptionalPackages = @("@cdxgen/cdx-hbom") }
+      # atom 3's payload is a per-platform sub-package of @appthreat/atom, not
+      # named here: pnpm picks the one matching the target's os/cpu/libc once
+      # optional resolution is enabled. Asserted explicitly below. Kept in step
+      # with build-standalone.sh.
       "atom-analysis" { $selectedOptionalPackages = @("@appthreat/atom", "@appthreat/atom-parsetools", "@cdxgen/cdx-proto", "@bufbuild/protobuf") }
       "os-runtime" { $selectedOptionalPackages = @("@cdxgen/cdx-proto", "@bufbuild/protobuf", (Resolve-PlatformPluginPackageName)) }
       { $_ -in @("no-optional", "json-signature") } { }
@@ -205,7 +356,7 @@ function Install-ProfileDependencies {
     }
     if ($selectedOptionalPackages.Count -gt 0) {
       Promote-OptionalDependencies -StagingDir $StagingDir -PackageNames $selectedOptionalPackages
-      pnpm @installArgs --no-optional --no-frozen-lockfile
+      pnpm @installArgs --no-frozen-lockfile
     } else {
       pnpm @installArgs --no-optional --frozen-lockfile
     }
@@ -321,6 +472,9 @@ function Invoke-ProfilePruningAndPreflight {
       Assert-PackagePresent -StagingDir $StagingDir -PackageName "@appthreat/atom-parsetools"
       Assert-PackagePresent -StagingDir $StagingDir -PackageName "@cdxgen/cdx-proto"
       Assert-PackagePresent -StagingDir $StagingDir -PackageName "@bufbuild/protobuf"
+      $atomPkg = Resolve-AtomPlatformPackageName
+      Assert-PackagePresent -StagingDir $StagingDir -PackageName $atomPkg
+      Assert-AtomPayloadPresent -StagingDir $StagingDir -PackageName $atomPkg
       Remove-PlatformPlugins -StagingDir $StagingDir
       Assert-PackageAbsent -StagingDir $StagingDir -PackageName "@cdxgen/cdx-hbom"
       Assert-PackageAbsent -StagingDir $StagingDir -PackageName "jsonata"

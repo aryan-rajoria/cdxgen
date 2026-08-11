@@ -56,7 +56,7 @@ fi
 
 if [ x"${SKIP_PYTHON}" != "xyes" ]; then
   python3 --version
-  python3 -m pip install --no-cache-dir --upgrade pip virtualenv --break-system-packages || true
+  python3 -m pip install --no-cache-dir --upgrade --ignore-installed pip virtualenv --break-system-packages || true
   python3 -m pip install --no-cache-dir --upgrade pipenv poetry uv --target /opt/pypi
 fi
 

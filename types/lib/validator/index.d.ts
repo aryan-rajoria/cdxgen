@@ -18,6 +18,22 @@ declare const SEVERITY_ORDER: {
     critical: number;
 };
 /**
+ * Try the Rust validator (`cdxrs validate`) first; fall back to JS if the
+ * binary is unavailable, disabled, or returns an operational error.
+ *
+ * **No failure mode may abort SBOM generation.** If the Rust validator
+ * cannot run, we fall back to JS and validate normally — we never skip
+ * validation, and we never treat a bridge failure as a validation failure.
+ *
+ * @param {object} bomJson Parsed CycloneDX BOM.
+ * @returns {Promise<{ valid: boolean, source: "rust"|"js", findings: object[]|null }>}
+ */
+export declare function validateBomWithRustFallback(bomJson: object): Promise<{
+    valid: boolean;
+    source: "rust" | "js";
+    findings: object[] | null;
+}>;
+/**
  * Run structural + compliance validation against a parsed BOM.
  *
  * @param {object} bomJson Parsed CycloneDX JSON BOM.

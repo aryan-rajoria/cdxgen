@@ -14,7 +14,7 @@ The package ships multiple CLI entry points. Use this table as the top-level nav
 | `aibom`        | Generate AI-BOM-oriented inventories from source, Hugging Face references, Modelfiles, or GGUF artifacts | yes                       | [AI_BOM.md](AI_BOM.md)             |
 | `hbom`         | Generate a CycloneDX hardware BOM for the current host, with optional protobuf export                    | yes (`hbom`, `hbom-slim`) | [HBOM.md](HBOM.md)                 |
 | `cdx-audit`    | Explainable upstream dependency risk prioritization from existing BOMs                                   | yes                       | [CDX_AUDIT.md](CDX_AUDIT.md)       |
-| `cdx-convert`  | Convert CycloneDX JSON or protobuf to SPDX 3.0.1 JSON-LD                                                 | yes                       | [CDX_CONVERT.md](CDX_CONVERT.md)   |
+| `cdx-convert`  | Convert CycloneDX JSON or protobuf to SPDX 3.0.1 JSON-LD, or to another CycloneDX spec version            | yes                       | [CDX_CONVERT.md](CDX_CONVERT.md)   |
 | `cdx-sign`     | Sign a CycloneDX BOM                                                                                     | yes                       | [CDX_SIGN.md](CDX_SIGN.md)         |
 | `cdx-validate` | Validate structure, compliance, and signatures                                                           | yes                       | [CDX_VALIDATE.md](CDX_VALIDATE.md) |
 | `cdx-verify`   | Verify BOM signatures                                                                                    | yes                       | [CDX_VERIFY.md](CDX_VERIFY.md)     |
@@ -39,7 +39,7 @@ Some commands are focused aliases rather than separate implementations.
 | `cdxgen-secure`                               | `cdxgen` with secure mode enabled and dependency installation disabled by default                                           |
 | `aibom`, `cbom`, `obom`, `saasbom`, `spdxgen` | still accept the regular `cdxgen` flags in addition to their alias behavior                                                 |
 
-Installing `@cyclonedx/cdxgen` from npm exposes the commands in the command map plus the aliases in this section. The standalone `aibom`, `cbom`, `obom`, and `saasbom` release binaries preserve the same alias behavior. The `cbom`, `obom`, and `saasbom` binaries also include protobuf export support, so `--export-proto --proto-bin-file <file>` works without installing optional npm dependencies separately.
+Installing `@cdxgen/cdxgen` from npm exposes the commands in the command map plus the aliases in this section. The standalone `aibom`, `cbom`, `obom`, and `saasbom` release binaries preserve the same alias behavior. The `cbom`, `obom`, and `saasbom` binaries also include protobuf export support, so `--export-proto --proto-bin-file <file>` works without installing optional npm dependencies separately.
 
 ## HBOM command
 
@@ -125,33 +125,33 @@ Install the npm package when you want the full multi-command CLI surface.
 **npm**:
 
 ```shell
-npm install -g @cyclonedx/cdxgen --omit=optional --ignore-scripts --min-release-age=2
+npm install -g @cdxgen/cdxgen --omit=optional --ignore-scripts --min-release-age=2
 ```
 
 **pnpm**:
 
 ```shell
-pnpm add -g @cyclonedx/cdxgen --omit=optional --ignore-scripts --minimum-release-age=2880
+pnpm add -g @cdxgen/cdxgen --omit=optional --ignore-scripts --minimum-release-age=2880
 ```
 
 **bun**:
 
 ```shell
-bun install -g @cyclonedx/cdxgen --ignore-scripts
+bun install -g @cdxgen/cdxgen --ignore-scripts
 ```
 
 You can also invoke any packaged command without a global install:
 
 ```shell
-corepack pnpm dlx @cyclonedx/cdxgen --help
-corepack pnpm dlx --package=@cyclonedx/cdxgen hbom --help
-corepack pnpm dlx --package=@cyclonedx/cdxgen cdx-audit --help
-corepack pnpm dlx --package=@cyclonedx/cdxgen cdx-convert --help
-corepack pnpm dlx --package=@cyclonedx/cdxgen cdx-validate --help
-corepack pnpm dlx --package=@cyclonedx/cdxgen cdx-sign --help
-corepack pnpm dlx --package=@cyclonedx/cdxgen cdx-verify --help
-corepack pnpm dlx --package=@cyclonedx/cdxgen evinse --help
-corepack pnpm dlx --package=@cyclonedx/cdxgen cdxi --help
+corepack pnpm dlx @cdxgen/cdxgen --help
+corepack pnpm dlx --package=@cdxgen/cdxgen hbom --help
+corepack pnpm dlx --package=@cdxgen/cdxgen cdx-audit --help
+corepack pnpm dlx --package=@cdxgen/cdxgen cdx-convert --help
+corepack pnpm dlx --package=@cdxgen/cdxgen cdx-validate --help
+corepack pnpm dlx --package=@cdxgen/cdxgen cdx-sign --help
+corepack pnpm dlx --package=@cdxgen/cdxgen cdx-verify --help
+corepack pnpm dlx --package=@cdxgen/cdxgen evinse --help
+corepack pnpm dlx --package=@cdxgen/cdxgen cdxi --help
 ```
 
 If you are a [Homebrew](https://brew.sh/) user, you can also install [cdxgen](https://formulae.brew.sh/formula/cdxgen) via:
@@ -163,13 +163,13 @@ $ brew install cdxgen
 Deno install is also supported.
 
 ```shell
-deno install --allow-read --allow-env --allow-run --allow-sys=uid,systemMemoryInfo,gid,homedir --allow-write --allow-net -n cdxgen "npm:@cyclonedx/cdxgen/cdxgen"
+deno install --allow-read --allow-env --allow-run --allow-sys=uid,systemMemoryInfo,gid,homedir --allow-write --allow-net -n cdxgen "npm:@cdxgen/cdxgen/cdxgen"
 ```
 
 You can also use the cdxgen container image
 
 ```bash
-docker run --rm -v /tmp:/tmp -v $(pwd):/app:rw -t ghcr.io/cyclonedx/cdxgen -r /app -o /app/bom.json
+docker run --rm -v /tmp:/tmp -v $(pwd):/app:rw -t ghcr.io/cdxgen/cdxgen -r /app -o /app/bom.json
 ```
 
 ### Standalone release binaries
@@ -185,7 +185,7 @@ Use the asset name that matches your platform, for example `cdx-audit-linux-amd6
 #### Linux
 
 ```bash
-VERSION="v12.3.1"
+VERSION="v13.0.0"
 ASSET="cdx-audit-linux-amd64"
 BASE_URL="https://github.com/cdxgen/cdxgen/releases/download/${VERSION}"
 
@@ -199,7 +199,7 @@ chmod +x "${ASSET}"
 #### macOS
 
 ```bash
-VERSION="v12.3.1"
+VERSION="v13.0.0"
 ASSET="cdx-audit-darwin-arm64"
 BASE_URL="https://github.com/cdxgen/cdxgen/releases/download/${VERSION}"
 
@@ -213,7 +213,7 @@ chmod +x "${ASSET}"
 #### Windows (PowerShell)
 
 ```powershell
-$Version = "v12.3.1"
+$Version = "v13.0.0"
 $Asset = "cdx-audit-windows-amd64.exe"
 $BaseUrl = "https://github.com/cdxgen/cdxgen/releases/download/$Version"
 
@@ -238,7 +238,7 @@ steps:
     env:
       GH_TOKEN: ${{ github.token }}
     run: |
-      gh release download v12.3.1 \
+      gh release download v13.0.0 \
         --repo cdxgen/cdxgen \
         --pattern 'cdx-audit-linux-amd64' \
         --pattern 'cdx-audit-linux-amd64.sha256'
@@ -247,16 +247,16 @@ steps:
       ./cdx-audit-linux-amd64 --help
 ```
 
-To use the deno version, use `ghcr.io/cyclonedx/cdxgen-deno` as the image name.
+To use the deno version, use `ghcr.io/cdxgen/cdxgen-deno` as the image name.
 
 ```bash
-docker run --rm -v /tmp:/tmp -v $(pwd):/app:rw -t ghcr.io/cyclonedx/cdxgen-deno -r /app -o /app/bom.json
+docker run --rm -v /tmp:/tmp -v $(pwd):/app:rw -t ghcr.io/cdxgen/cdxgen-deno -r /app -o /app/bom.json
 ```
 
 In deno applications, cdxgen could be directly imported without any conversion.
 
 ```ts
-import { createBom, submitBom } from "npm:@cyclonedx/cdxgen";
+import { createBom, submitBom } from "npm:@cdxgen/cdxgen";
 ```
 
 ## Getting Help
@@ -462,7 +462,16 @@ cdx-convert -i bom.cdx -o bom.spdx.json
 
 `cdx-convert` supports CycloneDX 1.6 and 1.7 inputs and exports SPDX 3.0.1.
 
-Refer to [cdx-convert — CycloneDX to SPDX](CDX_CONVERT.md) for complete usage.
+Pass `--to` with a CycloneDX specification version to convert between CycloneDX
+versions instead. Fields the target version does not define are listed on stderr
+before the file is written:
+
+```shell
+cdx-convert -i bom.json --to 1.6              # writes bom-1_6.json
+cdx-convert -i bom.json --to 1.6 -o old.cdx   # writes protobuf
+```
+
+Refer to [cdx-convert — CycloneDX converter](CDX_CONVERT.md) for complete usage.
 
 ## Dynamic Process Tracing (Dynamic SBOM)
 

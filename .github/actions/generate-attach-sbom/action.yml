@@ -42,12 +42,25 @@ runs:
         raw_tags="${{ inputs.tags }}"
         tags_list=$(echo "$raw_tags" | tr ',' ' ' | tr '\n' ' ')
         for tag in $tags_list; do
-          echo "Attaching SBOM to $tag"
-          node bin/sign.js -i sbom-oci-image.cdx.json --attach "$tag"
-          node bin/verify.js -i "$tag" --platform ${{ inputs.platform }} --public-key contrib/bom-signer/public.key
+          attached=false
+          for attempt in 1 2 3; do
+            echo "Attaching SBOM to $tag"
+            if node bin/sign.js -i sbom-oci-image.cdx.json --attach "$tag" \
+              && node bin/verify.js -i "$tag" --platform ${{ inputs.platform }} --public-key contrib/bom-signer/public.key; then
+              attached=true
+              break
+            fi
+            echo "The registry did not serve the attachment for $tag yet. Retrying in $((attempt * 15))s"
+            sleep $((attempt * 15))
+          done
+          if [ "$attached" != "true" ]; then
+            echo "Unable to attach and verify the SBOM for $tag"
+            exit 1
+          fi
         done
         rm sbom-oci-image.cdx.json ${{ runner.temp }}/image.tar
       env:
+        CDXGEN_OCI_TIMEOUT_MS: 60000
         CDXGEN_TEMP_DIR: ${{ runner.temp }}/cdxgen-sboms
         DOCKER_USE_CLI: true
         SBOM_SIGN_ALGORITHM: RS512

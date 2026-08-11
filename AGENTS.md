@@ -6,7 +6,7 @@ This document helps AI coding agents (GitHub Copilot, Claude, Cursor, etc.) unde
 
 ## Project overview
 
-**cdxgen** is a universal, polyglot CycloneDX Bill-of-Materials (BOM) generator. It produces SBOM, CBOM, OBOM, SaaSBOM, CDXA, and VDR documents in CycloneDX JSON format. It is distributed as an npm package (`@cyclonedx/cdxgen`), a container image, and a Deno/Bun-compatible script.
+**cdxgen** is a universal, polyglot CycloneDX Bill-of-Materials (BOM) generator. It produces SBOM, CBOM, OBOM, SaaSBOM, CDXA, and VDR documents in CycloneDX JSON format. It is distributed as an npm package (`@cdxgen/cdxgen`), a container image, and a Deno/Bun-compatible script.
 
 Primary entry points:
 
@@ -33,7 +33,7 @@ Companion binaries:
 
 - The package is **pure ESM** (`"type": "module"` in `package.json`). There is no CommonJS source except the generated `index.cjs` shim.
 - The project targets **Node.js ≥ 20** with optional support for Bun and Deno (see `devEngines` in `package.json`).
-- Detect the runtime with the helpers exported from `lib/helpers/utils.js`:
+- Detect the runtime with the helpers exported from `lib/ecosystems/utils.js`:
   ```js
   export const isNode = globalThis.process?.versions?.node !== undefined;
   export const isBun = globalThis.Bun?.version !== undefined;
@@ -63,7 +63,7 @@ Biome (`biome.json`) enforces this exact three-group order, with a blank line be
 ```
 1. Node built-ins   (node:*)
 <blank line>
-2. npm packages     (packageurl-js, semver, undici, …)
+2. npm packages     (@cdxgen/cdx-purl, semver, undici, …)
 <blank line>
 3. Local modules    (../../helpers/utils.js, …)
 ```
@@ -159,7 +159,6 @@ docs/            Documentation (Markdown)
 plugins/         cdxgen plugin entry point stubs
 contrib/         Community scripts (not linted)
 ci/              Dockerfiles for CI images
-tools_config/    Tool configuration files
 ```
 
 ---
@@ -186,11 +185,9 @@ Runs before BOM generation to install missing build tools via sdkman, nvm, rbenv
 
 ### Go Evinse with Golem
 
-`evinse -l go` calls `lib/helpers/golem.js`, which resolves the optional `golem` plugin binary, runs `golem analyze --format json`, and maps the report into CycloneDX evidence. Occurrences and call-stack frames are attached to matching Go module purls. Data-flow traces are mapped to occurrence and call-stack evidence when `--deep`, `--with-data-flow`, `--profile research`, or explicit `--golem-dataflow` options are used. Metadata-level `cdx:golem:*` properties are appended to `bom.metadata.component`; component-level `cdx:golem:*` properties are appended to matching dependency components; crypto evidence can add schema-valid `cryptographic-asset` components without purls.
+`evinse -l go` calls `lib/ecosystems/golem.js`, which resolves the optional `golem` plugin binary, runs `golem analyze --format json`, and maps the report into CycloneDX evidence. Occurrences and call-stack frames are attached to matching Go module purls. Data-flow traces are mapped to occurrence and call-stack evidence when `--deep`, `--with-data-flow`, `--profile research`, or explicit `--golem-dataflow` options are used. Metadata-level `cdx:golem:*` properties are appended to `bom.metadata.component`; component-level `cdx:golem:*` properties are appended to matching dependency components; crypto evidence can add schema-valid `cryptographic-asset` components without purls.
 
-Keep this path layered as `bin/evinse.js` → `lib/evinser/evinser.js` → `lib/helpers/golem.js`. Do not import CLI modules from helpers. When adding Golem evidence, update `docs/GO_EVINSE_GOLEM.md`, `docs/CUSTOM_PROPERTIES.md`, `docs/EVINSE.md`, `docs/GO_EVINSE_GOLEM_THREAT_MODEL.md`, `docs/BOM_AUDIT.md`, `docs/LESSON14.md`, repo-test assertions in `.github/workflows/repotests.yml`, and the REPL commands in `bin/repl.js` if the new property creates a useful analyst pivot.
-
-### PackageURL
+Keep this path layered as `bin/evinse.js` → `lib/evinser/evinser.js` → `lib/ecosystems/golem.js`. Do not import CLI modules from helpers. When adding Golem evidence, update `docs/GO_EVINSE_GOLEM.md`, `docs/CUSTOM_PROPERTIES.md`, `docs/EVINSE.md`, `docs/GO_EVINSE_GOLEM_THREAT_MODEL.md`, `docs/BOM_AUDIT.md`, `docs/LESSON14.md`, repo-test assertions in `.github/workflows/repotests.yml`, and the REPL commands in `bin/repl.js` if the new property creates a useful analyst pivot.
 
 ---
 
@@ -244,56 +241,80 @@ into the single formulation section it builds.
 
 ## Module layering rules
 
-The dependency graph between source layers is strictly one-directional:
+Every directory under `lib/` belongs to a numbered layer, and an import may only
+reach a strictly lower layer. `contrib/check-boundaries.js` owns the table and
+enforces it: `node contrib/check-boundaries.js --strict` must report zero cycles
+and zero violations.
 
-```
-lib/helpers/*          (no imports from cli/ or stages/)
-      ↓
-lib/cli/index.js       (imports from helpers/*)
-      ↓
-lib/stages/postgen/    (imports from helpers/*, NOT from cli/index.js)
-bin/cdxgen.js          (imports from cli/ and stages/)
-lib/server/server.js   (imports from cli/ and stages/)
-```
+| Layer | Directories                                               |
+| ----- | --------------------------------------------------------- |
+| 0     | `lib/core`                                                |
+| 1     | `lib/parsers`                                             |
+| 2     | `lib/inventory`, `lib/helpers`                            |
+| 3     | `lib/ecosystems`                                          |
+| 4     | `lib/managers`, `lib/stages/pregen`, `lib/stages/postgen` |
+| 5     | `lib/cli`, `lib/evinser`, `lib/validator`                 |
+| 6     | `lib/server`, `lib/audit`                                 |
 
-**Never import `lib/cli/index.js` from inside `lib/helpers/` or `lib/stages/`.**
-Shared utilities used by both layers must live in a helper module:
+`lib/third-party` is vendored and opts out of the rule.
 
-| Utility                 | Location                            |
-| ----------------------- | ----------------------------------- |
-| `mergeDependencies`     | `lib/helpers/depsUtils.js`          |
-| `trimComponents`        | `lib/helpers/depsUtils.js`          |
-| `addFormulationSection` | `lib/helpers/formulationParsers.js` |
+**Never import `lib/cli/index.js` from a lower layer.** A utility both layers
+need belongs in a layer both can reach:
 
-Go Evinse/Golem evidence mapping belongs in `lib/helpers/golem.js`; the enriched BOM write-back belongs in `lib/evinser/evinser.js`. Do not move that logic into post-processing because Evinse is a separate enrichment command over an existing BOM.
+| Utility                 | Location                              |
+| ----------------------- | ------------------------------------- |
+| `mergeDependencies`     | `lib/inventory/depsUtils.js`          |
+| `trimComponents`        | `lib/inventory/depsUtils.js`          |
+| `addFormulationSection` | `lib/inventory/formulationParsers.js` |
 
-If you find yourself writing `import { … } from "../../cli/index.js"` inside
-a helper or stage module, **stop and extract the function to `lib/helpers/`
-first**.
+Go Evinse/Golem evidence mapping belongs in `lib/ecosystems/golem.js`; the
+enriched BOM write-back belongs in `lib/evinser/evinser.js`. Do not move that
+logic into post-processing — Evinse is a separate enrichment command over an
+existing BOM.
+
+If you find yourself writing `import { … } from "../../cli/index.js"` in a lower
+layer, **stop and extract the function downward first**.
 
 ---
 
-### PackageURL
+### Package URLs
+
+Purls are built with `@cdxgen/cdx-purl` through the helpers in
+`lib/inventory/purl.js`, which apply the registered per-type rules (namespace
+requirements, permitted qualifiers, normalisation):
 
 ```js
-import { PackageURL } from "packageurl-js";
+import { applyPurl, tryBuildPurl } from "../inventory/purl.js";
 
-// construct
-const purl = new PackageURL(
-  type,
-  namespace,
-  name,
-  version,
-  qualifiers,
-  subpath,
-);
-// parse
-const purlObj = PackageURL.fromString(purlString);
-// serialise
-const s = purl.toString();
+const purl = tryBuildPurl({
+  type: "npm",
+  namespace: "@scope",
+  name: "pkg",
+  version: "1.0.0",
+});
+// null when the coordinates cannot form a valid purl — drop the purl rather
+// than emitting an invalid one.
+applyPurl(component, purl, `library:${name}:${version}`);
 ```
 
-Never construct purl strings by hand-concatenation.
+Never build a purl by string concatenation: it skips encoding and qualifier
+validation, which is how `pkg:generic/name#/abs/path` and `pkg:npm/test@` once
+reached CI. Never invent a purl `type` that cdx-purl has no rules for — use
+`pkg:generic` with a `cdx:purl:proposedType` property instead.
+
+### Hashes
+
+An integrity string belongs in `hashes[]`, never in a property. Set
+`_integrity` on the package (`sha512-<base64>` for npm/ssri, `sha256-<base64>`
+for Go sums) and `processHashes` converts it into a CycloneDX `hashes[]` entry
+with the digest hex-encoded, so the same artefact hashes identically whichever
+collector found it.
+
+### Custom properties
+
+Every `cdx:` property must be described in `docs/CUSTOM_PROPERTIES.md`.
+`lib/customProperties.poku.js` fails the build when a new namespace appears
+without documentation.
 
 ### Cryptographic assets and OS trust material
 
@@ -320,18 +341,18 @@ Never construct purl strings by hand-concatenation.
 
 ### HTTP requests
 
-All outbound HTTP is done through `cdxgenAgent`, exported from `lib/helpers/utils.js`. It is a small [undici](https://github.com/nodejs/undici)-backed, `got`-compatible client created by `createHttpClient()` in `lib/helpers/httpClient.js` — it supports `.get`/`.post`/`.put`/`.head`, `.extend()`, `responseType`, `throwHttpErrors`, `followRedirect`, timeouts, and `beforeRequest`/`afterResponse`/`beforeError` hooks (which power dry-run enforcement, host allow-listing, network-activity recording, and HTTP trace logging). It also keeps an in-memory GET response cache that can be disabled with `CDXGEN_NO_CACHE`. Never talk to the network directly (raw `undici`, `fetch`, `http`, etc.) in new code — use `cdxgenAgent`, or pass it through the `options` object. The one exception is Docker/Podman daemon communication, which uses the unix-socket/TLS connection helper in `lib/managers/dockerConnection.js`.
+All outbound HTTP is done through `cdxgenAgent`, exported from `lib/ecosystems/utils.js`. It is a small [undici](https://github.com/nodejs/undici)-backed, `got`-compatible client created by `createHttpClient()` in `lib/core/httpClient.js` — it supports `.get`/`.post`/`.put`/`.head`, `.extend()`, `responseType`, `throwHttpErrors`, `followRedirect`, timeouts, and `beforeRequest`/`afterResponse`/`beforeError` hooks (which power dry-run enforcement, host allow-listing, network-activity recording, and HTTP trace logging). It also keeps an in-memory GET response cache that can be disabled with `CDXGEN_NO_CACHE`. Never talk to the network directly (raw `undici`, `fetch`, `http`, etc.) in new code — use `cdxgenAgent`, or pass it through the `options` object. The one exception is Docker/Podman daemon communication, which uses the unix-socket/TLS connection helper in `lib/managers/dockerConnection.js`.
 
 ---
 
 ## Logging conventions
 
-| Function                                              | Purpose                             | Activation                                              |
-| ----------------------------------------------------- | ----------------------------------- | ------------------------------------------------------- |
-| `console.log` / `console.warn` / `console.error`      | Operational messages                | Always                                                  |
-| `thoughtLog(msg, args?)` from `lib/helpers/logger.js` | Internal reasoning / debug thinking | `CDXGEN_THINK_MODE=true` or `CDXGEN_DEBUG_MODE=verbose` |
-| `traceLog(type, args)` from `lib/helpers/logger.js`   | Structured trace of commands & HTTP | `CDXGEN_TRACE_MODE=true` or `CDXGEN_DEBUG_MODE=verbose` |
-| `DEBUG_MODE` constant from `lib/helpers/utils.js`     | Guards verbose `console.log` calls  | `CDXGEN_DEBUG_MODE=debug` or `debug`                    |
+| Function                                             | Purpose                             | Activation                                              |
+| ---------------------------------------------------- | ----------------------------------- | ------------------------------------------------------- |
+| `console.log` / `console.warn` / `console.error`     | Operational messages                | Always                                                  |
+| `thoughtLog(msg, args?)` from `lib/core/logger.js`   | Internal reasoning / debug thinking | `CDXGEN_THINK_MODE=true` or `CDXGEN_DEBUG_MODE=verbose` |
+| `traceLog(type, args)` from `lib/core/logger.js`     | Structured trace of commands & HTTP | `CDXGEN_TRACE_MODE=true` or `CDXGEN_DEBUG_MODE=verbose` |
+| `DEBUG_MODE` constant from `lib/ecosystems/utils.js` | Guards verbose `console.log` calls  | `CDXGEN_DEBUG_MODE=debug` or `debug`                    |
 
 Prefer `thoughtLog` over ad-hoc `console.log` for introspective messages inside core logic so they can be silenced in production.
 
@@ -396,30 +417,43 @@ When emitting CycloneDX `properties`, annotations, evidence objects, or service/
 
 ## Environment variables
 
-All cdxgen-specific variables use the `CDXGEN_` prefix (or well-known tool-specific names like `JAVA_HOME`, `PYTHON_CMD`, etc.). Environment variables are declared as module-level constants in `lib/helpers/utils.js`:
+All cdxgen-specific variables use the `CDXGEN_` prefix (or a well-known
+tool-specific name such as `JAVA_HOME` or `PYTHON_CMD`). `docs/ENV.md` lists
+every supported variable.
+
+Read them with `readEnvironmentVariable` from `lib/core/activity.js`, never
+`process.env` directly — the helper records the read so dry-run mode can report
+which variables a scan consulted:
+
+```js
+import { readEnvironmentVariable } from "../core/activity.js";
+
+const target = readEnvironmentVariable("BAZEL_TARGET") || "//...";
+```
+
+Variables that gate behaviour globally are derived once into a module-level
+constant and imported, rather than re-read deep in a call stack:
 
 ```js
 export const DEBUG_MODE =
-  ["debug", "verbose"].includes(process.env.CDXGEN_DEBUG_MODE) ||
-  process.env.SCAN_DEBUG_MODE === "debug";
+  ["debug", "verbose"].includes(readEnvironmentVariable("CDXGEN_DEBUG_MODE")) ||
+  readEnvironmentVariable("SCAN_DEBUG_MODE") === "debug";
 ```
-
-Do not read `process.env.CDXGEN_*` inside deep library functions — export the derived constant from `utils.js` and import it instead. See `docs/ENV.md` for the full list of supported variables.
 
 ---
 
 ## Adding support for a new language/ecosystem
 
 1. Add a `create<Language>Bom(path, options)` function in `lib/cli/index.js`, following the same signature and return shape as the existing functions.
-2. Add parser functions in `lib/helpers/utils.js` (for lock file / manifest parsing) or a new helper module under `lib/helpers/`.
-3. Register the new project type in `PROJECT_TYPE_ALIASES` and `PACKAGE_MANAGER_ALIASES` in `lib/helpers/utils.js`.
+2. Add parser functions in `lib/ecosystems/utils.js` (for lock file / manifest parsing) or a new helper module under `lib/helpers/`.
+3. Register the new project type in `PROJECT_TYPE_ALIASES` and `PACKAGE_MANAGER_ALIASES` in `lib/ecosystems/utils.js`.
 4. Add a dispatch branch in `createXBom` / `createBom` in `lib/cli/index.js`.
 5. Update `docs/PROJECT_TYPES.md`.
 6. Add fixture files to `test/` and cover with a `*.poku.js` test.
 7. If updating OSQuery table metadata in `data/queries*.json` (for example `purlType` or `componentType`), review all platform variants (`queries.json`, `queries-win.json`, and `queries-darwin.json`) and keep shared table entries aligned.
 8. Always consider adding/expanding `repotests.yml` coverage with a representative public repository for the ecosystem change; if a stable public repo is not practical, add fixture-backed repo tests under `test/data/` and exercise them from `repotests.yml`.
 9. For container/rootfs or OBOM feature work, also review the companion integration surfaces that usually need to stay aligned: `lib/managers/binary.js`, `lib/managers/binary.poku.js`, `lib/managers/binary.e2e.poku.js`, `lib/stages/postgen/auditBom.poku.js`, `ci/dockertests.sh`, `ci/assertions.sh`, `data/component-tags.json`, `bin/repl.js`, and any relevant docs/rules.
-10. For CBOM source-analysis work, keep `lib/helpers/analyzer.js`, `lib/helpers/analyzer.poku.js`, `lib/helpers/cbomutils.js`, and the `createCryptoCertsBom()` path in `lib/cli/index.js` aligned. The analyzer is intentionally lightweight, so prefer conservative constant propagation over broad speculative inference.
+10. For CBOM source-analysis work, keep `lib/inventory/analyzer.js`, `lib/inventory/analyzer.poku.js`, `lib/inventory/cbomutils.js`, and the `createCryptoCertsBom()` path in `lib/cli/index.js` aligned. The analyzer is intentionally lightweight, so prefer conservative constant propagation over broad speculative inference.
 
 ---
 
@@ -430,8 +464,8 @@ Do not read `process.env.CDXGEN_*` inside deep library functions — export the 
 Tests are co-located with the source as **`<module>.poku.js`** files. The test runner is [poku](https://poku.io/).
 
 ```
-lib/helpers/utils.poku.js         ← tests for utils.js
-lib/helpers/pythonutils.poku.js   ← tests for pythonutils.js
+lib/ecosystems/utils.poku.js         ← tests for utils.js
+lib/ecosystems/pythonutils.poku.js   ← tests for pythonutils.js
 lib/cli/index.poku.js             ← tests for index.js
 lib/stages/pregen/envAudit.poku.js
 …
@@ -469,8 +503,8 @@ pnpm run watch
 ### Container / OBOM regression coverage
 
 - **Unit coverage:** use `lib/managers/binary.poku.js` for rootfs/container parsing logic, repository-source parsing, trusted-key modeling, and osquery invocation behavior.
-- **Rule coverage:** use `lib/stages/postgen/auditBom.poku.js` when changing `data/rules/*.yaml`, `lib/helpers/auditCategories.js`, or hardening-related query packs.
-- **Analyzer coverage:** use `lib/helpers/analyzer.poku.js`, `lib/helpers/cbomutils.poku.js`, and `lib/helpers/utils.poku.js` when changing crypto-aware AST extraction, GTFOBins/LOLBAS enrichment, or osquery-to-component transforms.
+- **Rule coverage:** use `lib/stages/postgen/auditBom.poku.js` when changing `data/rules/*.yaml`, `lib/inventory/auditCategories.js`, or hardening-related query packs.
+- **Analyzer coverage:** use `lib/inventory/analyzer.poku.js`, `lib/inventory/cbomutils.poku.js`, and `lib/ecosystems/utils.poku.js` when changing crypto-aware AST extraction, GTFOBins/LOLBAS enrichment, or osquery-to-component transforms.
 - **Binary E2E coverage:** use `lib/managers/binary.e2e.poku.js` for real Trivy/rootfs integration when the local environment has the companion repo and container runtime available.
 - **Docker-script parity checks:** use `ci/dockertests.sh` plus `ci/assertions.sh` for archive vs reconstructed-rootfs parity, tool identity evidence, container-risk audit coverage, unpackaged native-file count assertions, and OS repo/trusted-key crypto assertions. The `nerdctl` lane must keep working even when Docker itself is absent.
 - For macOS OBOM changes, validate the real bundled osquery behavior and keep `docs/OBOM_MACOS_TROUBLESHOOTING.md` in sync when execution mode or permissions expectations change.
@@ -575,10 +609,10 @@ All GitHub Actions workflows pin action SHA digests and have `permissions: {}` a
 
 ## What to avoid
 
-- **Do not** talk to the network directly (raw `undici`, `fetch`, `http`/`https`) in new library code — use `cdxgenAgent` from `lib/helpers/utils.js` (or `lib/managers/dockerConnection.js` for the container daemon).
+- **Do not** talk to the network directly (raw `undici`, `fetch`, `http`/`https`) in new library code — use `cdxgenAgent` from `lib/ecosystems/utils.js` (or `lib/managers/dockerConnection.js` for the container daemon).
 - **Do not** use `spawnSync` / `execSync` directly — use `safeSpawnSync`.
 - **Do not** use `existsSync` / `mkdirSync` directly — use `safeExistsSync` / `safeMkdirSync`.
-- **Do not** shell out to the Electron `asar` CLI or add a runtime dependency for ASAR parsing — use the native reader in `lib/helpers/asarutils.js`.
+- **Do not** shell out to the Electron `asar` CLI or add a runtime dependency for ASAR parsing — use the native reader in `lib/ecosystems/asarutils.js`.
 - **Do not** construct PURL strings by concatenation — use `new PackageURL(…).toString()`.
 - **Do not** read `process.argv` inside library modules — accept options via the `options` object.
 - **Do not** commit secrets, tokens, or credentials.
@@ -588,5 +622,5 @@ All GitHub Actions workflows pin action SHA digests and have `permissions: {}` a
 - **Do not** add or update `pnpm-lock.yaml` unless changing `package.json` dependencies.
 - **Do not** import from `lib/cli/index.js` inside `lib/helpers/*` or `lib/stages/*` — this creates a circular-like cross-layer dependency. Extract the shared function to `lib/helpers/` instead.
 - **Do not** add logic that must execute once-per-BOM inside `buildBomNSData` — it is called once per language type. Use `postProcess` in `lib/stages/postgen/postgen.js` instead.
-- **Do not** add any generic functions to `lib/cli/index.js` and `lib/helpers/utils.js`.
+- **Do not** add any generic functions to `lib/cli/index.js` and `lib/ecosystems/utils.js`.
 - **Do not** add complex all-in-one regex parsers for filenames or other externally sourced strings when tokenization plus small validators will do; that pattern is difficult to maintain and may fail CodeQL inefficient-regex checks.

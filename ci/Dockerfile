@@ -144,18 +144,30 @@ LABEL maintainer="cyclonedx" \
       org.opencontainers.image.authors="Prabhu Subramanian <prabhu@appthreat.com>" \
       org.opencontainers.image.source="https://github.com/cdxgen/cdxgen" \
       org.opencontainers.image.url="https://github.com/cdxgen/cdxgen" \
-      org.opencontainers.image.version="12.7.x" \
+      org.opencontainers.image.version="13.0.x" \
       org.opencontainers.image.vendor="cyclonedx" \
       org.opencontainers.image.licenses="Apache-2.0" \
       org.opencontainers.image.title="cdxgen" \
       org.opencontainers.image.description="Container image for cdxgen SBOM generator packing latest build tools." \
-      org.opencontainers.docker.cmd="docker run --rm -v /tmp:/tmp -p 9090:9090 -v $(pwd):/app:rw -t ghcr.io/cyclonedx/cdxgen -r /app --server"
+      org.opencontainers.docker.cmd="docker run --rm -v /tmp:/tmp -p 9090:9090 -v $(pwd):/app:rw -t ghcr.io/cdxgen/cdxgen -r /app --server"
 
 COPY . /opt/cdxgen
 
 RUN cd /opt/cdxgen && corepack enable pnpm && pnpm config set global-bin-dir /opt/bin \
-    && pnpm install:prod && pnpm link && pnpm cache delete \
-    && pnpm bin && pnpm bin -g \
+    && pnpm install:prod && pnpm cache delete \
+    && chmod +x /opt/cdxgen/bin/*.js \
+    && for name in aibom cbom cdxgen cdxgen-secure obom saasbom spdxgen; do ln -sf /opt/cdxgen/bin/cdxgen.js /opt/bin/$name; done \
+    && ln -sf /opt/cdxgen/bin/audit.js /opt/bin/cdx-audit \
+    && ln -sf /opt/cdxgen/bin/convert.js /opt/bin/cdx-convert \
+    && ln -sf /opt/cdxgen/bin/validate.js /opt/bin/cdx-validate \
+    && ln -sf /opt/cdxgen/bin/verify.js /opt/bin/cdx-verify \
+    && ln -sf /opt/cdxgen/bin/sign.js /opt/bin/cdx-sign \
+    && ln -sf /opt/cdxgen/bin/repl.js /opt/bin/cdxi \
+    && ln -sf /opt/cdxgen/bin/evinse.js /opt/bin/evinse \
+    && ln -sf /opt/cdxgen/bin/hbom.js /opt/bin/hbom \
+    && ln -sf /opt/cdxgen/bin/tracebom.js /opt/bin/tracebom \
+    && cdxgen --version \
+    && rm -f /opt/cdxgen/pnpm-workspace.yaml \
     && mkdir -p ${NODE_COMPILE_CACHE} \
     && chown -R cyclonedx:cyclonedx /opt/cdxgen ${NODE_COMPILE_CACHE} ${CDXGEN_TEMP_DIR} \
     && chmod a-w -R /opt \

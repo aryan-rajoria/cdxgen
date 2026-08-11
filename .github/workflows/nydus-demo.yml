@@ -66,7 +66,7 @@ jobs:
           sudo /usr/local/bin/containerd-nydus-grpc --nydusd-config /etc/nydus/nydusd-config.fusedev.json &
           sleep 15
           cd repotests/dependency-track
-          sudo nerdctl --snapshotter nydus run --rm -e JAVA_TOOL_OPTIONS -v $HOME/.m2:$HOME/.m2 -v $(pwd):/app ghcr.io/cyclonedx/cdxgen:master-nydus --deep -t java /app -o /app/bom.json
+          sudo nerdctl --snapshotter nydus run --rm -e JAVA_TOOL_OPTIONS -v $HOME/.m2:$HOME/.m2 -v $(pwd):/app ghcr.io/cdxgen/cdxgen:master-nydus --deep -t java /app -o /app/bom.json
           ls -ltr
         env:
           JAVA_TOOL_OPTIONS: "-Dfile.encoding=UTF-8"
@@ -80,7 +80,7 @@ jobs:
         run: |
           sleep 15
           cd repotests/dependency-track
-          sudo nerdctl run --rm -e JAVA_TOOL_OPTIONS -v $HOME/.m2:$HOME/.m2 -v $(pwd):/app ghcr.io/cyclonedx/cdxgen:master --deep -t java /app -o /app/bom.json
+          sudo nerdctl run --rm -e JAVA_TOOL_OPTIONS -v $HOME/.m2:$HOME/.m2 -v $(pwd):/app ghcr.io/cdxgen/cdxgen:master --deep -t java /app -o /app/bom.json
           ls -ltr
         env:
           JAVA_TOOL_OPTIONS: "-Dfile.encoding=UTF-8"

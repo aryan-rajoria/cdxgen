@@ -13,7 +13,7 @@ import {
   retrieveCdxgenVersion,
   safeExistsSync,
   safeMkdirSync,
-} from "../lib/helpers/utils.js";
+} from "../lib/ecosystems/utils.js";
 
 const args = yargs(hideBin(process.argv))
   .option("bom", {

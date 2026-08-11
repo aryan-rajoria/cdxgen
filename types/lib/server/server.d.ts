@@ -1,4 +1,4 @@
-import { isAllowedHttpHost } from "../helpers/utils.js";
+import { isAllowedHttpHost } from "../core/activity.js";
 export { isAllowedHttpHost };
 /**
  * Method to safely parse value passed via the query string or body.

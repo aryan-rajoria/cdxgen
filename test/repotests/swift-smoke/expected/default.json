@@ -1,0 +1,151 @@
+{
+  "bomFormat": "CycloneDX",
+  "components": [
+    {
+      "bom-ref": "pkg:swift/github.com/apple/swift-argument-parser@1.8.2",
+      "evidence": {
+        "identity": [
+          {
+            "concludedValue": "$ROOT/Package.resolved",
+            "confidence": 1,
+            "field": "purl",
+            "methods": [
+              {
+                "confidence": 1,
+                "technique": "manifest-analysis",
+                "value": "$ROOT/Package.resolved"
+              }
+            ]
+          }
+        ]
+      },
+      "externalReferences": [
+        {
+          "type": "vcs",
+          "url": "https://github.com/apple/swift-argument-parser.git"
+        }
+      ],
+      "group": "github.com/apple",
+      "name": "swift-argument-parser",
+      "properties": [
+        {
+          "name": "internal:SrcFile",
+          "value": "$ROOT/Package.resolved"
+        }
+      ],
+      "purl": "pkg:swift/github.com/apple/swift-argument-parser@1.8.2",
+      "type": "library",
+      "version": "1.8.2"
+    },
+    {
+      "bom-ref": "pkg:swift/github.com/apple/swift-collections@1.6.0",
+      "evidence": {
+        "identity": [
+          {
+            "concludedValue": "$ROOT/Package.resolved",
+            "confidence": 1,
+            "field": "purl",
+            "methods": [
+              {
+                "confidence": 1,
+                "technique": "manifest-analysis",
+                "value": "$ROOT/Package.resolved"
+              }
+            ]
+          }
+        ]
+      },
+      "externalReferences": [
+        {
+          "type": "vcs",
+          "url": "https://github.com/apple/swift-collections.git"
+        }
+      ],
+      "group": "github.com/apple",
+      "name": "swift-collections",
+      "properties": [
+        {
+          "name": "internal:SrcFile",
+          "value": "$ROOT/Package.resolved"
+        }
+      ],
+      "purl": "pkg:swift/github.com/apple/swift-collections@1.6.0",
+      "type": "library",
+      "version": "1.6.0"
+    },
+    {
+      "bom-ref": "pkg:swift/github.com/apple/swift-log@1.14.0",
+      "evidence": {
+        "identity": [
+          {
+            "concludedValue": "$ROOT/Package.resolved",
+            "confidence": 1,
+            "field": "purl",
+            "methods": [
+              {
+                "confidence": 1,
+                "technique": "manifest-analysis",
+                "value": "$ROOT/Package.resolved"
+              }
+            ]
+          }
+        ]
+      },
+      "externalReferences": [
+        {
+          "type": "vcs",
+          "url": "https://github.com/apple/swift-log.git"
+        }
+      ],
+      "group": "github.com/apple",
+      "name": "swift-log",
+      "properties": [
+        {
+          "name": "internal:SrcFile",
+          "value": "$ROOT/Package.resolved"
+        }
+      ],
+      "purl": "pkg:swift/github.com/apple/swift-log@1.14.0",
+      "type": "library",
+      "version": "1.14.0"
+    }
+  ],
+  "dependencies": [],
+  "metadata": {
+    "authors": [],
+    "component": {
+      "bom-ref": "application:swift-smoke:latest",
+      "group": "",
+      "name": "swift-smoke",
+      "type": "application",
+      "version": "latest"
+    },
+    "lifecycles": [
+      {
+        "phase": "pre-build"
+      }
+    ],
+    "timestamp": "1970-01-01T00:00:00.000Z",
+    "tools": {
+      "components": [
+        {
+          "authors": [
+            {
+              "name": "OWASP Foundation"
+            }
+          ],
+          "bom-ref": "pkg:npm/%40cdxgen/cdxgen@0.0.0-normalized",
+          "group": "@cdxgen",
+          "name": "cdxgen",
+          "publisher": "OWASP Foundation",
+          "purl": "pkg:npm/%40cdxgen/cdxgen@0.0.0-normalized",
+          "type": "application",
+          "version": "0.0.0-normalized"
+        }
+      ]
+    }
+  },
+  "serialNumber": "urn:uuid:00000000-0000-0000-0000-000000000000",
+  "specVersion": "1.7",
+  "version": 1
+}

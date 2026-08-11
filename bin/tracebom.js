@@ -5,13 +5,14 @@ import process from "node:process";
 import yargs from "yargs";
 import { hideBin } from "yargs/helpers";
 
+import { validateSpecVersion } from "../lib/cli/cliOptions.js";
 import { createDynamicBom } from "../lib/cli/index.js";
-import { DEFAULT_CDX_SPEC_VERSION } from "../lib/helpers/bomUtils.js";
 import {
   DEBUG_MODE,
   retrieveCdxgenVersion,
   safeWriteSync,
-} from "../lib/helpers/utils.js";
+} from "../lib/ecosystems/utils.js";
+import { DEFAULT_CDX_SPEC_VERSION } from "../lib/inventory/bomUtils.js";
 
 const _yargs = yargs(hideBin(process.argv));
 
@@ -172,6 +173,19 @@ const args = _yargs
     description: "Print BOM to stdout.",
     default: false,
     type: "boolean",
+  })
+  .check((argv) => {
+    const specVersionError = validateSpecVersion(
+      argv.specVersion,
+      basename(process.argv[1] || "tracebom").replace(
+        /\.(?:[cm]?js|exe)$/u,
+        "",
+      ),
+    );
+    if (specVersionError) {
+      throw new Error(specVersionError);
+    }
+    return true;
   })
   .scriptName(
     basename(process.argv[1] || "tracebom").replace(/\.(?:[cm]?js|exe)$/u, ""),

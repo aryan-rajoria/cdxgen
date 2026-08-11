@@ -102,14 +102,14 @@ Current practical scope limits:
 `cdx-audit` ships with the main npm package.
 
 ```bash
-npm install -g @cyclonedx/cdxgen --omit=optional --ignore-scripts --min-release-age=2
+npm install -g @cdxgen/cdxgen --omit=optional --ignore-scripts --min-release-age=2
 cdx-audit --help
 ```
 
 Without a global install:
 
 ```bash
-corepack pnpm dlx --package=@cyclonedx/cdxgen cdx-audit --help
+corepack pnpm dlx --package=@cdxgen/cdxgen cdx-audit --help
 ```
 
 GitHub Releases also publish standalone binaries such as `cdx-audit-linux-amd64`, `cdx-audit-darwin-arm64`, and `cdx-audit-windows-amd64.exe` together with matching `.sha256` files.
@@ -125,7 +125,7 @@ steps:
     env:
       GH_TOKEN: ${{ github.token }}
     run: |
-      gh release download v12.3.1 \
+      gh release download v13.0.0 \
         --repo cdxgen/cdxgen \
         --pattern 'cdx-audit-linux-amd64' \
         --pattern 'cdx-audit-linux-amd64.sha256'

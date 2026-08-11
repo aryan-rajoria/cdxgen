@@ -86,7 +86,7 @@ Some ecosystems require the native toolchain for deep or transitive dependency r
 ### Example
 
 ```bash
-docker run --rm -v $(pwd):/app ghcr.io/cyclonedx/cdxgen:master -r /app -t java -o bom.json
+docker run --rm -v $(pwd):/app ghcr.io/cdxgen/cdxgen:master -r /app -t java -o bom.json
 ```
 
 For older Java or .NET targets, consult the container image selection guidance in [Advanced Usage](ADVANCED.md).

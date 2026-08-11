@@ -24,10 +24,10 @@ By the end, you will be able to:
 
 - Node.js ≥ 20
 - OpenSSL (for generating keys)
-- `@cyclonedx/cdxgen` globally installed (gives you `cdxgen`, `cdx-sign`,
+- `@cdxgen/cdxgen` globally installed (gives you `cdxgen`, `cdx-sign`,
   `cdx-verify`, and `cdx-validate`):
   ```shell
-  npm install -g @cyclonedx/cdxgen
+  npm install -g @cdxgen/cdxgen
   ```
 
 ## Step 1: Produce an SBOM

@@ -11,6 +11,19 @@
  *
  */
 /**
+ * Validate the `--spec-version` value against the v13 spec floor (1.6).
+ *
+ * Returns `null` when the value is an accepted generation target, or an
+ * actionable error string when it is rejected. The error message for
+ * sub-floor versions (1.4 / 1.5) explains that output downgrade still
+ * exists, so users are not left without a migration path.
+ *
+ * @param {number} specVersion  The parsed `--spec-version` value.
+ * @param {string} [commandName]  The invoked binary name for the message.
+ * @returns {string|null}  Error message, or `null` when valid.
+ */
+export declare function validateSpecVersion(specVersion: number, commandName?: string): string | null;
+/**
  * Check whether a value was explicitly provided by the user (i.e., is not
  * the yargs default). Yargs always populates default values, so we cannot
  * simply check for truthiness.

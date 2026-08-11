@@ -20,7 +20,7 @@ cdxgen --server
 Or use the container image.
 
 ```bash
-docker run --rm -v /tmp:/tmp -p 9090:9090 -v $(pwd):/app:rw -t ghcr.io/cyclonedx/cdxgen -r /app --server --server-host 0.0.0.0
+docker run --rm -v /tmp:/tmp -p 9090:9090 -v $(pwd):/app:rw -t ghcr.io/cdxgen/cdxgen -r /app --server --server-host 0.0.0.0
 ```
 
 Use curl or your favorite tool to pass arguments to the `/sbom` route.

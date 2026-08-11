@@ -8,11 +8,13 @@ on:
       - '.pnpmfile.cjs'
       - '.versions/node_*'
       - 'bin/**'
+      - 'contrib/**'
       - 'data/**'
       - 'index.cjs'
       - 'lib/**'
       - 'package.json'
       - 'pnpm-lock.yaml'
+      - 'test/repotests/**'
       - 'devenv*'
   push:
     branches:
@@ -26,19 +28,18 @@ on:
       - '.pnpmfile.cjs'
       - '.versions/node_*'
       - 'bin/**'
+      - 'contrib/**'
       - 'data/**'
       - 'index.cjs'
       - 'lib/**'
       - 'package.json'
       - 'pnpm-lock.yaml'
+      - 'test/repotests/**'
   workflow_dispatch:
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
   cancel-in-progress: true
-
-env:
-  NEXUS_URL: ${{ secrets.NEXUS_URL }}
 
 # https://docs.github.com/en/actions/writing-workflows/choosing-what-your-workflow-does/controlling-permissions-for-github_token
 permissions: {}
@@ -111,9 +112,6 @@ jobs:
         run: rm -rf /tmp/docker-images-* /tmp/atom-* /tmp/mvn-deps*
       - name: Setup pnpm
         uses: pnpm/action-setup@0ebf47130e4866e96fce0953f49152a61190b271  # v6.0.9
-      - name: Setup Nexus usage
-        if: github.repository == 'cdxgen/cdxgen' && (github.event_name != 'pull_request' || github.event.pull_request.head.repo.fork == false)
-        run: echo "registry=$NEXUS_URL" > .npmrc
       - name: pnpm install
         run: |
           pnpm install:frozen
@@ -122,8 +120,8 @@ jobs:
         if: github.ref == 'refs/heads/master'
         run: |
           node bin/cdxgen.js -t js -t php -t jar -t ruby -t github -o $(pwd)/reports/sbom-build.cdx.json --include-formulation --export-proto --proto-bin-file $(pwd)/reports/sbom-build.cdx.proto --exclude "**/test/**" $(pwd)
-          docker pull ghcr.io/cyclonedx/cdxgen:master
-          node bin/cdxgen.js -t docker -o $(pwd)/reports/sbom-container-js.cdx.json ghcr.io/cyclonedx/cdxgen:master
+          docker pull ghcr.io/cdxgen/cdxgen:master
+          node bin/cdxgen.js -t docker -o $(pwd)/reports/sbom-container-js.cdx.json ghcr.io/cdxgen/cdxgen:master
           depscan --src $(pwd) --bom-dir $(pwd)/reports --reports-dir $(pwd)/reports --reachability-analyzer SemanticReachability --explain
         env:
           COLUMNS: 140
@@ -144,6 +142,79 @@ jobs:
             reports/sbom-build.cdx.proto
       - name: Cleanup
         run: rm -rf /tmp/docker-images* /tmp/atom-* /tmp/mvn-deps*
+
+  golden-tests:
+    runs-on: 'ubuntu-latest'
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1  # v7.0.1
+        with:
+          persist-credentials: false
+      - name: Setup pnpm
+        uses: pnpm/action-setup@0ebf47130e4866e96fce0953f49152a61190b271  # v6.0.9
+      - name: Use Node.js
+        uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020  # v7.0.0
+        with:
+          node-version-file: .nvmrc
+          package-manager-cache: false
+      - name: pnpm install
+        run: pnpm install:frozen
+      - name: Run golden SBOM tests
+        run: pnpm run test:golden
+        env:
+          CI: true
+      # The default-vs-CDXGEN_RS_DISABLE=all comparison is the safety net for
+      # every Rust-backed step in v13, and it was not running anywhere in CI.
+      # It is useful even without the cdxrs binary present (it then compares the
+      # JS path with itself and still catches golden drift); the job below is the
+      # one that gives it teeth.
+      - name: Run CDXGEN_RS_DISABLE byte-identical tests
+        run: pnpm run test:rs-disable
+        env:
+          CI: true
+
+  # Re-runs the suites that can only exercise the Rust path when the cdxrs
+  # binary exists. CDXGEN_REQUIRE_CDXRS=1 turns a missing or too-old binary into
+  # a failure, so this job cannot go green by skipping everything it is here to
+  # check.
+  rust-fetch-tests:
+    runs-on: 'ubuntu-latest'
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1  # v7.0.1
+        with:
+          persist-credentials: false
+      - name: Setup pnpm
+        uses: pnpm/action-setup@0ebf47130e4866e96fce0953f49152a61190b271  # v6.0.9
+      - name: Use Node.js
+        uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020  # v7.0.0
+        with:
+          node-version-file: .nvmrc
+          package-manager-cache: false
+      - name: pnpm install
+        run: pnpm install:frozen
+      - name: Check the cdxrs binary from cdxgen-plugins-bin
+        run: |
+          node --input-type=module -e '
+          import { cdxrsAvailable, cdxrsBinaryPath } from "./lib/inventory/cdxrs.js";
+          const path = cdxrsBinaryPath();
+          console.log(`cdxrs: ${path}`);
+          for (const sub of ["info", "validate", "fetch"]) {
+            const { available, version } = cdxrsAvailable(sub);
+            console.log(`  ${sub}: available=${available} version=${version}`);
+            if (!available) process.exit(1);
+          }
+          '
+        shell: bash
+      - name: Unit tests with the Rust path enabled
+        run: pnpm test
+        env:
+          CI: true
+      - name: Golden and byte-identical tests with the Rust path enabled
+        run: |
+          pnpm run test:golden
+          pnpm run test:rs-disable
+        env:
+          CI: true
+          CDXGEN_REQUIRE_CDXRS: '1'
 
   deno-build:
     strategy:
@@ -194,7 +265,7 @@ jobs:
           package-manager-cache: false
       - uses: denoland/setup-deno@22d081ff2d3a40755e97629de92e3bcbfa7cf2ed  # v2.0.5
         with:
-          deno-version: 2.8.3
+          deno-version: 2.9.4
       - name: pnpm install, build and test
         run: |
           pnpm install:frozen

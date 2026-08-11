@@ -9,9 +9,10 @@ This guide is for contributors who want to teach cdxgen how to understand a new 
 ```text
 new ecosystem support
    |
-   +--> lib/helpers/utils.js
-   |      +--> aliases
-   |      +--> parser functions
+   +--> lib/core/env.js
+   |      +--> aliases (PROJECT_TYPE_ALIASES)
+   +--> lib/ecosystems/utils.js
+   |      +--> parser functions (re-exports)
    |
    +--> lib/cli/index.js
    |      +--> create<Language>Bom()
@@ -56,7 +57,7 @@ Start by answering these questions.
 | Does the ecosystem require a native tool or SDK?            | affects containers, CI, and secure-mode expectations  |
 | Does the output need custom purl behavior?                  | affects package identity and deduplication            |
 
-The first place to check is `lib/helpers/utils.js`, especially `PROJECT_TYPE_ALIASES`.
+The first place to check is `lib/core/env.js`, especially `PROJECT_TYPE_ALIASES` (re-exported from `lib/ecosystems/utils.js`).
 
 ## Working with an AI agent
 
@@ -64,7 +65,7 @@ If you want an AI agent to help with a new ecosystem contribution, start with [A
 
 ## Step 1: Define the user-facing type names
 
-Add the canonical type and its accepted aliases to `PROJECT_TYPE_ALIASES` in `lib/helpers/utils.js`.
+Add the canonical type and its accepted aliases to `PROJECT_TYPE_ALIASES` in `lib/core/env.js` (it is re-exported from `lib/ecosystems/utils.js`).
 
 ```js
 export const PROJECT_TYPE_ALIASES = {
@@ -83,7 +84,7 @@ If the package manager needs its own alias set, also update `PACKAGE_MANAGER_ALI
 
 ## Step 2: Decide where parsing logic belongs
 
-In cdxgen, most lightweight manifest and lockfile parsing lives in `lib/helpers/utils.js`. Add a new helper module only when the logic is large enough to deserve its own file or when it has a distinct responsibility.
+In cdxgen, most lightweight manifest and lockfile parsing lives in `lib/ecosystems/utils.js`. Add a new helper module only when the logic is large enough to deserve its own file or when it has a distinct responsibility.
 
 ### Parser decision diagram
 

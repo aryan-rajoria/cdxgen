@@ -1,0 +1,21 @@
+{
+  "description": "yarn classic v1 lockfile parse coverage. Lockfile-backed: pinned resolved graph with transitive deps (lru-cache, yallist). spec-1.6/1.7 variants cross-check the spec-version normalization against a third lockfile format (vs npm-legacy and pnpm-v9).",
+  "fixture": ".",
+  "scenarios": [
+    {
+      "name": "default",
+      "projectType": ["yarn"],
+      "options": {}
+    },
+    {
+      "name": "spec-1.6",
+      "projectType": ["yarn"],
+      "options": { "specVersion": "1.6" }
+    },
+    {
+      "name": "spec-1.7",
+      "projectType": ["yarn"],
+      "options": { "specVersion": "1.7" }
+    }
+  ]
+}

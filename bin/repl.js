@@ -9,7 +9,16 @@ import repl from "node:repl";
 import jsonata from "jsonata";
 
 import { createBom } from "../lib/cli/index.js";
-import { isSpdxJsonLd } from "../lib/helpers/bomUtils.js";
+import { readEnvironmentVariable } from "../lib/core/activity.js";
+import {
+  getTmpDir,
+  isDryRun,
+  safeExistsSync,
+  safeMkdirSync,
+  safeMkdtempSync,
+  safeWriteSync,
+} from "../lib/ecosystems/utils.js";
+import { isSpdxJsonLd } from "../lib/inventory/bomUtils.js";
 import {
   printAiBomDatasets,
   printAiBomInsights,
@@ -24,36 +33,28 @@ import {
   printSummary,
   printTable,
   printVulnerabilities,
-} from "../lib/helpers/display.js";
+} from "../lib/inventory/display.js";
 import {
   formatHbomHardwareClassSummary,
   getHbomSummary,
   isHbomLikeBom,
-} from "../lib/helpers/hbomAnalysis.js";
+} from "../lib/inventory/hbomAnalysis.js";
 import {
   getPropertyValue,
   getSourceDerivedCryptoComponents,
   getUnpackagedExecutableComponents,
   getUnpackagedSharedLibraryComponents,
-} from "../lib/helpers/inventoryStats.js";
+} from "../lib/inventory/inventoryStats.js";
 import {
   importProtobomModule,
   isProtoBomPath,
-} from "../lib/helpers/protobomLoader.js";
+} from "../lib/inventory/protobomLoader.js";
 import {
   getProvenanceComponents,
   getTrustedComponents,
-} from "../lib/helpers/provenanceUtils.js";
-import { toCycloneDxLikeBom } from "../lib/helpers/spdxUtils.js";
-import { table } from "../lib/helpers/table.js";
-import {
-  getTmpDir,
-  isDryRun,
-  safeExistsSync,
-  safeMkdirSync,
-  safeMkdtempSync,
-  safeWriteSync,
-} from "../lib/helpers/utils.js";
+} from "../lib/inventory/provenanceUtils.js";
+import { toCycloneDxLikeBom } from "../lib/inventory/spdxUtils.js";
+import { table } from "../lib/inventory/table.js";
 import { getBomWithOras } from "../lib/managers/oci.js";
 import { validateBom } from "../lib/validator/bomValidator.js";
 
@@ -80,7 +81,7 @@ const cdxArt = `
 
 console.log(cdxArt);
 
-if (process.env.CDXGEN_NODE_OPTIONS) {
+if (readEnvironmentVariable("CDXGEN_NODE_OPTIONS")) {
   process.env.NODE_OPTIONS = `${process.env.NODE_OPTIONS || ""} ${process.env.CDXGEN_NODE_OPTIONS}`;
 }
 
@@ -402,7 +403,10 @@ function getDiagnosticDisplayDetail(diagnostic) {
 
 let historyFile;
 const historyConfigDir = join(homedir(), ".config", ".cdxgen");
-if (!process.env.CDXGEN_REPL_HISTORY && !safeExistsSync(historyConfigDir)) {
+if (
+  !readEnvironmentVariable("CDXGEN_REPL_HISTORY") &&
+  !safeExistsSync(historyConfigDir)
+) {
   try {
     safeMkdirSync(historyConfigDir, { recursive: true });
     historyFile = join(historyConfigDir, ".repl_history");
@@ -528,7 +532,7 @@ if (process.argv.length > 2) {
 const cdxgenRepl = repl.start(options);
 if (historyFile) {
   cdxgenRepl.setupHistory(
-    process.env.CDXGEN_REPL_HISTORY || historyFile,
+    readEnvironmentVariable("CDXGEN_REPL_HISTORY") || historyFile,
     (err) => {
       if (err) {
         console.log(
@@ -1349,10 +1353,11 @@ cdxgenRepl.defineCommand("validate", {
   help: "validate the bom using jsonschema",
   action() {
     if (sbom) {
-      const result = validateBom(sbom);
-      if (result) {
-        console.log("BOM is valid!");
-      }
+      validateBom(sbom).then((result) => {
+        if (result) {
+          console.log("BOM is valid!");
+        }
+      });
     } else {
       console.log(
         "⚠ No BOM is loaded. Use .import command to import an existing BOM",

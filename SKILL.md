@@ -19,8 +19,8 @@
 | ------------- | -------------------------------------------------------------------------------------------------------- |
 | **Runtime**   | Node.js ≥ 20 (≥ 22.21 recommended for native proxy support)                                              |
 | **Java**      | ≥ 21 required for C/C++/Python/CBOM analysis. Fails silently or produces incomplete BOMs with Java 8/11. |
-| **Install**   | `npm i -g @cyclonedx/cdxgen` or `pnpm dlx @cyclonedx/cdxgen`                                             |
-| **Container** | `docker run --rm -v $(pwd):/app:rw -t ghcr.io/cyclonedx/cdxgen:master /app`                              |
+| **Install**   | `npm i -g @cdxgen/cdxgen` or `pnpm dlx @cdxgen/cdxgen`                                                   |
+| **Container** | `docker run --rm -v $(pwd):/app:rw -t ghcr.io/cdxgen/cdxgen:master /app`                              |
 
 Notes:
 

@@ -1,5 +1,5 @@
-export declare const SPDX_JSONLD_CONTEXT = "https://spdx.org/rdf/3.0.1/spdx-context.jsonld";
-export declare const SPDX_SPEC_VERSION = "3.0.1";
+import { SPDX_JSONLD_CONTEXT, SPDX_SPEC_VERSION } from "../../core/spdx.js";
+export { SPDX_JSONLD_CONTEXT, SPDX_SPEC_VERSION };
 /**
  * Convert a CycloneDX BOM JSON document into an SPDX 3.0.1 JSON-LD document.
  *

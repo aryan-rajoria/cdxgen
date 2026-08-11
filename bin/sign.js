@@ -6,16 +6,16 @@ import process from "node:process";
 import yargs from "yargs";
 import { hideBin } from "yargs/helpers";
 
-import { signBom } from "../lib/helpers/bomSigner.js";
-import {
-  getNonCycloneDxErrorMessage,
-  isCycloneDxBom,
-} from "../lib/helpers/bomUtils.js";
 import {
   readEnvironmentVariable,
   retrieveCdxgenVersion,
   safeExistsSync,
-} from "../lib/helpers/utils.js";
+} from "../lib/ecosystems/utils.js";
+import { signBom } from "../lib/helpers/bomSigner.js";
+import {
+  getNonCycloneDxErrorMessage,
+  isCycloneDxBom,
+} from "../lib/inventory/bomUtils.js";
 
 const _yargs = yargs(hideBin(process.argv));
 

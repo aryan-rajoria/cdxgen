@@ -22,60 +22,16 @@ import {
   applyAdvancedOptions as applyAdvancedOptionsImpl,
   buildOptionsFromArgs,
   isUserProvided,
+  validateSpecVersion,
 } from "../lib/cli/cliOptions.js";
 import { createBom, submitBom } from "../lib/cli/index.js";
-import { signBom, verifyBom } from "../lib/helpers/bomSigner.js";
+import { TRACE_MODE, thoughtEnd, thoughtLog } from "../lib/core/logger.js";
 import {
-  DEFAULT_CDX_SPEC_VERSION,
-  getSupportedCycloneDxComponentTypes,
-  isCycloneDxBom,
-  isCycloneDxComponentTypeEnabled,
-  normalizeCycloneDxComponentTypeFilter,
-  toCycloneDxSpecVersionString,
-} from "../lib/helpers/bomUtils.js";
-import {
-  displaySelfThreatModel,
-  printActivitySummary,
-  printCallStack,
-  printDependencyTree,
-  printEnvironmentAuditFindings,
-  printFormulation,
-  printOccurrences,
-  printReachables,
-  printServices,
-  printSponsorBanner,
-  printSummary,
-  printTable,
-} from "../lib/helpers/display.js";
-import {
-  createOutputPlan,
-  getOutputDirectory,
-} from "../lib/helpers/exportUtils.js";
-import {
-  ensureNoMixedHbomProjectTypes,
-  ensureSupportedHbomSpecVersion,
-  hasHbomProjectType,
-  isHbomOnlyProjectTypes,
-} from "../lib/helpers/hbom.js";
-import { TRACE_MODE, thoughtEnd, thoughtLog } from "../lib/helpers/logger.js";
-import { resolvePluginBinary } from "../lib/helpers/plugins.js";
-import { importProtobomModule } from "../lib/helpers/protobomLoader.js";
-import { normalizeHuggingFaceReference } from "../lib/helpers/remote/huggingface.js";
-import {
-  cleanupSourceDir,
-  findGitRefForPurlVersion,
-  gitClone,
-  isAllowedPath,
-  isAllowedWinPath,
-  maybePurlSource,
-  maybeRemotePath,
-  PURL_REGISTRY_LOOKUP_WARNING,
-  resolveGitUrlFromPurl,
-  resolvePurlSourceDirectory,
-  sanitizeRemoteUrlForLogs,
-  validateAndRejectGitSource,
-  validatePurlSource,
-} from "../lib/helpers/source.js";
+  PROJECT_CONFIG_FILENAMES,
+  sanitizeProjectConfig,
+} from "../lib/core/projectConfig.js";
+import { fetchPomXmlAsJson } from "../lib/ecosystems/ecosystems.js";
+import { normalizeHuggingFaceReference } from "../lib/ecosystems/remote/huggingface.js";
 import {
   commandsExecuted,
   DEBUG_MODE,
@@ -101,23 +57,71 @@ import {
   setActivityContext,
   setDryRunMode,
   shouldRunPredictiveBomAudit,
-  toCamel,
-} from "../lib/helpers/utils.js";
+} from "../lib/ecosystems/utils.js";
+import { signBom, verifyBom } from "../lib/helpers/bomSigner.js";
+import {
+  createOutputPlan,
+  getOutputDirectory,
+} from "../lib/helpers/exportUtils.js";
+import {
+  DEFAULT_CDX_SPEC_VERSION,
+  getSupportedCycloneDxComponentTypes,
+  isCycloneDxBom,
+  isCycloneDxComponentTypeEnabled,
+  normalizeCycloneDxComponentTypeFilter,
+  toCycloneDxSpecVersionString,
+} from "../lib/inventory/bomUtils.js";
+import {
+  displaySelfThreatModel,
+  printActivitySummary,
+  printCallStack,
+  printDependencyTree,
+  printEnvironmentAuditFindings,
+  printFormulation,
+  printOccurrences,
+  printReachables,
+  printServices,
+  printSponsorBanner,
+  printSummary,
+  printTable,
+} from "../lib/inventory/display.js";
+import {
+  ensureNoMixedHbomProjectTypes,
+  ensureSupportedHbomSpecVersion,
+  hasHbomProjectType,
+  isHbomOnlyProjectTypes,
+} from "../lib/inventory/hbom.js";
+import { resolvePluginBinary } from "../lib/inventory/plugins.js";
+import { importProtobomModule } from "../lib/inventory/protobomLoader.js";
+import {
+  cleanupSourceDir,
+  findGitRefForPurlVersion,
+  gitClone,
+  isAllowedPath,
+  isAllowedWinPath,
+  maybePurlSource,
+  maybeRemotePath,
+  PURL_REGISTRY_LOOKUP_WARNING,
+  resolveGitUrlFromPurl,
+  resolvePurlSourceDirectory,
+  sanitizeRemoteUrlForLogs,
+  validateAndRejectGitSource,
+  validatePurlSource,
+} from "../lib/inventory/source.js";
+import { executeOsQuery } from "../lib/managers/binary.js";
+import { getBomWithOras } from "../lib/managers/oci.js";
 import { postProcess } from "../lib/stages/postgen/postgen.js";
 import { convertCycloneDxToSpdx } from "../lib/stages/postgen/spdxConverter.js";
 import { auditEnvironment } from "../lib/stages/pregen/envAudit.js";
 import { prepareEnv } from "../lib/stages/pregen/pregen.js";
-import { validateBom, validateSpdx } from "../lib/validator/bomValidator.js";
+import { validateSpdx } from "../lib/validator/bomValidator.js";
+import { validateBomWithRustFallback } from "../lib/validator/index.js";
 
-// Support for config files
-const configPaths = [
-  ".cdxgenrc",
-  ".cdxgen.json",
-  ".cdxgen.yml",
-  ".cdxgen.yaml",
-];
+// Support for config files. The config file lives in the directory under
+// analysis, so it carries that directory's trust level; see
+// sanitizeProjectConfig for the boundary this applies.
 let config = {};
-for (const configPattern of configPaths) {
+for (const configPattern of PROJECT_CONFIG_FILENAMES) {
   const configPath = join(process.cwd(), configPattern);
   if (!safeExistsSync(configPath)) {
     continue;
@@ -131,14 +135,17 @@ for (const configPattern of configPaths) {
     if (isSecureMode || DEBUG_MODE) {
       console.log(`Config file '${configPath}' loaded successfully.`);
     }
-    const sensitiveOptions = ["server-url", "include-formulation"];
-    for (const opt of sensitiveOptions) {
-      if (config[opt] !== undefined || config[toCamel(opt)] !== undefined) {
-        const foundKey = config[opt] !== undefined ? opt : toCamel(opt);
-        console.warn(
-          `SECURE MODE: Config file sets '${foundKey}'. Verify this is intentional.`,
-        );
-      }
+    const sanitized = sanitizeProjectConfig(config, dirname(configPath));
+    config = sanitized.config;
+    for (const entry of sanitized.rejected) {
+      console.warn(
+        `\x1b[1;35mConfig file '${configPath}' sets '${entry}', which points outside the project directory. Ignoring it. Pass the option on the command line if this is intentional.\x1b[0m`,
+      );
+    }
+    for (const foundKey of sanitized.announced) {
+      console.warn(
+        `Config file '${configPath}' sets '${foundKey}'. Verify this is intentional.`,
+      );
     }
   } catch (_e) {
     console.log("Invalid config file", configPath);
@@ -146,6 +153,8 @@ for (const configPattern of configPaths) {
 }
 
 const _yargs = yargs(hideBin(process.argv));
+/** Actions accepted by the `cdxgen cache` subcommand. */
+const CACHE_ACTIONS = ["info", "clear"];
 const invokedCommandName = basename(process.argv[1] || "cdxgen").replace(
   /\.(?:[cm]?js|exe)$/u,
   "",
@@ -153,6 +162,26 @@ const invokedCommandName = basename(process.argv[1] || "cdxgen").replace(
 const defaultComponentTypeChoices = getSupportedCycloneDxComponentTypes(
   DEFAULT_CDX_SPEC_VERSION,
 );
+
+// Intercept --version --verbose BEFORE yargs' built-in --version handler exits.
+if (
+  (process.argv.includes("--version") || process.argv.includes("-v")) &&
+  process.argv.includes("--verbose")
+) {
+  console.log(`cdxgen ${retrieveCdxgenVersion()}`);
+  try {
+    const { cdxrsAvailable } = await import("../lib/inventory/cdxrs.js");
+    const rs = cdxrsAvailable("info");
+    if (rs.available) {
+      console.log(`cdxrs ${rs.version} (available)`);
+    } else {
+      console.log(`cdxrs: not available (${rs.reason})`);
+    }
+  } catch {
+    console.log("cdxrs: bridge not loaded");
+  }
+  process.exit(0);
+}
 
 const args = _yargs
   .env("CDXGEN")
@@ -220,6 +249,58 @@ const args = _yargs
   .option("api-key", {
     description: "Dependency track api key",
     type: "string",
+  })
+  .option("tea-fetch", {
+    description:
+      "Fetch upstream SBOMs for a Transparency Exchange Identifier (TEI, e.g. urn:tei:uuid:products.example.com:<uuid>) and merge them into the generated BOM.",
+    type: "string",
+  })
+  .option("tea-publish", {
+    description:
+      "Publish the generated BOM as a TEA Artifact in a Collection at the given TEA server URL (draft publisher API).",
+    type: "string",
+  })
+  .option("tea-leaf-identifier", {
+    description:
+      "UUID of the TEA leaf/release that the published Collection belongs to (required with --tea-publish).",
+    type: "string",
+  })
+  .option("tea-collection-name", {
+    description:
+      "Artifact name used with --tea-publish. Defaults to '<project> sbom'.",
+    type: "string",
+  })
+  .option("tea-reason", {
+    description:
+      "Collection update reason with --tea-publish: INITIAL_RELEASE, ARTIFACT_UPDATED, ARTIFACT_ADDED, ARTIFACT_REMOVED, or VEX_UPDATED.",
+    type: "string",
+    choices: [
+      "INITIAL_RELEASE",
+      "VEX_UPDATED",
+      "ARTIFACT_UPDATED",
+      "ARTIFACT_REMOVED",
+      "ARTIFACT_ADDED",
+    ],
+    default: "INITIAL_RELEASE",
+  })
+  .option("tea-author-name", {
+    description: "Author name recorded in the published TEA Collection.",
+    type: "string",
+  })
+  .option("tea-author-email", {
+    description: "Author email recorded in the published TEA Collection.",
+    type: "string",
+  })
+  .option("tea-artifact-url", {
+    description:
+      "Publicly reachable URL where the published BOM artifact can be downloaded. Defaults to the local output path, which a TEA server will usually not be able to fetch, so supply this whenever the BOM is hosted somewhere.",
+    type: "string",
+  })
+  .option("tea-token", {
+    description:
+      "Bearer token for TEA authentication. Sent only as an Authorization header and never logged. May also be supplied via the TEA_TOKEN environment variable.",
+    type: "string",
+    hidden: true,
   })
   .option("project-group", {
     description: "Dependency track project group",
@@ -359,10 +440,10 @@ const args = _yargs
     hidden: true,
   })
   .option("spec-version", {
-    description: "CycloneDX Specification version to use. Defaults to 1.7",
+    description:
+      "CycloneDX Specification version to use. Defaults to 1.7. Accepted generation targets: 1.6, 1.7, 2.0. (1.4 and 1.5 are rejected as generation targets; downgrade the serialized output if a legacy document is required.)",
     default: DEFAULT_CDX_SPEC_VERSION,
     type: "number",
-    choices: [1.4, 1.5, 1.6, 1.7, 2.0],
   })
   .option("filter", {
     description:
@@ -458,6 +539,13 @@ const args = _yargs
     default: false,
     description: "Include crypto libraries as components.",
   })
+  .option("experimental-mcp-pinning", {
+    type: "boolean",
+    default: false,
+    hidden: true,
+    description:
+      "Experimental: record an explicit pinning state (cdx:mcp:pinning) and composition (cdx:mcp:composition) for MCP server components. Off by default; the emitted property names are subject to change until the CycloneDX agent-BOM proposal is ratified.",
+  })
   .option("license-policy", {
     type: "string",
     description: "Path to a license compliance policy YAML file.",
@@ -529,9 +617,8 @@ const args = _yargs
   })
   .option("tlp-classification", {
     description:
-      "Traffic Light Protocol (TLP) is a classification system for identifying the potential risk associated with an artefact, including whether it is subject to certain types of legal, financial, or technical threats. Refer to [https://www.first.org/tlp/](https://www.first.org/tlp/) for further information.",
+      "Traffic Light Protocol (TLP) classification recorded under metadata.distributionConstraints.tlp (CycloneDX 1.7+). One of: CLEAR, GREEN, AMBER, AMBER_AND_STRICT, RED. See https://www.first.org/tlp/ for guidance.",
     choices: ["CLEAR", "GREEN", "AMBER", "AMBER_AND_STRICT", "RED"],
-    hidden: true,
   })
   .option("env-audit", {
     type: "boolean",
@@ -618,6 +705,16 @@ const args = _yargs
   .array("technique")
   .array("componentType")
   .check((argv) => {
+    const specVersionError = validateSpecVersion(
+      argv.specVersion,
+      invokedCommandName,
+    );
+    if (specVersionError) {
+      throw new Error(specVersionError);
+    }
+    return true;
+  })
+  .check((argv) => {
     const requestedComponentTypes = normalizeCycloneDxComponentTypeFilter(
       argv.componentType,
     );
@@ -663,7 +760,9 @@ const args = _yargs
     ],
     ["$0 --server", "Run cdxgen as a server"],
   ])
-  .epilogue("for documentation, visit https://cdxgen.github.io/cdxgen")
+  .epilogue(
+    `Subcommands:\n  cache <${CACHE_ACTIONS.join("|")}>  Inspect or purge the registry metadata cache.\n\nfor documentation, visit https://cdxgen.github.io/cdxgen`,
+  )
   .config(config)
   .scriptName(invokedCommandName || "cdxgen")
   .version(retrieveCdxgenVersion())
@@ -674,10 +773,66 @@ const args = _yargs
     type: "boolean",
     description: "Show help",
   })
+  .option("verbose", {
+    type: "boolean",
+    default: false,
+    description: "Show extended version and diagnostic information.",
+  })
+  .option("rust", {
+    type: "boolean",
+    default: true,
+    description:
+      "Use Rust-native (cdxrs) acceleration where available. Pass --no-rust to force the JS path.",
+  })
+  .option("cache", {
+    type: "boolean",
+    default: true,
+    description:
+      "Use the on-disk metadata cache for registry lookups. Pass --no-cache to bypass it for this run.",
+  })
+  .option("cache-ttl", {
+    type: "number",
+    description:
+      "Override the metadata cache TTL in seconds. 0 means never expire. Default: 86400 (24h).",
+  })
   .wrap(Math.min(120, yargs().terminalWidth())).argv;
 
-if (process.env?.CDXGEN_NODE_OPTIONS) {
+if (readEnvironmentVariable("CDXGEN_NODE_OPTIONS")) {
   process.env.NODE_OPTIONS = `${process.env.NODE_OPTIONS || ""} ${process.env.CDXGEN_NODE_OPTIONS}`;
+}
+
+// `--no-rust` is a front-end for CDXGEN_RS_DISABLE=all: the bridge reads only
+// the env var, so every consumer honours the flag without threading an option
+// through each call site. Declared as `rust` (default true) rather than
+// `no-rust` so yargs' own boolean negation produces the flag.
+if (args.rust === false) {
+  process.env.CDXGEN_RS_DISABLE = "all";
+}
+
+// `--no-cache` and `--cache-ttl` are front-ends for env vars that the fetch
+// bridge reads when constructing cdxrs arguments. Declared as `cache` (default
+// true) so yargs' boolean negation produces `--no-cache`.
+if (args.cache === false) {
+  process.env.CDXGEN_NO_CACHE = "true";
+}
+if (args.cacheTtl != null && Number.isFinite(args.cacheTtl)) {
+  process.env.CDXGEN_CACHE_TTL = String(args.cacheTtl);
+}
+
+// The `cache` subcommand takes its action as a positional word rather than a
+// flag, so an unrecognised action can be rejected instead of silently meaning
+// `info`. A bare `cdxgen cache` is left alone: it is a path, so scanning a
+// directory named `cache` keeps working.
+if (args._[0] === "cache" && args._.length > 1) {
+  const action = String(args._[1]);
+  if (!CACHE_ACTIONS.includes(action)) {
+    console.error(
+      `Unknown cache action "${action}". Expected one of: ${CACHE_ACTIONS.join(", ")}.`,
+    );
+    process.exit(1);
+  }
+  const { runCacheCommand } = await import("../lib/inventory/cacheCommands.js");
+  process.exit(await runCacheCommand(action));
 }
 
 if (args.help) {
@@ -692,7 +847,7 @@ if (args.bomAuditIncludeTrusted && args.bomAuditOnlyTrusted) {
   process.exit(1);
 }
 
-if (args.tui && !process.env.CI) {
+if (args.tui && !readEnvironmentVariable("CI")) {
   const cdxuiPath = resolvePluginBinary("cdxui");
   if (cdxuiPath) {
     const cdxgenArgs = process.argv.slice(2).filter((a) => a !== "--tui");
@@ -700,7 +855,8 @@ if (args.tui && !process.env.CI) {
       stdio: "inherit",
       env: {
         ...process.env,
-        CDXGEN_CMD: process.env?.CDXGEN_CMD || process.argv[1] || "cdxgen",
+        CDXGEN_CMD:
+          readEnvironmentVariable("CDXGEN_CMD") || process.argv[1] || "cdxgen",
         CDXGEN_ARGS: cdxgenArgs.join(" "),
       },
     });
@@ -712,14 +868,17 @@ if (args.tui && !process.env.CI) {
 // https://nodejs.org/en/learn/http/enterprise-network-configuration
 // https://docs.deno.com/runtime/reference/env_variables/#special-environment-variables
 // https://bun.com/docs/guides/http/proxy#environment-variables
-if (process.env.HTTP_PROXY || process.env.HTTPS_PROXY) {
+if (
+  readEnvironmentVariable("HTTP_PROXY") ||
+  readEnvironmentVariable("HTTPS_PROXY")
+) {
   if (isNode && !isBun && !isDeno) {
     process.env.NODE_USE_ENV_PROXY = "1";
     try {
       const proxyEnv = {
-        HTTP_PROXY: process.env.HTTP_PROXY,
-        HTTPS_PROXY: process.env.HTTPS_PROXY,
-        NO_PROXY: process.env.NO_PROXY,
+        HTTP_PROXY: readEnvironmentVariable("HTTP_PROXY"),
+        HTTPS_PROXY: readEnvironmentVariable("HTTPS_PROXY"),
+        NO_PROXY: readEnvironmentVariable("NO_PROXY"),
       };
       http.globalAgent = new http.Agent({ proxyEnv });
       https.globalAgent = new https.Agent({ proxyEnv });
@@ -734,7 +893,7 @@ if (process.env.HTTP_PROXY || process.env.HTTPS_PROXY) {
   }
 }
 
-if (!process.env.NODE_USE_SYSTEM_CA) {
+if (!readEnvironmentVariable("NODE_USE_SYSTEM_CA")) {
   process.env.NODE_USE_SYSTEM_CA = "1";
 }
 
@@ -777,7 +936,7 @@ if (invokedCommandName.includes("aibom") && !args.type) {
 
 /**
  * Command line options — built via the extracted buildOptionsFromArgs
- * function in lib/helpers/cliOptions.js. That function handles:
+ * function in lib/cli/cliOptions.js. That function handles:
  * - Command-name alias expansion (obom, spdxgen, aibom)
  * - Field renames (type→projectType, recurse→multiProject, etc.)
  * - Derived values (deep, noBabel, output path)
@@ -847,7 +1006,7 @@ if (["cbom", "saasbom"].includes(invokedCommandName)) {
     thoughtLog(
       "Ok, the user wants to generate a Software as a Service Bill-of-Materials (SaaSBOM). I should carefully collect the services, endpoints, and data flows.",
     );
-    if (process.env?.CDXGEN_IN_CONTAINER !== "true") {
+    if (readEnvironmentVariable("CDXGEN_IN_CONTAINER") !== "true") {
       thoughtLog(
         "Wait, I'm not running in a container. This means the chances of successfully collecting this inventory are quite low. Perhaps this is an advanced user who has set up atom and atom-tools already 🤔?",
       );
@@ -959,7 +1118,7 @@ if (options.envAudit) {
 }
 
 /**
- * Check for node >= 20 permissions
+ * Check for node permission model
  *
  * @param {string} filePath File path
  * @param {Object} options CLI Options
@@ -970,8 +1129,8 @@ const checkPermissions = (filePath, options) => {
   if (
     process.getuid &&
     process.getuid() === 0 &&
-    process.env?.CDXGEN_IN_CONTAINER !== "true" &&
-    process.env?.RUNNING_IN_SAFER_EXEC_SANDBOX !== "true"
+    readEnvironmentVariable("CDXGEN_IN_CONTAINER") !== "true" &&
+    readEnvironmentVariable("RUNNING_IN_SAFER_EXEC_SANDBOX") !== "true"
   ) {
     console.log(
       "\x1b[1;35mSECURE MODE: DO NOT run cdxgen with root privileges.\x1b[0m",
@@ -994,9 +1153,9 @@ const checkPermissions = (filePath, options) => {
       console.log(
         `${isWin ? "$env:" : "export "}NODE_OPTIONS='${nodeOptionsVal}'`,
       );
-      if (process.env?.CDXGEN_IN_CONTAINER !== "true") {
+      if (readEnvironmentVariable("CDXGEN_IN_CONTAINER") !== "true") {
         console.log(
-          "TIP: Run cdxgen using the secure container image 'ghcr.io/cyclonedx/cdxgen-secure' for best experience.",
+          "TIP: Run cdxgen using the secure container image 'ghcr.io/cdxgen/cdxgen-secure' for best experience.",
         );
       }
     }
@@ -1004,7 +1163,7 @@ const checkPermissions = (filePath, options) => {
   }
   // Secure mode checks
   if (isSecureMode) {
-    if (process.env?.GITHUB_TOKEN) {
+    if (readEnvironmentVariable("GITHUB_TOKEN")) {
       console.log(
         "Ensure that the GitHub token provided to cdxgen is restricted to read-only scopes.",
       );
@@ -1331,7 +1490,9 @@ const writeCycloneDxOutput = (jsonFile, bomJson, options) => {
       console.error(purlValidationError.error, purlValidationError.details);
       process.exit(1);
     }
-    purlResolution = await resolveGitUrlFromPurl(sourcePath);
+    purlResolution = await resolveGitUrlFromPurl(sourcePath, {
+      fetchPomXmlAsJson,
+    });
     if (!purlResolution?.repoUrl) {
       console.error(
         "Unable to resolve the provided package URL to a repository URL.",
@@ -1347,8 +1508,8 @@ const writeCycloneDxOutput = (jsonFile, bomJson, options) => {
     maybeRemotePath(sourcePath) &&
     !directHuggingFaceSource &&
     isSecureMode &&
-    !process.env.CDXGEN_GIT_ALLOWED_HOSTS &&
-    !process.env.CDXGEN_SERVER_ALLOWED_HOSTS
+    !readEnvironmentVariable("CDXGEN_GIT_ALLOWED_HOSTS") &&
+    !readEnvironmentVariable("CDXGEN_SERVER_ALLOWED_HOSTS")
   ) {
     console.error(
       "SECURE MODE: Configure CDXGEN_GIT_ALLOWED_HOSTS (or CDXGEN_SERVER_ALLOWED_HOSTS) before using git URL or purl sources.",
@@ -1436,7 +1597,20 @@ const writeCycloneDxOutput = (jsonFile, bomJson, options) => {
     prepareEnv(srcDir, options);
   }
   thoughtLog("Getting ready to generate the BOM ⚡️.");
-  const originalFetchPackageMetadata = process.env.CDXGEN_FETCH_PKG_METADATA;
+  if (DEBUG_MODE) {
+    try {
+      const { cdxrsAvailable } = await import("../lib/inventory/cdxrs.js");
+      const rs = cdxrsAvailable("info");
+      console.log(
+        `cdxrs: ${rs.available ? `available (${rs.version})` : `not available (${rs.reason}) — using JS path`}`,
+      );
+    } catch {
+      console.log("cdxrs: bridge not loaded — using JS path");
+    }
+  }
+  const originalFetchPackageMetadata = readEnvironmentVariable(
+    "CDXGEN_FETCH_PKG_METADATA",
+  );
   const shouldRunPredictiveAudit = shouldRunPredictiveBomAudit(
     options,
     process.argv[1],
@@ -1474,8 +1648,14 @@ const writeCycloneDxOutput = (jsonFile, bomJson, options) => {
     ensureAiProvenanceProperties(bomNSData.bomJson, options);
     await ensureAiOversightProperties(bomNSData.bomJson, options);
   }
+  // TEA upstream SBOM fetch runs BEFORE post-processing so the "upstream wins"
+  // merge and the provenance citations flow through the normal pipeline.
+  if (options.teaFetch) {
+    const { applyTeaFetch } = await import("../lib/ecosystems/tea.js");
+    bomNSData = await applyTeaFetch(bomNSData, options);
+  }
   // Add extra metadata and annotations with post processing
-  bomNSData = postProcess(bomNSData, options, srcDir);
+  bomNSData = postProcess(bomNSData, { ...options, executeOsQuery }, srcDir);
   setActivityContext({
     projectType: Array.isArray(options.projectType)
       ? options.projectType.join(",")
@@ -1500,7 +1680,10 @@ const writeCycloneDxOutput = (jsonFile, bomJson, options) => {
       hasCriticalFindings,
     } = await import("../lib/stages/postgen/auditBom.js");
     thoughtLog("Let's run security audit...");
-    const postAuditFindings = await auditBom(bomNSData.bomJson, options);
+    const postAuditFindings = await auditBom(bomNSData.bomJson, {
+      ...options,
+      getBomWithOras,
+    });
     if (postAuditFindings.length) {
       formatConsoleOutput(postAuditFindings);
     } else if (DEBUG_MODE) {
@@ -1731,14 +1914,35 @@ const writeCycloneDxOutput = (jsonFile, bomJson, options) => {
   // Perform automatic validation
   if (options.validate && bomNSData?.bomJson) {
     thoughtLog("Wait, let's check the generated BOM file for any issues.");
-    if (!validateBom(bomNSData.bomJson)) {
+    const validation = await validateBomWithRustFallback(bomNSData.bomJson);
+    const validationTarget = `cyclonedx-${bomNSData.bomJson.specVersion || options.specVersion}`;
+    if (!validation.valid) {
+      recordActivity({
+        kind: "validate",
+        reason: `The BOM failed schema validation using the ${validation.source} validator.`,
+        status: "failed",
+        target: validationTarget,
+      });
       if (cleanup) {
         cleanupSourceDir(srcDir);
       }
       process.exit(1);
     } else {
+      recordActivity({
+        kind: "validate",
+        reason: `Validated the BOM against the CycloneDX schema using the ${validation.source} validator.`,
+        status: "completed",
+        target: validationTarget,
+      });
       thoughtLog("✅ BOM file looks valid.");
     }
+  } else if (bomNSData?.bomJson) {
+    recordActivity({
+      kind: "validate",
+      reason: "Validation is disabled with --no-validate.",
+      status: "blocked",
+      target: `cyclonedx-${bomNSData.bomJson.specVersion || options.specVersion}`,
+    });
   }
   if (
     outputPlan.formats.has("spdx") &&
@@ -1863,6 +2067,73 @@ const writeCycloneDxOutput = (jsonFile, bomJson, options) => {
       }
     }
   }
+  // TEA publish (draft publisher API). The CycloneDX BOM is already written to
+  // disk above, so a publish failure never costs the user their SBOM: the
+  // failure is reported and the process exits with a distinct status (3).
+  if (options.teaPublish && bomNSData?.bomJson) {
+    if (!options.teaLeafIdentifier) {
+      console.error(
+        "cdxgen: --tea-publish requires --tea-leaf-identifier (UUID of the TEA leaf/release).",
+      );
+      process.exit(3);
+    }
+    if (isDryRun) {
+      recordActivity({
+        kind: "submit",
+        reason: "Dry run mode skips TEA collection publishing.",
+        status: "blocked",
+        target: options.teaPublish,
+      });
+    } else {
+      try {
+        const { buildPublishCollectionPayload, publishTeaCollection } =
+          await import("../lib/ecosystems/tea.js");
+        const parentComponent = bomNSData.bomJson.metadata?.component || {};
+        const projectName =
+          options.teaCollectionName ||
+          parentComponent.name ||
+          basename(resolve(srcDir));
+        // The checksum has to describe the bytes a consumer will download, so
+        // it is taken from the file that was written rather than from a fresh
+        // re-serialisation of the in-memory BOM.
+        const bomFile = outputPlan.outputs.cyclonedx;
+        const artifactContent = bomFile
+          ? fs.readFileSync(bomFile, "utf-8")
+          : JSON.stringify(bomNSData.bomJson);
+        const payload = buildPublishCollectionPayload({
+          leafIdentifier: options.teaLeafIdentifier,
+          productName: projectName,
+          // The product's own version, not bomJson.version, which counts
+          // revisions of the document.
+          productVersion: parentComponent.version || "unknown",
+          authorName: options.teaAuthorName || "cdxgen",
+          authorEmail: options.teaAuthorEmail,
+          reasonType: options.teaReason,
+          artifactName: `${projectName} sbom`,
+          artifactUrl: options.teaArtifactUrl || bomFile || "bom.json",
+          artifactContent,
+        });
+        const result = await publishTeaCollection(
+          options.teaPublish,
+          payload,
+          options,
+        );
+        recordActivity({
+          kind: "submit",
+          status: "completed",
+          target: options.teaPublish,
+        });
+        console.log(
+          `cdxgen: published TEA collection to ${options.teaPublish} (collection version ${result.body?.version ?? "assigned by server"}).`,
+        );
+      } catch (err) {
+        console.error(
+          `cdxgen: failed to publish TEA collection to ${options.teaPublish}: ${err?.message || err}. The local BOM was written regardless.`,
+        );
+        process.exit(3);
+      }
+    }
+  }
   // Protobuf serialization
   if (options.exportProto) {
     if (isDryRun) {
@@ -1911,8 +2182,8 @@ const writeCycloneDxOutput = (jsonFile, bomJson, options) => {
   }
   if (
     (DEBUG_MODE || TRACE_MODE) &&
-    (!process.env?.CDXGEN_ALLOWED_HOSTS ||
-      !process.env?.CDXGEN_ALLOWED_COMMANDS)
+    (!readEnvironmentVariable("CDXGEN_ALLOWED_HOSTS") ||
+      !readEnvironmentVariable("CDXGEN_ALLOWED_COMMANDS"))
   ) {
     let allowListSuggestion = "";
     const envPrefix = isWin ? "set $env:" : "export ";

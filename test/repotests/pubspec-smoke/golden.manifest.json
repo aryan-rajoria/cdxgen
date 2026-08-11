@@ -1,0 +1,10 @@
+{
+  "description": "Dart/Flutter pubspec.lock parse coverage. Lockfile-backed: pinned packages.",
+  "scenarios": [
+    {
+      "name": "default",
+      "projectType": ["pub"],
+      "options": {}
+    }
+  ]
+}

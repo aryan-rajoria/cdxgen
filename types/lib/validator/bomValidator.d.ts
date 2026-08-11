@@ -3,9 +3,9 @@
  *
  * @param {object} bomJson content
  *
- * @returns {Boolean} true if the BOM is valid. false otherwise.
+ * @returns {Promise<Boolean>} true if the BOM is valid. false otherwise.
  */
-export declare const validateBom: (bomJson: object) => boolean;
+export declare const validateBom: (bomJson: object) => Promise<boolean>;
 /**
  * Validate the generated SPDX export.
  *

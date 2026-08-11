@@ -1,0 +1,10 @@
+{
+  "description": "Elixir mix.lock parse coverage. Lockfile-backed: pinned hex packages with hashes.",
+  "scenarios": [
+    {
+      "name": "default",
+      "projectType": ["mix"],
+      "options": {}
+    }
+  ]
+}

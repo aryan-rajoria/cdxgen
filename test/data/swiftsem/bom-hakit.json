@@ -28,9 +28,9 @@
       "purl": "pkg:swift/HAKit@unspecified",
       "bom-ref": "pkg:swift/HAKit@unspecified",
       "properties": [
-        { "name": "SrcPath", "value": "/Volumes/Work/sandbox/HAKit" },
+        { "name": "internal:SrcPath", "value": "/Volumes/Work/sandbox/HAKit" },
         {
-          "name": "SrcFile",
+          "name": "internal:SrcFile",
           "value": "/Volumes/Work/sandbox/HAKit/Package.swift"
         }
       ],
@@ -72,7 +72,7 @@
       },
       "properties": [
         {
-          "name": "SrcFile",
+          "name": "internal:SrcFile",
           "value": "/Volumes/Work/sandbox/HAKit/Package.resolved"
         }
       ]
@@ -104,7 +104,7 @@
       },
       "properties": [
         {
-          "name": "SrcFile",
+          "name": "internal:SrcFile",
           "value": "/Volumes/Work/sandbox/HAKit/Package.resolved"
         }
       ]

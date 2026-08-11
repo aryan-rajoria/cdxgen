@@ -120,6 +120,14 @@ This generates **CycloneDX 1.7** compliant `cryptographic-asset` components in t
 tracebom --cmd "node app.js" --trace-crypto --cbom-output cbom.json -o bom.json
 ```
 
+Traced assets use the same 1.7 shape as statically detected ones: an
+`assetType`, an `oid` where one is known, and an `algorithmProperties` block
+carrying `algorithmFamily` and — for elliptic-curve assets — `ellipticCurve`.
+Because a runtime trace often observes one algorithm used several ways, read the
+repeated `cdx:crypto:primitive` properties rather than the single structured
+`primitive` field when you need every observed usage. The field reference is in
+[ADVANCED.md](ADVANCED.md#the-shape-of-a-cryptographic-asset-component).
+
 ### Additional sandbox controls
 
 tracebom exposes many of `@cdxgen/safer-exec`'s sandbox controls as CLI flags for advanced use cases:

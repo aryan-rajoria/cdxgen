@@ -25,7 +25,6 @@ changelog:
         - angular
         - vue
         - esbuild
-        - node20
         - jsr
     - title: "Python 🐍"
       labels:

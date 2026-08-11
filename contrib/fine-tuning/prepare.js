@@ -2,7 +2,8 @@ import { mkdirSync, readFileSync, writeFileSync } from "node:fs";
 import { join } from "node:path";
 import process from "node:process";
 
-import { dirNameStr, getAllFiles } from "../../lib/helpers/utils.js";
+import { getAllFiles } from "../../lib/core/fs.js";
+import { dirNameStr } from "../../lib/core/paths.js";
 
 const jsonlFiles = getAllFiles(dirNameStr, "**/*.jsonl", {
   exclude: ["**/{train, valid}.jsonl"],

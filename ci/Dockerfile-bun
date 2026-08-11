@@ -4,12 +4,12 @@ LABEL maintainer="cyclonedx" \
       org.opencontainers.image.authors="Prabhu Subramanian <prabhu@appthreat.com>" \
       org.opencontainers.image.source="https://github.com/cdxgen/cdxgen" \
       org.opencontainers.image.url="https://github.com/cdxgen/cdxgen" \
-      org.opencontainers.image.version="12.7.x" \
+      org.opencontainers.image.version="13.0.x" \
       org.opencontainers.image.vendor="cyclonedx" \
       org.opencontainers.image.licenses="Apache-2.0" \
       org.opencontainers.image.title="cdxgen" \
       org.opencontainers.image.description="Container image for cdxgen SBOM generator" \
-      org.opencontainers.docker.cmd="docker run --rm -v /tmp:/tmp -p 9090:9090 -v $(pwd):/app:rw -t ghcr.io/cyclonedx/cdxgen-bun -r /app --server"
+      org.opencontainers.docker.cmd="docker run --rm -v /tmp:/tmp -p 9090:9090 -v $(pwd):/app:rw -t ghcr.io/cdxgen/cdxgen-bun -r /app --server"
 
 ARG SWIFT_SIGNING_KEY=52BB7E3DE28A71BE22EC05FFEF80A866B47A981F
 ARG SWIFT_PLATFORM=ubi9
@@ -89,8 +89,15 @@ RUN set -e; \
     # Install atom and the atom-parsetools commands (astgen, phpastgen,
     # rbastgen, scalasem) globally so `cdxgen --profile research` and `--deep`
     # (which rely on atom via evinse) work inside the bun image.
+    # atom 3 ships a dispatcher plus per-platform optional sub-packages; assert
+    # the resolver actually finds the native payload rather than silently
+    # falling back to the jar kind. If bun fails to install the libc-matched
+    # sub-package, add it explicitly, e.g.
+    #   bun add -g @appthreat/atom-linux-amd64
     && bun add -g @appthreat/atom @appthreat/atom-parsetools \
-    && atom --help \
+    && ATOM_DEBUG=1 atom --help 2>/tmp/atom-resolve.log \
+    && grep -q "\[atom\] check native.*-> true" /tmp/atom-resolve.log \
+    && rm -f /tmp/atom-resolve.log \
     && astgen --version \
     && curl -s "https://get.sdkman.io" | bash \
     && echo -e "sdkman_auto_answer=true\nsdkman_selfupdate_feature=false\nsdkman_auto_env=true" >> $HOME/.sdkman/etc/config \
@@ -137,6 +144,7 @@ RUN set -e; \
     && microdnf clean all
 COPY . /opt/cdxgen
 RUN cd /opt/cdxgen && bun install --no-cache --production \
+    && rm -f /opt/cdxgen/pnpm-workspace.yaml \
     && chown -R cyclonedx:cyclonedx /opt/cdxgen \
     && chmod a-w -R /opt \
     && rm -rf /var/cache/yum \

@@ -1,0 +1,10 @@
+{
+  "description": "PHP composer.lock parse coverage. Lockfile-backed: pinned package versions.",
+  "scenarios": [
+    {
+      "name": "default",
+      "projectType": ["composer"],
+      "options": {}
+    }
+  ]
+}

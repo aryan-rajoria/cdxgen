@@ -1,0 +1,8 @@
+.{
+    .name = .alpha,
+    .version = "1.0.0",
+    .dependencies = .{
+        .beta = .{ .url = "https://example.invalid/beta.tar.gz", .hash = "beta-1.0.0-BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB" },
+    },
+    .paths = .{ "build.zig.zon" },
+}

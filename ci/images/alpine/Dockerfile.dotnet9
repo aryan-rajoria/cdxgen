@@ -66,7 +66,7 @@ RUN set -e; \
     cd /opt/cdxgen \
  && corepack enable \
  && corepack pnpm install:prod \
- && corepack pnpm cache delete \
+ && corepack pnpm cache delete && rm -f /opt/cdxgen/pnpm-workspace.yaml \
  && npm uninstall -g corepack \
  && apk del npm \
  && mkdir -p ${NODE_COMPILE_CACHE} \

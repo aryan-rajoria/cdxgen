@@ -80,6 +80,17 @@ export declare function prepareDB(options: Object): Promise<{
 export declare function catalogMavenDeps(dirPath: any, purlsJars: any, Namespaces: any, options?: {}): Promise<void>;
 export declare function catalogGradleDeps(dirPath: any, purlsJars: any, Namespaces: any): Promise<void>;
 export declare function createAndStoreSlice(purl: any, purlsJars: any, Usages: any, options?: {}): Promise<any>;
+/**
+ * Name the option a slice type reads its output path from.
+ *
+ * The CLI flags are hyphenated (`--data-flow-slices-file`) and yargs hands them
+ * over camel-cased, so a slice type containing a hyphen cannot be turned into
+ * its option name by concatenation alone.
+ *
+ * @param {string} sliceType Slice type such as `usages` or `data-flow`
+ * @returns {string} Matching option name
+ */
+export declare function sliceFileOption(sliceType: string): string;
 export declare function createSlice(purlOrLanguages: any, filePath: any, sliceType?: string, options?: {}): Promise<{
     tempDir?: undefined;
     tempDirOwned?: undefined;
