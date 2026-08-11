@@ -15,7 +15,6 @@ import { spawnSync } from "node:child_process";
 import process from "node:process";
 
 import { validateBom } from "../lib/validator/bomValidator.js";
-import { validateBomWithRustFallback } from "../lib/validator/index.js";
 
 const COMPONENT_COUNT = 10_000;
 const benchDir = mkdtempSync(join(tmpdir(), "cdxgen-bench-"));
@@ -81,16 +80,6 @@ console.log(`Result: ${jsResult ? "valid" : "invalid"}`);
 console.log(`Wall clock: ${jsMs.toFixed(0)} ms`);
 console.log(`Process RSS: ${jsMemMB} MB`);
 
-// ---- Rust validator benchmark (in-process via bridge) ----
-console.log("\n=== Rust Validator (bridge) ===");
-// Clear module cache for fair timing by using a fresh import
-const rustStart = process.hrtime.bigint();
-const rustResult = await validateBomWithRustFallback(bom);
-const rustEnd = process.hrtime.bigint();
-const rustMs = Number(rustEnd - rustStart) / 1_000_000;
-console.log(`Result: ${rustResult.valid ? "valid" : "invalid"} (source: ${rustResult.source})`);
-console.log(`Wall clock: ${rustMs.toFixed(0)} ms`);
-
 // ---- Rust validator benchmark (standalone binary, fresh process) ----
 console.log("\n=== Rust Validator (fresh process) ===");
 const rustBinaryPath = process.env.CDXRS_CMD ||
@@ -133,7 +122,3 @@ try {
 console.log("\n=== Summary ===");
 console.log(`BOM: ${COMPONENT_COUNT} components, ${sizeMB} MB`);
 console.log(`JS:  ${jsMs.toFixed(0)} ms (wall), ${jsMemMB} MB (RSS)`);
-console.log(`Rust: ${rustMs.toFixed(0)} ms (wall, in-process bridge)`);
-if (jsMs > 0 && rustMs > 0) {
-  console.log(`Speedup: ${(jsMs / rustMs).toFixed(1)}x`);
-}
