@@ -22,16 +22,6 @@ export declare const CDXRS_FALLBACK: Readonly<{
     exitCode: null;
 }>;
 /**
- * Determine whether `cdxrs validate` can validate a BOM, which requires both a
- * usable binary and a spec version the binary understands. A BOM outside that
- * set belongs to the JS validator; handing it to cdxrs reports the version
- * itself as a schema error.
- *
- * @param {object} bomJson Parsed CycloneDX BOM.
- * @returns {boolean} True when the Rust validator should be used.
- */
-export declare function cdxrsCanValidate(bomJson: object): boolean;
-/**
  * Determine whether a subcommand is disabled by env vars or the --no-rust alias.
  *
  * @param {string} subcommand The subcommand name (e.g. "info").
