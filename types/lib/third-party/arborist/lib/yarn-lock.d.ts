@@ -1,14 +1,3 @@
-declare class YarnLockEntry {
-    #private;
-    resolved: any;
-    version: any;
-    integrity: any;
-    dependencies: any;
-    optionalDependencies: any;
-    constructor(specs: any);
-    toString(): string;
-    addSpec(spec: any): void;
-}
 declare class YarnLock {
     entries: Map<any, any> | null;
     current: YarnLockEntry | null | undefined;
@@ -30,6 +19,17 @@ declare class YarnLock {
         integrity: any;
     };
     static get Entry(): typeof YarnLockEntry;
+}
+declare class YarnLockEntry {
+    #private;
+    resolved: any;
+    version: any;
+    integrity: any;
+    dependencies: any;
+    optionalDependencies: any;
+    constructor(specs: any);
+    toString(): string;
+    addSpec(spec: any): void;
 }
 export default YarnLock;
 //# sourceMappingURL=yarn-lock.d.ts.map

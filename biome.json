@@ -122,7 +122,34 @@
       "!**/*.html",
       "!**/*.css",
       "!test/repotests",
-      "!lib/validator/generated"
+      "!lib/validator/generated",
+      "!lib/third-party/arborist/snapshots"
     ]
-  }
+  },
+  "overrides": [
+    {
+      "includes": ["lib/third-party/**"],
+      "linter": {
+        "rules": {
+          "complexity": {
+            "useOptionalChain": "off"
+          },
+          "correctness": {
+            "noConstantCondition": "off",
+            "noConstructorReturn": "off",
+            "noUnusedFunctionParameters": "off",
+            "noUnusedVariables": "off"
+          },
+          "style": {
+            "noUselessElse": "off",
+            "useTemplate": "off"
+          },
+          "suspicious": {
+            "noEmptyBlockStatements": "off",
+            "noFallthroughSwitchClause": "off"
+          }
+        }
+      }
+    }
+  ]
 }

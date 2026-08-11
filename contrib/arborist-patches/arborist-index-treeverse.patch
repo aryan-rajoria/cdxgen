@@ -1,0 +1,13 @@
+TARGET: lib/arborist/index.js
+REASON: treeverse is a CJS package whose `depth` named export is not detected
+by Node.js's cjs-module-lexer (the value is require('./depth.js'), which the
+lexer does not statically resolve).  breadth, used by yarn-lock.js and
+calc-dep-flags.js, IS detected, so only this one import needs the
+default-import-then-destructure pattern.
+
+---
+SEARCH:
+import { depth } from "treeverse";
+REPLACE:
+import treeverse from "treeverse";
+const { depth } = treeverse;

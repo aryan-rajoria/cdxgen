@@ -1,4 +1,4 @@
+export default _default;
 /** @returns {any} */
-declare const VirtualLoader: (cls: any) => any;
-export default VirtualLoader;
+declare function _default(cls: any): any;
 //# sourceMappingURL=load-virtual.d.ts.map

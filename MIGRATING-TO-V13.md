@@ -151,13 +151,13 @@ namespaces are tied to the owning GitHub organization and cdxgen now lives at
 `github.com/cdxgen/cdxgen`. Every image moves from `ghcr.io/cyclonedx/*` to
 `ghcr.io/cdxgen/*`:
 
-| v12                                         | v13                                       |
-| ------------------------------------------- | ----------------------------------------- |
-| `ghcr.io/cyclonedx/cdxgen:v12`              | `ghcr.io/cdxgen/cdxgen:v13`               |
-| `ghcr.io/cyclonedx/cdxgen-secure:v12`       | `ghcr.io/cdxgen/cdxgen-secure:v13`        |
-| `ghcr.io/cyclonedx/cdxgen-deno:v12`         | `ghcr.io/cdxgen/cdxgen-deno:v13`          |
-| `ghcr.io/cyclonedx/cdxgen-bun:v12`          | `ghcr.io/cdxgen/cdxgen-bun:v13`           |
-| `ghcr.io/cyclonedx/cdxgen-<lang><ver>:v12`  | `ghcr.io/cdxgen/cdxgen-<lang><ver>:v13`   |
+| v12                                        | v13                                     |
+| ------------------------------------------ | --------------------------------------- |
+| `ghcr.io/cyclonedx/cdxgen:v12`             | `ghcr.io/cdxgen/cdxgen:v13`             |
+| `ghcr.io/cyclonedx/cdxgen-secure:v12`      | `ghcr.io/cdxgen/cdxgen-secure:v13`      |
+| `ghcr.io/cyclonedx/cdxgen-deno:v12`        | `ghcr.io/cdxgen/cdxgen-deno:v13`        |
+| `ghcr.io/cyclonedx/cdxgen-bun:v12`         | `ghcr.io/cdxgen/cdxgen-bun:v13`         |
+| `ghcr.io/cyclonedx/cdxgen-<lang><ver>:v12` | `ghcr.io/cdxgen/cdxgen-<lang><ver>:v13` |
 
 The v12 images stay where they are and keep working; they are simply not
 updated past v12. Pipelines pinned to `ghcr.io/cyclonedx/cdxgen:v12` continue
@@ -250,8 +250,8 @@ specific leaf module instead:
 
 The Node.js 20 images are removed, since cdxgen itself now requires Node.js >= 24:
 
-| Removed                                  | Replacement                              |
-| ---------------------------------------- | ---------------------------------------- |
+| Removed                               | Replacement                           |
+| ------------------------------------- | ------------------------------------- |
 | `ghcr.io/cdxgen/cdxgen-node20`        | `ghcr.io/cdxgen/cdxgen-alpine-node24` |
 | `ghcr.io/cdxgen/cdxgen-alpine-node20` | `ghcr.io/cdxgen/cdxgen-alpine-node24` |
 
@@ -512,13 +512,13 @@ See [`docs/ENV.md`](docs/ENV.md) for the Atom/Evinse env-var table
 
 ## New CLI flags
 
-| Flag | Purpose |
-| ---- | ------- |
-| `--tlp-classification` | Record a Traffic Light Protocol classification under `metadata.distributionConstraints.tlp` (CycloneDX 1.7+). Present in v12 but hidden; now documented. A weak classification (`CLEAR`, `GREEN`, `AMBER`) also redacts known sensitive property values. |
-| `--tea-fetch <tei>` | Retrieve a supplier's SBOM over the Transparency Exchange API and merge it. See [Lesson 20](docs/LESSON20.md). |
-| `--tea-publish <url>` | Publish the generated BOM as a TEA Artifact. Targets the **draft** publisher API and will change. |
-| `--tea-leaf-identifier`, `--tea-collection-name`, `--tea-reason`, `--tea-author-name`, `--tea-author-email`, `--tea-artifact-url`, `--tea-token` | Supporting options for `--tea-publish`. |
-| `--experimental-mcp-pinning` | Record an explicit pinning state for MCP server components. Off by default; property names carry no stability promise. |
+| Flag                                                                                                                                             | Purpose                                                                                                                                                                                                                                                  |
+| ------------------------------------------------------------------------------------------------------------------------------------------------ | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `--tlp-classification`                                                                                                                           | Record a Traffic Light Protocol classification under `metadata.distributionConstraints.tlp` (CycloneDX 1.7+). Present in v12 but hidden; now documented. A weak classification (`CLEAR`, `GREEN`, `AMBER`) also redacts known sensitive property values. |
+| `--tea-fetch <tei>`                                                                                                                              | Retrieve a supplier's SBOM over the Transparency Exchange API and merge it. See [Lesson 20](docs/LESSON20.md).                                                                                                                                           |
+| `--tea-publish <url>`                                                                                                                            | Publish the generated BOM as a TEA Artifact. Targets the **draft** publisher API and will change.                                                                                                                                                        |
+| `--tea-leaf-identifier`, `--tea-collection-name`, `--tea-reason`, `--tea-author-name`, `--tea-author-email`, `--tea-artifact-url`, `--tea-token` | Supporting options for `--tea-publish`.                                                                                                                                                                                                                  |
+| `--experimental-mcp-pinning`                                                                                                                     | Record an explicit pinning state for MCP server components. Off by default; property names carry no stability promise.                                                                                                                                   |
 
 `--tea-publish` uses exit status **3** for a publish failure, distinct from
 other errors. The BOM is written to disk before the publish is attempted, so a
@@ -535,7 +535,7 @@ to surprise a diff after upgrading.
   automatically at `--spec-version 1.6` and below. See
   [Lesson 19](docs/LESSON19.md).
 - **PEP 770 embedded SBOMs** — components a Python distribution declares in its
-  own `.dist-info/sboms/` directory now appear, as dependencies *of* that
+  own `.dist-info/sboms/` directory now appear, as dependencies _of_ that
   distribution. On the project's own test fixture this took the component count
   from 1 to 2.
 - **`algorithmFamily` and `ellipticCurve`** on cryptographic assets, with the
@@ -555,3 +555,19 @@ The Rust fallback paths are **not** scheduled for removal, reversing the
 original v13 plan — measurement did not justify making the binary mandatory.
 See [docs/DEPRECATIONS.md](docs/DEPRECATIONS.md) for the full schedule and the
 criteria that would have to hold before anything is removed.
+
+## npm dependency tree reader updated
+
+cdxgen reads npm dependency trees with a trimmed, vendored copy of
+`@npmcli/arborist`, now based on upstream 10.0.2. SBOM content for npm projects
+is unchanged. Two behaviours differ:
+
+- **`packageExtensions` in a project's `package.json` are applied.** This is an
+  upstream 10.x feature for repairing third-party manifests declaratively. Where
+  an extension adds a dependency, that dependency now appears in the SBOM. No
+  flag is needed.
+- **`.npm-extension.{mjs,cjs}` files are ignored.** npm loads and executes these
+  while reading a tree; cdxgen does not run project code to build an SBOM. If a
+  project relies on one to repair manifests, the repairs it makes are absent
+  from an `npm ls`-style scan of the working tree. Scans driven by a lockfile
+  are unaffected, because npm records the repaired dependencies in the lockfile.

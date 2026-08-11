@@ -1,0 +1,59 @@
+TARGET: lib/shrinkwrap.js
+REASON: Two deviations:
+  1. proc-log: upstream uses proc-log for logging; cdxgen stubs it as a no-op
+     local module (./proc-log.js) to avoid adding a runtime dep.
+  2. Shrinkwrap#commit writes the lockfile and yarn.lock to disk (writeFile
+     and rm from node:fs/promises).  cdxgen only reads trees; the write paths
+     are removed so the vendored tree is structurally read-only.  commit() is
+     kept as a no-op so loadActual/loadVirtual — which never call it — are
+     unaffected.
+
+---
+SEARCH:
+import { log } from "proc-log";
+REPLACE:
+import { log } from "./proc-log.js";
+
+---
+SEARCH:
+import {
+  readdir,
+  readFile,
+  readlink,
+  rm,
+  stat,
+  writeFile,
+} from "node:fs/promises";
+REPLACE:
+import { readdir, readFile, readlink, stat } from "node:fs/promises";
+
+---
+SEARCH:
+    // This must be called before the lockfile conversion check below since it sets properties as part of `commit()`
+    const json = this.toString(options);
+REPLACE:
+    // toString() sets properties as part of commit(), so it must run before
+    // the lockfile conversion check below.  Its serialised output is unused
+    // here because save() no longer writes.
+    this.toString(options);
+
+---
+SEARCH:
+    return Promise.all([
+      writeFile(this.filename, json).catch((er) => {
+        if (this.hiddenLockfile) {
+          // well, we did our best.
+          // if we reify, and there's nothing there, then it might be lacking
+          // a node_modules folder, but then the lockfile is not important.
+          // Remove the file, so that in case there WERE deps, but we just
+          // failed to update the file for some reason, it's not out of sync.
+          return rm(this.filename, { recursive: true, force: true });
+        }
+        throw er;
+      }),
+      this.yarnLock &&
+        this.yarnLock.entries.size &&
+        writeFile(this.path + "/yarn.lock", this.yarnLock.toString()),
+    ]);
+REPLACE:
+    return Promise.resolve([]);

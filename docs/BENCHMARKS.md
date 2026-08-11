@@ -22,7 +22,7 @@ still outstanding, and this document should not be read as covering it.
   is reported. A single run is not a benchmark, and the first run on a cold
   file cache is consistently 1.5–2x slower than the rest.
 - **Variance**: the whole A/B was repeated 3 times. An early run showed v13
-  *slower* on startup; that was a cold-cache artefact for the working-tree copy
+  _slower_ on startup; that was a cold-cache artefact for the working-tree copy
   and did not reproduce. Treat any single run of this on a busy machine as
   noise — the repeats are the measurement.
 - `--no-install-deps` throughout, so no package manager runs and the numbers
@@ -32,11 +32,11 @@ still outstanding, and this document should not be read as covering it.
 
 Median of 7, three independent repeats:
 
-| Scenario | v12 | v13 | Delta |
-| -------- | --- | --- | ----- |
-| `--version` (startup floor) | 517–567 ms | 312–327 ms | **~200 ms faster** |
+| Scenario                     | v12        | v13        | Delta              |
+| ---------------------------- | ---------- | ---------- | ------------------ |
+| `--version` (startup floor)  | 517–567 ms | 312–327 ms | **~200 ms faster** |
 | npm project, no dependencies | 666–685 ms | 356–364 ms | **~310 ms faster** |
-| small Python project | 667–676 ms | 358–365 ms | **~310 ms faster** |
+| small Python project         | 667–676 ms | 358–365 ms | **~310 ms faster** |
 
 **Small projects did not get slower — they got roughly 45% faster.** The fixed
 costs v13 added are more than paid for by what it removed from the startup
@@ -54,19 +54,19 @@ a duplicate major of `undici`.
 
 ## Peak memory
 
-| Scenario | v12 | v13 |
-| -------- | --- | --- |
+| Scenario                     | v12    | v13        |
+| ---------------------------- | ------ | ---------- |
 | npm project, no dependencies | 223 MB | **178 MB** |
 
 ## Install size
 
-| | v12 | v13 |
-| --- | --- | --- |
-| Packed tarball | 2.3 MB | 2.7 MB |
-| Unpacked | — | 15.9 MB (697 files) |
+|                | v12    | v13                 |
+| -------------- | ------ | ------------------- |
+| Packed tarball | 2.3 MB | 2.7 MB              |
+| Unpacked       | —      | 15.9 MB (697 files) |
 
 The tarball grew ~0.4 MB. `@cdxgen/cdxgen-plugins-bin` is a direct dependency
-in v13 rather than an optional add-on, so the *installed* footprint grows by
+in v13 rather than an optional add-on, so the _installed_ footprint grows by
 considerably more than the tarball suggests. That was an accepted trade in the
 v13 plan and it has not been revisited.
 
@@ -74,9 +74,9 @@ v13 plan and it has not been revisited.
 
 Not all deltas are performance. On the PEP 770 fixture:
 
-| | v12 | v13 |
-| --- | --- | --- |
-| Components discovered | 1 | **2** |
+|                       | v12 | v13   |
+| --------------------- | --- | ----- |
+| Components discovered | 1   | **2** |
 
 v13 finds the component declared by the distribution's own
 `.dist-info/sboms/` directory, which v12 has no support for. Both emit

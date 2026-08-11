@@ -24,10 +24,10 @@ By the end of this lesson you should be able to answer:
 
 This distinction determines how much you should trust each half of the feature.
 
-| Surface | Status | cdxgen support |
-| ------- | ------ | -------------- |
-| Consumer API (`spec/openapi.yaml`, 0.4.0, "Beta 2") | Conformance base | `--tea-fetch` |
-| Publisher API (`spec/publisher/`) | **Draft recommendation** — "will be a recommended TEA publisher API" | `--tea-publish`, subject to change |
+| Surface                                             | Status                                                               | cdxgen support                     |
+| --------------------------------------------------- | -------------------------------------------------------------------- | ---------------------------------- |
+| Consumer API (`spec/openapi.yaml`, 0.4.0, "Beta 2") | Conformance base                                                     | `--tea-fetch`                      |
+| Publisher API (`spec/publisher/`)                   | **Draft recommendation** — "will be a recommended TEA publisher API" | `--tea-publish`, subject to change |
 
 The publisher API is not part of the conformance spec. `--tea-publish` targets
 the draft's `POST /collection` shape and will change when the standard lands.
@@ -91,10 +91,10 @@ rather than discarding the loser.
 
 Every fetched component carries:
 
-| Property | Meaning |
-| -------- | ------- |
-| `cdx:tea:source` | URL of the artifact it came from |
-| `cdx:tea:collection` | UUID of the Collection |
+| Property             | Meaning                          |
+| -------------------- | -------------------------------- |
+| `cdx:tea:source`     | URL of the artifact it came from |
+| `cdx:tea:collection` | UUID of the Collection           |
 
 plus a CycloneDX 1.7 citation (see [Lesson 19](LESSON19.md)).
 
@@ -134,8 +134,8 @@ cdxgen -t js /path/to/repo -o bom.json \
   --tea-artifact-url https://cdxgen.github.io/downloads/bom.json
 ```
 
-`--tea-artifact-url` matters more than it looks. The Collection records *where
-the artifact can be downloaded*, and the server generally fetches it from there.
+`--tea-artifact-url` matters more than it looks. The Collection records _where
+the artifact can be downloaded_, and the server generally fetches it from there.
 The default is your local output path, which no server can reach — so supply the
 hosted URL whenever the BOM is published somewhere.
 
@@ -145,7 +145,7 @@ will actually download.
 
 ### Collection versioning is the server's job
 
-You declare *why* you are publishing; the server assigns the version number.
+You declare _why_ you are publishing; the server assigns the version number.
 
 ```bash
 --tea-reason INITIAL_RELEASE     # first publish (default)

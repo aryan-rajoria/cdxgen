@@ -14,7 +14,7 @@ The package ships multiple CLI entry points. Use this table as the top-level nav
 | `aibom`        | Generate AI-BOM-oriented inventories from source, Hugging Face references, Modelfiles, or GGUF artifacts | yes                       | [AI_BOM.md](AI_BOM.md)             |
 | `hbom`         | Generate a CycloneDX hardware BOM for the current host, with optional protobuf export                    | yes (`hbom`, `hbom-slim`) | [HBOM.md](HBOM.md)                 |
 | `cdx-audit`    | Explainable upstream dependency risk prioritization from existing BOMs                                   | yes                       | [CDX_AUDIT.md](CDX_AUDIT.md)       |
-| `cdx-convert`  | Convert CycloneDX JSON or protobuf to SPDX 3.0.1 JSON-LD, or to another CycloneDX spec version            | yes                       | [CDX_CONVERT.md](CDX_CONVERT.md)   |
+| `cdx-convert`  | Convert CycloneDX JSON or protobuf to SPDX 3.0.1 JSON-LD, or to another CycloneDX spec version           | yes                       | [CDX_CONVERT.md](CDX_CONVERT.md)   |
 | `cdx-sign`     | Sign a CycloneDX BOM                                                                                     | yes                       | [CDX_SIGN.md](CDX_SIGN.md)         |
 | `cdx-validate` | Validate structure, compliance, and signatures                                                           | yes                       | [CDX_VALIDATE.md](CDX_VALIDATE.md) |
 | `cdx-verify`   | Verify BOM signatures                                                                                    | yes                       | [CDX_VERIFY.md](CDX_VERIFY.md)     |

@@ -1,0 +1,9 @@
+TARGET: lib/override-set.js
+REASON: proc-log: upstream uses proc-log for logging; cdxgen stubs it as a
+no-op local module (./proc-log.js) to avoid adding a runtime dep.
+
+---
+SEARCH:
+import { log } from "proc-log";
+REPLACE:
+import { log } from "./proc-log.js";

@@ -1,0 +1,12 @@
+TARGET: lib/yarn-lock.js
+REASON: The concise arrow body returns the Map from Map#set into forEach, which
+discards it, and trips lint/suspicious/useIterableCallbackReturn.  Bracing the
+body makes the callback return undefined explicitly.
+
+---
+SEARCH:
+        specs.forEach((spec) => this.entries.set(spec, this.current));
+REPLACE:
+        specs.forEach((spec) => {
+          this.entries.set(spec, this.current);
+        });

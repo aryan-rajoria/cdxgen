@@ -42,12 +42,12 @@ node -e "console.log(JSON.stringify(require('./bom.json').citations, null, 2))"
 Four things are worth reading carefully, because the schema is stricter than it
 first appears:
 
-| Field | Rule |
-| ----- | ---- |
-| `timestamp` | Required. |
+| Field                      | Rule                                                                                                                                                      |
+| -------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `timestamp`                | Required.                                                                                                                                                 |
 | `pointers` / `expressions` | **Exactly one** of the two (`oneOf`). `pointers` are RFC 6901 JSON Pointers; `expressions` are RFC 9535 JSONPath. Supplying both, or neither, is invalid. |
-| `attributedTo` / `process` | **At least one** (`anyOf`). Each holds the `bom-ref` of something else in the document. |
-| `bom-ref`, `note` | Optional. |
+| `attributedTo` / `process` | **At least one** (`anyOf`). Each holds the `bom-ref` of something else in the document.                                                                   |
+| `bom-ref`, `note`          | Optional.                                                                                                                                                 |
 
 `--spec-version 1.7` is the default, so citations are on unless you ask for an
 older document.
@@ -104,13 +104,13 @@ cdxgen -t python -o bom.json /path/to/venv-project
 }
 ```
 
-Read that as: *demo-pkg itself says these components are inside it.* The
+Read that as: _demo-pkg itself says these components are inside it._ The
 attribution is the distribution's own purl, not cdxgen's — because cdxgen did
 not infer these components, it copied them from a document the publisher
 shipped. The expression selects exactly the components carrying the matching
 `cdx:embeddedSbom:source` tag, so the citation and the tag stay in agreement.
 
-Note the note names a path *inside the distribution*, never the absolute build
+Note the note names a path _inside the distribution_, never the absolute build
 path. A BOM travels beyond the machine that built it.
 
 ### TEA-retrieved BOMs
@@ -132,7 +132,7 @@ node -e "const b=require('./bom.json');
 # true
 ```
 
-Be precise about what this does and does not guarantee. Two *separate* cdxgen
+Be precise about what this does and does not guarantee. Two _separate_ cdxgen
 runs still differ, because each run stamps its own `metadata.timestamp`; if you
 are diffing BOMs across runs you have to normalise that field either way. What
 this does guarantee is that **one document is

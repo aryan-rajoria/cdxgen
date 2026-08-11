@@ -1,0 +1,30 @@
+TARGET: lib/node.js
+REASON: Three deviations from upstream in the imports block:
+  1. bin-links: upstream requires the real bin-links npm package; cdxgen uses
+     its own dependency-free local reimplementation (./bin-links.js) that only
+     computes paths and never creates symlinks.
+  2. proc-log: upstream uses proc-log for structured logging; cdxgen stubs it
+     as a no-op local module (./proc-log.js) to avoid adding a runtime dep.
+  3. query-selector-all: removed in cdxgen commit c3132b7e because it drags in
+     @npmcli/query and postcss-selector-parser.  The method on Node is kept
+     but throws if called — cdxgen never calls it.
+
+---
+SEARCH:
+import { getPaths as getBinPaths } from "bin-links";
+REPLACE:
+import getBinPaths from "./bin-links.js";
+
+---
+SEARCH:
+import { log } from "proc-log";
+REPLACE:
+import { log } from "./proc-log.js";
+
+---
+SEARCH:
+import querySelectorAll from "./query-selector-all.js";
+REPLACE:
+const querySelectorAll = () => {
+  throw new Error("query-selector-all is not vendored in cdxgen");
+};

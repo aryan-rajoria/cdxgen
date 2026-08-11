@@ -1,0 +1,90 @@
+TARGET: lib/arborist/index.js
+REASON: audit(), lockfileString() and dedupe() belong to the install and audit
+paths.  They call buildIdealTree, reify, AuditReport and the proggy tracker,
+none of which the vendored mixin set provides, so on the vendored class they
+are unreachable code whose only possible outcome is a ReferenceError.  The
+saveType validation reads saveTypeMap from add-rm-pkg-deps, which is likewise
+not vendored.  Removing them keeps the public surface of the vendored class
+equal to what it can actually do: loadActual and loadVirtual.
+
+---
+SEARCH:
+    if (options.saveType && !saveTypeMap.get(options.saveType)) {
+      throw new Error(`Invalid saveType ${options.saveType}`);
+    }
+    this.cache = resolve(this.options.cache);
+REPLACE:
+    this.cache = resolve(this.options.cache);
+
+---
+SEARCH:
+  async audit(options = {}) {
+    this.addTracker("audit");
+    if (this.options.global) {
+      throw Object.assign(
+        new Error("`npm audit` does not support testing globals"),
+        { code: "EAUDITGLOBAL" },
+      );
+    }
+
+    // allow the user to set options on the ctor as well.
+    // XXX: deprecate separate method options objects.
+    options = { ...this.options, ...options };
+
+    const timeEnd = time.start("audit");
+    let tree;
+    if (options.packageLock === false) {
+      // build ideal tree
+      await this.loadActual(options);
+      await this.buildIdealTree();
+      tree = this.idealTree;
+    } else {
+      tree = await this.loadVirtual();
+    }
+    if (this.options.workspaces.length) {
+      options.filterSet = this.workspaceDependencySet(
+        tree,
+        this.options.workspaces,
+        this.options.includeWorkspaceRoot,
+      );
+    }
+    if (!options.workspacesEnabled) {
+      options.filterSet = this.excludeWorkspacesDependencySet(tree);
+    }
+    this.auditReport = await AuditReport.load(tree, options);
+    const ret = options.fix ? this.reify(options) : this.auditReport;
+    timeEnd();
+    this.finishTracker("audit");
+    return ret;
+  }
+
+  // Build an ideal tree (or reuse an already-built one) and return the
+  // resulting lockfile contents as a string, without writing to disk.
+  // Useful for callers that want to inspect, diff, or store a lockfile
+  // somewhere other than the project's `package-lock.json`.
+  async lockfileString(options = {}) {
+    await this.buildIdealTree(options);
+
+    return this.idealTree.meta.toString(options);
+  }
+
+  async dedupe(options = {}) {
+    // allow the user to set options on the ctor as well.
+    // XXX: deprecate separate method options objects.
+    options = { ...this.options, ...options };
+    const tree = await this.loadVirtual().catch(() => this.loadActual());
+    const names = [];
+    for (const name of tree.inventory.query("name")) {
+      if (tree.inventory.query("name", name).size > 1) {
+        names.push(name);
+      }
+    }
+    return this.reify({
+      ...options,
+      preferDedupe: true,
+      update: { names },
+    });
+  }
+}
+REPLACE:
+}

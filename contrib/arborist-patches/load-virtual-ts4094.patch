@@ -1,0 +1,14 @@
+TARGET: lib/arborist/load-virtual.js
+REASON: The VirtualLoader mixin factory returns an anonymous class with private
+(#) fields.  TypeScript 7's declaration emitter rejects this shape (TS4094),
+which breaks `pnpm run gen-types`.  Annotating the return type as `any`
+produces the same declaration TS 6 emitted and keeps type generation clean.
+
+---
+SEARCH:
+export default (cls) =>
+  class VirtualLoader extends cls {
+REPLACE:
+/** @returns {any} */
+export default (cls) =>
+  class VirtualLoader extends cls {

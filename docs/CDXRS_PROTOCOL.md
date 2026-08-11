@@ -209,12 +209,12 @@ CDXGEN_PLUGINS_DIR=/tmp/cdxgen-local-plugins npx poku lib/inventory/cdxrs.poku.j
 `prefetchJson` in `lib/inventory/fetchBatch.js` dispatches a batch to one of two
 transports, and callers do not choose between them:
 
-| Batch contains                                          | Transport                     |
-| ------------------------------------------------------- | ----------------------------- |
-| Plain JSON requests only, binary available               | `cdxrs fetch` subprocess      |
-| Any request with `responseType: "text"` or `"buffer"`    | JS pool (`cdxgenAgent`)       |
-| Any request carrying its own `headers`                   | JS pool                       |
-| No binary, or `CDXGEN_RS_DISABLE=fetch`, or `--no-rust`  | JS pool                       |
+| Batch contains                                          | Transport                |
+| ------------------------------------------------------- | ------------------------ |
+| Plain JSON requests only, binary available              | `cdxrs fetch` subprocess |
+| Any request with `responseType: "text"` or `"buffer"`   | JS pool (`cdxgenAgent`)  |
+| Any request carrying its own `headers`                  | JS pool                  |
+| No binary, or `CDXGEN_RS_DISABLE=fetch`, or `--no-rust` | JS pool                  |
 
 The protocol carries a URL, an `accept` value and an opaque `authRealm`, and
 types a result body as JSON. Two kinds of request therefore have no faithful

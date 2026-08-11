@@ -19,7 +19,9 @@ declare class OverrideSet {
     get isRoot(): boolean;
     get ruleset(): Map<any, any>;
     static findSpecificOverrideSet(first: any, second: any): any;
+    static findCommonAncestor(first: any, second: any): any;
     static doOverrideSetsConflict(first: any, second: any): boolean;
+    static haveConflictingRules(first: any, second: any): boolean;
 }
 export default OverrideSet;
 //# sourceMappingURL=override-set.d.ts.map
