@@ -115,7 +115,7 @@ import { convertCycloneDxToSpdx } from "../lib/stages/postgen/spdxConverter.js";
 import { auditEnvironment } from "../lib/stages/pregen/envAudit.js";
 import { prepareEnv } from "../lib/stages/pregen/pregen.js";
 import { validateSpdx } from "../lib/validator/bomValidator.js";
-import { validateBomWithRustFallback } from "../lib/validator/index.js";
+import { validateGeneratedBom } from "../lib/validator/index.js";
 
 // Support for config files. The config file lives in the directory under
 // analysis, so it carries that directory's trust level; see
@@ -1914,7 +1914,7 @@ const writeCycloneDxOutput = (jsonFile, bomJson, options) => {
   // Perform automatic validation
   if (options.validate && bomNSData?.bomJson) {
     thoughtLog("Wait, let's check the generated BOM file for any issues.");
-    const validation = await validateBomWithRustFallback(bomNSData.bomJson);
+    const validation = await validateGeneratedBom(bomNSData.bomJson);
     const validationTarget = `cyclonedx-${bomNSData.bomJson.specVersion || options.specVersion}`;
     if (!validation.valid) {
       recordActivity({
