@@ -1,0 +1,12 @@
+TARGET: lib/package-extensions.js
+REASON: validate-npm-package-name is a single-consumer dependency whose only
+  used surface here is validForOldPackages/validForNewPackages.  cdxgen carries
+  a dependency-free reimplementation at lib/validate-npm-package-name.js so the
+  package does not have to be installed; its published engines range is also
+  narrower than cdxgen's, which the local copy sidesteps.
+
+---
+SEARCH:
+import validateName from "validate-npm-package-name";
+REPLACE:
+import validateName from "./validate-npm-package-name.js";

@@ -40,6 +40,7 @@ const SKIP_DIRS = new Set(["node_modules", ".git", "bomresults"]);
 const SKIP_PATHS = [
   path.join("test", "data"),
   path.join("contrib", "check-lib-paths.js"),
+  path.join("contrib", "vendor-arborist.mjs"),
 ];
 
 // "lib/helpers/utils.js", "./lib/core/fs.js", "../../lib/ecosystems/purl.js"

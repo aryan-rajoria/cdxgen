@@ -1,0 +1,22 @@
+TARGET: lib/tree-check.js
+REASON: Upstream swaps the export for the checking implementation by assigning
+to `module.exports` from inside the debug callback.  `module` does not exist in
+an ES module, so under ESM that assignment raises a ReferenceError the moment
+the module is imported with debug active, and the checking implementation is
+never reachable otherwise.  Selecting the implementation through a binding the
+default export closes over keeps both arms working: the identity function
+normally, the full tree check when debug is on.
+
+---
+SEARCH:
+// should only ever run this check in debug mode
+export default (tree) => tree;
+debug(() => (module.exports = checkTree));
+REPLACE:
+// should only ever run this check in debug mode
+let selected = (tree) => tree;
+debug(() => {
+  selected = checkTree;
+});
+
+export default (tree, checkUnreachable) => selected(tree, checkUnreachable);

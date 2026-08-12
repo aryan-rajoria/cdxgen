@@ -14,10 +14,10 @@ major does not match, the subcommand is disabled, the input cannot be spilled
 to a temp file, or the process fails. Nothing surfaces to the user beyond one
 warning.
 
-| Path | JS fallback | Status |
-| ---- | ----------- | ------ |
-| `cdxrs fetch` | `lib/inventory/fetchBatch.js` | Retained indefinitely |
-| `cdxrs validate` | `lib/validator/` | Retained indefinitely |
+| Path             | JS fallback                   | Status                |
+| ---------------- | ----------------------------- | --------------------- |
+| `cdxrs fetch`    | `lib/inventory/fetchBatch.js` | Retained indefinitely |
+| `cdxrs validate` | `lib/validator/`              | Retained indefinitely |
 
 **Neither fallback is scheduled for removal, and that is a deliberate reversal
 of the v13 plan.** The plan assumed the Rust surface would keep growing and the
@@ -56,14 +56,14 @@ into a required one.
 
 Already gone; listed so an upgrade failure is diagnosable.
 
-| Removed | Replacement |
-| ------- | ----------- |
-| Node.js < 24 | Node.js >= 24 |
-| CycloneDX 1.4/1.5 as a **target** spec version | 1.6 or 1.7. Downgrade *output* to 1.4/1.5 still works |
-| `ghcr.io/cyclonedx/*` images | `ghcr.io/cdxgen/*` — see [MIGRATING-TO-V13.md](../MIGRATING-TO-V13.md) |
-| `@cyclonedx/cdxgen` on npm | `@cdxgen/cdxgen` |
-| Node.js 20 container images | `cdxgen-alpine-node24` |
-| `cheerio` dependency | Internal extractor; no user-visible change |
+| Removed                                        | Replacement                                                            |
+| ---------------------------------------------- | ---------------------------------------------------------------------- |
+| Node.js < 24                                   | Node.js >= 24                                                          |
+| CycloneDX 1.4/1.5 as a **target** spec version | 1.6 or 1.7. Downgrade _output_ to 1.4/1.5 still works                  |
+| `ghcr.io/cyclonedx/*` images                   | `ghcr.io/cdxgen/*` — see [MIGRATING-TO-V13.md](../MIGRATING-TO-V13.md) |
+| `@cyclonedx/cdxgen` on npm                     | `@cdxgen/cdxgen`                                                       |
+| Node.js 20 container images                    | `cdxgen-alpine-node24`                                                 |
+| `cheerio` dependency                           | Internal extractor; no user-visible change                             |
 
 ## Property naming
 

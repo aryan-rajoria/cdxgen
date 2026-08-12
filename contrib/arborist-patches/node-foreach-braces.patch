@@ -1,0 +1,13 @@
+TARGET: lib/node.js
+REASON: The concise arrow body returns Edge#reload's value into forEach, which
+discards it, and trips lint/suspicious/useIterableCallbackReturn.  Bracing the
+body makes the callback return undefined explicitly; reload's return value was
+never used.
+
+---
+SEARCH:
+    this.edgesIn.forEach((edge) => edge.reload(true));
+REPLACE:
+    this.edgesIn.forEach((edge) => {
+      edge.reload(true);
+    });

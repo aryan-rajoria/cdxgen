@@ -1,0 +1,9 @@
+name: "cdxgen CodeQL config"
+
+# Poku test files exercise cdxgen against fixture data with hardcoded inputs.
+# Alerts raised inside them describe the fixtures rather than the shipped code.
+paths-ignore:
+  - "**/*.poku.js"
+  - "test/**"
+  - "types/**"
+  - "lib/third-party/**"

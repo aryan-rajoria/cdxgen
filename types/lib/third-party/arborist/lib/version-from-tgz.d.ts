@@ -1,6 +1,6 @@
-declare const versionFromTgz: (name: any, tgz: any) => {
+export default _default;
+declare function _default(name: any, tgz: any): {
     name: any;
     version: any;
 } | null;
-export default versionFromTgz;
 //# sourceMappingURL=version-from-tgz.d.ts.map

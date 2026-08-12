@@ -1,0 +1,18 @@
+TARGET: lib/inventory.js
+REASON: Upstream borrows Object.prototype.hasOwnProperty into a local binding
+of the same name, which shadows the global and trips
+lint/suspicious/noShadowRestrictedNames.  Renaming the local binding is a
+pure rename with no behavioural difference, so the vendored tree stays
+lint-clean without a rule exemption.
+
+---
+SEARCH:
+const { hasOwnProperty } = Object.prototype;
+REPLACE:
+const { hasOwnProperty: hasOwn } = Object.prototype;
+
+---
+SEARCH:
+      if (hasOwnProperty.call(node, key)) {
+REPLACE:
+      if (hasOwn.call(node, key)) {

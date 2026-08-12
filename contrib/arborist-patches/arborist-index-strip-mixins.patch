@@ -1,0 +1,58 @@
+TARGET: lib/arborist/index.js
+REASON: Upstream's Arborist class mixes in tracker (proggy progress bars),
+build-ideal-tree, rebuild (lifecycle scripts), reify (install), and
+isolated-reifier, plus audit-report, packument-cache, and add-rm-pkg-deps.
+cdxgen only calls loadActual and loadVirtual; every other mixin is either
+security-sensitive (rebuild runs lifecycle scripts, reify fetches over the
+network) or pulls in dependencies cdxgen does not vendor (proggy, pacote,
+cacache, make-fetch-happen).  Stripping the mixin list to just the two
+read-only loaders is the structural enforcement of the "no lifecycle scripts,
+no network, no git" invariant.  The proc-log import is redirected to the
+local no-op stub, and PackumentCache (used in the constructor) is replaced
+with a plain Map.
+
+---
+SEARCH:
+import mapWorkspaces from "@npmcli/map-workspaces";
+import { log, time } from "proc-log";
+import { depth } from "treeverse";
+
+import { saveTypeMap } from "../add-rm-pkg-deps.js";
+import AuditReport from "../audit-report.js";
+import PackumentCache from "../packument-cache.js";
+import relpath from "../relpath.js";
+REPLACE:
+import { EventEmitter } from "node:events";
+import mapWorkspaces from "@npmcli/map-workspaces";
+import { depth } from "treeverse";
+
+import { log, time } from "../proc-log.js";
+import relpath from "../relpath.js";
+import LoadActual from "./load-actual.js";
+import LoadVirtual from "./load-virtual.js";
+
+---
+SEARCH:
+      packumentCache: options.packumentCache || new PackumentCache(),
+REPLACE:
+      packumentCache: options.packumentCache || new Map(),
+
+---
+SEARCH:
+const mixins = [
+  require("../tracker.js"),
+  require("./build-ideal-tree.js"),
+  require("./load-actual.js"),
+  require("./load-virtual.js"),
+  require("./rebuild.js"),
+  require("./reify.js"),
+  require("./isolated-reifier.js"),
+];
+
+const _setWorkspaces = Symbol.for("setWorkspaces");
+const Base = mixins.reduce((a, b) => b(a), require("node:events"));
+REPLACE:
+const mixins = [LoadActual, LoadVirtual];
+
+const _setWorkspaces = Symbol.for("setWorkspaces");
+const Base = mixins.reduce((a, b) => b(a), EventEmitter);

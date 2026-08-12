@@ -1,4 +1,30 @@
+import { Buffer } from "node:buffer";
 export declare function parsePkgJson(pkgJsonFile: any, simple?: boolean, securityProps?: boolean): Promise<any[]>;
+/**
+ * Hash a root `.npm-extension` file exactly as npm does: ssri sha512 over
+ * `npm-extension:v1:<format>\n` followed by the raw file bytes. Mirrors
+ * `hashFile` in the vendored arborist's upstream npm-extension.js so the value
+ * is comparable to what npm writes into the lockfile as `npmExtensionHash`.
+ *
+ * @param {string} format Either "mjs" or "cjs"
+ * @param {Buffer} bytes Raw file contents
+ * @returns {string} ssri integrity string
+ */
+export declare function hashNpmExtensionFile(format: string, bytes: Buffer): string;
+/**
+ * Detect a root-owned `.npm-extension.mjs` or `.npm-extension.cjs` file and
+ * return its format, path, and npm-comparable hash. Returns null when no file
+ * is present. A non-root workspace file is never consulted, matching upstream.
+ *
+ * @param {string} rootPath Real path of the project root (tree.realpath)
+ * @returns {{format: string, path: string, hash: string, duplicate: boolean}|null}
+ */
+export declare function detectRootNpmExtension(rootPath: string): {
+    format: string;
+    path: string;
+    hash: string;
+    duplicate: boolean;
+} | null;
 /**
  * Parse nodejs package lock file
  *

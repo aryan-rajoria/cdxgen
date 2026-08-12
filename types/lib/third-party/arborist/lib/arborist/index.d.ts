@@ -1,11 +1,19 @@
 declare const _setWorkspaces: unique symbol;
 declare const Base: any;
 declare class Arborist extends Base {
+    registry: string;
+    actualTree: any;
+    idealTree: any;
+    installLinks: any;
+    legacyPeerDeps: any;
+    virtualTree: any;
     options: {
         nodeVersion: any;
         Arborist: Function;
+        allowScripts: any;
         binLinks: boolean;
         cache: any;
+        dangerouslyAllowAllScripts: boolean;
         dryRun: boolean;
         formatPackageLock: boolean;
         force: boolean;
@@ -14,11 +22,13 @@ declare class Arborist extends Base {
         installStrategy: any;
         lockfileVersion: any;
         packageLockOnly: boolean;
+        packumentCache: any;
         path: any;
         rebuildBundle: boolean;
         replaceRegistryHost: any;
         savePrefix: unknown;
         scriptShell: any;
+        usePackageLock: unknown;
         workspaces: any;
         workspacesEnabled: boolean;
     };
@@ -26,12 +36,12 @@ declare class Arborist extends Base {
     cache: any;
     diff: any;
     path: any;
+    scriptsRun: Set<any>;
     constructor(options?: {});
     workspaceNodes(tree: any, workspaces: any): any[];
     workspaceDependencySet(tree: any, workspaces: any, includeWorkspaceRoot: any): Set<any>;
     excludeWorkspacesDependencySet(tree: any): Set<any>;
     [_setWorkspaces](node: any): Promise<any>;
-    dedupe(options?: {}): Promise<any>;
 }
 export default Arborist;
 //# sourceMappingURL=index.d.ts.map

@@ -1,0 +1,24 @@
+TARGET: lib/arborist/load-actual.js
+REASON: Upstream 10.0.2 removed the ActualLoader constructor that initialises
+the realpath and stat caches (Symbol.for("realpathCache") / ("statCache")).
+In the full npm CLI these caches are likely initialised by the rebuild or
+reify mixin, but cdxgen only loads loadActual and loadVirtual.  Without
+initialisation, realpathCached() receives undefined for rpcache and throws
+"Cannot read properties of undefined (reading 'has')".  The 9.1.4 vendored
+tree had this constructor; restoring it is a cdxgen-specific fix for the
+stripped mixin set.
+
+---
+SEARCH:
+  class ActualLoader extends cls {
+    #actualTree;
+REPLACE:
+  class ActualLoader extends cls {
+    constructor(options) {
+      super(options);
+      const cwd = process.cwd();
+      this[_rpcache] = new Map([[cwd, cwd]]);
+      this[_stcache] = new Map();
+    }
+
+    #actualTree;

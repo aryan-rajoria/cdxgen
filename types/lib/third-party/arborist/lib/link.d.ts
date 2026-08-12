@@ -7,10 +7,11 @@ declare class Link extends Node {
     get target(): any;
     set target(target: any);
     get resolved(): string | null;
-    set resolved(_r: string | null);
+    set resolved(r: string | null);
     [_loadDeps](): void;
+    recalculateOutEdgesOverrides(): void;
     get children(): Map<any, any>;
-    set children(_c: Map<any, any>);
+    set children(c: Map<any, any>);
     get isLink(): boolean;
 }
 export default Link;

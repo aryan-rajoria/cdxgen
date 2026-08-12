@@ -1,24 +1,17 @@
 name: v13 differential
 
 # Differential v12-vs-v13 BOM comparison over the golden scenario corpus.
-# Runs nightly and on PRs labelled `v13` (not every push — it is slow because
-# it installs and invokes a second cdxgen version).
+#
+# Manual only. It is slow, because it installs and invokes a second cdxgen
+# version, and the comparison is a release-time question rather than a
+# per-change one — the golden corpus already gates every push. Run it by hand
+# from the Actions tab when a v12-vs-v13 comparison is actually wanted.
 
 on:
-  schedule:
-    # Nightly at 03:17 UTC — off the top of the hour to reduce load.
-    - cron: '17 3 * * *'
-  # No `paths:` filter here on purpose. A paths filter is ANDed with the event,
-  # so labelling a PR that only touched lib/** would not have triggered this —
-  # and that is the primary case we need it for (Deliverable 03 refactors
-  # lib/ecosystems/utils.js). The `v13` label is the gate; the job-level `if:`
-  # enforces it.
-  pull_request:
-    types: [labeled]
   workflow_dispatch:
 
 concurrency:
-  group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
+  group: ${{ github.workflow }}-${{ github.ref }}
   cancel-in-progress: true
 
 env:
@@ -28,11 +21,6 @@ permissions: {}
 
 jobs:
   diff-v12-v13:
-    # Only run on: scheduled runs, manual dispatch, or PRs labelled `v13`.
-    if: >
-      github.event_name == 'schedule' ||
-      github.event_name == 'workflow_dispatch' ||
-      (github.event_name == 'pull_request' && contains(github.event.label.name, 'v13'))
     runs-on: 'ubuntu-latest'
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1  # v7.0.1

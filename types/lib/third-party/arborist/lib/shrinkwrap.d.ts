@@ -14,7 +14,8 @@ declare class Shrinkwrap {
     hiddenLockfile: any;
     loadingError: unknown;
     resolveOptions: any;
-    shrinkwrapOnly: any;
+    packageExtensionsHash: any;
+    npmExtensionHash: any;
     originalLockfileVersion: any;
     ancientLockfile: boolean | undefined;
     static get defaultLockfileVersion(): number;
@@ -47,8 +48,7 @@ declare class Shrinkwrap {
     addEdge(edge: any): void;
     commit(): any;
     toJSON(): any;
-    toString(options?: {}): any;
-    save(options?: {}): Promise<any>;
+    save(options?: {}): Promise<never[]>;
 }
 export default Shrinkwrap;
 //# sourceMappingURL=shrinkwrap.d.ts.map

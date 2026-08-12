@@ -11,10 +11,10 @@ via the `binary-builds` workflow.
 
 `cdx-convert` supports two conversion paths, selected with `--to`:
 
-| `--to`                 | Input spec versions | Output                             |
-| ---------------------- | ------------------- | ---------------------------------- |
-| `spdx` (default)       | `1.6`, `1.7`        | SPDX `3.0.1` JSON-LD               |
-| a CycloneDX version    | any cdxgen supports | CycloneDX at the requested version |
+| `--to`              | Input spec versions | Output                             |
+| ------------------- | ------------------- | ---------------------------------- |
+| `spdx` (default)    | `1.6`, `1.7`        | SPDX `3.0.1` JSON-LD               |
+| a CycloneDX version | any cdxgen supports | CycloneDX at the requested version |
 
 Input is CycloneDX JSON or protobuf (`.cdx`, `.cdx.bin`, `.proto`) with
 `bomFormat: "CycloneDX"`. If the input is not CycloneDX, the command fails with
@@ -45,13 +45,13 @@ cdx-convert -i bom.json --to 1.6 -o bom-1_6.cdx
 
 ## CLI reference
 
-| Flag                           | Default             | Description                                |
-| ------------------------------ | ------------------- | ------------------------------------------ |
-| `-i, --input`                  | `bom.json`          | Input CycloneDX BOM JSON or protobuf file. |
-| `-o, --output`                 | see below           | Output file path.                          |
-| `--to`                         | `spdx`              | `spdx`, or a CycloneDX spec version.       |
-| `--validate` / `--no-validate` | on                  | Validate the converted output.             |
-| `--json-pretty`                | off                 | Pretty-print JSON output.                  |
+| Flag                           | Default    | Description                                |
+| ------------------------------ | ---------- | ------------------------------------------ |
+| `-i, --input`                  | `bom.json` | Input CycloneDX BOM JSON or protobuf file. |
+| `-o, --output`                 | see below  | Output file path.                          |
+| `--to`                         | `spdx`     | `spdx`, or a CycloneDX spec version.       |
+| `--validate` / `--no-validate` | on         | Validate the converted output.             |
+| `--json-pretty`                | off        | Pretty-print JSON output.                  |
 
 `-o` defaults to `<input>.spdx.json` for the SPDX path, and to
 `<input>-<version>.<ext>` for a CycloneDX version conversion — so

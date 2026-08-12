@@ -19,7 +19,9 @@ declare class Node {
     realpath: any;
     resolved: any;
     integrity: any;
-    hasShrinkwrap: any;
+    patched: any;
+    packageExtensionsApplied: any;
+    npmExtensionApplied: any;
     installLinks: any;
     legacyPeerDeps: any;
     children: CaseInsensitiveMap;
@@ -33,7 +35,7 @@ declare class Node {
     peer: any;
     extraneous: any;
     dummy: boolean;
-    ideallyInert: any;
+    inert: any;
     edgesIn: Set<any>;
     edgesOut: CaseInsensitiveMap;
     overrides: any;
@@ -77,7 +79,6 @@ declare class Node {
     matches(node: any): any;
     replaceWith(node: any): void;
     replace(node: any): void;
-    get inShrinkwrap(): any;
     get parent(): any;
     set parent(parent: any);
     [_delistFromMeta](): void;
@@ -93,7 +94,7 @@ declare class Node {
     [_reloadNamedEdges](name: any, rootLoc?: any): void;
     get isLink(): boolean;
     get target(): this;
-    set target(_n: this);
+    set target(n: this);
     get depth(): any;
     get isTop(): any;
     get top(): any;
@@ -102,7 +103,10 @@ declare class Node {
     get resolveParent(): any;
     resolve(name: any): any;
     inNodeModules(): any;
+    querySelectorAll(query: any, opts: any): never;
     toJSON(): any;
+    resetDepFlags(): void;
+    unsetDepFlags(): void;
 }
 export default Node;
 //# sourceMappingURL=node.d.ts.map
