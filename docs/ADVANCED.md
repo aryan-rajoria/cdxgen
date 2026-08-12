@@ -272,6 +272,49 @@ When using any filters, cdxgen would automatically set the [compositions.aggrega
 
 To disable this behavior, pass `--no-auto-compositions`.
 
+## Output streams and log discipline
+
+cdxgen follows a strict stream contract:
+
+- **stdout** carries the payload only — the BOM document when no `-o` file is
+  given, or when you use `-o -` to write the BOM to stdout.
+- **stderr** carries every diagnostic: progress, banners, warnings, the
+  environment audit table, audit findings, and debug/trace logs.
+
+This keeps stdout machine-parseable. To write the BOM directly to stdout (for
+piping into another tool), use:
+
+```bash
+cdxgen -t js -o - . | jq '.components | length'
+```
+
+### Verbosity and progress flags
+
+| Flag                          | Env equivalent                                      | Effect                                                  |
+| ----------------------------- | --------------------------------------------------- | ------------------------------------------------------- |
+| `-q`, `--quiet`               | `CDXGEN_LOG_LEVEL=silent`                           | Errors only                                             |
+| `--verbose`                   | `CDXGEN_LOG_LEVEL=verbose`                          | + per-file/per-manifest detail                          |
+| `--verbose --verbose`         | `CDXGEN_LOG_LEVEL=debug`, `CDXGEN_DEBUG_MODE=debug` | + debug output                                          |
+| `--no-progress`               | `CDXGEN_NO_PROGRESS=true`                           | Force static (non-animated) output                      |
+| `--color=always\|never\|auto` | `CDXGEN_COLOR`, `NO_COLOR`, `FORCE_COLOR`           | Color control                                           |
+| `--log-format=json`           | `CDXGEN_LOG_FORMAT=json`                            | NDJSON records to stderr; disables the live region      |
+|                               | `CDXGEN_UNICODE=false`                              | Use ASCII markers and spinner instead of unicode glyphs |
+
+When both a flag and its env equivalent are set, the **env var wins** so
+existing CI configurations keep working unchanged.
+
+`-v` prints the version, unchanged from v12. `--verbose` therefore has no short
+form; repeat the long flag or set `CDXGEN_LOG_LEVEL=debug`.
+
+The live progress region animates only when stderr is an interactive terminal.
+Under a pipe or redirect, with `CI=true`, when `TERM` is `dumb` or `unknown`, in
+server mode, inside worker threads, or with `--no-progress`, each phase emits a
+single static summary line and no ANSI escape byte is written.
+
+Unicode glyphs (the braille spinner and the `✔`/`✖`/`→` markers) are used
+everywhere except legacy Windows consoles, which are detected by the absence of
+`WT_SESSION`. Set `CDXGEN_UNICODE=true` or `false` to override the guess.
+
 ## Purl source resolution
 
 cdxgen can accept a package URL (`pkg:*`) as the input path and automatically resolve it to a cloneable repository URL.

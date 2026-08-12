@@ -179,7 +179,7 @@ jobs:
         run: |
           bin/cdxgen.js -t ai test/data/ai-huggingface/repos -o bomresults/bom-huggingface-ai-fixture.json --include-formulation --fail-on-error
           jq -e 'any(.components[]; .type == "machine-learning-model" and .group == "HuggingFaceH4" and .name == "zephyr-7b-beta" and any((.modelCard.properties // [])[]; .name == "cdx:huggingface:language" and .value == "en") and any((.modelCard.properties // [])[]; .name == "cdx:huggingface:gatedFieldCount" and .value == "1") and .modelCard.modelParameters.inputs[0].format == "text" and .modelCard.modelParameters.outputs[0].format == "text" and any((.modelCard.considerations.environmentalConsiderations.properties // [])[]; .name == "cdx:huggingface:co2EmissionsGrams" and .value == "123.4") and any((.pedigree.ancestors // [])[]; .group == "mistralai"))' bomresults/bom-huggingface-ai-fixture.json
-          jq -e 'any(.dependencies[]; .ref == "pkg:huggingface/HuggingFaceH4/zephyr-7b-beta" and any((.dependsOn // [])[]; . == "pkg:huggingface/HuggingFaceH4/ultrachat_200k?repository_url=https%3A%2F%2Fhuggingface.co%2Fdatasets"))' bomresults/bom-huggingface-ai-fixture.json
+          jq -e 'any(.dependencies[]; .ref == "pkg:huggingface/HuggingFaceH4/zephyr-7b-beta" and any((.dependsOn // [])[]; . == "pkg:huggingface/HuggingFaceH4/ultrachat_200k?repository_url=https:%2F%2Fhuggingface.co%2Fdatasets"))' bomresults/bom-huggingface-ai-fixture.json
         shell: bash
       - name: repotests angular analyzer fixtures
         run: |

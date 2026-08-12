@@ -16,6 +16,10 @@ export declare function shouldRenderProgress(options?: object): boolean;
  * Create a dependency-free progress renderer for cdx-audit.
  *
  * Progress is always written to stderr so JSON/stdout reports remain clean.
+ * The renderer delegates the live region to `lib/core/ui.js`: an interactive
+ * run shows a single spinner phase whose detail line tracks the current
+ * target, while a non-interactive run commits one plain line per state
+ * transition.
  *
  * @param {object} [options] progress options
  * @returns {{ onProgress: Function, stop: Function }} progress controller

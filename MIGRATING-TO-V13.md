@@ -584,3 +584,122 @@ is unchanged. Two behaviours differ:
   lockfile was written the hashes differ and the graph is reported as
   `unverified`; when the lockfile records no extension at all it is reported as
   `false`, meaning repairs may be missing.
+
+## Diagnostic output moved from stdout to stderr
+
+**Affected:** any caller that read cdxgen's stdout to get progress messages,
+banners, the environment-audit table, or other diagnostics.
+
+cdxgen v13 enforces a strict stream contract:
+
+- **stdout** carries the payload only — the BOM document, and only when you ask
+  for it on stdout with `-o -`.
+- **stderr** carries every human-readable diagnostic: progress, banners,
+  warnings, the environment audit, audit findings, and the debug, thought, and
+  trace logs (`CDXGEN_DEBUG_MODE`, `CDXGEN_THINK_MODE`, `CDXGEN_TRACE_MODE`).
+
+In v12 all of this went to stdout, so `CDXGEN_TRACE_MODE=true` interleaved JSON
+trace records with `--print` table output and there was no way to get a clean
+machine-readable stream.
+
+If you parsed stdout for diagnostics, read stderr instead. To restore the v12
+behaviour during a staged migration:
+
+```shell
+export CDXGEN_LOG_STREAM=stdout
+```
+
+This is a compatibility escape hatch and will be removed in a future release.
+
+## `-o -` writes the BOM to stdout
+
+`-o -` (or `--output -`) emits the BOM document on stdout with all diagnostics
+on stderr:
+
+```shell
+cdxgen -t js -o - . > bom.json
+cdxgen -t js -o - . | jq '.components | length'
+```
+
+In v12 this silently created a file named `-` in the current directory.
+
+When several output formats are requested, `-o -` emits one document: the SPDX
+document if `--format spdx` was requested, otherwise the CycloneDX one. Write to
+files if you need both.
+
+## Verbosity, progress, and log format flags
+
+| Flag                          | Purpose                                                                                                     |
+| ----------------------------- | ----------------------------------------------------------------------------------------------------------- |
+| `-q`, `--quiet`               | Errors only. (Env: `CDXGEN_LOG_LEVEL=silent`)                                                               |
+| `--verbose`                   | Countable. Once for per-file detail, twice for debug output. (Env: `CDXGEN_LOG_LEVEL`, `CDXGEN_DEBUG_MODE`) |
+| `--no-progress`               | Force static output instead of the live progress region. (Env: `CDXGEN_NO_PROGRESS`)                        |
+| `--color=auto\|always\|never` | When to colorize. (Env: `CDXGEN_COLOR`, `NO_COLOR`, `FORCE_COLOR`)                                          |
+| `--log-format=text\|json`     | `json` emits NDJSON records on stderr and disables the live region. (Env: `CDXGEN_LOG_FORMAT`)              |
+
+`-v` still means `--version`, unchanged from v12. `--verbose` has no short form
+because of it; repeat the long flag (`--verbose --verbose`) or set
+`CDXGEN_LOG_LEVEL=debug`.
+
+Existing env vars (`CDXGEN_DEBUG_MODE`, `SCAN_DEBUG_MODE`, `CI`, `NO_COLOR`,
+`FORCE_COLOR`, `CDXGEN_TABLE_BORDER`) keep working and take precedence when both
+a flag and an env var are set.
+
+The live progress region is used only when stderr is an interactive terminal. It
+is disabled automatically for pipes and redirects, under `CI=true`, when `TERM`
+is `dumb` or `unknown`, in server mode, and inside worker threads — in all of
+those cases each phase prints one plain line when it finishes, and no ANSI
+escape byte is written.
+
+## Unidentifiable Java archives are reported instead of dropped
+
+**Affected:** BOMs for `.jar`, `.war`, and `.hpi` archives, and container images
+containing them. Component counts go up.
+
+In v12, an archive whose Maven coordinates could not be read produced a warning
+and was left out of the SBOM entirely:
+
+```
+Unable to extract component information from /opt/java/lib/jrt-fs.jar.
+The SBOM won't include this artifact.
+```
+
+Silently omitting a shipped artifact is the worst outcome for an SBOM: the file
+is on disk and reachable, but nothing downstream knows it exists. v13 records it
+as a `file` component instead, with:
+
+- MD5, SHA-1, and SHA-256 hashes, so it can be matched by content against a
+  binary-authority service even without coordinates.
+- `evidence.identity` at **confidence `0`** with technique `filename`, stating
+  plainly that only the file name is known.
+- A `pkg:generic/<name>` purl. The location is carried by `internal:SrcFile`
+  and the evidence `concludedValue`, both rewritten to scan-relative paths;
+  nested archives are identified by their entry path, as
+  `outer.war!/WEB-INF/lib/inner.jar`. The purl holds no path, so it stays
+  identical between runs over the same input.
+
+This is the same treatment unpackaged executables and shared libraries already
+get in container BOMs. The warning is gone; the archive is not.
+
+Test jars (`-tests.jar`, `-test-sources.jar`) are still skipped, and unreadable
+files are still skipped.
+
+To find them in a generated BOM, select `file` components whose purl identity
+was concluded at zero confidence from a `.jar`, `.war`, or `.hpi` name:
+
+```shell
+jq '[.components[]
+     | select(.type=="file")
+     | select(.name | test("\\.(jar|war|hpi)$"))
+     | select(any(.evidence.identity[]?;
+                  .field=="purl" and .confidence==0))]
+    | length' bom.json
+```
+
+### Purls set by a collector are no longer discarded
+
+`file`, `data`, and `cryptographic-asset` components get no purl _derived_ from
+the ecosystem being scanned, since they are not packages of that ecosystem.
+Previously this also discarded a purl the collector had already resolved. A
+`pkg:generic/...` purl set by a collector is now preserved, which is what makes
+these components joinable across BOMs.

@@ -27,7 +27,25 @@ export declare function createContainerSpecLikeBom(path: string, options: Object
  * @param {Object} options Parse options from the cli
  * @returns {Promise<Object>} Promise resolving to BOM object
  */
-export declare function createMultiXBom(pathList: string[], options: Object): Promise<Object>;
+/**
+ * Join non-zero counts into a phase summary.
+ *
+ * Each entry carries its own plural form rather than having one appended, so
+ * nouns like "shared library" read correctly.
+ *
+ * @param {Array<[number, string, string]>} entries Count, singular, and plural
+ * @returns {string} Summary such as "412 OS packages, 3 services"
+ */
+export declare function summarizeCounts(entries: Array<[number, string, string]>): string;
+/**
+ * Summarize components by purl type, so a scan reports "412 npm, 88 pypi"
+ * rather than an anonymous total.
+ *
+ * @param {object[]} components Components carrying purls
+ * @returns {string} Comma-separated counts, busiest type first
+ */
+export declare function summarizePurlTypes(components: object[]): string;
+export declare function createMultiXBom(pathList: any, options: any): Promise<Object>;
 /**
  * Function to create a dynamic SBOM by executing a command and tracing the
  * shared libraries it loads at runtime via instrumentation.

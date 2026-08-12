@@ -50,22 +50,10 @@ export declare function isUserProvided(value: any, yaDefault: any): boolean;
  * @returns {object} A shallow copy of args with alias-based defaults applied
  */
 export declare function applyCommandNameDefaults(args: object, invokedCommandName: string): object;
-/**
- * Build the initial `options` object from parsed CLI args. This performs
- * the field renames and derived-value computations that create the shape
- * expected by `createBom`.
- *
- * @param {object} args               Parsed yargs argv (after command-name
- *                                    defaults have been applied)
- * @param {object} context
- * @param {string} context.filePath          Resolved source path
- * @param {boolean} context.isRemoteOrPurl   True when source is a URL or purl
- * @returns {object} The initial options object
- */
-export declare function buildInitialOptions(args: object, { filePath, isRemoteOrPurl }: {
-    filePath: string;
-    isRemoteOrPurl: boolean;
-}): object;
+export declare function buildInitialOptions(args: any, { filePath, isRemoteOrPurl }: {
+    filePath: any;
+    isRemoteOrPurl: any;
+}): any;
 export type OptionsWarning = {
     /**
      * Severity level
