@@ -100,6 +100,8 @@ lib/core/projectConfig.js
 lib/core/propertySanitizer.js
 lib/core/spdx.js
 lib/core/state.js
+lib/core/text.js
+lib/core/ui.js
 lib/core/urls.js
 lib/ecosystems/asarutils.js
 lib/ecosystems/bunutils.js

@@ -30,6 +30,11 @@ import {
   PROJECT_CONFIG_FILENAMES,
   sanitizeProjectConfig,
 } from "../lib/core/projectConfig.js";
+import {
+  ui as defaultUi,
+  installConsoleShim,
+  restoreConsole,
+} from "../lib/core/ui.js";
 import { fetchPomXmlAsJson } from "../lib/ecosystems/ecosystems.js";
 import { normalizeHuggingFaceReference } from "../lib/ecosystems/remote/huggingface.js";
 import {
@@ -194,8 +199,10 @@ const args = _yargs
   })
   .option("output", {
     alias: "o",
-    description: "Output file. Default bom.json",
+    description:
+      "Output file. Default bom.json. Use -o - to write the BOM to stdout.",
     default: "bom.json",
+    nargs: 1,
   })
   .option("evinse-output", {
     description:
@@ -780,9 +787,34 @@ const args = _yargs
     description: "Show help",
   })
   .option("verbose", {
+    count: true,
+    description:
+      "Increase log verbosity. Repeat for more detail: --verbose shows per-file detail, --verbose --verbose enables debug output. (Env: CDXGEN_LOG_LEVEL, CDXGEN_DEBUG_MODE)",
+  })
+  .option("quiet", {
+    alias: "q",
     type: "boolean",
     default: false,
-    description: "Show extended version and diagnostic information.",
+    description:
+      "Silent mode: show errors only. (Env: CDXGEN_LOG_LEVEL=silent)",
+  })
+  .option("progress", {
+    type: "boolean",
+    default: true,
+    description:
+      "Live progress region. Pass --no-progress to force static output. (Env: CDXGEN_NO_PROGRESS)",
+  })
+  .option("color", {
+    description:
+      "When to colorize output. auto detects the terminal. (Env: CDXGEN_COLOR, NO_COLOR, FORCE_COLOR)",
+    choices: ["auto", "always", "never"],
+    default: "auto",
+  })
+  .option("log-format", {
+    description:
+      "Diagnostic log format. json emits NDJSON records to stderr and disables the live region. (Env: CDXGEN_LOG_FORMAT)",
+    choices: ["text", "json"],
+    default: "text",
   })
   .option("rust", {
     type: "boolean",
@@ -977,7 +1009,11 @@ const cliActivityContext = {
 setDryRunMode(options.dryRun);
 setActivityContext(cliActivityContext);
 const outputPlan = createOutputPlan(options);
+const outputIsStdout = options.output === "-";
 for (const outputFile of Object.values(outputPlan.outputs)) {
+  if (outputFile === "-") {
+    continue;
+  }
   const outputDirectory = getOutputDirectory(outputFile);
   if (
     outputDirectory &&
@@ -986,6 +1022,33 @@ for (const outputFile of Object.values(outputPlan.outputs)) {
   ) {
     safeMkdirSync(outputDirectory, { recursive: true });
   }
+}
+// Configure the live-region UI from the parsed flags, then install the console
+// shim so every existing console.log call site lands on the diagnostic stream
+// (stderr) above the live region. Env equivalents keep working and win when
+// both are set (resolved inside ui.configure).
+{
+  // Verbosity ladder: 0 silent, 1 normal, 2 verbose, 3 debug. `undefined` means
+  // no flag was given, leaving the env vars to decide.
+  let flagLevel;
+  if (args.quiet) {
+    flagLevel = 0;
+  } else if (args.verbose >= 2) {
+    flagLevel = 3;
+  } else if (args.verbose >= 1) {
+    flagLevel = 2;
+  }
+  const colorByFlag = { always: true, never: false };
+  defaultUi.configure({
+    level: flagLevel,
+    format: args.logFormat,
+    noProgress: args.progress === false,
+    color: colorByFlag[args.color],
+  });
+  installConsoleShim(defaultUi);
+  // Restore the original console when the process exits so post-IIFE output
+  // (and any atexit hooks) uses the real streams.
+  process.once("exit", restoreConsole);
 }
 // HBOM validation (side-effects that must stay in the CLI entry point)
 try {
@@ -1214,7 +1277,11 @@ const checkPermissions = (filePath, options) => {
     );
     return false;
   }
-  if (!isDryRun && !process.permission.has("fs.write", options.output)) {
+  if (
+    !isDryRun &&
+    options.output !== "-" &&
+    !process.permission.has("fs.write", options.output)
+  ) {
     console.log(
       `\x1b[1;35mSECURE MODE: FileSystemWrite permission is required to create the output BOM file. Please invoke cdxgen with the argument --allow-fs-write="${options.output}"\x1b[0m`,
     );
@@ -1600,7 +1667,14 @@ const writeCycloneDxOutput = (jsonFile, bomJson, options) => {
   }
   setActivityContext({ sourcePath: srcDir });
   if (!hasHbomProjectType(options.projectType)) {
-    prepareEnv(srcDir, options);
+    const prepPhase = defaultUi.phase("Preparing environment");
+    try {
+      prepareEnv(srcDir, options);
+      prepPhase.succeed("");
+    } catch (err) {
+      prepPhase.fail(err);
+      throw err;
+    }
   }
   thoughtLog("Getting ready to generate the BOM ⚡️.");
   if (DEBUG_MODE) {
@@ -1625,8 +1699,15 @@ const writeCycloneDxOutput = (jsonFile, bomJson, options) => {
     process.env.CDXGEN_FETCH_PKG_METADATA = "true";
   }
   let bomNSData;
+  const bomPhase = defaultUi.phase("Generating BOM");
   try {
     bomNSData = (await createBom(srcDir, options)) || {};
+    bomPhase.succeed(
+      `${bomNSData?.bomJson?.components?.length || 0} components`,
+    );
+  } catch (err) {
+    bomPhase.fail(err);
+    throw err;
   } finally {
     if (originalFetchPackageMetadata === undefined) {
       delete process.env.CDXGEN_FETCH_PKG_METADATA;
@@ -1661,7 +1742,20 @@ const writeCycloneDxOutput = (jsonFile, bomJson, options) => {
     bomNSData = await applyTeaFetch(bomNSData, options);
   }
   // Add extra metadata and annotations with post processing
-  bomNSData = postProcess(bomNSData, { ...options, executeOsQuery }, srcDir);
+  {
+    const postPhase = defaultUi.phase("Post-processing BOM");
+    try {
+      bomNSData = postProcess(
+        bomNSData,
+        { ...options, executeOsQuery },
+        srcDir,
+      );
+      postPhase.succeed("");
+    } catch (err) {
+      postPhase.fail(err);
+      throw err;
+    }
+  }
   setActivityContext({
     projectType: Array.isArray(options.projectType)
       ? options.projectType.join(",")
@@ -1920,9 +2014,11 @@ const writeCycloneDxOutput = (jsonFile, bomJson, options) => {
   // Perform automatic validation
   if (options.validate && bomNSData?.bomJson) {
     thoughtLog("Wait, let's check the generated BOM file for any issues.");
+    const validatePhase = defaultUi.phase("Validating BOM");
     const validation = await validateGeneratedBom(bomNSData.bomJson);
     const validationTarget = `cyclonedx-${bomNSData.bomJson.specVersion || options.specVersion}`;
     if (!validation.valid) {
+      validatePhase.fail("schema validation failed");
       recordActivity({
         kind: "validate",
         reason: `The BOM failed schema validation using the ${validation.source} validator.`,
@@ -1934,6 +2030,7 @@ const writeCycloneDxOutput = (jsonFile, bomJson, options) => {
       }
       process.exit(1);
     } else {
+      validatePhase.succeed(`valid (${validation.source})`);
       recordActivity({
         kind: "validate",
         reason: `Validated the BOM against the CycloneDX schema using the ${validation.source} validator.`,
@@ -1978,7 +2075,22 @@ const writeCycloneDxOutput = (jsonFile, bomJson, options) => {
       }
     }
   }
-  if (
+  if (outputIsStdout) {
+    if (!isDryRun && bomNSData.bomJson) {
+      const payload =
+        outputPlan.formats.has("spdx") && bomNSData.spdxJson
+          ? stringifyJson(bomNSData.spdxJson, options.jsonPretty)
+          : stringifyJson(bomNSData.bomJson, options.jsonPretty);
+      process.stdout.write(payload);
+    } else if (isDryRun) {
+      recordActivity({
+        kind: "write",
+        reason: "Dry run mode skips stdout BOM output.",
+        status: "blocked",
+        target: "stdout",
+      });
+    }
+  } else if (
     options.output &&
     (typeof options.output === "string" || options.output instanceof String)
   ) {

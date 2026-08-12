@@ -23,6 +23,22 @@ export declare function parseSbomDocument(text: string, { source, maxBytes }?: {
     rootRef: (string | undefined);
 } | null;
 /**
+ * Repair the purl of a component read from a third-party document.
+ *
+ * Producers write a `download_url` as a bare URL, but a purl qualifier value is
+ * percent-encoded, so an unescaped `://` makes the whole purl unparseable. A
+ * `file:` URL is dropped instead of escaped: it names a path on the machine
+ * that built the document, so it identifies nothing for a reader of the BOM.
+ * Versions are escaped for build metadata in either case.
+ *
+ * A purl that is still unparseable afterwards is split on its separators and
+ * rebuilt, which escapes any remaining reserved character wherever it sits —
+ * a shared-library name such as `libstdc++.so.6`, for instance.
+ *
+ * @param {object} component Component whose purl is rewritten in place
+ */
+export declare function repairPurl(component: object): void;
+/**
  * Attach provenance properties to every component of a parsed document. The
  * caller owns the property names so each provenance channel stays
  * distinguishable in the merged BOM.
