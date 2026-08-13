@@ -1,4 +1,9 @@
-export declare const spdxLicenses: any;
+/**
+ * Parsed list of SPDX license identifiers loaded from `data/spdx-licenses.json`.
+ *
+ * @type {string[]}
+ */
+export declare const spdxLicenses: string[];
 /**
  * Method to determine if a license is a valid SPDX license expression
  *

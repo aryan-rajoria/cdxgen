@@ -10,13 +10,29 @@ export declare const parseFileASTTreeCollected: (src: string, file: string) => {
     imports: Object;
     exports: Object;
 };
+/**
+ * Capability categories analyzed in Chromium browser-extension sources, such
+ * as file access, device access, network, bluetooth, and fingerprinting.
+ */
 export declare const CHROMIUM_EXTENSION_CAPABILITY_CATEGORIES: string[];
+/**
+ * Capability categories analyzed in plain JavaScript/TypeScript sources, such
+ * as child-process execution, code generation, dynamic fetch, and dynamic import.
+ */
 export declare const JS_CAPABILITY_CATEGORIES: string[];
-export declare function analyzeSuspiciousJsSource(source: any): {
-    executionIndicators: any[];
-    indicators: any[];
-    networkIndicators: any[];
-    obfuscationIndicators: any[];
+/**
+ * Babel-parse a JavaScript source and flag suspicious execution, network, and
+ * obfuscation indicators such as child-process calls, fetch usage, and long
+ * base64 strings.
+ *
+ * @param {string} source JavaScript source code to analyze.
+ * @returns {{executionIndicators: string[], networkIndicators: string[], obfuscationIndicators: string[], indicators: string[]}} Suspicious indicator findings (empty arrays when the source cannot be parsed).
+ */
+export declare function analyzeSuspiciousJsSource(source: string): {
+    executionIndicators: string[];
+    networkIndicators: string[];
+    obfuscationIndicators: string[];
+    indicators: string[];
 };
 /**
  * Find all imports and exports
@@ -38,31 +54,68 @@ export declare const analyzeSuspiciousJsFile: (filePath: string) => {
     networkIndicators: string[];
     obfuscationIndicators: string[];
 };
-export declare function analyzeJsCapabilitiesSource(source: any): {
+/**
+ * AST-scan JavaScript source for runtime capability usage including child
+ * process execution, eval/code generation, dynamic fetch, and dynamic import.
+ *
+ * @param {string} source JavaScript source code to analyze.
+ * @returns {{capabilities: string[], hasDynamicFetch: boolean, hasDynamicImport: boolean, hasEval: boolean, indicatorMap: Object<string, string[]>}} Capability analysis result (empty when the source cannot be parsed).
+ */
+export declare function analyzeJsCapabilitiesSource(source: string): {
     capabilities: string[];
     hasDynamicFetch: boolean;
     hasDynamicImport: boolean;
     hasEval: boolean;
-    indicatorMap: {};
+    indicatorMap: Record<string, string[]>;
 };
-export declare const analyzeJsCapabilitiesFile: (filePath: any) => {
+/**
+ * Read a JavaScript/TypeScript file from disk and return its capability
+ * analysis, converting it to parseable code first.
+ *
+ * @param {string} filePath Path to the JS/TS file to analyze.
+ * @returns {{capabilities: string[], hasDynamicFetch: boolean, hasDynamicImport: boolean, hasEval: boolean, indicatorMap: Object<string, string[]>}|undefined} Capability analysis result, or undefined when the file cannot be read.
+ */
+export declare const analyzeJsCapabilitiesFile: (filePath: string) => {
     capabilities: string[];
     hasDynamicFetch: boolean;
     hasDynamicImport: boolean;
     hasEval: boolean;
-    indicatorMap: {};
+    indicatorMap: Record<string, string[]>;
+} | undefined;
+/**
+ * AST-scan JavaScript source for cryptographic algorithm and library usage,
+ * detecting calls to Node.js `crypto`, WebCrypto, JWT/JOSE libraries, and
+ * literal algorithm references.
+ *
+ * @param {string} source JavaScript source code to analyze.
+ * @returns {{algorithms: Object[], libraries: string[]}} Detected crypto algorithms and library names (empty arrays when the source cannot be parsed).
+ */
+export declare function analyzeJsCryptoSource(source: string): {
+    algorithms: Object[];
+    libraries: string[];
 };
-export declare function analyzeJsCryptoSource(source: any): {
-    algorithms: any[];
-    libraries: any[];
-};
-export declare const analyzeJsCryptoFile: (filePath: any) => {
-    algorithms: any[];
-    libraries: any[];
-};
-export declare const detectJsCryptoInventory: (src: any, deep?: boolean) => Promise<{
-    algorithms: any[];
-    libraries: any[];
+/**
+ * Read a JavaScript/TypeScript file from disk and return detected
+ * cryptographic algorithms and libraries.
+ *
+ * @param {string} filePath Path to the JS/TS file to analyze.
+ * @returns {{algorithms: Object[], libraries: string[]}|undefined} Crypto analysis result, or undefined when the file cannot be read.
+ */
+export declare const analyzeJsCryptoFile: (filePath: string) => {
+    algorithms: Object[];
+    libraries: string[];
+} | undefined;
+/**
+ * Walk a source tree aggregating cryptographic inventory (algorithms and
+ * libraries) across all JavaScript/TypeScript files found.
+ *
+ * @param {string} src Path to the source directory to scan.
+ * @param {boolean} [deep=false] When true, includes node_modules and nested directories.
+ * @returns {Promise<{algorithms: Object[], libraries: string[]}>} Aggregated crypto inventory (empty arrays when no files are found).
+ */
+export declare const detectJsCryptoInventory: (src: string, deep?: boolean) => Promise<{
+    algorithms: Object[];
+    libraries: string[];
 }>;
 /**
  * Detect browser-extension capability signals from source code using Babel AST analysis.

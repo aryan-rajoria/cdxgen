@@ -6,8 +6,11 @@
  * and `lib/core/ui.js` (layer 0) both need, so neither has to reach across a
  * layer boundary for them.
  */
+/** String source of a regex matching ANSI escape sequences (CSI forms). */
 declare const ANSI_PATTERN = "\\u001B\\[[0-?]*[ -/]*[@-~]";
+/** Global regex constructed from {@link ANSI_PATTERN}, used to strip ANSI escapes. */
 declare const ANSI_REGEX: RegExp;
+/** Regex matching Unicode combining mark characters (the `\p{Mark}` category). */
 declare const COMBINING_MARK_REGEX: RegExp;
 /**
  * Strip ANSI escape sequences from a string.

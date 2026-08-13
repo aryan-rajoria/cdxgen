@@ -1,4 +1,6 @@
+/** True when thought/reasoning logging is enabled (CDXGEN_THOUGHT_LOG, CDXGEN_THINK_MODE, or verbose debug mode). */
 export declare const THINK_MODE: any;
+/** True when structured command/HTTP trace logging is enabled (CDXGEN_TRACE_LOG, CDXGEN_TRACE_ID, CDXGEN_TRACE_MODE, or verbose debug mode). */
 export declare const TRACE_MODE: any;
 /**
  * Logs a thought message to the think logger if THINK_MODE is enabled.

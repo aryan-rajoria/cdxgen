@@ -7,7 +7,15 @@
  * @param {boolean} recurse Recurse. Default: false
  */
 export declare const getDirs: (dirPath: string, dirName: string, hidden?: boolean, recurse?: boolean) => string[];
-export declare const getOnlyDirs: (srcpath: any, dirName: any) => any;
+/**
+ * Recursively walk `srcpath` and return all subdirectory paths whose basename
+ * matches `dirName` (the root path is included when it matches).
+ *
+ * @param {string} srcpath Root directory to start the walk from.
+ * @param {string} dirName Basename that a directory must end with to be kept.
+ * @returns {string[]} Matching directory paths.
+ */
+export declare const getOnlyDirs: (srcpath: string, dirName: string) => string[];
 /**
  * Walk a directory tree once and collect all subdirectories whose basename
  * matches any of the target names. Returns a map from name to array of paths.

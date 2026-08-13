@@ -29,7 +29,23 @@ export declare function parseQueryString(q: Object, body?: Object, options?: Obj
  * @returns {Object} Key/value map of query parameters from the request URL
  */
 export declare function getQueryParams(req: Object): Object;
-declare const configureServer: (cdxgenServer: any) => void;
-declare const start: (options: any) => void;
+/**
+ * Configure timeout and keepAlive values on the cdxgen HTTP server.
+ *
+ * @param {import("node:http").Server} cdxgenServer HTTP server instance to configure
+ * @returns {void}
+ */
+declare const configureServer: (cdxgenServer: import("node:http").Server) => void;
+/**
+ * Boot the cdxgen HTTP server.
+ *
+ * Performs startup security checks (secure mode, host exposure, privileged
+ * ports), validates the configured port, registers routes, and begins
+ * listening for BOM generation requests.
+ *
+ * @param {object} options CLI options including `serverHost` and `serverPort`
+ * @returns {void}
+ */
+declare const start: (options: object) => void;
 export { configureServer, start };
 //# sourceMappingURL=server.d.ts.map

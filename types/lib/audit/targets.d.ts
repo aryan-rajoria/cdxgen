@@ -1,3 +1,4 @@
+/** Set of purl types supported by the predictive audit (cargo, npm, pypi). */
 declare const SUPPORTED_PURL_TYPES: Set<string>;
 /**
  * Determine whether a CycloneDX component scope should be treated as required.

@@ -1,8 +1,14 @@
+/** npm provenance evidence component property names. */
 export declare const NPM_PROVENANCE_EVIDENCE_PROPERTIES: string[];
+/** PyPI provenance evidence component property names. */
 export declare const PYPI_PROVENANCE_EVIDENCE_PROPERTIES: string[];
+/** Cargo provenance evidence component property names. */
 export declare const CARGO_PROVENANCE_EVIDENCE_PROPERTIES: string[];
+/** All registry provenance evidence component property names (npm, PyPI, and Cargo combined). */
 export declare const REGISTRY_PROVENANCE_EVIDENCE_PROPERTIES: string[];
+/** Trusted-publishing indicator component property names for each registry. */
 export declare const TRUSTED_PUBLISHING_PROPERTIES: string[];
+/** Icon appended to component names that carry registry provenance evidence. */
 export declare const REGISTRY_PROVENANCE_ICON = "\uD83D\uDEE1";
 /**
  * Return a component property value by name.

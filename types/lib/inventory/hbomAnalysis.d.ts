@@ -1,76 +1,56 @@
-export declare function getHbomCommandDiagnostics(bomJson: any): any;
-export declare function getHbomCommandDiagnosticSummary(bomJson: any): {
-    actionableDiagnosticCount: any;
-    commandDiagnosticCount: any;
-    commandDiagnostics: any;
-    commandErrorCount: any;
-    commandErrorIds: string[];
-    diagnosticIssues: string[];
-    installHintCount: number;
-    installHints: string[];
-    missingCommandCount: any;
-    missingCommandIds: string[];
-    missingCommands: string[];
-    partialSupportCount: any;
-    partialSupportIds: string[];
-    permissionDeniedCommands: string[];
-    permissionDeniedCount: any;
-    permissionDeniedIds: string[];
-    privilegeHintCount: number;
-    privilegeHints: string[];
-    requiresPrivilegedEnrichment: boolean;
-    timeoutIds: string[];
-    timeoutCount: any;
-};
-export declare function isHbomLikeBom(bomJson: any): any;
-export declare function getHbomHardwareClass(component: any): any;
-export declare function getHbomHardwareClassCounts(components?: any[]): {
-    hardwareClass: any;
-    count: any;
+/**
+ * Parse command diagnostic values carried as `cdx:hbom:evidence:commandDiagnostic` properties.
+ *
+ * @param {Object} bomJson CycloneDX HBOM document
+ * @returns {Object[]} Parsed command diagnostic objects, skipping unparseable entries
+ */
+export declare function getHbomCommandDiagnostics(bomJson: Object): Object[];
+/**
+ * Summarize HBOM command diagnostics by issue kind with counts and identifiers.
+ *
+ * @param {Object} bomJson CycloneDX HBOM document
+ * @returns {Object} Summary with per-issue counts, sorted command/id/hint lists, and a `requiresPrivilegedEnrichment` flag
+ */
+export declare function getHbomCommandDiagnosticSummary(bomJson: Object): Object;
+/**
+ * Determine whether a BOM carries HBOM markers (`cdx:hbom:*` properties).
+ *
+ * @param {Object} bomJson CycloneDX BOM document
+ * @returns {boolean} `true` when the BOM looks like an HBOM
+ */
+export declare function isHbomLikeBom(bomJson: Object): boolean;
+/**
+ * Return a component's `cdx:hbom:hardwareClass` property value.
+ *
+ * @param {Object} component CycloneDX component
+ * @returns {string|undefined} Hardware class value when present
+ */
+export declare function getHbomHardwareClass(component: Object): string | undefined;
+/**
+ * Count components per `cdx:hbom:hardwareClass`, sorted by count descending.
+ *
+ * @param {Object[]} [components=[]] CycloneDX components
+ * @returns {{hardwareClass: string, count: number}[]} Sorted hardware class counts
+ */
+export declare function getHbomHardwareClassCounts(components?: Object[]): {
+    hardwareClass: string;
+    count: number;
 }[];
-export declare function formatHbomHardwareClassSummary(hardwareClassCounts?: any[]): string;
-export declare function getHbomSummary(bomJson: any): {
-    actionableDiagnosticCount: any;
-    architecture: any;
-    collectorProfile: any;
-    commandDiagnosticCount: any;
-    commandDiagnostics: any;
-    commandErrorCount: any;
-    commandErrorIds: string[];
-    componentCount: any;
-    diagnosticIssues: string[];
-    evidenceCommandCount: any;
-    evidenceCommands: any;
-    evidenceFileCount: any;
-    evidenceFiles: any;
-    hardwareClassCount: number;
-    hardwareClassCounts: {
-        hardwareClass: any;
-        count: any;
-    }[];
-    identifierPolicy: any;
-    installHintCount: number;
-    installHints: string[];
-    manufacturer: any;
-    metadataName: any;
-    metadataType: any;
-    missingCommandCount: any;
-    missingCommandIds: string[];
-    missingCommands: string[];
-    partialSupportCount: any;
-    partialSupportIds: string[];
-    platform: any;
-    permissionDeniedCommands: string[];
-    permissionDeniedCount: any;
-    permissionDeniedIds: string[];
-    privilegeHintCount: number;
-    privilegeHints: string[];
-    requiresPrivilegedEnrichment: boolean;
-    timeoutIds: string[];
-    timeoutCount: any;
-    topHardwareClasses: {
-        hardwareClass: any;
-        count: any;
-    }[];
-};
+/**
+ * Format the top hardware-class counts as a `class (count)` comma-separated string.
+ *
+ * @param {{hardwareClass: string, count: number}[]} [hardwareClassCounts=[]] Hardware class counts
+ * @returns {string} Summary string covering at most five entries
+ */
+export declare function formatHbomHardwareClassSummary(hardwareClassCounts?: {
+    hardwareClass: string;
+    count: number;
+}[]): string;
+/**
+ * Build an overall HBOM summary from metadata, components, evidence, and diagnostics.
+ *
+ * @param {Object} bomJson CycloneDX HBOM document
+ * @returns {Object} HBOM summary with collector profile, platform, architecture, hardware class counts, evidence counts, and command diagnostic details
+ */
+export declare function getHbomSummary(bomJson: Object): Object;
 //# sourceMappingURL=hbomAnalysis.d.ts.map

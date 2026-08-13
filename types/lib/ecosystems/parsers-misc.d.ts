@@ -364,7 +364,18 @@ export declare function parseCmakeLikeFile(cmakeListFile: string, pkgType: strin
     parentComponent: Object;
     pkgList: Object[];
 };
-export declare function parseCUsageSlice(sliceData: any): {} | undefined;
+/**
+ * Parse an atom C/C++ usage-slice report into per-file package usage data.
+ *
+ * Walks the `objectSlices` of an atom report, collecting resolved method names
+ * and full names per source file while skipping include globals and compiler
+ * internals.
+ *
+ * @param {object} sliceData Parsed atom usage-slice report.
+ * @returns {Object<string, Set<string>>|undefined} Map of file name to the set
+ *   of used symbols, or undefined when sliceData is empty.
+ */
+export declare function parseCUsageSlice(sliceData: object): Record<string, Set<string>> | undefined;
 /**
  * Function to parse the .d make files
  *

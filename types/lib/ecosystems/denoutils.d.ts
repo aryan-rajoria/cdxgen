@@ -25,7 +25,17 @@ export declare function parseDenoJsonFile(jsonFile: string): Object | undefined;
  * @returns {string|undefined} Path to the manifest, if present.
  */
 export declare function findDenoJson(dir: string): string | undefined;
-export declare function getJsrMetadata(pkgList: any): Promise<any>;
+/**
+ * Fetch JSR registry metadata for deno/jsr package components.
+ *
+ * For each component carrying a `cdx:deno:jsrKey` property, fetches the version
+ * and package endpoints from the JSR API (batched in a single prefetch round
+ * when enabled) and fills in license, description, and the GitHub source link.
+ *
+ * @param {Array<object>} pkgList Package components potentially enriched with `cdx:deno:jsrKey`.
+ * @returns {Promise<Array<object>>} The enriched package list (same reference as pkgList).
+ */
+export declare function getJsrMetadata(pkgList: Array<object>): Promise<Array<object>>;
 /**
  * Parse a deno.lock file (versions 2 through 5) and return the package list
  * and dependency graph in the same shape as the other lockfile parsers.

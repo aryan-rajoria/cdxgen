@@ -72,34 +72,112 @@ export declare function hydrateNpmNodePackage(node: object, options?: object): {
  * Helper to check if a package is imported only for TypeScript types.
  */
 export declare function isPkgTypeOnlyImport(allImports: any, group: any, name: any): boolean;
-export declare function normalizePnpmLockKey(lockKey: any): any;
-export declare function normalizeNpmRegistryUrl(registryUrl: any): any;
-export declare function loadNpmrcConfig(projectRoot: any): {
-    constructor: Function;
-    toString(): string;
-    toLocaleString(): string;
-    valueOf(): Object;
-    hasOwnProperty(v: PropertyKey): boolean;
-    isPrototypeOf(v: Object): boolean;
-    propertyIsEnumerable(v: PropertyKey): boolean;
-};
-export declare function normalizeNpmScopeGroup(group: any): any;
-export declare function resolveNpmRegistryUrlForGitPackage(group: any, npmrcConfig?: {}): any;
-export declare function buildNpmGitPurlQualifiers(vcsUrl: any, group: any, npmrcConfig: any): {
-    vcs_url: any;
-    repository_url: any;
-} | null;
-export declare function buildNpmRegistryTarballUrl(registryUrl: any, group: any, name: any, version: any): string | undefined;
-export declare function buildNpmGitDistributionIntakeRefs(group: any, name: any, version: any, npmrcConfig: any): {
+/**
+ * Normalize a pnpm lockfile package key by stripping the leading "/@"
+ * separator and any parenthetical peer-dependency suffix.
+ *
+ * @param {string} lockKey Raw package key from a pnpm lockfile.
+ * @returns {string} The normalized key.
+ */
+export declare function normalizePnpmLockKey(lockKey: string): string;
+/**
+ * Normalize an npm registry URL by trimming surrounding whitespace and any
+ * trailing slash. Returns undefined for empty or templated (`${...}`) URLs.
+ *
+ * @param {string} registryUrl Raw registry URL.
+ * @returns {string|undefined} The normalized registry URL, or undefined when
+ *   the URL is empty or templated.
+ */
+export declare function normalizeNpmRegistryUrl(registryUrl: string): string | undefined;
+/**
+ * Load and merge npm/pnpm configuration from the project root with env-derived values.
+ *
+ * Reads `.npmrc` and `.pnpmrc` (when present) under `projectRoot`, layering them
+ * on top of the environment-derived config returned by `parseNpmrcFromEnv`.
+ *
+ * @param {string} projectRoot Project root directory to search for rc files.
+ * @returns {Object<string, string>} Merged npmrc configuration object.
+ */
+export declare function loadNpmrcConfig(projectRoot: string): Record<string, string>;
+/**
+ * Strip a leading "@" from an npm scope group name.
+ *
+ * @param {string} group Raw scope group (e.g. "@scope").
+ * @returns {string} The scope without the leading "@", or an empty string.
+ */
+export declare function normalizeNpmScopeGroup(group: string): string;
+/**
+ * Resolve the npm registry URL for a git-installed package.
+ *
+ * Prefers the scope-specific registry (`@scope:registry`) from the npmrc config,
+ * falling back to the global `registry` value.
+ *
+ * @param {string} group npm scope group (with or without leading "@").
+ * @param {Object<string, string>} [npmrcConfig={}] Merged npmrc configuration.
+ * @returns {string|undefined} The resolved registry URL, or undefined.
+ */
+export declare function resolveNpmRegistryUrlForGitPackage(group: string, npmrcConfig?: Record<string, string>): string | undefined;
+/**
+ * Build purl qualifiers (vcs_url, repository_url) for a git-sourced npm package.
+ *
+ * @param {string} vcsUrl Version-control URL (e.g. "repo#commit").
+ * @param {string} group npm scope group.
+ * @param {Object<string, string>} npmrcConfig Merged npmrc configuration.
+ * @returns {Object<string, string>|null} Qualifier map, or null when none apply.
+ */
+export declare function buildNpmGitPurlQualifiers(vcsUrl: string, group: string, npmrcConfig: Record<string, string>): Record<string, string> | null;
+/**
+ * Construct the registry tarball download URL for an npm package.
+ *
+ * @param {string} registryUrl Normalized registry base URL.
+ * @param {string} group npm scope group.
+ * @param {string} name Package name.
+ * @param {string} version Package version.
+ * @returns {string|undefined} The tarball URL, or undefined when required inputs are missing.
+ */
+export declare function buildNpmRegistryTarballUrl(registryUrl: string, group: string, name: string, version: string): string | undefined;
+/**
+ * Build distribution-intake external references for a git npm package's tarball.
+ *
+ * Resolves the registry URL for the package scope and constructs the tarball
+ * download URL, returning a single-element external-reference list.
+ *
+ * @param {string} group npm scope group.
+ * @param {string} name Package name.
+ * @param {string} version Package version.
+ * @param {Object<string, string>} npmrcConfig Merged npmrc configuration.
+ * @returns {Array<{type: string, url: string}>|undefined} Distribution-intake
+ *   references, or undefined when the registry URL cannot be resolved.
+ */
+export declare function buildNpmGitDistributionIntakeRefs(group: string, name: string, version: string, npmrcConfig: Record<string, string>): Array<{
     type: string;
     url: string;
-}[] | undefined;
-export declare function parsePnpmGitLockKey(lockKey: any): {
-    group: any;
-    name: any;
-    gitSpec: any;
-    fullName: any;
-    packageName: any;
+}> | undefined;
+/**
+ * Parse a pnpm lockfile key into group/name/git-spec for git-resolved packages.
+ *
+ * @param {string} lockKey Raw package key from a pnpm lockfile.
+ * @returns {{group: string, name: string, gitSpec: string, fullName: string, packageName: string}|null}
+ *   Parsed coordinates, or null when the key is not a git reference.
+ */
+export declare function parsePnpmGitLockKey(lockKey: string): {
+    group: string;
+    name: string;
+    gitSpec: string;
+    fullName: string;
+    packageName: string;
 } | null;
-export declare function buildPnpmGitPkgRefs(packages: any, snapshots: any, npmrcConfig?: {}): {};
+/**
+ * Build external-reference/intake objects for git-resolved pnpm packages.
+ *
+ * Scans the lockfile `packages` and `snapshots` maps for git resolutions,
+ * deriving purl, vcs_url, and distribution-intake references for each. Entries
+ * are indexed under every alias of their lock key for fast lookup.
+ *
+ * @param {Object<string, object>} packages Lockfile `packages` map.
+ * @param {Object<string, object>} snapshots Lockfile `snapshots` map.
+ * @param {Object<string, string>} [npmrcConfig={}] Merged npmrc configuration.
+ * @returns {Object<string, object>} Map of lookup key to git package reference.
+ */
+export declare function buildPnpmGitPkgRefs(packages: Record<string, object>, snapshots: Record<string, object>, npmrcConfig?: Record<string, string>): Record<string, object>;
 //# sourceMappingURL=npmutils.d.ts.map

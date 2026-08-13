@@ -1,15 +1,18 @@
-export declare const GIT_COMMAND: any;
-export declare const SDKMAN_JAVA_TOOL_ALIASES: {
-    java8: any;
-    java11: any;
-    java17: any;
-    java21: any;
-    java22: any;
-    java23: any;
-    java24: any;
-    java25: any;
-    java26: any;
-};
+/**
+ * Git executable name used for all git invocations, overridable via GIT_CMD.
+ *
+ * @type {string}
+ */
+export declare const GIT_COMMAND: string;
+/**
+ * sdkman tool aliases mapping java version identifiers to candidate ids.
+ *
+ * Each alias can be overridden via the matching `JAVA*_TOOL` environment
+ * variable and otherwise defaults to a Temurin candidate version.
+ *
+ * @type {Object<string, string>}
+ */
+export declare const SDKMAN_JAVA_TOOL_ALIASES: Record<string, string>;
 /**
  * Retrieves a git config item
  * @param {string} configKey Git config key
@@ -192,16 +195,16 @@ export declare function collectRubyInfo(dir: string): {
  * @returns Object containing swift details
  */
 export declare function runSwiftCommand(dir: string, args: any[]): string | undefined;
-export declare function collectEnvInfo(dir: any): {
-    type: string;
-    name: string;
-    version: string;
-    description: string;
-    properties: {
-        name: string;
-        value: string;
-    }[];
-}[];
+/**
+ * Collect toolchain information components for the current environment.
+ *
+ * Probes the working directory for java, dotnet, python, node, gcc, rust, go,
+ * and ruby toolchains and returns one component per detected tool.
+ *
+ * @param {string} dir Working directory to inspect
+ * @returns {Object[]} Array of toolchain component objects; empty when nothing is detected
+ */
+export declare function collectEnvInfo(dir: string): Object[];
 /**
  * Method to check if sdkman is available.
  */

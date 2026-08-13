@@ -10,13 +10,13 @@
  * and helpers to classify the result. It does *not* perform any I/O: the CLI
  * wrapper (`bin/validate.js`) is responsible for reading the input BOM.
  */
-declare const SEVERITY_ORDER: {
-    info: number;
-    low: number;
-    medium: number;
-    high: number;
-    critical: number;
-};
+/**
+ * Map of severity names to numeric ordering used for severity threshold
+ * comparisons.
+ *
+ * @type {Object<string, number>}
+ */
+declare const SEVERITY_ORDER: Record<string, number>;
 /**
  * Validate a BOM.
  *

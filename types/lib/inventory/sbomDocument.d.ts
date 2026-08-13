@@ -1,3 +1,8 @@
+/**
+ * Maximum size in bytes (5 MiB) of a third-party SBOM document accepted for parsing.
+ *
+ * @type {number}
+ */
 export declare const MAX_SBOM_DOCUMENT_BYTES: number;
 /**
  * Parse a third-party SBOM document into components and dependencies.

@@ -1,5 +1,21 @@
-export declare const isProtoSupportedSpecVersion: (specVersion: any) => boolean;
-export declare const assertProtoSupportedSpecVersion: (specVersion: any, operation?: string) => void;
+/**
+ * Determine whether a spec version is supported for protobuf serialization.
+ *
+ * @param {string|undefined} specVersion CycloneDX spec version string
+ * @returns {boolean} `true` when supported by `@cdxgen/cdx-proto`, or when no spec version is provided
+ */
+export declare const isProtoSupportedSpecVersion: (specVersion: string | undefined) => boolean;
+/**
+ * Assert that a spec version is supported by `@cdxgen/cdx-proto`.
+ *
+ * Throws an `Error` naming the unsupported version and the operation when the
+ * spec version cannot be serialized to protobuf; returns without effect
+ * otherwise.
+ *
+ * @param {string|undefined} specVersion CycloneDX spec version string
+ * @param {string} [operation="protobuf operations"] Operation label used in the error message
+ */
+export declare const assertProtoSupportedSpecVersion: (specVersion: string | undefined, operation?: string) => void;
 /**
  * Determine whether a path looks like a CycloneDX protobuf file.
  *

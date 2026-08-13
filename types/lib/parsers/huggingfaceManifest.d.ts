@@ -1,5 +1,20 @@
+/**
+ * Glob patterns used to locate Hugging Face model-card README files.
+ *
+ * @type {string[]}
+ */
 export declare const HUGGING_FACE_MODEL_CARD_PATTERNS: string[];
+/**
+ * Glob patterns used to locate Hugging Face `config.json` files.
+ *
+ * @type {string[]}
+ */
 export declare const HUGGING_FACE_CONFIG_PATTERNS: string[];
+/**
+ * Glob patterns used to locate Hugging Face PEFT `adapter_config.json` files.
+ *
+ * @type {string[]}
+ */
 export declare const HUGGING_FACE_ADAPTER_PATTERNS: string[];
 /**
  * Parse YAML frontmatter from a local Hugging Face README/model card.

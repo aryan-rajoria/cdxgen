@@ -1,3 +1,10 @@
+/**
+ * npmrc keys that are blocked and ignored during parsing for safety, because
+ * they can influence command execution, shell spawning, or sensitive config
+ * locations.
+ *
+ * @type {Set<string>}
+ */
 export declare const DEFAULT_NPMRC_BLOCKLIST: Set<string>;
 /**
  * Parse .npmrc content into a plain key-value object.

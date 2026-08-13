@@ -92,6 +92,9 @@ export declare const OS_DISTRO_ALIAS: {
  * @returns {Object} Raw key/value pairs from the os-release file.
  */
 export declare function readOsRelease(root?: string): Object;
+/**
+ * Reset the per-root os-release cache. Exported for unit tests only.
+ */
 export declare function _resetOsReleaseCache(): void;
 /**
  * Derive structured distro information from an os-release file.

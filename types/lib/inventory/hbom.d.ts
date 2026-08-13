@@ -38,7 +38,16 @@ export declare function ensureHbomRuntimeSupport(options?: object, commandName?:
  * @returns {object} cdx-hbom collector options.
  */
 export declare function normalizeHbomOptions(options?: object): object;
-export declare function addHbomAnalysisProperties(bomJson: any): any;
+/**
+ * Recompute and attach `cdx:hbom:analysis:*` summary properties to an HBOM.
+ *
+ * Existing analysis properties are dropped and rebuilt from the BOM's
+ * `cdx:hbom:evidence:commandDiagnostic` payload.
+ *
+ * @param {Object} bomJson CycloneDX HBOM document
+ * @returns {Object} The same BOM with refreshed analysis properties
+ */
+export declare function addHbomAnalysisProperties(bomJson: Object): Object;
 /**
  * Generate an HBOM using the optional cdx-hbom package.
  *

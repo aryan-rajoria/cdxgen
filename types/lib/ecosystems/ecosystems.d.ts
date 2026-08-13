@@ -118,8 +118,29 @@ export declare function parseBdistMetadata(mDataFile: string, rawMetadata?: stri
     externalReferences: never[];
     properties: never[];
 }[];
-export declare function createExternalReferenceKey(reference: any): string;
-export declare function mergeExternalReferences(component: any, references: any): void;
+/**
+ * Build a stable dedupe key for an external reference from its type/url/comment.
+ *
+ * @param {{type: string, url: string, comment?: string}} reference External reference.
+ * @returns {string} JSON-stringified dedupe key.
+ */
+export declare function createExternalReferenceKey(reference: {
+    type: string;
+    url: string;
+    comment?: string;
+}): string;
+/**
+ * Merge external references onto a component, skipping duplicates.
+ *
+ * @param {object} component Component to enrich with external references.
+ * @param {Array<{type: string, url: string, comment?: string}>} references References to merge.
+ * @returns {void}
+ */
+export declare function mergeExternalReferences(component: object, references: Array<{
+    type: string;
+    url: string;
+    comment?: string;
+}>): void;
 /**
  * Method to construct a GitHub API url for the given repo metadata
  * @param {Object} repoMetadata Repo metadata with group and name
@@ -157,8 +178,22 @@ export declare function prefetchRepoLicenses(repoUrls: Array<string | undefined>
  * Discard prefetched repository licences. Tests only.
  */
 export declare function resetRepoLicensePrefetch(): void;
-export declare function getRepoLicense(repoUrl: any, repoMetadata: any): Promise<{
-    url: any;
+/**
+ * Fetch the license for a repository, primarily via the GitHub license API.
+ *
+ * Resolves the GitHub API license endpoint for the repository URL, deriving an
+ * SPDX id from the response (or by scanning the license file content when the
+ * API reports `NOASSERTION`). Honours any prefetched response.
+ *
+ * @param {string} repoUrl Repository URL.
+ * @param {object} [repoMetadata] Optional repository metadata.
+ * @returns {Promise<{url: string, id?: string, name?: string}|undefined>}
+ *   Resolved license object, or undefined when no license can be determined.
+ */
+export declare function getRepoLicense(repoUrl: string, repoMetadata?: object): Promise<{
+    url: string;
+    id?: string;
+    name?: string;
 } | undefined>;
 /**
  * Prefetch the pkg.go.dev pages for a list of Go modules.
@@ -210,7 +245,17 @@ export declare function getCratesMetadata(pkgList: any[]): Promise<any[]>;
  * @param {Array} pkgList Package list
  */
 export declare function getDartMetadata(pkgList: any[]): Promise<any[]>;
-export declare function normalizeCargoIntegrity(integrity: any): string | undefined;
+/**
+ * Normalize a Cargo checksum/integrity string into canonical hex-prefixed form.
+ *
+ * Accepts an existing `sha256-`/`sha384-` prefixed digest (validating the hex
+ * length) or a bare hex digest, returning `<algo>-<digest>`. Returns undefined
+ * for non-string or unrecognized inputs.
+ *
+ * @param {string} integrity Raw checksum string from a Cargo.lock or registry.
+ * @returns {string|undefined} Canonical `algo-digest` integrity, or undefined.
+ */
+export declare function normalizeCargoIntegrity(integrity: string): string | undefined;
 /**
  * Method to extract a war or ear file
  *

@@ -13,9 +13,24 @@
  * `jsr.json` publishes `lib/cli/index.js` to JSR, so `import.meta.url` can be an
  * `https://` URL, and `fileURLToPath` throws `ERR_INVALID_URL_SCHEME` on those.
  */
+/** Absolute path to the cdxgen repository root, resolved from the module URL. */
 export declare const dirNameStr: any;
+/** True when running on Windows. */
 export declare const isWin: boolean;
+/** True when running on macOS. */
 export declare const isMac: boolean;
-export declare function isValidDriveRoot(root: any): boolean;
-export declare function toCamel(str: any): any;
+/**
+ * Validate that a string is a Windows drive root such as `C:\`.
+ *
+ * @param {string} root Candidate drive root string.
+ * @returns {boolean} True when the string is a valid Windows drive root.
+ */
+export declare function isValidDriveRoot(root: string): boolean;
+/**
+ * Convert a kebab-case string to camelCase.
+ *
+ * @param {string} str Kebab-case input string.
+ * @returns {string} camelCase representation of the input.
+ */
+export declare function toCamel(str: string): string;
 //# sourceMappingURL=paths.d.ts.map

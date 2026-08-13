@@ -74,7 +74,17 @@ export declare class RequestError extends Error {
  * @returns {number} Timeout in milliseconds
  */
 export declare function getDefaultHttpTimeoutMs(): number;
-export declare function resolveTimeout(timeout: any): any;
+/**
+ * Translate a `got`-style timeout option into a single total-request timeout in
+ * milliseconds suitable for `AbortSignal.timeout`. A plain number is used
+ * verbatim. A phase object (e.g. `{ connect, send, response }`, or `{ request }`)
+ * is reduced to the sum of its numeric phases, which provides a sensible upper
+ * bound for the whole request.
+ *
+ * @param {number|Object} [timeout] `got`-style timeout option.
+ * @returns {number|undefined} Total timeout in milliseconds, or `undefined`.
+ */
+export declare function resolveTimeout(timeout?: number | Object): number | undefined;
 /**
  * Determine whether the in-memory HTTP response cache is disabled via the
  * CDXGEN_NO_CACHE environment variable. Evaluated per request so tests and

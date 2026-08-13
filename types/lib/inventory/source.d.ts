@@ -1,4 +1,6 @@
+/** Warning emitted for repository URLs resolved from untrusted package registry metadata. */
 export declare const PURL_REGISTRY_LOOKUP_WARNING = "Resolved repository URL from package registry metadata. This source can be inaccurate or malicious; review before trusting results.";
+/** Purl types supported for source repository resolution. */
 export declare const SUPPORTED_PURL_SOURCE_TYPES: string[];
 /**
  * Validate git ref names used as branch/tag values.
@@ -133,13 +135,24 @@ export declare function resetGitUrlSourcePrefetch(): void;
  * @returns {Promise<void>}
  */
 export declare function prefetchGitUrlSources(purlStrings: Array<string>): Promise<void>;
-export declare function resolveGitUrlFromPurl(purlString: any, helpers?: {}): Promise<{
-    type: any;
-    registry: any;
+/**
+ * Resolve source repository details for a package from its purl.
+ *
+ * Queries the package registry (or constructs the URL directly for VCS-hosted
+ * purl types) and normalizes the repository or homepage URL found in registry
+ * metadata. Network and lookup failures are logged and yield `undefined`.
+ *
+ * @param {string} purlString Package URL string
+ * @param {Object} [helpers={}] Injected registry helpers (e.g. `fetchPomXmlAsJson` required for maven)
+ * @returns {Promise<{type: string, registry: string, repoUrl: string, version: string, namespace: string, name: string}|undefined>} Resolved source details, or `undefined` when no remote repository URL could be resolved
+ */
+export declare function resolveGitUrlFromPurl(purlString: string, helpers?: Object): Promise<{
+    type: string;
+    registry: string;
     repoUrl: string;
-    version: any;
-    namespace: any;
-    name: any;
+    version: string;
+    namespace: string;
+    name: string;
 } | undefined>;
 /**
  * Clean up cloned source directories.

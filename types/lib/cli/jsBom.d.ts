@@ -1,5 +1,29 @@
-export declare function getDirectAiInventoryType(path: any, options: any): string | undefined;
-export declare function createNodejsBom(path: any, options: any): Promise<Object>;
+/**
+ * Detects an exact AI inventory type from a direct HuggingFace reference or a
+ * local Modelfile/`.gguf` file input. Returns the explicit selection from
+ * `getExactAiInventoryType` when one is present.
+ *
+ * @param {string} path Project or file path
+ * @param {object} options CLI options
+ * @returns {string|undefined} The detected AI inventory type (`"ai"`) or undefined
+ */
+export declare function getDirectAiInventoryType(path: string, options: object): string | undefined;
+/**
+ * Main Node.js/npm BOM generator. Parses manifests, lockfiles, and import
+ * evidence to assemble components, dependencies, formulation data, AI inventory,
+ * and the parent component for a Node.js project.
+ *
+ * @param {string} path Path to the project
+ * @param {object} options CLI options
+ * @returns {Promise<object>} Promise resolving to a BOM namespace data object
+ */
+export declare function createNodejsBom(path: string, options: object): Promise<object>;
+/**
+ * Regex matching `.wasm` import paths in analyzer output, including optional
+ * query/fragment suffixes.
+ *
+ * @type {RegExp}
+ */
 export declare const WASM_IMPORT_PATTERN: RegExp;
 /**
  * Adds generic wasm components from discovered source imports.

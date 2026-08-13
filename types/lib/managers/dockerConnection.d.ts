@@ -5,11 +5,13 @@
  *
  * @module dockerConnection
  */
-export declare const DAEMON_RETRY_OPTIONS: {
-    maxRetries: number;
-    methods: string[];
-    statusCodes: number[];
-};
+/**
+ * Retry policy for transient Docker/Podman daemon and registry failures.
+ * Mirrors the retry behaviour cdxgen previously configured on the got client.
+ *
+ * @type {Object}
+ */
+export declare const DAEMON_RETRY_OPTIONS: Object;
 /**
  * Parse a got-style Docker daemon `prefixUrl` into the pieces undici needs.
  * Unix socket URLs use the form `http://unix:/path/to/socket:`; anything else

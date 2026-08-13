@@ -1,19 +1,21 @@
-export declare function getGtfoBinsMetadata(name: any, linkedName: any): {
-    canonicalName: any;
-    contexts: any;
-    functions: any;
-    matchSource: string;
-    mitreTechniques: any;
-    privilegedContexts: any;
-    reference: string;
-    riskTags: any[];
-    source: any;
-    sourceRef: any;
-} | undefined;
-export declare function createGtfoBinsProperties(name: any, linkedName: any): {
-    name: string;
-    value: any;
-}[];
+/**
+ * Look up GTFOBins metadata for a binary, falling back to its linked (symlink) name.
+ *
+ * @param {string} name Binary name to look up
+ * @param {string} [linkedName] Optional symlinked/linked binary name used as a fallback match
+ * @returns {Object|undefined} Metadata with canonicalName, contexts, functions, mitreTechniques,
+ * privilegedContexts, reference, riskTags, and source details, or undefined when unmatched
+ */
+export declare function getGtfoBinsMetadata(name: string, linkedName?: string): Object | undefined;
+/**
+ * Build `cdx:gtfobins:*` custom properties for a binary matched against the
+ * GTFOBins index.
+ *
+ * @param {string} name Binary name to look up
+ * @param {string} [linkedName] Optional symlinked/linked binary name used as a fallback match
+ * @returns {Object[]} CycloneDX custom properties; empty when the binary is not matched
+ */
+export declare function createGtfoBinsProperties(name: string, linkedName?: string): Object[];
 /**
  * Resolve GTFOBins properties for a live Linux osquery row.
  *

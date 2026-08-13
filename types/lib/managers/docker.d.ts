@@ -1,6 +1,13 @@
 import { Buffer } from "node:buffer";
+/** True when the current operating system is Windows. */
 export declare const isWin: boolean;
-export declare const DOCKER_HUB_REGISTRY = "docker.io";
+/**
+ * Canonical Docker Hub registry hostname used as the default registry when
+ * parsing image names.
+ *
+ * @type {string}
+ */
+export declare const DOCKER_HUB_REGISTRY: string;
 /**
  * Strip absolute path prefixes from a path string, handling both Unix and
  * Windows paths (including UNC and extended-length paths such as //?/C:/).
