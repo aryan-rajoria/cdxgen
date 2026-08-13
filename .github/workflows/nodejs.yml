@@ -115,7 +115,7 @@ jobs:
       - name: pnpm install
         run: |
           pnpm install:frozen
-          python3 -m pip install --pre owasp-depscan[all] atom-tools
+          python3 -m pip install --pre --upgrade owasp-depscan[all] atom-tools
       - name: check sbom for vulns
         if: github.ref == 'refs/heads/master'
         run: |
