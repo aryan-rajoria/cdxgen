@@ -68,13 +68,24 @@ jobs:
         run: |
           pnpm install:frozen
           NPM_CONFIG_PROVENANCE=true pnpm publish --access=public --no-git-checks
+      - name: Setup deno
+        # `npx jsr publish` bundles its own pinned Deno (0.14.x ships
+        # v2.6.7), which predates the minimumDependencyAge config that
+        # exempts first-party scopes (@cdxgen/*, @appthreat/*) from the
+        # dependency-freshness gate. A 2.6.7 publish ignores that exclude
+        # and rejects freshly-released first-party deps. Use a current
+        # Deno (>= 2.9) via setup-deno so deno.json's config is honored.
+        if: startsWith(github.ref, 'refs/tags/')
+        uses: denoland/setup-deno@22d081ff2d3a40755e97629de92e3bcbfa7cf2ed  # v2.0.5
+        with:
+          deno-version: v2.x
       - name: jsr publish
         # JSR verifies the repository claim on the same OIDC token. A failure
         # here leaves npm and JSR on different versions, so it fails the job
         # rather than being swallowed as it was while JSR was best-effort.
         if: startsWith(github.ref, 'refs/tags/')
         run: |
-          npx jsr publish --allow-dirty
+          deno publish --allow-dirty
   containers-ruby-builder-amd64:
     if: github.repository == 'cdxgen/cdxgen'
     runs-on: 'ubuntu-24.04'
