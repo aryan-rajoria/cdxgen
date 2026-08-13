@@ -13,7 +13,8 @@ export declare const TRACE_MODE: any;
 export declare function thoughtLog(s: string, args?: Object): void;
 /**
  * Closes the think log group by emitting the closing `</think>` marker.
- * Has no effect if THINK_MODE is not enabled.
+ * Has no effect if THINK_MODE is not enabled, and emits the marker at most
+ * once so an explicit call followed by the exit handler cannot produce two.
  *
  * @returns {void}
  */
@@ -25,4 +26,14 @@ export declare function thoughtEnd(): void;
  * @param {Object} args Additional arguments
  */
 export declare function traceLog(traceType: string, args: Object): void;
+/**
+ * Terminate the think block and close the log file descriptors.
+ *
+ * Readers tail these files as a live feed, so a run that ends without the
+ * closing `</think>` marker leaves the consumer holding an unterminated block.
+ * Registered on process exit and safe to call more than once.
+ *
+ * @returns {void}
+ */
+export declare function closeLogStreams(): void;
 //# sourceMappingURL=logger.d.ts.map

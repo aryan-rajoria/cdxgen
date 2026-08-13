@@ -651,6 +651,54 @@ is `dumb` or `unknown`, in server mode, and inside worker threads — in all of
 those cases each phase prints one plain line when it finishes, and no ANSI
 escape byte is written.
 
+## Trace records changed shape, and now carry phases
+
+**Affected:** anything consuming `CDXGEN_TRACE_LOG` / `CDXGEN_TRACE_MODE`
+output, including the `--tui` terminal interface (cdxui).
+
+The trace stream is NDJSON: one JSON object per line, each with a `timestamp`
+and a `type`. v13 renames the fields that v12 emitted and adds two record
+types.
+
+| Type       | v12 fields  | v13 fields                                                        |
+| ---------- | ----------- | ----------------------------------------------------------------- |
+| `spawn`    | `cmd`       | `command`, `cwd`                                                  |
+| `http`     | `url`       | `protocol`, `host`, `path`, `pathname`                            |
+| `activity` | —           | `identifier`, `kind`, `status`, `target`, `reason`, `networkIntent` |
+| `phase`    | —           | `phase`, `state`, `detail`, `note`, `done`, `total`, `elapsedMs`  |
+
+A consumer that read `cmd` or `url` gets nothing in v13. Rebuild the URL from
+its parts:
+
+```js
+const url = `${protocol.replace(/:$/, "")}://${host}${pathname ?? ""}`;
+```
+
+`phase` records mirror the live progress region, so a program driving cdxgen
+through a pipe can render progress without scraping formatted lines. `state` is
+one of `started`, `progress`, `succeeded`, `failed`, or `skipped`; `progress`
+records are throttled to the frame interval, and `done`/`total` appear only for
+phases with a determinate total:
+
+```json
+{"timestamp":"...","type":"phase","phase":"Generating BOM","state":"started","elapsedMs":0}
+{"timestamp":"...","type":"phase","phase":"Generating BOM","state":"succeeded","note":"5770 components","elapsedMs":3013}
+```
+
+Two related fixes land with this:
+
+- The thought and trace logs are written synchronously and opened in append
+  mode. In v12 the tail of a log was lost when the process exited, so
+  `CDXGEN_THOUGHT_LOG` files ended mid-sentence with no closing `</think>`, and
+  worker threads punched holes through each other's records.
+- `--tui` now reports an error when the cdxui plugin binary is missing instead
+  of silently continuing without the interface, and passes arguments to cdxui
+  separated by `\x1f` rather than by spaces, so a scan path containing a space
+  survives. Set `CDXUI_CMD` to point at a specific cdxui binary.
+
+Using `--tui` requires a cdxui build from cdxgen-plugins-bin new enough to
+understand these records; an older cdxui shows an empty progress panel.
+
 ## Unidentifiable Java archives are reported instead of dropped
 
 **Affected:** BOMs for `.jar`, `.war`, and `.hpi` archives, and container images

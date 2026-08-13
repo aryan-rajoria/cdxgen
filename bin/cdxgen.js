@@ -887,15 +887,26 @@ if (args.bomAuditIncludeTrusted && args.bomAuditOnlyTrusted) {
 
 if (args.tui && !readEnvironmentVariable("CI")) {
   const cdxuiPath = resolvePluginBinary("cdxui");
-  if (cdxuiPath) {
-    const cdxgenArgs = process.argv.slice(2).filter((a) => a !== "--tui");
+  if (!cdxuiPath) {
+    console.error(
+      "The terminal user interface requires the cdxui plugin binary, which is not installed for this platform.\nInstall @cdxgen/cdxgen-plugins-bin, or set CDXUI_CMD to a cdxui binary, then retry. Continuing without the interface.",
+    );
+  } else {
+    const cdxgenArgs = process.argv
+      .slice(2)
+      .filter((a) => a !== "--tui" && !a.startsWith("--tui="));
+    // Arguments cross the process boundary separated by the unit separator
+    // rather than by spaces: a scan path may legitimately contain a space, and
+    // re-splitting on whitespace would silently turn it into two paths.
     const cdxuiResult = safeSpawnSync(cdxuiPath, ["--generate"], {
       stdio: "inherit",
       env: {
         ...process.env,
         CDXGEN_CMD:
-          readEnvironmentVariable("CDXGEN_CMD") || process.argv[1] || "cdxgen",
-        CDXGEN_ARGS: cdxgenArgs.join(" "),
+          readEnvironmentVariable("CDXGEN_CMD") ||
+          [process.argv[0], process.argv[1]].filter(Boolean).join("\x1f") ||
+          "cdxgen",
+        CDXGEN_ARGS: cdxgenArgs.join("\x1f"),
       },
     });
     process.exit(cdxuiResult.status || 0);
