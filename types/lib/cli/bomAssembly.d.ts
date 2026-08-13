@@ -180,8 +180,22 @@ export declare function determinePackageType(pkg: any): any;
 export declare function processHashes(pkg: any, component: any): void;
 /**
  * Adds a hash to component.
+ *
+ * Registries hand out digests in hex or in the base64 form npm uses for
+ * `integrity`, and both are accepted. A digest that is neither, or that decodes
+ * to the wrong length for its algorithm, is dropped rather than copied through:
+ * CycloneDX constrains `hash.content` to a hex digest, so emitting it anyway
+ * fails schema validation for the whole document over one bad package.
  */
 export declare function addComponentHash(alg: any, digest: any, component: any): void;
+/**
+ * Normalize a digest to the lower-case hex form CycloneDX requires.
+ *
+ * @param {string} alg Hash algorithm name
+ * @param {string} digest Digest in hex or base64
+ * @returns {string|undefined} Hex digest, or undefined when it cannot be trusted
+ */
+export declare function normalizeHashContent(alg: string, digest: string): string | undefined;
 /**
  * Return the BOM in json format including any namespace mapping
  *

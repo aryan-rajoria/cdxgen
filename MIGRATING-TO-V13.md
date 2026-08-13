@@ -229,14 +229,14 @@ specific leaf module instead:
 
 | New module                  | Theme                                                                                                   |
 | --------------------------- | ------------------------------------------------------------------------------------------------------- |
-| `ecosystems/purl`           | purl build/parse, version compare, conan/nix purl helpers                                               |
-| `ecosystems/spdx`           | license-id normalisation, SPDX expressions, license data lookup                                         |
+| `inventory/purl`            | purl build/parse, version compare, conan/nix purl helpers                                               |
+| `inventory/spdx`            | license-id normalisation, SPDX expressions, license data lookup                                         |
 | `core/state`                | eval-time data constants (frameworks, version, module tables)                                           |
 | `core/paths`                | path/OS detection helpers, `isValidDriveRoot`, `toCamel`                                                |
 | `core/activity`             | activity/dry-run/host-allowlist, `cdxgenAgent`, feature flags                                           |
 | `core/fs`                   | safe wrappers, `safeSpawnSync`, file discovery, checksums                                               |
 | `core/env`                  | runtime detection, env flags, command resolution, alias tables, `isFeatureEnabled`, `hasAnyProjectType` |
-| `ecosystems/deps`           | dependency-tree assembly, component merge/dedupe, JAR namespace collection                              |
+| `inventory/deps`            | dependency-tree assembly, component merge/dedupe, JAR namespace collection                              |
 | `ecosystems/ecosystems`     | the `get*Metadata` family + registry fetch helpers                                                      |
 | `ecosystems/parsers-go`     | Go ecosystem parsers (`parseGoMod*`, `parseGosum*`, etc.)                                               |
 | `ecosystems/parsers-dotnet` | .NET ecosystem parsers (`parseCsProj*`, `parseNuspec*`, etc.)                                           |
@@ -650,6 +650,31 @@ is disabled automatically for pipes and redirects, under `CI=true`, when `TERM`
 is `dumb` or `unknown`, in server mode, and inside worker threads — in all of
 those cases each phase prints one plain line when it finishes, and no ANSI
 escape byte is written.
+
+### Containers: `docker run -t` opts into the live region
+
+`docker run -t` allocates a pseudo-terminal, which makes stderr interactive
+inside the container. Docker does **not** propagate the host's environment, so a
+`CI=true` set by your build system is not visible to cdxgen in the container and
+cannot suppress the region for you. A CI job that copies one of the documented
+`-t` examples therefore collects cursor-movement escapes in its logs.
+
+Pick whichever fits the job:
+
+```shell
+# Drop -t: nothing needs a TTY when the output is captured
+docker run --rm -v /tmp:/tmp -v $(pwd):/app:rw ghcr.io/cdxgen/cdxgen -t js -o /app/bom.json /app
+
+# Or keep -t and turn the region off explicitly
+docker run --rm -t -e CDXGEN_NO_PROGRESS=true ... ghcr.io/cdxgen/cdxgen ...
+
+# Or forward the CI signal the image cannot see
+docker run --rm -t -e CI=true ... ghcr.io/cdxgen/cdxgen ...
+```
+
+This is not specific to containers — any `-t`-style pseudo-terminal has the same
+effect — but containers are where it surprises people, because the host's `CI`
+is silently absent.
 
 ## Trace records changed shape, and now carry phases
 
