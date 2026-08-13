@@ -1,5 +1,22 @@
-export declare const hasDotnetProjectIndicators: (src: any, options?: {}) => boolean;
-export declare const shouldCollectDosaiCrypto: (src: any, options?: {}) => boolean;
+/**
+ * Checks whether a directory contains .NET project or solution files
+ * (`*.csproj`, `*.fsproj`, `*.vbproj`, `*.sln`).
+ *
+ * @param {string} src Directory to inspect
+ * @param {object} [options={}] CLI options
+ * @returns {boolean} True when at least one .NET project/solution file exists
+ */
+export declare const hasDotnetProjectIndicators: (src: string, options?: object) => boolean;
+/**
+ * Decides whether dosai crypto collection should run for a .NET source. Returns
+ * true when an explicit dosai .NET project type is selected, or when no project
+ * type (or `universal`) is selected and .NET project indicators are present.
+ *
+ * @param {string} src Directory to inspect
+ * @param {object} [options={}] CLI options
+ * @returns {boolean} True when dosai crypto collection should run
+ */
+export declare const shouldCollectDosaiCrypto: (src: string, options?: object) => boolean;
 /**
  * Function to create bom string for Projects that use Pixi package manager.
  * createPixiBom is based on createPythonBom.

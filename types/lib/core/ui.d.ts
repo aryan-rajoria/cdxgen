@@ -55,33 +55,20 @@ export declare function createUi(options?: {
     interactive?: boolean;
     now?: () => number;
 }): object;
-export declare const ui: object;
-export declare const log: {
-    /**
-     * Log an error through the default controller.
-     *
-     * @param {...unknown} args Message parts
-     */
-    error: (...args: unknown[]) => any;
-    /**
-     * Log a warning through the default controller.
-     *
-     * @param {...unknown} args Message parts
-     */
-    warn: (...args: unknown[]) => any;
-    /**
-     * Log an informational message through the default controller.
-     *
-     * @param {...unknown} args Message parts
-     */
-    info: (...args: unknown[]) => any;
-    /**
-     * Log a debug message through the default controller.
-     *
-     * @param {...unknown} args Message parts
-     */
-    debug: (...args: unknown[]) => any;
-};
+/**
+ * Process-wide default live-region UI controller instance. Library code imports
+ * this directly; the CLI reconfigures it once flags are parsed.
+ *
+ * @type {Object}
+ */
+export declare const ui: Object;
+/**
+ * Convenience facade exposing leveled log methods (`error`, `warn`, `info`,
+ * `debug`) that delegate to the default controller instance.
+ *
+ * @type {Object}
+ */
+export declare const log: Object;
 /**
  * Install a global `console` shim routing `log`/`info`/`warn`/`error`/`debug`/
  * `trace` through the controller. This converts every existing `console.*` call

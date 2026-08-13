@@ -1,10 +1,29 @@
-export declare function createOccurrenceEvidence(location: any, details?: {}): {
-    location: string;
-} | undefined;
-export declare function parseOccurrenceEvidenceLocation(location: any, details?: {}): {
-    location: string;
-} | undefined;
-export declare function formatOccurrenceEvidence(occurrence: any): any;
+/**
+ * Build a CycloneDX occurrence evidence object from a location string.
+ *
+ * @param {string} location Location string such as a file path or `file#line`
+ * @param {Object} [details] Extra fields (e.g. line, offset) merged into the occurrence; empty values are skipped
+ * @returns {Object|undefined} Occurrence evidence object with a location, or undefined when the location is empty
+ */
+export declare function createOccurrenceEvidence(location: string, details?: Object): Object | undefined;
+/**
+ * Parse a location string into a CycloneDX occurrence with file/line/offset fields.
+ *
+ * Recognizes `file#line`, `file:line:offset`, and `file:line` forms; other
+ * strings are kept as a plain location occurrence.
+ *
+ * @param {string} location Location string to parse
+ * @param {Object} [details] Extra fields merged into the occurrence
+ * @returns {Object|undefined} Occurrence evidence object, or undefined when the location is empty
+ */
+export declare function parseOccurrenceEvidenceLocation(location: string, details?: Object): Object | undefined;
+/**
+ * Format an occurrence evidence object back into a location string.
+ *
+ * @param {Object} occurrence Occurrence evidence object with location, and optional line/offset
+ * @returns {string} Location string in `file:line:offset`, `file#line`, or plain `file` form; empty when no location
+ */
+export declare function formatOccurrenceEvidence(occurrence: Object): string;
 /**
  * Collect bom-refs from metadata.tools entries.
  *
@@ -43,11 +62,11 @@ export declare function addEvidenceForDotnet(pkgList: Object[], slicesFile: stri
  * @param {Boolean} enhance Optionally enhance results by invoking additional package manager commands
  */
 export declare function convertOSQueryResults(queryCategory: string, queryObj: Object, results: any[], enhance?: boolean, osPackageListers?: undefined): {
-    name: any;
+    name: string;
     group: string;
-    version: any;
+    version: string;
     description: any;
-    publisher: any;
+    publisher: string;
     "bom-ref": string;
     scope: any;
     type: any;

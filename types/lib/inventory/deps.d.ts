@@ -115,7 +115,17 @@ export declare function readZipEntriesMatching(zipFile: string, pathFragment: st
  * @returns List of classes and sources matching certain known patterns
  */
 export declare function getJarClasses(jarFile: string): Promise<any>;
-export declare function flattenDeps(dependenciesMap: any, pkgList: any, reqOrSetupFile: any, t: any): void;
+/**
+ * Recursively flatten a Python package's transitive dependencies into the
+ * dependencies map and flat package list.
+ *
+ * @param {Object} dependenciesMap Map of bom-ref to the list of dependent bom-refs, mutated in place
+ * @param {Object[]} pkgList Flat list of package component objects, mutated in place
+ * @param {string} reqOrSetupFile Path to the requirements.txt or setup.py file used as evidence
+ * @param {Object} t Root package object with name, version, and nested dependencies
+ * @returns {void}
+ */
+export declare function flattenDeps(dependenciesMap: Object, pkgList: Object[], reqOrSetupFile: string, t: Object): void;
 /**
  * Comparator function for sorting CycloneDX component objects.
  *

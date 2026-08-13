@@ -1,6 +1,13 @@
+/** Project types treated as AI-related inventory for collection and parsing. */
 export declare const AI_INVENTORY_PROJECT_TYPES: string[];
+/**
+ * Set of file-kind labels that identify AI instruction and agent-definition
+ * files (for example copilot instructions, crew agents/tasks, custom tools).
+ */
 export declare const AI_INSTRUCTION_FILE_KINDS: Set<string>;
+/** Constant label used to classify AI skill definition files. */
 export declare const AI_SKILL_FILE_KIND = "skill-file";
+/** Constant label used to classify MCP (Model Context Protocol) config files. */
 export declare const MCP_CONFIG_FILE_KIND = "mcp-config";
 /**
  * Read a property value from an inventory subject.

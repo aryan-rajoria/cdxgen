@@ -1,3 +1,4 @@
+import { Buffer } from "node:buffer";
 /**
  * Safely check if a file path exists without crashing due to a lack of permissions
  *
@@ -5,7 +6,16 @@
  * @Boolean True if the path exists. False otherwise
  */
 export declare function safeExistsSync(filePath: string): any;
-export declare function safeWriteSync(filePath: any, data: any, options: any): undefined;
+/**
+ * Permission- and dry-run-aware wrapper around writeFileSync. Records the
+ * activity and returns undefined when blocked.
+ *
+ * @param {string} filePath File path to write.
+ * @param {string|Buffer} data Data to write.
+ * @param {Object} [options] writeFileSync options (encoding, mode, flag).
+ * @returns {void}
+ */
+export declare function safeWriteSync(filePath: string, data: string | Buffer, options?: Object): void;
 /**
  * Safely create a directory without crashing due to a lack of permissions
  *
@@ -14,12 +24,57 @@ export declare function safeWriteSync(filePath: any, data: any, options: any): u
  * @Boolean True if the path exists. False otherwise
  */
 export declare function safeMkdirSync(filePath: string, options: Options): undefined;
-export declare function safeMkdtempSync(prefix: any, options?: undefined): any;
-export declare function safeRmSync(filePath: any, options?: undefined): undefined;
-export declare function safeUnlinkSync(filePath: any): undefined;
-export declare function safeCopyFileSync(src: any, dest: any, mode?: undefined): any;
-export declare function safeExtractArchive(sourcePath: any, targetPath: any, extractor: any, kind?: string, options?: undefined): Promise<boolean>;
+/**
+ * Dry-run-aware wrapper around mkdtempSync that records the activity. In dry-run
+ * mode, returns a synthetic path without touching the filesystem.
+ *
+ * @param {string} prefix Path prefix for the temporary directory.
+ * @param {string|Object} [options] Encoding or mkdtempSync options.
+ * @returns {string|undefined} The created directory path, a synthetic path in dry-run mode, or undefined when blocked.
+ */
+export declare function safeMkdtempSync(prefix: string, options?: string | Object): string | undefined;
+/**
+ * Dry-run-aware wrapper around rmSync. Records the activity and returns
+ * undefined when blocked.
+ *
+ * @param {string} filePath Path to remove.
+ * @param {Object} [options] rmSync options (recursive, force, etc.).
+ * @returns {void}
+ */
+export declare function safeRmSync(filePath: string, options?: Object): void;
+/**
+ * Dry-run-aware wrapper around unlinkSync. Records the activity and returns
+ * undefined when blocked.
+ *
+ * @param {string} filePath File path to unlink.
+ * @returns {void}
+ */
+export declare function safeUnlinkSync(filePath: string): void;
+/**
+ * Dry-run-aware wrapper around copyFileSync. Records the activity and returns
+ * undefined when blocked.
+ *
+ * @param {string} src Source file path.
+ * @param {string} dest Destination file path.
+ * @param {number} [mode] Optional copy mode bitmask.
+ * @returns {void}
+ */
+export declare function safeCopyFileSync(src: string, dest: string, mode?: number): void;
+/**
+ * Run an archive extractor under dry-run/debug activity tracing. In dry-run
+ * mode the extraction is recorded as blocked and resolves false without running.
+ *
+ * @param {string} sourcePath Path to the source archive.
+ * @param {string} targetPath Path to extract into.
+ * @param {() => Promise} extractor Async function performing the extraction.
+ * @param {string} [kind="unzip"] Archive kind label for tracing.
+ * @param {Object} [options] Optional tracing metadata, blockedReason, and failureReason.
+ * @returns {Promise<boolean>} True when extraction succeeded, false when blocked by dry-run.
+ */
+export declare function safeExtractArchive(sourcePath: string, targetPath: string, extractor: () => Promise<any>, kind?: string, options?: Object): Promise<boolean>;
+/** Set of temporary file paths written by cdxgen that are removed on process exit. */
 export declare const temporaryFiles: Set<any>;
+/** Set accumulating every executable command spawned via safeSpawnSync. */
 export declare const commandsExecuted: Set<any>;
 /**
  * Safe wrapper around spawnSync that enforces permission checks, injects default
@@ -32,7 +87,9 @@ export declare const commandsExecuted: Set<any>;
  * @returns {Object} spawnSync result object with status, stdout, stderr, and error fields
  */
 export declare function safeSpawnSync(command: string, args: string[], options: Object): Object;
+/** Default spawn timeout in milliseconds (20 minutes), overridable via CDXGEN_TIMEOUT_MS. */
 export declare const TIMEOUT_MS: number;
+/** Default maxBuffer size for spawned process stdout/stderr (100 MB), overridable via CDXGEN_MAX_BUFFER. */
 export declare const MAX_BUFFER: number;
 /**
  * Method to get files matching a pattern
@@ -75,7 +132,13 @@ export declare function getAllFilesWithIgnore(dirPath: string, pattern: string, 
  * @returns {string} ISO formatted timestamp, without milliseconds.
  */
 export declare function getTimestamp(): string;
-export declare function getTmpDir(): any;
+/**
+ * Return the temp directory, creating CDXGEN_TEMP_DIR when it is set but does
+ * not yet exist. Falls back to the OS tmpdir when unset.
+ *
+ * @returns {string} Resolved temp directory path.
+ */
+export declare function getTmpDir(): string;
 /**
  * Computes the checksum for a file path using the given hash algorithm
  *

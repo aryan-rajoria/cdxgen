@@ -1,3 +1,4 @@
+/** Default predictive audit category list applied when none are explicitly requested. */
 export declare const DEFAULT_AUDIT_CATEGORIES: string[];
 /**
  * Read and validate a CycloneDX BOM file.
@@ -23,52 +24,20 @@ export declare function loadInputBoms(options: object): {
     source: string;
     bomJson: object;
 }[];
-export declare function runDirectBomAuditFromBoms(inputBoms: any, options?: {}): Promise<{
-    auditMode: string;
-    generatedAt: string;
-    inputs: any;
-    results: {
-        auditOptions: {
-            aiProvenance: any;
-            bomAuditCategories: any;
-            bomAuditMinSeverity: any;
-            bomAuditRulesDir: any;
-            workspaceDir: any;
-        };
-        bomFormat: any;
-        findings: any[];
-        serialNumber: any;
-        source: any;
-        specVersion: any;
-        status: string;
-        summary: {
-            findingsBySeverity: {
-                critical: number;
-                high: number;
-                low: number;
-                medium: number;
-            };
-            findingsCount: number;
-            maxSeverity: string;
-        };
-    }[];
-    summary: {
-        findingsBySeverity: {
-            critical: number;
-            high: number;
-            low: number;
-            medium: number;
-        };
-        inputBomCount: any;
-        maxSeverity: string;
-        totalFindings: number;
-        bomsWithFindings: number;
-    };
-    tool: {
-        name: string;
-        version: string;
-    };
-}>;
+/**
+ * Run the direct (post-generation) BOM policy audit over loaded input BOMs.
+ *
+ * Audits each supplied BOM with {@link auditBom}, collects per-BOM findings and
+ * summaries, and aggregates them into a single report keyed by `auditMode: "direct"`.
+ *
+ * @param {{ source: string, bomJson: object }[]} inputBoms Loaded CycloneDX BOM objects to audit
+ * @param {object} [options={}] CLI options including optional category, severity, and rules configuration
+ * @returns {Promise<object>} Aggregate direct audit report with per-BOM results and a rollup summary
+ */
+export declare function runDirectBomAuditFromBoms(inputBoms: {
+    source: string;
+    bomJson: object;
+}[], options?: object): Promise<object>;
 /**
  * Build low-noise provenance-aware contextual findings from the root BOM target.
  *
@@ -121,7 +90,17 @@ export declare function buildPythonSourceHeuristicFindings(scanDir: string, targ
  * @returns {Promise<object>} analyzed target result
  */
 export declare function auditTarget(target: object, options: object): Promise<object>;
-export declare function groupAuditResults(results: any): any[];
+/**
+ * Consolidate per-target audit results into shared repo/CI alert groups.
+ *
+ * Groups results that share a common repository/CI provenance (or cargo
+ * repository/namespace) into consolidated alert entries while preserving
+ * single-target results unchanged.
+ *
+ * @param {object[]} results Per-target audit result objects
+ * @returns {object[]} Grouped result objects with consolidated entries where applicable
+ */
+export declare function groupAuditResults(results: object[]): object[];
 /**
  * Run the predictive audit flow from one or more already-loaded CycloneDX BOM inputs.
  *

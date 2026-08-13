@@ -1,9 +1,46 @@
-export declare const HF_BASE_URL = "https://huggingface.co";
+/**
+ * Base URL for the Hugging Face Hub.
+ *
+ * @type {string}
+ */
+export declare const HF_BASE_URL: string;
+/**
+ * Relation labels that indicate a Hugging Face pedigree "ancestors" link, as
+ * opposed to sibling "variants". Includes adapter, finetune, merge, and
+ * quantization relation spellings.
+ *
+ * @type {Set<string>}
+ */
 export declare const HUGGING_FACE_ANCESTOR_RELATIONS: Set<string>;
-export declare const HUGGING_FACE_DATASET_REPOSITORY_URL = "https://huggingface.co/datasets";
-export declare const HUGGING_FACE_SPACE_REPOSITORY_URL = "https://huggingface.co/spaces";
-export declare function repositoryUrlForHuggingFaceAssetType(assetType: any): "https://huggingface.co" | "https://huggingface.co/datasets" | "https://huggingface.co/spaces";
-export declare function assetTypeFromHuggingFaceRepositoryUrl(repositoryUrl: any): "dataset" | "model" | "space";
+/**
+ * Canonical Hugging Face datasets repository URL.
+ *
+ * @type {string}
+ */
+export declare const HUGGING_FACE_DATASET_REPOSITORY_URL: string;
+/**
+ * Canonical Hugging Face spaces repository URL.
+ *
+ * @type {string}
+ */
+export declare const HUGGING_FACE_SPACE_REPOSITORY_URL: string;
+/**
+ * Map a Hugging Face asset type to its canonical Hub repository URL.
+ *
+ * @param {string} assetType One of "dataset", "space", or "model".
+ * @returns {string|undefined} The repository URL for the asset type, or the
+ *   base Hub URL for models/unknown types.
+ */
+export declare function repositoryUrlForHuggingFaceAssetType(assetType: string): string | undefined;
+/**
+ * Infer the Hugging Face asset type (model, dataset, or space) from a
+ * repository URL.
+ *
+ * @param {string} repositoryUrl The Hugging Face repository URL to inspect.
+ * @returns {string|undefined} The inferred asset type ("model", "dataset", or
+ *   "space").
+ */
+export declare function assetTypeFromHuggingFaceRepositoryUrl(repositoryUrl: string): string | undefined;
 /**
  * Normalize a Hugging Face repository identifier to the canonical namespace/name form.
  *

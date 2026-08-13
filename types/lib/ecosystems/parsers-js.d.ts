@@ -1,5 +1,16 @@
 import { Buffer } from "node:buffer";
-export declare function parsePkgJson(pkgJsonFile: any, simple?: boolean, securityProps?: boolean): Promise<any[]>;
+/**
+ * Parse a package.json file into CycloneDX component objects.
+ *
+ * @param {string} pkgJsonFile Path to the package.json file.
+ * @param {boolean} [simple=false] When true, omit component properties and
+ *   identity evidence and skip npm registry metadata fetching.
+ * @param {boolean} [securityProps=false] When true, append npm security-relevant
+ *   properties such as lifecycle scripts, binaries, native addons, and deprecation notices.
+ * @returns {Promise<Array<object>>} Parsed component list, enriched with npm
+ *   registry metadata when available and not in simple mode.
+ */
+export declare function parsePkgJson(pkgJsonFile: string, simple?: boolean, securityProps?: boolean): Promise<Array<object>>;
 /**
  * Hash a root `.npm-extension` file exactly as npm does: ssri sha512 over
  * `npm-extension:v1:<format>\n` followed by the raw file bytes. Mirrors
@@ -84,7 +95,18 @@ export declare function parseNodeShrinkwrap(swFile: string): Promise<any[]>;
  * @returns {String} The published version, without the peer-resolution suffix
  */
 export declare function stripPnpmPeerSuffix(version: string): string;
-export declare function getVersionNumPnpm(depPkg: any, relativePath: any): Promise<any>;
+/**
+ * Resolve a concrete version for a pnpm dependency.
+ *
+ * Link/file references are resolved by reading the target package.json, while
+ * registry versions have their pnpm peer-dependency suffix stripped via
+ * {@link stripPnpmPeerSuffix}.
+ *
+ * @param {string|object} depPkg Dependency version string or package object.
+ * @param {string} relativePath Base path for resolving link/file references.
+ * @returns {Promise<string|undefined>} The resolved published version.
+ */
+export declare function getVersionNumPnpm(depPkg: string | object, relativePath: string): Promise<string | undefined>;
 /**
  * Resolve a pnpm dependency to its PURL string.
  *

@@ -59,7 +59,27 @@ export declare function testUrlExists(url: string): Promise<boolean>;
  * @returns {string|null} local jar path or null
  */
 export declare function findLocalJarPath(group: string, name: string, version: string): string | null;
-export declare function resolveJarDistribution(group: any, name: any, version: any): Promise<any>;
+/**
+ * Resolve the repo/jar download URLs and optional hashes for a Maven coordinate.
+ *
+ * Looks up the Coursier registry URL for the coordinate and, when the jar is
+ * present in the local Coursier cache, computes MD5/SHA-1/SHA-256/SHA-512
+ * digests. Results are memoized per coordinate.
+ *
+ * @param {string} group Maven groupId.
+ * @param {string} name Maven artifactId.
+ * @param {string} version Package version.
+ * @returns {Promise<{repoUrl: string, jarUrl: string, hashes?: Array<{alg: string, content: string}>}|null>}
+ *   Resolved URLs with optional hashes, or null when no registry URL is found.
+ */
+export declare function resolveJarDistribution(group: string, name: string, version: string): Promise<{
+    repoUrl: string;
+    jarUrl: string;
+    hashes?: Array<{
+        alg: string;
+        content: string;
+    }>;
+} | null>;
 /**
  * Parse an sbt dependency tree output file and return the package list and dependency tree.
  *

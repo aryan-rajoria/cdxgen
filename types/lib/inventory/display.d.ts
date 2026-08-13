@@ -67,17 +67,27 @@ export declare const buildTableSummaryLines: (bomJson: Object, filterTypes: stri
  * @returns {string[]} Legend lines to print after the tree output
  */
 export declare const buildDependencyTreeLegendLines: (treeGraphics: string[]) => string[];
-export declare function buildActivitySummaryPayload(activities: any, dryRunMode?: any): {
-    activities: any;
-    mode: string;
-    summary: {
-        blocked: any;
-        completed: any;
-        failed: any;
-        total: any;
-    };
-};
-export declare function serializeActivitySummary(activities: any, reportType?: string, dryRunMode?: any): any[];
+/**
+ * Aggregate recorded activities into a summary payload with mode and status counts.
+ *
+ * @param {Object[]} activities Recorded activity objects with a status field
+ * @param {boolean} [dryRunMode] Whether the run was a dry run; defaults to the global dry-run flag
+ * @returns {Object} Payload containing the activities, mode ("dry-run" or "debug"), and summary counts
+ */
+export declare function buildActivitySummaryPayload(activities: Object[], dryRunMode?: boolean): Object;
+/**
+ * Serialize an activity summary into report lines for the given report type.
+ *
+ * Produces a single pretty-printed JSON document for "json", newline-delimited
+ * JSON records (a summary record followed by one record per activity) for
+ * "jsonl", and no lines otherwise.
+ *
+ * @param {Object[]} activities Recorded activity objects
+ * @param {string} [reportType] Report format: "json" or "jsonl"
+ * @param {boolean} [dryRunMode] Whether the run was a dry run; defaults to the global dry-run flag
+ * @returns {string[]} Serialized report lines; empty when the report type is unsupported
+ */
+export declare function serializeActivitySummary(activities: Object[], reportType?: string, dryRunMode?: boolean): string[];
 /**
  * Prints the BOM components as a streaming table to the console.
  * Delegates to {@link printOSTable} automatically when the BOM metadata indicates
@@ -180,7 +190,16 @@ export declare function printSponsorBanner(options: Object): void;
  * @returns {void}
  */
 export declare function printSummary(bomJson: Object): void;
-export declare function printActivitySummary(reportType?: undefined): void;
+/**
+ * Print the recorded activity summary to the console.
+ *
+ * For "json"/"jsonl" report types the serialized lines are printed verbatim;
+ * otherwise a human-readable console summary with status counts is shown.
+ *
+ * @param {string} [reportType] Report format: "json", "jsonl", or undefined for console output
+ * @returns {void}
+ */
+export declare function printActivitySummary(reportType?: string): void;
 export type EnvAuditFinding = {
     type: string;
     variable: string;

@@ -35,6 +35,8 @@ flowchart TD
 | permissions and secure mode  | covered         | `PERMISSIONS.md`, `ALLOWED_HOSTS_AND_COMMANDS.md`, `THREAT_MODEL.md` | describes allowlists, secure mode, and threat boundaries                                                      |
 | supported project types      | covered         | `PROJECT_TYPES.md`                                                   | canonical project type reference                                                                              |
 | environment variables        | covered         | `ENV.md`                                                             | runtime knobs and configuration                                                                               |
+| dynamic SBOM (tracebom)      | covered         | `TRACEBOM.md`, `LESSON16.md`                                         | standalone dynamic SBOM binary tracing runtime libraries and HTTP services under a sandbox                    |
+| cache subcommand             | covered         | `CDXRS_PROTOCOL.md`                                                  | local BOM cache; currently documented only within the CDXRS protocol page                                     |
 
 ## Feature-specific pointers
 

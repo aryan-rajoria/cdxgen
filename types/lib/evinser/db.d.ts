@@ -1,34 +1,17 @@
-declare class Model {
-    tableName: any;
-    store: Map<any, any>;
-    constructor(tableName: any);
-    init(): Promise<void>;
-    findByPk(purl: any): Promise<{
-        purl: any;
-        data: any;
-        createdAt: any;
-        updatedAt: any;
-    } | null>;
-    findOrCreate(options: any): Promise<(boolean | {
-        purl: any;
-        data: any;
-        createdAt: any;
-        updatedAt: any;
-    })[]>;
-    findAll(options: any): Promise<{
-        purl: any;
-        data: any;
-        createdAt: any;
-        updatedAt: any;
-    }[]>;
-}
+/**
+ * Create or load the in-memory Namespaces, Usages, and DataFlows models.
+ *
+ * Initialises each model and returns a sequelize-like handle along with the
+ * model references used by evinse for persisting slice evidence.
+ *
+ * @returns {Promise<{ sequelize: { close: () => boolean }, Namespaces: Object, Usages: Object, DataFlows: Object }>}
+ */
 export declare const createOrLoad: () => Promise<{
     sequelize: {
         close: () => boolean;
     };
-    Namespaces: Model;
-    Usages: Model;
-    DataFlows: Model;
+    Namespaces: Object;
+    Usages: Object;
+    DataFlows: Object;
 }>;
-export {};
 //# sourceMappingURL=db.d.ts.map

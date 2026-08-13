@@ -1,11 +1,28 @@
+/** True when running under Node.js. */
 export declare const isNode: boolean;
+/** True when running under Bun. */
 export declare const isBun: boolean;
+/** True when running under Deno. */
 export declare const isDeno: boolean;
-export declare const CDXGEN_SPDX_CREATED_BY: any;
+/** Value of the CDXGEN_SPDX_CREATED_BY environment variable, or undefined when unset. */
+export declare const CDXGEN_SPDX_CREATED_BY: string | undefined;
+/**
+ * Resolved table border style for console output ("ascii", "unicode", or
+ * "auto"), driven by the CDXGEN_TABLE_BORDER environment variable.
+ */
 export declare const TABLE_BORDER_STYLE: string;
+/** True when test scope dependencies should be included for Maven projects (default true unless CDX_MAVEN_INCLUDE_TEST_SCOPE is explicitly false). */
 export declare const includeMavenTestScope: boolean;
+/** True when the native Maven dependency tree command should be preferred (default true unless PREFER_MAVEN_DEPS_TREE is false/0). */
 export declare const PREFER_MAVEN_DEPS_TREE: boolean;
-export declare function parseMavenArgs(argsString: any): string[];
+/**
+ * Split a Maven arguments string into an argv array, honoring shell quoting
+ * (single and double quotes) and backslash escaping of whitespace and quotes.
+ *
+ * @param {string} argsString Raw Maven arguments string.
+ * @returns {string[]} Parsed argument array, or an empty array when input is falsy.
+ */
+export declare function parseMavenArgs(argsString: string): string[];
 /**
  * Determines whether license information should be fetched from remote sources,
  * based on the FETCH_LICENSE environment variable.
@@ -26,8 +43,11 @@ export declare function shouldFetchPackageMetadata(): boolean;
  * @returns {boolean} True if the GO_FETCH_VCS env var is set to "true" or "1"
  */
 export declare function shouldFetchVCS(): boolean;
+/** True when license information should be fetched from remote sources (FETCH_LICENSE env var). */
 export declare const FETCH_LICENSE: boolean;
+/** True when search.maven.org should be used to identify jars without Maven metadata (default true unless SEARCH_MAVEN_ORG is explicitly false). */
 export declare const SEARCH_MAVEN_ORG: boolean;
+/** Resolved Java executable command (JAVA_CMD env var > JAVA_HOME/bin/java > "java"). */
 export declare const JAVA_CMD: string;
 /**
  * Returns the Java executable command to use, resolved in priority order:
@@ -36,6 +56,7 @@ export declare const JAVA_CMD: string;
  * @returns {string} Path or name of the Java executable
  */
 export declare function getJavaCommand(): string;
+/** Resolved Python executable command (PYTHON_CMD env var > CONDA_PYTHON_EXE > "python"). */
 export declare const PYTHON_CMD: string;
 /**
  * Returns the Python executable command to use, resolved in priority order:
@@ -44,20 +65,35 @@ export declare const PYTHON_CMD: string;
  * @returns {string} Path or name of the Python executable
  */
 export declare function getPythonCommand(): string;
+/** Resolved .NET CLI command (DOTNET_CMD env var, or "dotnet"). */
 export declare let DOTNET_CMD: string;
+/** Resolved Node.js executable command (NODE_CMD env var, or "node"). */
 export declare let NODE_CMD: string;
+/** Resolved npm executable command (NPM_CMD env var, or "npm"). */
 export declare let NPM_CMD: string;
+/** Resolved Yarn executable command (YARN_CMD env var, or "yarn"). */
 export declare let YARN_CMD: string;
+/** Resolved GCC executable command (GCC_CMD env var, or "gcc"). */
 export declare let GCC_CMD: string;
+/** Resolved rustc executable command (RUSTC_CMD env var, or "rustc"). */
 export declare let RUSTC_CMD: string;
+/** Resolved Go executable command (GO_CMD env var, or "go"). */
 export declare let GO_CMD: string;
+/** Resolved Cargo executable command (CARGO_CMD env var, or "cargo"). */
 export declare let CARGO_CMD: string;
+/** Resolved Clojure CLI executable command (CLJ_CMD env var, or "clj"). */
 export declare let CLJ_CMD: string;
+/** Resolved Leiningen executable command (LEIN_CMD env var, or "lein"). */
 export declare let LEIN_CMD: string;
+/** Resolved temp directory used by cdxgen (CDXGEN_TEMP_DIR env var, or "temp"). */
 export declare let CDXGEN_TEMP_DIR: string;
-export declare const SWIFT_CMD: any;
-export declare const RUBY_CMD: any;
+/** Resolved Swift executable command (SWIFT_CMD env var, or "swift"). */
+export declare const SWIFT_CMD: string;
+/** Resolved Ruby executable command (RUBY_CMD env var, or "ruby"). */
+export declare const RUBY_CMD: string;
+/** Python package components that can be excluded from the generated BOM. */
 export declare const PYTHON_EXCLUDED_COMPONENTS: string[];
+/** Map of base cdxgen project type to the array of accepted alias strings. */
 export declare const PROJECT_TYPE_ALIASES: {
     java: string[];
     android: string[];
@@ -103,6 +139,7 @@ export declare const PROJECT_TYPE_ALIASES: {
     dynamic: string[];
     "ai-provenance": string[];
 };
+/** Map of base package manager to the array of accepted alias strings. */
 export declare const PACKAGE_MANAGER_ALIASES: {
     scala: string[];
 };

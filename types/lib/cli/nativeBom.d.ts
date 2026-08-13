@@ -1,4 +1,10 @@
-export declare function getCargoCacheDir(): any;
+/**
+ * Resolves the local Cargo registry cache directory from the `CARGO_CACHE_DIR`
+ * or `CARGO_HOME` environment variables, falling back to `~/.cargo/registry/cache`.
+ *
+ * @returns {string|undefined} Absolute path to the Cargo cache directory
+ */
+export declare function getCargoCacheDir(): string | undefined;
 /**
  * Function to create bom string for Go projects
  *
@@ -15,20 +21,34 @@ export declare function createGoBom(path: string, options: Object): Promise<Obje
  * @returns {Promise<Object|undefined>} Promise resolving to a BOM object or undefined
  */
 export declare function createRustBom(path: string, options: Object): Promise<Object | undefined>;
-export declare function buildCargoCacheComponent(crateFile: any): {
-    "bom-ref": string;
-    group: string;
-    name: any;
-    properties: {
-        name: string;
-        value: any;
-    }[];
-    purl: any;
-    type: string;
-    version: any;
-} | undefined;
-export declare function enrichCargoCacheComponent(crateFile: any, component: any): Promise<any>;
-export declare function createCargoCacheBom(path: any, options: any): Promise<Object>;
+/**
+ * Parses a `.crate` file name into a CycloneDX component (name, version, purl,
+ * bom-ref, and source/cache properties). Returns undefined when the file name
+ * does not match the `name-version` convention.
+ *
+ * @param {string} crateFile Absolute path to a `.crate` archive
+ * @returns {object|undefined} Component object or undefined
+ */
+export declare function buildCargoCacheComponent(crateFile: string): object | undefined;
+/**
+ * Enriches a cargo cache component with a SHA-256 hash and filename-based
+ * identity evidence (confidence 0.5). Hash computation failures are ignored.
+ *
+ * @param {string} crateFile Absolute path to the `.crate` archive
+ * @param {object} [component] Component produced by `buildCargoCacheComponent`
+ * @returns {Promise<object|undefined>} The enriched component or undefined
+ */
+export declare function enrichCargoCacheComponent(crateFile: string, component?: object): Promise<object | undefined>;
+/**
+ * Builds a BOM from `.crate` files found in the Cargo registry cache (or from a
+ * single `.crate` path). Optionally fetches crates.io license metadata when
+ * license fetching is enabled.
+ *
+ * @param {string} path Directory or `.crate` file path
+ * @param {object} options CLI options
+ * @returns {Promise<object>} Promise resolving to a BOM namespace data object
+ */
+export declare function createCargoCacheBom(path: string, options: object): Promise<object>;
 /**
  * Function to create bom string for Dart projects
  *

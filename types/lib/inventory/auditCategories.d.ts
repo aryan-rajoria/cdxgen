@@ -1,9 +1,19 @@
+/** Frozen list of hardware-bill-of-materials (HBOM) audit categories. */
 export declare const HBOM_AUDIT_CATEGORIES: readonly string[];
+/** Frozen list of cryptographic-bill-of-materials (CBOM) audit categories. */
 export declare const CBOM_AUDIT_CATEGORIES: readonly string[];
+/** Frozen list of host-topology audit categories. */
 export declare const HOST_TOPOLOGY_AUDIT_CATEGORIES: readonly string[];
+/** Frozen list of Golem (Go Evinse) audit categories. */
 export declare const GOLEM_AUDIT_CATEGORIES: readonly string[];
+/** Frozen list of AI-bill-of-materials audit categories. */
 export declare const AI_BOM_AUDIT_CATEGORIES: readonly string[];
+/** Comma-separated default HBOM category string used when none is specified. */
 export declare const DEFAULT_HBOM_AUDIT_CATEGORIES: string;
+/**
+ * Frozen map of category alias names to their expanded concrete category lists.
+ * Used by `expandBomAuditCategories` to resolve shorthand aliases.
+ */
 export declare const BOM_AUDIT_CATEGORY_ALIASES: Readonly<{
     "ai-inventory": string[];
     aibom: string[];
@@ -16,13 +26,45 @@ export declare const BOM_AUDIT_CATEGORY_ALIASES: Readonly<{
     hbom: string[];
     host: string[];
 }>;
-export declare function normalizeBomAuditCategories(categories: any): any[];
-export declare function expandBomAuditCategories(categories: any): any[];
-export declare function availableBomAuditCategories(rules: any): any[];
-export declare function validateBomAuditCategories(categories: any, rules: any): {
-    categories: any[];
-    expandedCategories: any[];
-    validCategories: any[];
+/**
+ * Normalize a category string or array into a deduplicated array of trimmed,
+ * non-empty category names.
+ *
+ * @param {string|string[]} categories Comma-separated string or array of categories.
+ * @returns {string[]} Deduplicated, trimmed category names.
+ */
+export declare function normalizeBomAuditCategories(categories: string | string[]): string[];
+/**
+ * Expand category aliases into their concrete category lists, returning a
+ * deduplicated array of resolved categories.
+ *
+ * @param {string|string[]} categories Comma-separated string or array of categories or aliases.
+ * @returns {string[]} Deduplicated, fully expanded category names.
+ */
+export declare function expandBomAuditCategories(categories: string | string[]): string[];
+/**
+ * Collect the sorted set of unique categories present in the loaded audit rules.
+ *
+ * @param {Array<{category?: string}>} rules Loaded audit rule objects.
+ * @returns {string[]} Sorted unique category names found in the rules.
+ */
+export declare function availableBomAuditCategories(rules: Array<{
+    category?: string;
+}>): string[];
+/**
+ * Validate that every requested category is a known category or alias,
+ * throwing an Error listing the valid options otherwise.
+ *
+ * @param {string|string[]} categories Comma-separated string or array of categories to validate.
+ * @param {Array<{category?: string}>} rules Loaded audit rule objects to derive valid categories from.
+ * @returns {{categories: string[], expandedCategories: string[], validCategories: string[]}} Normalized, expanded, and valid category lists.
+ */
+export declare function validateBomAuditCategories(categories: string | string[], rules: Array<{
+    category?: string;
+}>): {
+    categories: string[];
+    expandedCategories: string[];
+    validCategories: string[];
 };
 /**
  * Determine the default BOM audit categories for the current CLI invocation.

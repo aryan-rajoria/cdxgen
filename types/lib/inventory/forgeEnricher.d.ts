@@ -1,6 +1,16 @@
-export declare function parseGitHubUrl(url: any): {
-    owner: any;
-    repo: any;
+/**
+ * Parse a GitHub repository URL into its owner and repository name.
+ *
+ * Only accepts URLs where github.com is the actual host (rejecting spoofed
+ * hosts such as `https://evil.com/github.com/o/r`) and only git-safe path
+ * segments, so an untrusted remote URL cannot steer authenticated API requests.
+ *
+ * @param {string} url The git origin url
+ * @returns {{owner: string, repo: string}|null} Object containing owner and repo, or null
+ */
+export declare function parseGitHubUrl(url: string): {
+    owner: string;
+    repo: string;
 } | null;
 /**
  * Parses GitLab repository origin URL to extract project path/ID.

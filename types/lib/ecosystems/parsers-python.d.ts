@@ -13,7 +13,15 @@ export declare function parsePyRequiresDist(dist_string: string): {
  * @param {Object} lockData JSON data from Pipfile.lock
  */
 export declare function parsePiplockData(lockData: Object): Promise<any[]>;
-export declare function addComponentProperty(component: any, name: any, value: any): void;
+/**
+ * Append a deduplicated name/value property to a component's properties array.
+ *
+ * @param {object} component Component to mutate.
+ * @param {string} name Property name.
+ * @param {string} value Property value.
+ * @returns {void}
+ */
+export declare function addComponentProperty(component: object, name: string, value: string): void;
 /**
  * Method to parse python pyproject.toml file
  *

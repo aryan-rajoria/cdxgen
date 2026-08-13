@@ -1,3 +1,7 @@
+/**
+ * Platform-specific @appthreat/atom-* native package names that carry the
+ * bundled native `atom` binary.
+ */
 export declare const ATOM_NATIVE_PACKAGES: Set<string>;
 /**
  * Convert cdxgen's glob-style exclude patterns to a Scala/Java regex string.
@@ -6,8 +10,27 @@ export declare const ATOM_NATIVE_PACKAGES: Set<string>;
  * @returns {string|undefined} Scala-compatible regex or undefined when empty
  */
 export declare function globPatternsToAtomIgnoreRegex(patterns?: string[]): string | undefined;
-export declare function isPathExcludedByGlobPatterns(filePath: any, patterns?: any[]): boolean;
-export declare function filterAtomSlicesByExcludePatterns(sliceData: any, patterns?: any[]): any;
+/**
+ * Determine whether a file path is excluded by the given atom-style glob
+ * exclude patterns.
+ *
+ * @param {string} filePath File path to test.
+ * @param {string[]} [patterns=[]] Glob exclude patterns.
+ * @returns {boolean} True when the path matches an exclude pattern.
+ */
+export declare function isPathExcludedByGlobPatterns(filePath: string, patterns?: string[]): boolean;
+/**
+ * Remove atom-slice entries whose source file matches the given glob exclude
+ * patterns, preserving the original slice structure otherwise.
+ *
+ * Filters `objectSlices`, `userDefinedTypes`, `reachables`, and reachable
+ * `paths`/`graph` nodes/edges that reference excluded files.
+ *
+ * @param {object|Array} sliceData Atom slice data object or array.
+ * @param {string[]} [patterns=[]] Glob exclude patterns.
+ * @returns {object|Array} Filtered slice data (shallow copy when an object).
+ */
+export declare function filterAtomSlicesByExcludePatterns(sliceData: object | any[], patterns?: string[]): object | any[];
 /**
  * Build additional environment variables for Atom from cdxgen CLI options.
  *

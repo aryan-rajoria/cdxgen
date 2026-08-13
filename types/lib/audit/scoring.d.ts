@@ -1,3 +1,4 @@
+/** Map of severity names to numeric ordering used for threshold comparisons. */
 export declare const SEVERITY_ORDER: {
     none: number;
     low: number;

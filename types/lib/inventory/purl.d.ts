@@ -299,5 +299,15 @@ export declare function purlFromUrlString(type: string, repoUrl: string, version
  * @returns Located project with precise purl or the original unmodified input.
  */
 export declare function locateGenericPackage(apkg: object): object;
-export declare function mapConanPkgRefToPurlStringAndNameAndVersion(conanPkgRef: any): any[];
+/**
+ * Parse a Conan package reference into purl coordinates.
+ *
+ * Accepts references such as `name/version@user/channel#recipe_revision` and
+ * returns a `[purl, name, version]` tuple, or `[null, null, null]` when the
+ * reference cannot be parsed.
+ *
+ * @param {string} conanPkgRef Conan package reference
+ * @returns {(string|null)[]} Tuple of purl string, package name, and version
+ */
+export declare function mapConanPkgRefToPurlStringAndNameAndVersion(conanPkgRef: string): (string | null)[];
 //# sourceMappingURL=purl.d.ts.map

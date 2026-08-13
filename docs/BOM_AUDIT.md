@@ -76,6 +76,11 @@ The categories that work best in dry-run mode are the formulation-centric ones:
 - `ai-agent`
 - `ai-bom` (alias for `ai-governance,ai-security,ai-performance,ai-agent,mcp-server`)
 - `ai-inventory` (alias for `ai-agent,mcp-server`)
+- `ai-oversight`
+- `ai-provenance` (alias for `ai-provenance,ai-oversight`)
+- `cbom` (alias for `cbom-security,cbom-compliance`)
+- `cbom-compliance`
+- `cbom-security`
 - `chrome-extension`
 - `ci-permission`
 - `container-risk`
@@ -370,6 +375,28 @@ This is the recommended category for AI-heavy repositories because it combines p
 | AIP-001 | medium   | Local AI model advertises a very large context window |
 | AIP-002 | medium   | Large local AI model lacks quantization metadata      |
 
+### `ai-oversight`
+
+Rules that evaluate the `cdx:ai:oversight:*` properties emitted by the AI oversight collector at the BOM document root. They check whether AI-assisted code was merged with adequate independent human review and detect rubber-stamping or quality gate bypassing. Use `--bom-audit-categories ai-provenance` to enable both `ai-provenance` and `ai-oversight`.
+
+| Rule      | Severity | Description                                                                         |
+| --------- | -------- | ----------------------------------------------------------------------------------- |
+| AIOVS-001 | high     | High fraction of AI-authored commits or PRs lacks independent human review          |
+| AIOVS-002 | high     | AI commits weaken CI gates by deleting tests, silencing failures, or skipping lints |
+| AIOVS-003 | medium   | High self-merge or self-approval rate for AI-authored commits                       |
+| AIOVS-004 | medium   | Low share of AI commits or PRs has verified independent human approval              |
+| AIOVS-005 | low      | Files touched by AI commits have weak CODEOWNERS coverage                           |
+| AIOVS-006 | medium   | Overall AI human oversight score falls into the weak band                           |
+
+### `ai-provenance`
+
+Rules that evaluate the `cdx:ai:codegen:*` properties emitted by the AI provenance collector (see [AI_PROVENANCE.md](AI_PROVENANCE.md)). They surface governance, licensing, and intellectual-property considerations when AI, LLMs, or coding agents contribute to a project. The `ai-provenance` name also works as an alias that enables both `ai-provenance` and `ai-oversight`.
+
+| Rule       | Severity | Description                                                                              |
+| ---------- | -------- | ---------------------------------------------------------------------------------------- |
+| AIPROV-001 | low      | AI, LLM, or coding-agent involvement detected in development, testing, review, or triage |
+| AIPROV-002 | medium   | High-confidence authorship signals such as bot committers or AI co-author trailers       |
+
 ### Standards mapping
 
 The AI, MCP, and AI-agent rule sets now carry standards metadata that can be surfaced in audit annotations and downstream compliance workflows. The current mappings focus on:
@@ -583,6 +610,25 @@ Rules that evaluate Chrome/Chromium/Edge/Brave extension metadata for broad site
 | CHE-006 | critical | Extension has code-injection capability with broad host scope                         |
 | CHE-007 | high     | Extension has fingerprinting capability indicators with broad host scope              |
 | CHE-008 | high     | AI-assistant extension has code-injection capability on OpenAI/Claude/Copilot domains |
+
+### `cbom-security`
+
+Rules that evaluate cryptographic assets in a CBOM for weak or deprecated algorithms, insecure cipher modes, insufficient key sizes, and outdated protocol versions. Use `--bom-audit-categories cbom` or `crypto-bom` to enable both `cbom-security` and `cbom-compliance`.
+
+| Rule    | Severity | Description                                                                          |
+| ------- | -------- | ------------------------------------------------------------------------------------ |
+| CBS-001 | high     | Weak or deprecated cryptographic algorithm such as MD5, SHA-1, RC4, DES, or Blowfish |
+| CBS-002 | high     | Algorithm uses ECB mode, or CBC without authenticated encryption                     |
+| CBS-003 | high     | Symmetric security level below 128 bits or RSA private key below 2048 bits           |
+| CBS-004 | critical | Outdated TLS or DTLS protocol version such as SSL, TLS 1.0, or TLS 1.1               |
+
+### `cbom-compliance`
+
+Rules that evaluate certificate assets in a CBOM for expiry and trust-validation problems. Use `--bom-audit-categories cbom` or `crypto-bom` to enable both `cbom-security` and `cbom-compliance`.
+
+| Rule    | Severity | Description                                       |
+| ------- | -------- | ------------------------------------------------- |
+| CBC-001 | high     | Certificate has expired or is close to expiration |
 
 ## Writing custom rules
 

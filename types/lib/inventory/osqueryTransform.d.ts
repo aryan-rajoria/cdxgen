@@ -1,10 +1,84 @@
-export declare function deriveOsQueryVersion(res: any): any;
-export declare function deriveOsQueryName(res: any, singleResult: any, queryName: any): any;
-export declare function deriveOsQueryPublisher(res: any): any;
-export declare function deriveOsQueryDescription(res: any): any;
-export declare function sanitizeOsQueryIdentity(value: any): string;
-export declare function sanitizeOsQueryBomRefValue(value: any, fallback?: string): string;
-export declare function createOsQueryFallbackBomRef(queryCategory: any, componentType: any, name: any, version: any, identityField: any, identityValue: any): string;
-export declare function shouldCreateOsQueryPurl(componentType: any): boolean;
-export declare function createOsQueryPurl(purlType: any, group: any, name: any, version: any, qualifiers: any, subpath: any): string | null;
+/**
+ * Derive a version value from an osquery result row.
+ *
+ * Falls back through alternate row fields (e.g. `hotfix_id`, `port`, `pid`)
+ * that carry version-like values for the given query category.
+ *
+ * @param {Object} res osquery result row
+ * @returns {string|undefined} First present version-like field value
+ */
+export declare function deriveOsQueryVersion(res: Object): string | undefined;
+/**
+ * Derive a name value from an osquery result row.
+ *
+ * @param {Object} res osquery result row
+ * @param {boolean} singleResult Whether the query returned exactly one row
+ * @param {string} queryName Query name used as a fallback name for single-result queries
+ * @returns {string|undefined} First present name-like field value
+ */
+export declare function deriveOsQueryName(res: Object, singleResult: boolean, queryName: string): string | undefined;
+/**
+ * Derive a publisher value from an osquery result row.
+ *
+ * @param {Object} res osquery result row
+ * @returns {string} Publisher-like value, or an empty string when absent or literal `"null"`
+ */
+export declare function deriveOsQueryPublisher(res: Object): string;
+/**
+ * Derive a description value from an osquery result row.
+ *
+ * @param {Object} res osquery result row
+ * @returns {string} First present description-like field value, or an empty string
+ */
+export declare function deriveOsQueryDescription(res: Object): string;
+/**
+ * Sanitize an identity string for use in component names and references.
+ *
+ * @param {string} value Raw identity value
+ * @returns {string} Value with spaces mapped to `+`, `:`/`%` mapped to `-`, and `@`/brace delimiters trimmed
+ */
+export declare function sanitizeOsQueryIdentity(value: string): string;
+/**
+ * Sanitize a value for safe use inside a `bom-ref`.
+ *
+ * @param {string} value Raw value
+ * @param {string} [fallback="unknown"] Value returned when the input is empty or `"null"`
+ * @returns {string} Whitespace-collapsed value with bom-ref delimiters replaced by `-`
+ */
+export declare function sanitizeOsQueryBomRefValue(value: string, fallback?: string): string;
+/**
+ * Build a deterministic fallback `bom-ref` for an osquery-derived component.
+ *
+ * @param {string} queryCategory Osquery category (e.g. `deb_packages`)
+ * @param {string} componentType CycloneDX component type
+ * @param {string|undefined} name Component name
+ * @param {string|undefined} version Component version
+ * @param {string|undefined} identityField Row field used to distinguish the component's identity
+ * @param {string|undefined} identityValue Value of the identity field
+ * @returns {string} BOM ref of the form `osquery:<category>:<type>:<name>@<version>[<field>=<value>]`
+ */
+export declare function createOsQueryFallbackBomRef(queryCategory: string, componentType: string, name: string | undefined, version: string | undefined, identityField: string | undefined, identityValue: string | undefined): string;
+/**
+ * Determine whether an osquery-derived component type may carry a purl.
+ *
+ * @param {string} componentType CycloneDX component type
+ * @returns {boolean} `false` for `cryptographic-asset`, `data`, `device`, and `information`
+ */
+export declare function shouldCreateOsQueryPurl(componentType: string): boolean;
+/**
+ * Construct a purl string for an osquery-derived component.
+ *
+ * Builds through `tryBuildPurl`, so an invalid combination yields `null`
+ * instead of throwing. Derives a swid `tag_id` qualifier when missing and a
+ * distro namespace from `/etc/os-release` for OS package types that require one.
+ *
+ * @param {string} purlType Purl type (e.g. `deb`, `rpm`, `generic`)
+ * @param {string|null} group Purl namespace or group
+ * @param {string} name Component name
+ * @param {string} version Component version
+ * @param {Object|null} qualifiers Purl qualifiers
+ * @param {string|null} subpath Purl subpath (leading slashes are stripped)
+ * @returns {string|null} Canonical purl string, or `null` when the parts do not form a valid purl
+ */
+export declare function createOsQueryPurl(purlType: string, group: string | null, name: string, version: string, qualifiers: Object | null, subpath: string | null): string | null;
 //# sourceMappingURL=osqueryTransform.d.ts.map

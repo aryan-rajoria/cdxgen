@@ -1,27 +1,14 @@
-export declare const communityAiConfigParser: {
-    id: string;
-    patterns: string[];
-    parse(files: any, _options?: {}): {
-        components: {
-            "bom-ref": string;
-            name: any;
-            properties: {
-                name: string;
-                value: any;
-            }[];
-            type: string;
-            version: string | undefined;
-        }[];
-        services: {
-            "bom-ref": string;
-            group: any;
-            name: any;
-            properties: {
-                name: string;
-                value: any;
-            }[];
-            version: string;
-        }[];
-    };
-};
+/**
+ * Parser object for community AI assistant configuration files.
+ *
+ * Dispatches matched files (opencode/langgraph configs, agent/skill/rule
+ * markdown, crewai python/yaml definitions, and similar) to dedicated
+ * parsers and collects the resulting components and services.
+ *
+ * @type {Object}
+ * @property {string} id Unique parser identifier ("community-ai-config")
+ * @property {string[]} patterns File path patterns this parser handles
+ * @property {Function} parse Parse matched files into components and services
+ */
+export declare const communityAiConfigParser: Object;
 //# sourceMappingURL=communityAiConfigParser.d.ts.map

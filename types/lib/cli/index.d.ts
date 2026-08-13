@@ -45,7 +45,18 @@ export declare function summarizeCounts(entries: Array<[number, string, string]>
  * @returns {string} Comma-separated counts, busiest type first
  */
 export declare function summarizePurlTypes(components: object[]): string;
-export declare function createMultiXBom(pathList: any, options: any): Promise<Object>;
+/**
+ * Generates BOMs across multiple project types and/or paths, then merges and
+ * deduplicates the results into a single BOM namespace data object. Handles
+ * OCI/container inventory, per-path scans, formulation accumulation, and
+ * parent-component reconciliation.
+ *
+ * @param {string|string[]} pathList Comma-separated string or array of paths
+ * @param {object} options CLI options
+ * @returns {Promise<object>} Promise resolving to a deduplicated BOM namespace
+ *   data object (components, dependencies, bomJson, parentComponent, etc.)
+ */
+export declare function createMultiXBom(pathList: string | string[], options: object): Promise<object>;
 /**
  * Function to create a dynamic SBOM by executing a command and tracing the
  * shared libraries it loads at runtime via instrumentation.

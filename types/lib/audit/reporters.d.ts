@@ -1,4 +1,15 @@
-export declare function renderSarifReport(report: any, options?: {}): string;
+/**
+ * Render a predictive audit report as a SARIF 2.1.0 document.
+ *
+ * Converts visible findings (filtered by the configured minimum severity) into
+ * SARIF results and derives the rule table, producing a serialised JSON string
+ * conforming to the SARIF 2.1.0 schema.
+ *
+ * @param {object} report Aggregate audit report
+ * @param {object} [options={}] Render options including optional `minSeverity`
+ * @returns {string} SARIF 2.1.0 JSON document as a string
+ */
+export declare function renderSarifReport(report: object, options?: object): string;
 /**
  * Render an audit report as pretty JSON.
  *

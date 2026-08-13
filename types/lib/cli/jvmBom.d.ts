@@ -1,6 +1,23 @@
-export declare let GRADLE_CACHE_DIR: any;
-export declare const GRADLE_INIT_SCRIPT: any;
-export declare const SBT_CACHE_DIR: any;
+/**
+ * Resolved path to the Gradle modules cache directory, derived from
+ * `GRADLE_CACHE_DIR`, `GRADLE_USER_HOME`, or `~/.gradle/caches/modules-2/files-2.1`.
+ *
+ * @type {string}
+ */
+export declare let GRADLE_CACHE_DIR: string;
+/**
+ * Absolute path to the bundled `init.gradle` helper script under `data/helpers`.
+ *
+ * @type {string}
+ */
+export declare const GRADLE_INIT_SCRIPT: string;
+/**
+ * Resolved path to the sbt/Ivy2 cache directory, derived from `SBT_CACHE_DIR`
+ * or `~/.ivy2/cache`.
+ *
+ * @type {string}
+ */
+export declare const SBT_CACHE_DIR: string;
 /**
  * Function to create bom string for Java jars
  *

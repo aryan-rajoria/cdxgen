@@ -1,3 +1,6 @@
+/**
+ * Reset all OS package resolver caches. Exported for unit tests only.
+ */
 export declare function _resetOsInfoCache(): void;
 /**
  * Resolves a file path to its owning OS package manager package, including a
