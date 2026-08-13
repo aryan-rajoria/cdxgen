@@ -24,6 +24,8 @@ pnpm add -g @cdxgen/cdxgen --omit=optional --ignore-scripts --minimum-release-ag
 bun install -g @cdxgen/cdxgen --ignore-scripts
 ```
 
+> **Note:** cdxgen v13 moved to the `@cdxgen/cdxgen` package (the older `@cyclonedx/cdxgen` name is deprecated). If you are upgrading from v0.x or v1.x, review the migration guide in [MIGRATING-TO-V13.md](../MIGRATING-TO-V13.md) and the list of removed features in [docs/DEPRECATIONS.md](DEPRECATIONS.md) before installing.
+
 If you are a [Homebrew](https://brew.sh/) user, you can also install [cdxgen](https://formulae.brew.sh/formula/cdxgen) via:
 
 ```bash
@@ -149,10 +151,17 @@ Supported purl source types: `npm`, `pypi`, `gem`, `cargo`, `pub`, `github`, `bi
 
 > **Warning:** For purl inputs, cdxgen resolves repository metadata from registries. This information can be inaccurate or malicious, so review resolved sources before trusting output.
 
-To generate SBOM for an older specification version such as 1.4, pass the version using the `--spec-version` argument.
+cdxgen generates CycloneDX documents at specification version `1.6`, `1.7`, or `2.0`. Pass the desired target with the `--spec-version` argument.
 
 ```shell
-cdxgen -r -o bom.json --spec-version 1.4
+cdxgen -r -o bom.json --spec-version 1.6
+```
+
+Legacy `1.4` and `1.5` documents are no longer produced directly, because those versions predate required v13 features. To obtain a `1.5` document, generate at `1.6` or later and then convert with `cdx-convert`.
+
+```shell
+cdxgen -r -o bom.json --spec-version 1.6
+cdx-convert -i bom.json -o bom-1.5.json --to 1.5
 ```
 
 To generate SBOM for C or Python, ensure Java >= 21 is installed.
@@ -243,34 +252,43 @@ For more options, diagnostics, and merged host workflows, see the [HBOM guide](.
 
 ## Integrate with Dependency Track
 
-Invoke cdxgen with the below arguments to automatically submit the BOM to your organization's Dependency Track server.
+Invoke cdxgen with the following arguments to automatically submit the BOM to your organization's Dependency-Track server. Pass the server URL and an API key, then identify the target project by name and version (or by its UUID).
 
-```shell
-      --type                   Project type. Please refer to https://cyclonedx.g
-                               ithub.io/cdxgen/#/PROJECT_TYPES for supported lan
-                               guages/platforms.
-      --server-url             Dependency track url. Eg: https://deptrack.cyclon
-                               edx.io
-      --api-key                Dependency track api key
-      --project-group          Dependency track project group
-      --project-name           Dependency track project name. Default use the di
-                               rectory name
-      --project-version        Dependency track project version    [default: ""]
-      --project-tag            Dependency track project tag. Multiple values all
-                               owed.                                     [array]
-      --project-id             Dependency track project id. Either provide the i
-                               d or the project name and version together
-      --parent-project-id      Dependency track parent project id. You must provide the id or both
-                               parent project name and parent project version.
-      --parent-project-name    Dependency track parent project name
-      --parent-project-version Dependency track parent project version
-```
+Key Dependency-Track flags:
+
+- `--server-url` - Dependency-Track base URL (e.g. `https://deptrack.cyclonedx.io`).
+- `--api-key` - Dependency-Track API key.
+- `--project-name` - Project name. Defaults to the scanned directory name.
+- `--project-version` - Project version.
+- `--project-id` - Existing project UUID. Either supply this, or the project name and version together.
+- `--project-group` and `--project-tag` - Optional project group and tags (tags accept multiple values).
+- `--parent-project-id` - UUID of an existing parent project. You must provide either this id, or both `--parent-project-name` and `--parent-project-version` so the parent can be resolved.
+- `--auto-create` - Let Dependency-Track create the project if it does not exist.
+- `--is-latest` - Mark the uploaded BOM as the latest version.
+- `--skip-dt-tls-check` - Skip the TLS certificate check when calling Dependency-Track (use only for self-signed or internal servers).
 
 ## Example
 
 ```shell
-cdxgen -t java -o bom.json --server-url https://deptrack.server.com --api-key "token" --project-group ...
+cdxgen -t java -o bom.json \
+  --server-url https://deptrack.server.com \
+  --api-key "token" \
+  --project-name my-service \
+  --project-version 1.0.0 \
+  --parent-project-name platform --parent-project-version main
 ```
+
+## Companion CLI tools
+
+cdxgen v13 ships several companion CLIs alongside the main `cdxgen` command. Each is available as an npm binary, a standalone SEA binary, and inside the container image.
+
+- [`cdx-audit`](CDX_AUDIT.md) - Predictive supply-chain audit that scores a generated BOM and reports risk.
+- [`cdx-convert`](CDX_CONVERT.md) - Export CycloneDX to SPDX, and convert between CycloneDX spec versions.
+- [`cdx-validate`](CDX_VALIDATE.md) - Validate a BOM against SCVS and CRA requirements.
+- [`cdx-sign`](CDX_SIGN.md) - Sign a CycloneDX BOM.
+- [`cdx-verify`](CDX_VERIFY.md) - Verify BOM signatures, including nested component and service signatures.
+- [`evinse`](EVINSE.md) - Enrich a BOM with evidence and produce a SaaSBOM.
+- [`tracebom`](TRACEBOM.md) - Generate a dynamic SBOM by tracing a running process.
 
 # Supported Languages and Package Managers
 
@@ -336,7 +354,7 @@ cdxgen is [ESM only](https://gist.github.com/sindresorhus/a39789f98801d908bbc7ff
 Minimal example:
 
 ```ts
-import { createBom, submitBom } from "npm:@cdxgen/cdxgen@^9.9.0";
+import { createBom, submitBom } from "npm:@cdxgen/cdxgen@^13";
 ```
 
 See the [Deno Readme](https://github.com/cdxgen/cdxgen/blob/master/contrib/deno/README.md) for detailed instructions.
@@ -363,7 +381,7 @@ To generate test public/private key pairs, you can run cdxgen by passing the arg
 
 ### Verifying the signature
 
-Use the bundled `cdx-verify` command, which supports verifying a single signature added at the bom level.
+Use the bundled `cdx-verify` command. By default it performs strict deep verification: it validates the top-level BOM signature and every nested component, service, and annotation signature against the provided public key. Pass `--no-deep` to check only the root signature.
 
 ```shell
 npm install -g @cdxgen/cdxgen --omit=optional --ignore-scripts --min-release-age=2
@@ -372,7 +390,7 @@ cdx-verify -i bom.json --public-key public.key
 
 ### Verifying the signature (pnpm)
 
-Use the bundled `cdx-verify` command, which supports verifying a single signature added at the BOM level.
+Use the bundled `cdx-verify` command. By default it performs strict deep verification of the top-level signature plus every nested component, service, and annotation signature. Pass `--no-deep` to verify only the root signature.
 
 You can run it directly using pnpm (no global install needed):
 

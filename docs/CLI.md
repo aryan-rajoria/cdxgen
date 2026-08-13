@@ -21,6 +21,7 @@ The package ships multiple CLI entry points. Use this table as the top-level nav
 | `cbom`         | Generate CBOM-oriented inventories with crypto and evidence defaults                                     | yes                       | [CLI Usage](CLI.md)                |
 | `obom`         | Generate live OS/runtime inventories; equivalent default type is `os`                                    | yes                       | [OBOM_LESSONS.md](OBOM_LESSONS.md) |
 | `saasbom`      | Generate SaaSBOM-oriented inventories with service-evidence defaults                                     | yes                       | [CLI Usage](CLI.md)                |
+| `tracebom`     | Dynamic SBOM via process tracing                                                                         | yes                       | [TRACEBOM.md](TRACEBOM.md)         |
 | `evinse`       | Add evidence, call stacks, reachability, and service data                                                | no                        | [EVINSE.md](EVINSE.md)             |
 | `cdxi`         | Explore BOMs interactively in the REPL                                                                   | no                        | [REPL.md](REPL.md)                 |
 
@@ -315,8 +316,10 @@ Options:
       --validate                  Validate the generated SBOM using json schema. Defaults to true. Pass --no-validate to
                                   disable.                                                     [boolean] [default: true]
       --evidence                  Generate SBOM with evidence for supported languages.        [boolean] [default: false]
-      --spec-version              CycloneDX Specification version to use. Defaults to 1.7
-                                                                   [number] [choices: 1.4, 1.5, 1.6, 1.7] [default: 1.7]
+      --spec-version              CycloneDX Specification version to use. Defaults to 1.7. Accepted generation
+                                  targets: 1.6, 1.7, 2.0. 1.4 and 1.5 are rejected as generation targets; generate at 1.6+
+                                  and convert the output with `cdx-convert --to 1.5` if a legacy document is needed.
+                                                                        [number] [choices: 1.6, 1.7, 2.0] [default: 1.7]
       --filter                    Filter components containing this word in purl or component.properties.value. Multiple
                                   values allowed.                                                                [array]
       --only                      Include components only containing this word in purl. Useful to generate BOM with
@@ -355,6 +358,23 @@ Options:
                                                                                                [boolean] [default: true]
   -h, --help                      Show help                                                                    [boolean]
   -v, --version                   Show version number                                                          [boolean]
+      --verbose                   Increase log verbosity. Repeat for more detail: --verbose shows per-file detail,
+                                  --verbose --verbose enables debug output. (Env: CDXGEN_LOG_LEVEL, CDXGEN_DEBUG_MODE)
+                                                                                                                 [count]
+  -q, --quiet                     Silent mode: show errors only. (Env: CDXGEN_LOG_LEVEL=silent)
+                                                                                              [boolean] [default: false]
+      --progress                  Live progress region. Pass --no-progress to force static output. (Env:
+                                  CDXGEN_NO_PROGRESS)                                          [boolean] [default: true]
+      --color                     When to colorize output. auto detects the terminal. (Env: CDXGEN_COLOR, NO_COLOR,
+                                  FORCE_COLOR)                    [choices: "auto", "always", "never"] [default: "auto"]
+      --log-format                Diagnostic log format. json emits NDJSON records to stderr and disables the live
+                                  region. (Env: CDXGEN_LOG_FORMAT)           [choices: "text", "json"] [default: "text"]
+      --rust                      Use Rust-native (cdxrs) acceleration where available. Pass --no-rust to force the JS
+                                  path.                                                        [boolean] [default: true]
+      --cache                     Use the on-disk metadata cache for registry lookups. Pass --no-cache to bypass it for
+                                  this run.                                                    [boolean] [default: true]
+      --cache-ttl                 Override the metadata cache TTL in seconds. 0 means never expire. Default: 86400
+                                  (24h).                                                                        [number]
 
 Examples:
   cdxgen -t java .                       Generate a Java SBOM for the current directory
@@ -478,9 +498,16 @@ Refer to [cdx-convert — CycloneDX converter](CDX_CONVERT.md) for complete usag
 
 ## Dynamic Process Tracing (Dynamic SBOM)
 
-Use the `-t dynamic` or `-t trace` project types to trace binary execution at runtime and capture loaded libraries:
+Dynamic tracing is performed with the dedicated `tracebom` command, which runs a target command under the `@cdxgen/safer-exec` sandbox and records the shared libraries it loads at runtime (via `dlopen`), the HTTP URLs it opens, and the services it contacts:
 
-- `--trace-cmd`: The command line to execute and trace (e.g. `cdxgen -t dynamic --trace-cmd "node app.js"`).
-- `--trace-working-dir`: Optional. The working directory for command execution.
+```shell
+tracebom --cmd "node app.js" --working-dir /path/to/project
+tracebom --cmd "node app.js" -d /path/to/project -o bom.json
+```
+
+- `--cmd`: The command line to execute and trace (e.g. `tracebom --cmd "node app.js"`).
+- `--working-dir` (alias `-d`): Optional. The working directory for command execution.
+
+The `--trace-cmd` and `--trace-working-dir` flags are not registered on `cdxgen -t dynamic`; they live on `tracebom` as `--cmd` and `--working-dir`. See [tracebom](TRACEBOM.md) for the full flag reference.
 
 Dynamic trace SBOMs tag discovered libraries as `scope=required` with CycloneDX verification `evidence` technique set to `instrumentation`.

@@ -16,7 +16,7 @@ These variables are used either by cdxgen itself or by multiple scanners.
 | CDXGEN_DRY_RUN                   | Set to `true` or `1` to enable read-only dry-run mode. cdxgen will read files, block writes/exec/network submissions, and print an activity summary table at the end.                                                                                                                                                                                                                                                             |
 | CDXGEN_IN_CONTAINER              | Set to `true` to indicate that the process is running inside a containerized environment. Affects the configuration of certain container-specific settings and optimizations.                                                                                                                                                                                                                                                     |
 | CDXGEN_MAX_BUFFER                | Max buffer for stdout and stderr. Defaults to 100MB                                                                                                                                                                                                                                                                                                                                                                               |
-| CDXGEN_NO_CACHE                  | Set to `true` or `1` to disable the in-memory HTTP GET response cache used by the request agent.                                                                                                                                                                                                                                                                                                                                  |
+| CDXGEN_NO_CACHE                  | Set to `true` or `1` to disable response caching. Disables both the in-memory HTTP GET cache used by the request agent and the on-disk `cdxrs fetch` metadata cache (passed to cdxrs as `--no-cache`). Also set by the `--no-cache` CLI flag.                                                                                                                                                                                     |
 | CDXGEN_NO_IGNORE                 | Set to `true` or `1` to disable default ignore lists (such as `.git`, `.hg`, `node_modules`) during scanning.                                                                                                                                                                                                                                                                                                                     |
 | CDXGEN_PLUGINS_DIR               | Defines the directory where cdxgen plugins are stored. If not set, defaults to an empty value, and a global node_modules path is used if available.                                                                                                                                                                                                                                                                               |
 | CDXGEN_REPL_HISTORY              | Specifies the path to save REPL command history. If not set and the default directory does not exist, REPL history will not be saved.                                                                                                                                                                                                                                                                                             |
@@ -255,6 +255,85 @@ tree before re-running when a previously working project starts failing.
 | SWIFT_COMPILER_EXTRA_ARGS | Extra compiler arguments to add to the auto-detected string. Eg: -suppress-warnings -track-system-dependencies                                                                             |
 | SWIFT_SDK_ARGS            | Swift sdk arguments. Eg: -sdk <path>                                                                                                                                                       |
 | SWIFT_PACKAGE_ARGS        | Additional arguments to pass to the swift package command. The values gets inserted before the 'show-dependencies' sub-command. Example: --swift-sdks-path <swift-sdks-path> --jobs <jobs> |
+
+## Caching and performance
+
+These variables control the on-disk metadata cache and CPU/IO parallelism.
+
+| Variable                | Description                                                                                                                                                                                                                                                                                                               |
+| ----------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| CDXGEN_CACHE_DIR        | Override the directory used for the package metadata cache. When unset, cdxgen resolves a platform-specific directory: `~/Library/Caches/cdxgen` on macOS, `$XDG_CACHE_HOME/cdxgen` or `~/.cache/cdxgen` on Linux, and `%LOCALAPPDATA%\cdxgen\cache` on Windows. Inspect and purge it with the `cdxgen cache` subcommand. |
+| CDXGEN_CACHE_TTL        | Time-to-live for the on-disk metadata cache, in seconds. Forwarded to `cdxrs fetch` as `--cache-ttl`. Set to `0` to never expire. Defaults to `86400` (24h).                                                                                                                                                              |
+| CDXGEN_MAX_PATH_SCANS   | Maximum number of rootfs or image paths scanned concurrently when multiple paths are passed (for example a container image). Defaults to the smaller of `availableParallelism()` and `8`. Forced to `1` (sequential) in dry-run and debug mode.                                                                           |
+| CDXGEN_MAX_WORKERS      | Maximum number of worker threads the CPU-bound worker pool creates for a single call (AST parsing, file hashing). Defaults to the smaller of `availableParallelism()` and `8`.                                                                                                                                            |
+| CDXGEN_WORKER_THRESHOLD | Task count at or above which CPU-bound work is dispatched to worker threads instead of running inline on the calling thread. Below it, spawning a worker costs more than it saves. Defaults to `24`.                                                                                                                      |
+
+## Rust acceleration
+
+cdxgen uses the optional `cdxrs` Rust binary to accelerate registry metadata fetches and other hot paths, falling back to the JavaScript path on any failure. These variables control that acceleration.
+
+| Variable          | Description                                                                                                                                                                                                                                          |
+| ----------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| CDXGEN_NO_RUST    | Set to `true` to disable the `cdxrs` Rust accelerator entirely. Equivalent to `CDXGEN_RS_DISABLE=all`. Also set automatically by the `--no-rust` CLI flag.                                                                                           |
+| CDXGEN_RS_DISABLE | Disable one or more `cdxrs` subcommands. Set to `all` to disable the accelerator entirely, or to a comma-separated list of subcommand names (currently `info`, `fetch`) to disable specific ones. Affected callers fall back to the JavaScript path. |
+
+## Logging and output
+
+These variables control the diagnostic log stream and the live progress region written to stderr.
+
+| Variable           | Description                                                                                                                                                                                                                                 |
+| ------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| CDXGEN_COLOR       | Force coloured diagnostic output. Recognised alongside `NO_COLOR` and `FORCE_COLOR`; the env equivalent of the `--color` flag (`auto`, `always`, `never`).                                                                                  |
+| CDXGEN_LOG_FORMAT  | Diagnostic log serialization format. `text` (default) or `json`. `json` emits NDJSON records to stderr and disables the live progress region. Env equivalent of `--log-format`.                                                             |
+| CDXGEN_LOG_LEVEL   | Diagnostic log verbosity. Named values: `silent`, `quiet`, `error`, `normal`, `info`, `warn`, `verbose`, `debug`. A numeric `0` to `3` is also accepted. Wins over `CDXGEN_DEBUG_MODE` when set. Env equivalent of `--quiet` / `--verbose`. |
+| CDXGEN_NO_PROGRESS | Set to `true` or `1` to disable the live progress region. Also forced when `CI=true` or by `--no-progress`.                                                                                                                                 |
+| CDXGEN_UNICODE     | Force the glyph set used by the live region. `true` or `1` for unicode (braille spinner, check marks), `false` or `0` for ASCII. When unset, cdxgen guesses: unicode on except on legacy Windows consoles.                                  |
+
+## Secure mode allow-lists
+
+In secure mode (`CDXGEN_SECURE_MODE=true` or Node.js `--permission`) cdxgen restricts git hosts, git protocols, and local paths to configured allow-lists.
+
+| Variable                  | Description                                                                                                                                                                                                            |
+| ------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| CDXGEN_ALLOWED_PATHS      | Comma-separated allow-list of local filesystem paths permitted in secure mode. Falls back to `CDXGEN_SERVER_ALLOWED_PATHS`.                                                                                            |
+| CDXGEN_GIT_ALLOW_PROTOCOL | Colon-separated list of git protocols permitted for git CLI invocations. Defaults to `https:ssh` in secure mode and `https:git:ssh` otherwise. Aliased by `GIT_ALLOW_PROTOCOL` and `CDXGEN_SERVER_GIT_ALLOW_PROTOCOL`. |
+| CDXGEN_GIT_ALLOWED_HOSTS  | Comma-separated allow-list of git hosts permitted for git URL and purl sources. Falls back to `CDXGEN_SERVER_ALLOWED_HOSTS`.                                                                                           |
+| CDXGEN_GIT_HOST           | Default host assumed for git-based package references parsed from lockfiles (for example pnpm git dependencies). Defaults to `github.com`.                                                                             |
+
+## Hugging Face
+
+Used when resolving Hugging Face models, datasets, and spaces into AI-BOM components.
+
+| Variable                             | Description                                                                                                                                                                         |
+| ------------------------------------ | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| CDXGEN_HUGGINGFACE_CACHE_MAX_ENTRIES | Maximum number of entries retained in the in-memory Hugging Face response cache. Default: `256`.                                                                                    |
+| CDXGEN_HUGGINGFACE_CACHE_TTL_MS      | Time-to-live for entries in the Hugging Face response cache, in milliseconds. Default: `300000` (5 minutes).                                                                        |
+| CDXGEN_HUGGINGFACE_REMOTE            | Set to `true` to enable remote Hugging Face metadata resolution. Equivalent to the `--ai-huggingface-remote` / `--resolve-huggingface-remote` flags.                                |
+| HF_TOKEN                             | Bearer token for the Hugging Face Hub API, sent as an `Authorization` header and never logged. Read after `HUGGING_FACE_HUB_TOKEN`; the first non-empty value among the three wins. |
+| HUGGING_FACE_HUB_TOKEN               | Alias for `HF_TOKEN`, consulted first.                                                                                                                                              |
+| HUGGINGFACE_TOKEN                    | Alias for `HF_TOKEN`, consulted after `HUGGING_FACE_HUB_TOKEN`.                                                                                                                     |
+
+## Validation
+
+| Variable                      | Description                                                                                                                                                                                                                                                                                                    |
+| ----------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| CDXGEN_PRECOMPILED_VALIDATORS | Use the pre-compiled CycloneDX schema validators generated by `contrib/gen-validators.mjs`, which skips roughly 114 ms of ajv compilation per process. Set to `0` or `false` to force runtime compilation. Falls back to runtime compilation automatically when the generated module is missing or unreadable. |
+
+## Timeouts
+
+| Variable                     | Description                                                                                                                                                                                              |
+| ---------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| CDXGEN_OCI_TIMEOUT_MS        | Per-request timeout, in milliseconds, for OCI registry probes (manifest, token, referrers, and blob lookups), including those issued from JSONata rules. Capped at `300000`. Default: `8000`.            |
+| CDXGEN_SBOM_PROBE_TIMEOUT_MS | Timeout, in milliseconds, for registry SBOM lookups performed inside JSONata rules (`$hasSbom` / `$hasSignedSbom`). An unresolved probe fails closed and is treated as "no SBOM found". Default: `2500`. |
+
+## Audit and submission
+
+| Variable                        | Description                                                                                                                                                                                  |
+| ------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| CDXGEN_EXPERIMENTAL_MCP_PINNING | Set to `true` to enable the experimental MCP server pinning and composition enrichment, which marks MCP packages as `pinned` or `unpinned` and records transport and composition properties. |
+| CDXGEN_FETCH_PKG_METADATA       | Set to `true` or `1` to fetch registry package metadata (provenance, trusted-publishing signals) for enrichment, independent of `FETCH_LICENSE`. Set automatically while `--bom-audit` runs. |
+| CDXGEN_SERVER_URL               | Dependency-Track (or other submission) server URL. Overrides the `--server-url` flag when set, and surfaces a configuration risk warning when present in the environment.                    |
+| TEA_TOKEN                       | Bearer token for Transparency Exchange API (TEA) requests. Sent only as an `Authorization` header and never logged or written to the BOM. Equivalent to the `--tea-token` flag.              |
 
 ## Proxy and Network Configuration
 

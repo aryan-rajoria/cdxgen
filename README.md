@@ -12,7 +12,7 @@
 
 <img src="./docs/_media/cdxgen.png" width="200" height="auto" />
 
-cdxgen is a CLI tool, library, [REPL](./ADVANCED.md), and server to create, validate, sign, and verify software BOMs. It generates CycloneDX JSON BOMs and supports SPDX 3.0.1 JSON-LD export. CycloneDX is a full-stack BOM specification that is easily created, human and machine-readable, and simple to parse. The tool supports CycloneDX specification versions from 1.5 - 1.7.
+cdxgen is a CLI tool, library, [REPL](./ADVANCED.md), and server to create, validate, sign, and verify software BOMs. It generates CycloneDX JSON BOMs and supports SPDX 3.0.1 JSON-LD export. CycloneDX is a full-stack BOM specification that is easily created, human and machine-readable, and simple to parse. The tool generates BOMs targeting CycloneDX specification versions 1.6, 1.7, and 2.0, and the output can be downgraded to 1.4 or 1.5 for legacy consumers.
 
 Supported BOM formats:
 
@@ -99,6 +99,7 @@ Sections include:
 
 - [Getting Started][docs-homepage]
 - [CLI Usage][docs-cli]
+- [Migration to v13](MIGRATING-TO-V13.md)
 - [HBOM Guide](docs/HBOM.md)
 - [Merged Host View Lesson](docs/LESSON13.md)
 - [Server Usage][docs-server]
@@ -109,6 +110,17 @@ Sections include:
 - [Environment Variables][docs-env-vars]
 - [Advanced Usage][docs-advanced-usage]
 - [Permissions][docs-permissions]
+- [cdx-audit Guide](docs/CDX_AUDIT.md)
+- [cdx-convert Guide](docs/CDX_CONVERT.md)
+- [cdx-validate Guide](docs/CDX_VALIDATE.md)
+- [cdx-verify Guide](docs/CDX_VERIFY.md)
+- [cdx-sign Guide](docs/CDX_SIGN.md)
+- [Tracebom Guide](docs/TRACEBOM.md)
+- [AI-BOM Guide](docs/AI_BOM.md)
+- [MCP Inventory](docs/MCP.md)
+- [REPL Guide](docs/REPL.md)
+- [Custom Properties](docs/CUSTOM_PROPERTIES.md)
+- [Deprecations](docs/DEPRECATIONS.md)
 - [Security Policy](SECURITY.md)
 - [Threat Model](docs/THREAT_MODEL.md)
 - [Support (Enterprise & Community)][docs-support]
@@ -186,9 +198,9 @@ Standalone GitHub release binaries are published for `cdxgen`, `cdxgen-slim`, `a
 
 `hbom` release binaries bundle both `@cdxgen/cdx-hbom` and the matching `@cdxgen/cdxgen-plugins-bin*` companion helpers for the target platform. `hbom-slim` keeps the dedicated hardware collector (`@cdxgen/cdx-hbom`) but omits the companion plugin bundle when you want the smallest single-file HBOM executable.
 
-The `cbom` and `saasbom` release binaries bundle the Atom analysis stack (`@appthreat/atom` and `@appthreat/atom-parsetools`) plus protobuf export support (`@cdxgen/cdx-proto` and `@bufbuild/protobuf`). As of atom 3, `cbom` and `saasbom` embed a native atom binary and need **no JDK** on linux-amd64, linux-arm64 (glibc), linux-amd64-musl, darwin-arm64, and windows-amd64. On the jar-kind triples — darwin-amd64, windows-arm64, and linux-arm64-musl — the embedded atom still runs on the JVM and requires Java 23+. The `obom` release binary bundles the matching platform plugin package, pruned to runtime OS inventory helpers, plus the same protobuf export support. These aliases therefore support `--export-proto --proto-bin-file <file>` without requiring a separate npm install.
+The `cbom` and `saasbom` release binaries bundle the Atom analysis stack (`@appthreat/atom` and `@appthreat/atom-parsetools`) plus protobuf export support (`@cdxgen/cdx-proto` and `@bufbuild/protobuf`). As of atom 3, `cbom` and `saasbom` embed a native atom binary and need **no JDK** on linux-amd64, linux-arm64 (glibc), linux-amd64-musl, darwin-arm64, and windows-amd64. On the jar-kind triples (darwin-amd64, windows-arm64, and linux-arm64-musl), the embedded atom still runs on the JVM and requires Java 23+. The `obom` release binary bundles the matching platform plugin package, pruned to runtime OS inventory helpers, plus the same protobuf export support. These aliases therefore support `--export-proto --proto-bin-file <file>` without requiring a separate npm install.
 
-`cdx-audit` is designed to accelerate upstream dependency review with explainable, evidence-backed risk prioritization. It complements provenance, reproducibility, and manual investigation rather than replacing them.
+`cdx-audit` is designed to accelerate upstream dependency review with explainable, evidence-backed risk prioritization. It complements provenance, reproducibility, and manual investigation rather than replacing them. Beyond the basic `cdx-audit --bom bom.json` usage, it supports three reporters (`--report console|json|sarif`), scope selection (`--scope all|required`), trusted-publishing filters (`--include-trusted` and `--only-trusted`), and license policies via `--license-policy`. Non-zero exit codes on findings make it easy to gate CI pipelines. See the [cdx-audit guide](docs/CDX_AUDIT.md) for the full reference.
 
 For AI-heavy repositories, cdxgen also supports an AI-BOM workflow via the `aibom` command or the `-t ai` project type aliases (`ai`, `aibom`, `ai-bom`). This emits AI service/model evidence and pairs naturally with the `ai-bom` BOM-audit category alias for governance, security, performance, AI-agent, and MCP findings.
 
@@ -327,7 +339,7 @@ deno install --allow-read --allow-env --allow-run --allow-sys=uid,systemMemoryIn
 
 You can also use the cdxgen container image with node, deno, or bun runtime versions.
 
-The default version uses Node.js 23
+The default version uses Node.js 24
 
 ```bash
 docker run --rm -e CDXGEN_DEBUG_MODE=debug -v /tmp:/tmp -v $(pwd):/app:rw -t ghcr.io/cdxgen/cdxgen:master -r /app -o /app/bom.json
@@ -348,7 +360,7 @@ docker run --rm -e CDXGEN_DEBUG_MODE=debug -v /tmp:/tmp -v $(pwd):/app:rw -t ghc
 In deno applications, cdxgen could be directly imported without any conversion.
 
 ```ts
-import { createBom, submitBom } from "npm:@cdxgen/cdxgen@^12.2.1";
+import { createBom, submitBom } from "npm:@cdxgen/cdxgen@^13";
 ```
 
 ## Common workflows
@@ -451,17 +463,17 @@ Supported purl source types: `npm`, `pypi`, `gem`, `cargo`, `pub`, `github`, `bi
 
 > **Warning:** Repository URLs resolved from registries may be inaccurate or malicious. Review resolved sources before trusting generated output.
 
-The default specification used by cdxgen is 1.7. To generate BOM for a different specification version, such as 1.5 or 1.6, pass the version number using the `--spec-version` argument.
+The default specification used by cdxgen is 1.7. To generate BOM for a different specification version, such as 1.6, pass the version number using the `--spec-version` argument. Accepted values are 1.6, 1.7, and 2.0. Versions 1.4 and 1.5 are only available as output downgrades, not as generation targets; generate at 1.6 or higher and then use `cdx-convert --to 1.5` for legacy consumers.
 
 ```shell
 # 1.6 is supported by most tools
 cdxgen -r -o bom.json --spec-version 1.6
 ```
 
-Use repeated `--component-type` values to include only selected CycloneDX component types. This is a filter, not an inventory enabler: passing a type such as `machine-learning-model` does not enable machine-learning model discovery, and filtering to a type that the scan does not generate can produce an empty component list. The allowed values are validated against `--spec-version`; for example, `cryptographic-asset` is rejected for CycloneDX 1.5 and unsupported component types are pruned during compatibility downgrades. The dedicated `cbom` command does not accept `--component-type`; use `cdxgen --include-crypto` for normal generation plus filtering.
+Use repeated `--component-type` values to include only selected CycloneDX component types. This is a filter, not an inventory enabler: passing a type such as `machine-learning-model` does not enable machine-learning model discovery, and filtering to a type that the scan does not generate can produce an empty component list. The allowed values are validated against `--spec-version`; for example, `cryptographic-asset` requires 1.6 or newer, and unsupported component types are pruned during compatibility downgrades. The dedicated `cbom` command does not accept `--component-type`; use `cdxgen --include-crypto` for normal generation plus filtering.
 
 ```shell
-cdxgen -t docker alpine:3.20 --spec-version 1.5 --component-type library --component-type data
+cdxgen -t docker alpine:3.20 --spec-version 1.6 --component-type library --component-type data
 ```
 
 To generate SBOM for C or Python, ensure Java >= 21 is installed.
@@ -583,20 +595,19 @@ cdxgen can retain the dependency tree under the `dependencies` attribute for a s
 
 ## Plugins
 
-cdxgen could be extended with external binary plugins to support more SBOM use cases. These are installed as an optional dependency.
-
-```shell
-sudo npm install -g @cdxgen/cdxgen-plugins-bin
-```
-
-## Plugins (pnpm)
-
-`cdxgen` can be extended with external binary plugins to support more SBOM use cases.  
-These are installed as optional dependencies and can be used without a global install.
+`cdxgen` can be extended with external binary plugins to support more SBOM use cases. These are installed as optional dependencies and can be used without a global install.
 
 ```shell
 pnpm dlx @cdxgen/cdxgen-plugins-bin
 ```
+
+## Rust accelerator (cdxrs)
+
+cdxgen ships with an optional Rust accelerator binary, `cdxrs`, which speeds up hot paths such as registry metadata lookups where available. Use the `--rust` and `--no-rust` arguments to toggle it, or set the environment variable `CDXGEN_RS_DISABLE=all` to force the JavaScript path. See the [cdxrs protocol](./docs/CDXRS_PROTOCOL.md) document for implementation details.
+
+## Metadata cache
+
+cdxgen caches registry metadata on disk to speed up repeat runs. Use the `cdxgen cache <info|clear>` subcommand to inspect or purge the cache, the `--cache` and `--cache-ttl` arguments to control it per run, or the `CDXGEN_NO_CACHE` and `CDXGEN_CACHE_TTL` environment variables for the same effect.
 
 ## Docker / OCI container support
 
@@ -764,12 +775,19 @@ the bundled `cdx-convert` command:
 cdx-convert -i bom.json -o bom.spdx.json
 ```
 
-`cdx-convert` currently supports CycloneDX 1.6 and 1.7 inputs and exports
-SPDX 3.0.1 JSON-LD.
+`cdx-convert` currently supports CycloneDX 1.6, 1.7, and 2.0 inputs, accepts and
+produces protobuf, and exports SPDX 3.0.1 JSON-LD. The `--to` argument accepts
+either `spdx` or a CycloneDX spec version (1.5, 1.6, or 1.7) for
+CycloneDX-to-CycloneDX cross-version conversion, which is also the recommended
+way to produce 1.5 output for legacy consumers.
 
 Use `cdxgen --format spdx` (or `--format cyclonedx,spdx`) when generating BOMs.
 Use the [CycloneDX CLI][cyclonedx-cli-github] tool for advanced use cases such
 as diff and merging.
+
+To distribute BOMs through the Transparency Exchange API (TEA), use the
+`--tea-fetch` and `--tea-publish` arguments. See the [TEA lesson](docs/LESSON20.md)
+for usage.
 
 ## Including .NET Global Assembly Cache dependencies in the results
 
@@ -800,7 +818,7 @@ cdxgen is [ESM only](https://gist.github.com/sindresorhus/a39789f98801d908bbc7ff
 Minimal example:
 
 ```ts
-import { createBom, submitBom } from "npm:@cdxgen/cdxgen@^9.0.1";
+import { createBom, submitBom } from "npm:@cdxgen/cdxgen@^13";
 ```
 
 See the [Deno Readme](./contrib/deno/README.md) for detailed instructions.
@@ -838,7 +856,7 @@ pnpm install:frozen
 pnpm run gen-types
 # Run biomejs formatter and linter with auto fix
 pnpm run lint
-# Run jest tests
+# Run poku tests
 pnpm test
 ```
 
@@ -902,7 +920,6 @@ Copy the below block to your markdown files to show your ❤️ for cdxgen.
 
 [github-contribute]: https://github.com/cdxgen/cdxgen/contribute
 [github-contributors]: https://github.com/cdxgen/cdxgen/graphs/contributors
-[github-issues]: https://github.com/cdxgen/cdxgen/issues
 [github-license]: https://github.com/cdxgen/cdxgen/blob/master/LICENSE
 [github-releases]: https://github.com/cdxgen/cdxgen/releases
 
@@ -919,21 +936,16 @@ Copy the below block to your markdown files to show your ❤️ for cdxgen.
 
 <!-- web links-->
 
-[appthreat-homepage]: https://www.appthreat.com
-[cyclonedx-homepage]: https://cyclonedx.org
 [cyclonedx-cli-github]: https://github.com/CycloneDX/cyclonedx-cli
-[depscan-github]: https://github.com/cyclonedx/dep-scan
+[depscan-github]: https://github.com/owasp-dep-scan/dep-scan
 [github-rate-limit]: https://docs.github.com/en/rest/overview/rate-limits-for-the-rest-api#primary-rate-limit-for-github_token-in-github-actions
 [homebrew-homepage]: https://brew.sh
 [homebrew-cdxgen]: https://formulae.brew.sh/formula/cdxgen
 [winget-homepage]: https://learn.microsoft.com/en-us/windows/package-manager/winget/
 [jsr-cdxgen]: https://jsr.io/@cdxgen/cdxgen
-[jwt-homepage]: https://jwt.io
-[jwt-libraries]: https://jwt.io/libraries
-[librariesio]: https://libraries.io/npm/@cyclonedx%2Fcdxgen
+[librariesio]: https://libraries.io/npm/@cdxgen%2Fcdxgen
 [npmjs-cdxgen]: https://www.npmjs.com/package/@cdxgen/cdxgen
 [npmjs-cdxgen-v12]: https://www.npmjs.com/package/@cyclonedx/cdxgen
 [podman-github-rootless]: https://github.com/containers/podman/blob/master/docs/tutorials/rootless_tutorial.md
 [podman-github-remote]: https://github.com/containers/podman/blob/master/docs/tutorials/mac_win_client.md
 [swh-cdxgen]: https://archive.softwareheritage.org/browse/origin/?origin_url=https://github.com/cdxgen/cdxgen
-[cdxgen-gpt]: https://chatgpt.com/g/g-673bfeb4037481919be8a2cd1bf868d2-cyclonedx-generator-cdxgen
