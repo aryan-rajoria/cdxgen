@@ -37,7 +37,7 @@ export declare function detectCapabilities(overrides?: object): {
  * Create a live-region controller.
  *
  * @param {object} [options] Controller options
- * @param {object} [options.stream] Writable stream (default `process.stderr`)
+ * @param {object} [options.stream] Writable stream (default: the diagnostic stream, stderr unless `CDXGEN_LOG_STREAM=stdout`)
  * @param {number|string} [options.level] Verbosity ladder 0..3
  * @param {("text"|"json")} [options.format] Log serialization format
  * @param {boolean} [options.noProgress] Force-disable the live region

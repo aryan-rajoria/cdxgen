@@ -7,7 +7,10 @@
  */
 export declare function table(rows: any[][], config?: Object): string;
 /**
- * Create a streaming table writer that renders rows to stdout incrementally.
+ * Create a streaming table writer that renders rows incrementally.
+ *
+ * Rows go to the diagnostic stream: a rendered table is human-readable output,
+ * and writing it to stdout corrupted the BOM document under `-o -`.
  *
  * @param {Object} [config={}] Table configuration (header, columns, border style)
  * @returns {{write(row: *): void, end(): void}} Writer whose `end()` emits the bottom border

@@ -1,3 +1,14 @@
+/**
+ * The stream every human-readable diagnostic is written to.
+ *
+ * Exported so that the live region and the table renderer resolve the same
+ * destination as the loggers do. A caller that sets `CDXGEN_LOG_STREAM=stdout`
+ * gets the pre-v13 behaviour for all of it, not just for the thought and trace
+ * logs.
+ *
+ * @type {NodeJS.WritableStream}
+ */
+export declare const diagnosticStream: NodeJS.WritableStream;
 /** True when thought/reasoning logging is enabled (CDXGEN_THOUGHT_LOG, CDXGEN_THINK_MODE, or verbose debug mode). */
 export declare const THINK_MODE: any;
 /** True when structured command/HTTP trace logging is enabled (CDXGEN_TRACE_LOG, CDXGEN_TRACE_ID, CDXGEN_TRACE_MODE, or verbose debug mode). */
