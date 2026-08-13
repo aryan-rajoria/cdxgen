@@ -147,33 +147,14 @@ Sections include:
 > If you import cdxgen as a library, update the specifier:
 > `import { createBom } from "@cdxgen/cdxgen"`.
 
-Install the npm package without the optional binary plugins for basic SBOM generation.
+cdxgen is distributed three ways. The **standalone executables** and **container
+images** are the recommended choice for CI, production, and any environment
+where you want a self-contained tool with no Node.js dependency. The npm package
+is an alternative when you already manage JavaScript tooling or need cdxgen as a
+library. See [npm and JavaScript package managers](#npm-and-javascript-package-managers)
+below.
 
-**npm**:
-
-```shell
-npm install -g @cdxgen/cdxgen --omit=optional --ignore-scripts --min-release-age=2
-```
-
-For a full and rich experience with support for multiple BOM types, remove `--omit=optional`.
-
-```shell
-npm install -g @cdxgen/cdxgen --ignore-scripts --min-release-age=2
-```
-
-**pnpm**:
-
-```shell
-pnpm add -g @cdxgen/cdxgen --omit=optional --ignore-scripts --minimum-release-age=2880
-```
-
-**bun**:
-
-```shell
-bun install -g @cdxgen/cdxgen --ignore-scripts
-```
-
-Installing `@cdxgen/cdxgen` exposes these commands:
+Regardless of how you install, the following commands are available:
 
 | Command         | Purpose                                                                                                              | Standalone GitHub release binary |
 | --------------- | -------------------------------------------------------------------------------------------------------------------- | -------------------------------- |
@@ -206,41 +187,11 @@ For AI-heavy repositories, cdxgen also supports an AI-BOM workflow via the `aibo
 
 For host inventories, `hbom --include-runtime` produces a merged HBOM + OBOM view with strict topology links such as interface-name, driver-module, storage/runtime, and explicit secure-boot trust matches, plus a `host-topology` BOM audit pack for higher-confidence host findings. When the live hardware collector reports missing utilities or permission-sensitive enrichments, use `hbom diagnostics` (or inspect the derived `cdx:hbom:analysis:*` summary properties) before deciding whether a rerun with `--privileged` is justified.
 
-To run cdxgen without installing (hotloading), use the [pnpm dlx](https://pnpm.io/cli/dlx) command.
+### Standalone executables (recommended)
 
-```shell
-corepack pnpm dlx @cdxgen/cdxgen --help
-```
-
-You can call any packaged command the same way:
-
-```shell
-corepack pnpm dlx --package=@cdxgen/cdxgen cdx-audit --help
-corepack pnpm dlx --package=@cdxgen/cdxgen cdx-convert --help
-corepack pnpm dlx --package=@cdxgen/cdxgen cdx-validate --help
-corepack pnpm dlx --package=@cdxgen/cdxgen cdx-sign --help
-corepack pnpm dlx --package=@cdxgen/cdxgen cdx-verify --help
-corepack pnpm dlx --package=@cdxgen/cdxgen hbom --help
-corepack pnpm dlx --package=@cdxgen/cdxgen hbom diagnostics --help
-corepack pnpm dlx --package=@cdxgen/cdxgen evinse --help
-corepack pnpm dlx --package=@cdxgen/cdxgen cdxi --help
-```
-
-If you are a [Homebrew][homebrew-homepage] user, you can also install [cdxgen][homebrew-cdxgen] via:
-
-```shell
-$ brew install cdxgen
-```
-
-If you are a [Winget][winget-homepage] user on windows, you can also install cdxgen via:
-
-```shell
-winget install cdxgen
-```
-
-### Standalone GitHub release binaries
-
-If you want a single-file executable instead of an npm installation, download a published release asset and verify its hash before executing it.
+For a self-contained tool with no runtime dependencies, download a published
+release asset and verify its hash before executing it. This is the recommended
+method for CI and production use.
 
 Common asset names:
 
@@ -325,17 +276,21 @@ steps:
       ./cdx-audit-linux-amd64 --help
 ```
 
-cdxgen also runs under the [bun](https://bun.sh) runtime, including `bunx --bun @cdxgen/cdxgen`. Bun projects using a text lockfile (`bun.lock`) are supported as an SBOM target via the `bun` project type (`-t bun`); the legacy binary lockfile (`bun.lockb`) is not parsed, so regenerate a text lockfile with `bun install --save-text-lockfile`.
+Package managers that install the standalone executable with a single command:
+
+If you are a [Homebrew][homebrew-homepage] user, you can install [cdxgen][homebrew-cdxgen] via:
 
 ```shell
-bun install -g @cdxgen/cdxgen --ignore-scripts
+$ brew install cdxgen
 ```
 
-cdxgen also runs under the [deno](https://deno.com) runtime. Deno projects with a lockfile (`deno.lock`, versions 2 - 5) are supported as an SBOM target via the `deno` project type (`-t deno`); `jsr:` imports are recorded under the `@jsr` npm-compat scope, `npm:` imports as regular npm components and remote `https://` imports as generic components.
+If you are a [Winget][winget-homepage] user on windows, you can also install cdxgen via:
 
 ```shell
-deno install --allow-read --allow-env --allow-run --allow-sys=uid,systemMemoryInfo,gid,homedir --allow-write --allow-net -n cdxgen "npm:@cdxgen/cdxgen/cdxgen"
+winget install cdxgen
 ```
+
+### Container images
 
 You can also use the cdxgen container image with node, deno, or bun runtime versions.
 
@@ -355,6 +310,70 @@ For the bun version, use `ghcr.io/cdxgen/cdxgen-bun` as the image name.
 
 ```bash
 docker run --rm -e CDXGEN_DEBUG_MODE=debug -v /tmp:/tmp -v $(pwd):/app:rw -t ghcr.io/cdxgen/cdxgen-bun:master -r /app -o /app/bom.json
+```
+
+### npm and JavaScript package managers
+
+The npm package is an alternative when you already have Node.js >= 24 available
+or need cdxgen as a library. It is the least self-contained option because it
+relies on a JavaScript runtime and optional native companions.
+
+Install the npm package without the optional binary plugins for basic SBOM generation.
+
+**npm**:
+
+```shell
+npm install -g @cdxgen/cdxgen --omit=optional --ignore-scripts --min-release-age=2
+```
+
+For a full and rich experience with support for multiple BOM types, remove `--omit=optional`.
+
+```shell
+npm install -g @cdxgen/cdxgen --ignore-scripts --min-release-age=2
+```
+
+**pnpm**:
+
+```shell
+pnpm add -g @cdxgen/cdxgen --omit=optional --ignore-scripts --minimum-release-age=2880
+```
+
+**bun**:
+
+```shell
+bun install -g @cdxgen/cdxgen --ignore-scripts
+```
+
+To run cdxgen without installing (hotloading), use the [pnpm dlx](https://pnpm.io/cli/dlx) command.
+
+```shell
+corepack pnpm dlx @cdxgen/cdxgen --help
+```
+
+You can call any packaged command the same way:
+
+```shell
+corepack pnpm dlx --package=@cdxgen/cdxgen cdx-audit --help
+corepack pnpm dlx --package=@cdxgen/cdxgen cdx-convert --help
+corepack pnpm dlx --package=@cdxgen/cdxgen cdx-validate --help
+corepack pnpm dlx --package=@cdxgen/cdxgen cdx-sign --help
+corepack pnpm dlx --package=@cdxgen/cdxgen cdx-verify --help
+corepack pnpm dlx --package=@cdxgen/cdxgen hbom --help
+corepack pnpm dlx --package=@cdxgen/cdxgen hbom diagnostics --help
+corepack pnpm dlx --package=@cdxgen/cdxgen evinse --help
+corepack pnpm dlx --package=@cdxgen/cdxgen cdxi --help
+```
+
+cdxgen also runs under the [bun](https://bun.sh) runtime, including `bunx --bun @cdxgen/cdxgen`. Bun projects using a text lockfile (`bun.lock`) are supported as an SBOM target via the `bun` project type (`-t bun`); the legacy binary lockfile (`bun.lockb`) is not parsed, so regenerate a text lockfile with `bun install --save-text-lockfile`.
+
+```shell
+bun install -g @cdxgen/cdxgen --ignore-scripts
+```
+
+cdxgen also runs under the [deno](https://deno.com) runtime. Deno projects with a lockfile (`deno.lock`, versions 2 - 5) are supported as an SBOM target via the `deno` project type (`-t deno`); `jsr:` imports are recorded under the `@jsr` npm-compat scope, `npm:` imports as regular npm components and remote `https://` imports as generic components.
+
+```shell
+deno install --allow-read --allow-env --allow-run --allow-sys=uid,systemMemoryInfo,gid,homedir --allow-write --allow-net -n cdxgen "npm:@cdxgen/cdxgen/cdxgen"
 ```
 
 In deno applications, cdxgen could be directly imported without any conversion.

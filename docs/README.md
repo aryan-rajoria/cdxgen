@@ -1,45 +1,10 @@
 # Getting Started <!-- {docsify-ignore-all} -->
 
-cdxgen is available as an npm package, container image, and single executable binaries. Begin your journey by selecting your use case.
+cdxgen is available as standalone executable binaries, container images, and an npm package. The standalone binaries and container images are recommended for CI and production because they have no runtime dependencies. Begin your journey by selecting your use case.
 
 ## Installation
 
-Install the npm package when you want the full multi-command CLI surface.
-
-**npm**:
-
-```shell
-npm install -g @cdxgen/cdxgen --omit=optional --ignore-scripts --min-release-age=2
-```
-
-**pnpm**:
-
-```shell
-pnpm add -g @cdxgen/cdxgen --omit=optional --ignore-scripts --minimum-release-age=2880
-```
-
-**bun**:
-
-```shell
-bun install -g @cdxgen/cdxgen --ignore-scripts
-```
-
-> **Note:** cdxgen v13 moved to the `@cdxgen/cdxgen` package (the older `@cyclonedx/cdxgen` name is deprecated). If you are upgrading from v0.x or v1.x, review the migration guide in [MIGRATING-TO-V13.md](../MIGRATING-TO-V13.md) and the list of removed features in [docs/DEPRECATIONS.md](DEPRECATIONS.md) before installing.
-
-If you are a [Homebrew](https://brew.sh/) user, you can also install [cdxgen](https://formulae.brew.sh/formula/cdxgen) via:
-
-```bash
-brew install cdxgen
-```
-
-If you are a [Winget](https://learn.microsoft.com/en-us/windows/package-manager/winget/) user on windows, you can also install cdxgen via:
-
-```shell
-winget install cdxgen
-```
-
-<details>
-<summary><strong>Single Executable Application (SEA) Binaries</strong></summary>
+### Standalone executables (recommended)
 
 `cdxgen`, `aibom`, and `hbom` are available as standalone binaries for Linux, macOS, and Windows. These binaries do not require Node.js or `npm` to be installed on the system, making them ideal for CI/CD environments, containerized scans, or quick local usage.
 
@@ -51,7 +16,7 @@ Binaries are available in the [GitHub Releases](https://github.com/cdxgen/cdxgen
 - **Slim:** (`-slim`) Smaller binaries with the node runtime and without the companion plugin bundle. `cdxgen-*-slim` omits the binary plugins, and `hbom-*-slim` keeps `@cdxgen/cdx-hbom` while omitting `@cdxgen/cdxgen-plugins-bin*`.
 - **Musl:** (`-musl`) Linked against Musl libc, specifically for **Alpine Linux**.
 
-### Linux and macOS (Bash)
+#### Linux and macOS (Bash)
 
 ```bash
 OS=linux
@@ -71,7 +36,7 @@ chmod +x "$BINARY_NAME"
 ./"$BINARY_NAME" --version
 ```
 
-### Windows (PowerShell)
+#### Windows (PowerShell)
 
 ```powershell
 $Arch = "amd64"
@@ -98,7 +63,43 @@ if ($ExpectedHash -eq $ActualHash) {
 > tools are also available as standalone binaries in the releases using the
 > same naming convention (e.g., `cdx-convert-linux-amd64`).
 
-</details>
+Package managers that install the standalone executable with a single command:
+
+If you are a [Homebrew](https://brew.sh/) user, you can install [cdxgen](https://formulae.brew.sh/formula/cdxgen) via:
+
+```bash
+brew install cdxgen
+```
+
+If you are a [Winget](https://learn.microsoft.com/en-us/windows/package-manager/winget/) user on windows, you can also install cdxgen via:
+
+```shell
+winget install cdxgen
+```
+
+### npm and JavaScript package managers
+
+The npm package is an alternative when you already have Node.js >= 24 available or need cdxgen as a library.
+
+**npm**:
+
+```shell
+npm install -g @cdxgen/cdxgen --omit=optional --ignore-scripts --min-release-age=2
+```
+
+**pnpm**:
+
+```shell
+pnpm add -g @cdxgen/cdxgen --omit=optional --ignore-scripts --minimum-release-age=2880
+```
+
+**bun**:
+
+```shell
+bun install -g @cdxgen/cdxgen --ignore-scripts
+```
+
+> **Note:** cdxgen v13 moved to the `@cdxgen/cdxgen` package (the older `@cyclonedx/cdxgen` name is deprecated). If you are upgrading from v0.x or v1.x, review the migration guide in [MIGRATING-TO-V13.md](../MIGRATING-TO-V13.md) and the list of removed features in [docs/DEPRECATIONS.md](DEPRECATIONS.md) before installing.
 
 ## Generate BOM for source code inputs
 
