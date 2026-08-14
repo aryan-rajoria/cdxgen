@@ -7,6 +7,7 @@ import process from "node:process";
 import yargs from "yargs";
 import { hideBin } from "yargs/helpers";
 
+import { installConsoleShim, restoreConsole } from "../lib/core/ui.js";
 import {
   retrieveCdxgenVersion,
   safeExistsSync,
@@ -73,6 +74,12 @@ const args = _yargs
   .version(retrieveCdxgenVersion())
   .help()
   .wrap(Math.min(120, yargs().terminalWidth())).argv;
+
+// stdout carries the payload and nothing else; every diagnostic goes to the
+// live region's stream. Without the shim a `--print`/`--json` document shares
+// stdout with progress messages and cannot be piped into a parser.
+installConsoleShim();
+process.once("exit", restoreConsole);
 
 const loadCycloneDxBom = async (inputPath) => {
   if (!safeExistsSync(inputPath)) {

@@ -1,3 +1,14 @@
+/**
+ * The stream every human-readable diagnostic is written to.
+ *
+ * Exported so that the live region and the table renderer resolve the same
+ * destination as the loggers do. A caller that sets `CDXGEN_LOG_STREAM=stdout`
+ * gets the pre-v13 behaviour for all of it, not just for the thought and trace
+ * logs.
+ *
+ * @type {NodeJS.WritableStream}
+ */
+export declare const diagnosticStream: NodeJS.WritableStream;
 /** True when thought/reasoning logging is enabled (CDXGEN_THOUGHT_LOG, CDXGEN_THINK_MODE, or verbose debug mode). */
 export declare const THINK_MODE: any;
 /** True when structured command/HTTP trace logging is enabled (CDXGEN_TRACE_LOG, CDXGEN_TRACE_ID, CDXGEN_TRACE_MODE, or verbose debug mode). */
@@ -13,7 +24,8 @@ export declare const TRACE_MODE: any;
 export declare function thoughtLog(s: string, args?: Object): void;
 /**
  * Closes the think log group by emitting the closing `</think>` marker.
- * Has no effect if THINK_MODE is not enabled.
+ * Has no effect if THINK_MODE is not enabled, and emits the marker at most
+ * once so an explicit call followed by the exit handler cannot produce two.
  *
  * @returns {void}
  */
@@ -25,4 +37,14 @@ export declare function thoughtEnd(): void;
  * @param {Object} args Additional arguments
  */
 export declare function traceLog(traceType: string, args: Object): void;
+/**
+ * Terminate the think block and close the log file descriptors.
+ *
+ * Readers tail these files as a live feed, so a run that ends without the
+ * closing `</think>` marker leaves the consumer holding an unterminated block.
+ * Registered on process exit and safe to call more than once.
+ *
+ * @returns {void}
+ */
+export declare function closeLogStreams(): void;
 //# sourceMappingURL=logger.d.ts.map

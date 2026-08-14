@@ -7,6 +7,7 @@ import { hideBin } from "yargs/helpers";
 
 import { validateSpecVersion } from "../lib/cli/cliOptions.js";
 import { createDynamicBom } from "../lib/cli/index.js";
+import { installConsoleShim, restoreConsole } from "../lib/core/ui.js";
 import {
   DEBUG_MODE,
   retrieveCdxgenVersion,
@@ -200,6 +201,12 @@ const args = _yargs
   })
   .wrap(Math.min(120, yargs().terminalWidth())).argv;
 
+// stdout carries the payload and nothing else; every diagnostic goes to the
+// live region's stream. Without the shim a `--print`/`--json` document shares
+// stdout with progress messages and cannot be piped into a parser.
+installConsoleShim();
+process.once("exit", restoreConsole);
+
 if (args.help) {
   console.log(`${retrieveCdxgenVersion()}\n`);
   _yargs.showHelp();
@@ -274,7 +281,8 @@ const options = {
   const jsonPayload = JSON.stringify(bomJson, null, DEBUG_MODE ? 2 : null);
 
   if (args.print) {
-    console.log(jsonPayload);
+    // The document is the payload, so it bypasses the console shim.
+    process.stdout.write(`${jsonPayload}\n`);
   }
 
   safeWriteSync(options.output, jsonPayload);

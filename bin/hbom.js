@@ -8,6 +8,7 @@ import { hideBin } from "yargs/helpers";
 
 import { createHBom } from "../lib/cli/index.js";
 import { thoughtLog } from "../lib/core/logger.js";
+import { installConsoleShim, restoreConsole } from "../lib/core/ui.js";
 import {
   DEBUG_MODE,
   isDryRun,
@@ -192,6 +193,12 @@ const args = _yargs
   })
   .wrap(Math.min(120, yargs().terminalWidth())).argv;
 
+// stdout carries the payload and nothing else; every diagnostic goes to the
+// live region's stream. Without the shim a `--print`/`--json` document shares
+// stdout with progress messages and cannot be piped into a parser.
+installConsoleShim();
+process.once("exit", restoreConsole);
+
 if (args.help) {
   console.log(`${retrieveCdxgenVersion()}\n`);
   _yargs.showHelp();
@@ -334,8 +341,9 @@ async function loadBomFromInputFile(inputFile) {
 function printHbomDiagnosticsReport(bomJson) {
   const hbomSummary = getHbomSummary(bomJson);
   if (options.json) {
-    console.log(
-      JSON.stringify(
+    // A machine-readable report is a payload too, not a diagnostic.
+    process.stdout.write(
+      `${JSON.stringify(
         {
           actionableDiagnosticCount: hbomSummary.actionableDiagnosticCount,
           architecture: hbomSummary.architecture,
@@ -359,7 +367,7 @@ function printHbomDiagnosticsReport(bomJson) {
         },
         null,
         2,
-      ),
+      )}\n`,
     );
     return;
   }
@@ -459,7 +467,8 @@ async function runDiagnosticsCommand() {
   }
   const output = JSON.stringify(bomJson, null, options.pretty ? 2 : null);
   if (options.print) {
-    console.log(output);
+    // The document is the payload, so it bypasses the console shim.
+    process.stdout.write(`${output}\n`);
   } else {
     const outputDirectory = getOutputDirectory(options.output);
     if (outputDirectory && !safeExistsSync(outputDirectory)) {

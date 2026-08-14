@@ -214,7 +214,7 @@ Common asset names:
 #### Linux
 
 ```bash
-VERSION="v13.0.0"
+VERSION="v13.0.1"
 ASSET="cdx-audit-linux-amd64"
 BASE_URL="https://github.com/cdxgen/cdxgen/releases/download/${VERSION}"
 
@@ -228,7 +228,7 @@ chmod +x "${ASSET}"
 #### macOS
 
 ```bash
-VERSION="v13.0.0"
+VERSION="v13.0.1"
 ASSET="cdx-audit-darwin-arm64"
 BASE_URL="https://github.com/cdxgen/cdxgen/releases/download/${VERSION}"
 
@@ -242,7 +242,7 @@ chmod +x "${ASSET}"
 #### Windows (PowerShell)
 
 ```powershell
-$Version = "v13.0.0"
+$Version = "v13.0.1"
 $Asset = "cdx-audit-windows-amd64.exe"
 $BaseUrl = "https://github.com/cdxgen/cdxgen/releases/download/$Version"
 
@@ -267,7 +267,7 @@ steps:
     env:
       GH_TOKEN: ${{ github.token }}
     run: |
-      gh release download v13.0.0 \
+      gh release download v13.0.1 \
         --repo cdxgen/cdxgen \
         --pattern 'cdx-audit-linux-amd64' \
         --pattern 'cdx-audit-linux-amd64.sha256'
