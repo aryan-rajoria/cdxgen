@@ -115,6 +115,7 @@ jobs:
       - name: pnpm install
         run: |
           pnpm install:frozen
+          python3 -m pip uninstall -y owasp-depscan ds-analysis-lib ds-xbom-lib ds-reporting-lib ds-server-lib atom-tools || true
           python3 -m pip install --pre --upgrade owasp-depscan[all] atom-tools
       - name: check sbom for vulns
         if: github.ref == 'refs/heads/master'
@@ -141,7 +142,9 @@ jobs:
             reports/sbom-build.cdx.json
             reports/sbom-build.cdx.proto
       - name: Cleanup
-        run: rm -rf /tmp/docker-images* /tmp/atom-* /tmp/mvn-deps*
+        run: |
+          python3 -m pip uninstall -y owasp-depscan ds-analysis-lib ds-xbom-lib ds-reporting-lib ds-server-lib atom-tools || true
+          rm -rf /tmp/docker-images* /tmp/atom-* /tmp/mvn-deps*
 
   golden-tests:
     runs-on: 'ubuntu-latest'
