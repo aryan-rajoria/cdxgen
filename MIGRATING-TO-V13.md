@@ -685,12 +685,12 @@ The trace stream is NDJSON: one JSON object per line, each with a `timestamp`
 and a `type`. v13 renames the fields that v12 emitted and adds two record
 types.
 
-| Type       | v12 fields  | v13 fields                                                        |
-| ---------- | ----------- | ----------------------------------------------------------------- |
-| `spawn`    | `cmd`       | `command`, `cwd`                                                  |
-| `http`     | `url`       | `protocol`, `host`, `path`, `pathname`                            |
-| `activity` | —           | `identifier`, `kind`, `status`, `target`, `reason`, `networkIntent` |
-| `phase`    | —           | `phase`, `state`, `detail`, `note`, `done`, `total`, `elapsedMs`  |
+| Type       | v12 fields | v13 fields                                                          |
+| ---------- | ---------- | ------------------------------------------------------------------- |
+| `spawn`    | `cmd`      | `command`, `cwd`                                                    |
+| `http`     | `url`      | `protocol`, `host`, `path`, `pathname`                              |
+| `activity` | —          | `identifier`, `kind`, `status`, `target`, `reason`, `networkIntent` |
+| `phase`    | —          | `phase`, `state`, `detail`, `note`, `done`, `total`, `elapsedMs`    |
 
 A consumer that read `cmd` or `url` gets nothing in v13. Rebuild the URL from
 its parts:
