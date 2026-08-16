@@ -179,6 +179,9 @@ cbom -t dotnet /path/to/solution
 # cdxgen -t dotnet --include-crypto --evidence --deep --spec-version 1.7 .
 ```
 
+The `cbom` alias rejects OS inventory project types (`-t os`) because the
+crypto pass analyses source code. Use the `obom` command for OS inventories.
+
 Inspect the resulting assets. Each algorithm component carries
 `cryptoProperties.assetType: "algorithm"`, an `oid`, an `algorithmProperties`
 block (family, primitive), and `cdx:crypto:*` properties recording every
