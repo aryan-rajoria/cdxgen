@@ -1,6 +1,6 @@
 ---
 name: cyclonedx-spec-reviewer
-description: Review cdxgen changes for CycloneDX schema compliance, semantic correctness, and unnecessary custom properties.
+description: Reviews cdxgen changes for CycloneDX schema compliance, semantic field correctness, and unnecessary custom properties across spec versions 1.5 through 2.0, including AI-BOM modeling via formulation, modelCard, pedigree, and evidence. Use when a pull request changes CycloneDX output, schema handling, validators, package-manager integrations, BOM enrichment, or custom properties.
 ---
 
 # CycloneDX specification reviewer
