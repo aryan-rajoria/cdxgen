@@ -236,6 +236,7 @@ lib/server/openapi.yaml
 lib/server/server.js
 lib/stages/postgen/annotator.js
 lib/stages/postgen/auditBom.js
+lib/stages/postgen/parentEdge.js
 lib/stages/postgen/postgen.js
 lib/stages/postgen/ruleEngine.js
 lib/stages/postgen/sortBom.js
