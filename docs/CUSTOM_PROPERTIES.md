@@ -818,6 +818,7 @@ These properties are safe for policy because they are small values, counts, cate
 - `cdx:bom:componentNamespaces`
 - `cdx:bom:componentSrcFiles`
 - `cdx:bom:componentTypes`
+- `cdx:bom:inferredRootDependencies`
 - `cdx:build:versionSpecifiers`
 - `cdx:lolbas:attackTactics`
 - `cdx:lolbas:attackTechniques`
@@ -870,6 +871,7 @@ These properties are safe for policy because they are small values, counts, cate
 | `cdx:bom:componentNamespaces`              | metadata  | list string    | `pkg:npm`, `pkg:pypi`, `pkg:maven`            | After BOM post-processing                                        | Shows ecosystem breadth and helps explain mixed-language outputs    | Context only     |
 | `cdx:bom:componentSrcFiles`                | metadata  | list string    | `package.json`, `requirements.txt`, `pom.xml` | After BOM post-processing                                        | Useful for completeness gates and evidence-of-origin attestations   | Warning / triage |
 | `cdx:bom:componentTypes`                   | metadata  | list string    | `library`, `application`, `container`         | After BOM post-processing                                        | Helps identify unexpectedly narrow or broad BOM composition         | Warning / triage |
+| `cdx:bom:inferredRootDependencies`          | metadata  | number string  | `1`, `25`                                     | When no leg emitted the parent component's direct dependencies   | Flags a root edge inferred from graph shape rather than a manifest  | Warning / triage |
 | `cdx:build:versionSpecifiers`              | component | string         | `>=1.0,<2.0`                                  | When build metadata yields non-exact constraints                 | Good pinning strictness signal for build ecosystems                 | Warning / triage |
 | `cdx:lolbas:names`                         | component | list string    | `powershell.exe,regsvr32.exe`                 | When Windows osquery rows reference curated LOLBAS helpers       | Useful pivot for startup persistence, WMI, or process triage        | Warning / triage |
 | `cdx:lolbas:attackTechniques`              | component | list string    | `T1059.001,T1218.010`                         | When LOLBAS helpers map to ATT&CK techniques                     | Aligns Windows host telemetry with ATT&CK-aware policy pipelines    | Warning / triage |

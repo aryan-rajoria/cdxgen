@@ -822,6 +822,16 @@
     {
       "dependsOn": [],
       "ref": "pkg:pypi/urllib3@1.26.13"
+    },
+    {
+      "dependsOn": [
+        "pkg:pypi/certifi@2022.12.7",
+        "pkg:pypi/charset-normalizer@2.0.12",
+        "pkg:pypi/idna@3.3",
+        "pkg:pypi/requests@2.28.0",
+        "pkg:pypi/urllib3@1.26.13"
+      ],
+      "ref": "pkg:pypi/uv-smoke@1.0.0"
     }
   ],
   "metadata": {
