@@ -83,6 +83,85 @@ export declare const OS_DISTRO_ALIAS: {
     "red hat enterprise linux 10": string;
 };
 /**
+ * Canonical purl namespace for distro vendors that are published under more
+ * than one spelling. Both the os-release path (`getDistroInfo`) and the trivy
+ * passthrough in `lib/managers/binary.js` route through this single map so the
+ * two paths cannot drift apart again.
+ *
+ * Azure Linux 2.0 is CBL-Mariner 2.0 — Microsoft renamed the product — and the
+ * OSV feed publishes `pkg:rpm/azure-linux/<name>` for every generation
+ * (ecosystems "Azure Linux:2" and "Azure Linux:3"), so the historical
+ * spellings azurelinux, cbl-mariner and mariner all canonicalise to
+ * "azure-linux". rhel/ol/amzn/opensuse-* are the cases previously inlined in
+ * getDistroInfo(); alma/rocky-linux were previously inlined in binary.js.
+ *
+ * Amazon Linux canonicalises to "amazon", the spelling the vulnerability feeds
+ * publish (AppThreat vuln-list `amazon`): the os-release ID is `amzn` and
+ * trivy emits `amazon`, and the previous `amazonlinux` mapping here matched
+ * neither, so live-host Amazon Linux purls matched nothing at all.
+ */
+export declare const OS_NAMESPACE_ALIAS: {
+    alma: string;
+    amazonlinux: string;
+    amzn: string;
+    azurelinux: string;
+    "cbl-mariner": string;
+    mariner: string;
+    ol: string;
+    "opensuse-leap": string;
+    "opensuse-tumbleweed": string;
+    rhel: string;
+    "rocky-linux": string;
+};
+/**
+ * Vendor prefixes that `distro` qualifier values are canonicalised for, so one
+ * release has exactly one qualifier value no matter which side produced it.
+ *
+ * trivy stamps the qualifier from its own distro table while cdxgen stamps it
+ * from os-release, and the two disagree: an Oracle Linux 9.8 image came out
+ * with `oracle-9.8` on 99 components and `ol-9.8` on 43, and a RHEL 9.8 image
+ * with namespace `redhat` but qualifier `rhel-9.8`. Canonicalising both sides
+ * through this map collapses each release onto the vendor its purl namespace
+ * already uses.
+ *
+ * SUSE is deliberately absent. `sles-15.6`, `opensuse-leap-15.6` and
+ * `opensuse-tumbleweed-<snapshot>` are the values consumers derive the release
+ * channel from (vulnerability-db maps them to per-release channels), and both
+ * sides already agree on them; folding Leap and Tumbleweed onto a bare
+ * `opensuse-` vendor would destroy exactly the distinction that matters.
+ *
+ * Keys are matched longest-first so `cbl-mariner-2.0` resolves against the
+ * full vendor segment rather than a shorter prefix.
+ */
+export declare const OS_DISTRO_QUALIFIER_ALIAS: {
+    alma: string;
+    amazonlinux: string;
+    amzn: string;
+    azurelinux: string;
+    "cbl-mariner": string;
+    mariner: string;
+    ol: string;
+    rhel: string;
+    "rocky-linux": string;
+};
+/**
+ * Whether a `distro` qualifier value is safe to place in a purl unencoded.
+ *
+ * @param {string} qualifier - distro qualifier value
+ * @returns {boolean} true when the value contains only purl-safe characters
+ */
+export declare function isCleanDistroQualifier(qualifier: string): boolean;
+/**
+ * Canonicalise the vendor prefix of a `distro` qualifier value
+ * (e.g. "cbl-mariner-2.0" or "mariner-2.0" -> "azure-linux-2.0") so a release
+ * has exactly one qualifier spelling regardless of which tool emitted it.
+ * Values without a known vendor prefix are returned unchanged.
+ *
+ * @param {string} qualifier - distro qualifier value such as "azurelinux-3.0"
+ * @returns {string} canonical qualifier value
+ */
+export declare function canonicalDistroQualifier(qualifier: string): string;
+/**
  * Parse an os-release file from an arbitrary root path and return a plain
  * key→value object.  Results are cached per root path so the file is read
  * at most once per process per distinct root.
@@ -101,8 +180,10 @@ export declare function _resetOsReleaseCache(): void;
  *
  * Returns an object with:
  *   - purlType    {string}  "deb" | "apk" | "rpm"
- *   - namespace   {string}  purl namespace (e.g. "ubuntu", "alpine", "fedora")
- *   - distroId    {string}  ID + "-" + VERSION_ID  (e.g. "ubuntu-22.04")
+ *   - namespace   {string}  canonical purl namespace (e.g. "ubuntu", "alpine",
+ *                           "azure-linux" for both Azure Linux and CBL-Mariner)
+ *   - distroId    {string}  ID + "-" + VERSION_ID with a canonical vendor
+ *                           prefix (e.g. "ubuntu-22.04", "azure-linux-3.0")
  *   - distroName  {string}  codename/alias          (e.g. "jammy")
  *
  * Mirrors the logic in lib/managers/binary.js getOSPackages() so that both

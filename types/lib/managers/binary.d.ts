@@ -23,6 +23,77 @@ export declare function getCargoAuditableInfo(src: string): string | undefined;
  */
 export declare function executeSourcekitten(args: any[]): undefined | Object;
 /**
+ * Canonicalise the distro vendor namespace of an OS package component
+ * produced by trivy, regardless of whether trivy expressed the vendor via the
+ * purl namespace or the component group (it is inconsistent between
+ * packages). e.g. pkg:rpm/alma/... -> pkg:rpm/almalinux/... and
+ * pkg:rpm/cbl-mariner/... -> pkg:rpm/azure-linux/... so the purls match the
+ * vulnerability feeds. Also aligns the ``distro`` qualifier vendor prefix
+ * (alma-9.8 -> almalinux-9.8, mariner-2.0 -> azure-linux-2.0), including
+ * spellings that disagree with the namespace, and rebuilds ``group`` and
+ * ``bom-ref`` from the rewritten purl.
+ *
+ * The namespace table is OS_NAMESPACE_ALIAS from lib/inventory/osinfo.js so
+ * the trivy path and the os-release path (getDistroInfo) cannot drift apart.
+ *
+ * A `distro` qualifier that is not purl-safe (trivy emits Amazon Linux as
+ * `amazon-2023.12.20260727+(Amazon Linux)`) is replaced with the os-release
+ * derived value, or dropped when there is none: an unusable qualifier
+ * invalidates the purl and fails validation for the whole BOM.
+ *
+ * @param {Object} comp trivy OS package component (mutated in place)
+ * @param {Object} purlObj parsed PackageURL of comp.purl (mutated in place)
+ * @param {string} name component package name (basename form)
+ * @param {string} group component group derived from the trivy component name
+ * @param {string} [distroId] canonical os-release distro id, e.g. "amazon-2023"
+ * @returns {string} the canonicalised group
+ */
+export declare function canonicaliseOsPackageNamespace(comp: Object, purlObj: Object, name: string, group: string, distroId?: string): string;
+/**
+ * Repair a `distro` qualifier that cannot survive purl parsing, in place.
+ *
+ * trivy stamps Amazon Linux with the full pretty version — the qualifier
+ * arrives as `distro=amazon-2023.12.20260727+%28Amazon+Linux%29`, whose spaces
+ * and parentheses `Purl.parse` rejects outright ("Invalid character in
+ * qualifier distro"). The component then bypasses every canonicalisation below
+ * (they all need a parsed purl) and reaches the BOM verbatim, where schema
+ * validation fails and the *entire* SBOM is discarded — an Amazon Linux scan
+ * produces no output at all today.
+ *
+ * The release is already known from os-release, so the unusable value is
+ * swapped for it; with no usable replacement the qualifier is dropped, since a
+ * missing qualifier costs one matching hint while an invalid one costs the
+ * whole document.
+ *
+ * @param {Object} comp component whose purl may carry an unusable qualifier
+ * @param {string} [distroId] canonical os-release distro id, e.g. "amazon-2023"
+ * @returns {Object} the same component
+ */
+export declare function repairOsComponentPurl(comp: Object, distroId?: string): Object;
+/**
+ * Drop source-package shadow components that duplicate a real installed
+ * package, in place.
+ *
+ * A shadow is emitted whenever an rpm/deb declares a source name different
+ * from its own (bzip2-libs -> bzip2) so that scanners keying on source names
+ * still match. When the source package is *itself* installed at the same
+ * version, the shadow's purl is identical to the real component's and the two
+ * collapse in trimComponents() — which keeps whichever was seen first and
+ * never merges `tags`. Seen-first is trivy's listing order, so the outcome is
+ * arbitrary: when the shadow wins, a genuinely installed package is reported
+ * with `tags: ["source"]` and identity confidence 0, the very marker the
+ * shadow carries so consumers can filter shadows out. That turns a real
+ * package into a filtered-away one.
+ *
+ * Dropping the redundant shadow is loss-free: it duplicates the real
+ * component's purl (so nothing that matches on purl changes) and its bom-ref
+ * is byte-identical, so no dependency reference can dangle.
+ *
+ * @param {Array} pkgList component list, mutated in place
+ * @returns {Array} the same list, for convenience
+ */
+export declare function dropRedundantSourceComponents(pkgList: any[]): any[];
+/**
  * Get the packages installed in the container image filesystem.
  *
  * @param src {String} Source directory containing the extracted filesystem.
