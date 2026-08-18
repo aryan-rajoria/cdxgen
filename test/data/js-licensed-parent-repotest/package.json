@@ -1,0 +1,1 @@
+{"name":"licensed-parent-demo","version":"1.0.0","license":"Apache-2.0","author":"Fixture Author","homepage":"https://example.com/licensed-parent-demo","repository":{"url":"git+https://github.com/example/licensed-parent-demo.git"},"dependencies":{"ms":"2.1.3"}}
