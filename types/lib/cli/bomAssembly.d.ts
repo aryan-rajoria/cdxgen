@@ -72,6 +72,20 @@ export declare const componentToSimpleFullName: (comp: object) => string;
  */
 export declare const cleanParentComponent: (comp: object) => object;
 /**
+ * Convert the transient package keys that parsers attach to workspace-member
+ * components nested under a parent, recursively.
+ *
+ * Nested components skip `addComponent`/`cleanParentComponent`, so without
+ * this conversion raw keys such as `homepage: { url }` leak into
+ * `metadata.component.components` and `components[].components`, which the
+ * strict Component schema rejects with `additionalProperties: false`
+ * (issue #4326).
+ *
+ * @param {object[]} components Nested component list to clean in place
+ * @returns {object[]|undefined} The cleaned list
+ */
+export declare const cleanNestedComponents: (components: object[]) => object[] | undefined;
+/**
  * Builds the `metadata.authors` array from `options.author`, which may be a
  * single string or an array of author strings. Entries shorter than two
  * characters are ignored.
