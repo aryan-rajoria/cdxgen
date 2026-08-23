@@ -98,6 +98,8 @@ jobs:
             distro: alpine
           - lang: golang1.26
             distro: alpine
+          - lang: golang1.27
+            distro: alpine
             base-image:
               additional-image: alpine-golang
             cdxgen-image:
@@ -106,6 +108,9 @@ jobs:
             distro: debian
 
           - lang: golang1.26
+            distro: debian
+
+          - lang: golang1.27
             distro: debian
             base-image:
               additional-image: debian-golang
