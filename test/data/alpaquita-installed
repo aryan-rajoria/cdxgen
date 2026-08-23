@@ -1,0 +1,163 @@
+C:Q1ZsZhf8Z2Wia3nVtv4nnCaAvFcnU=
+P:apk-tools
+V:3.0.7-r1
+A:aarch64
+S:55928
+I:135248
+T:APK Package Manager (Derivative from Alpine Package Keeper)
+U:https://gitlab.alpinelinux.org/alpine/apk-tools
+L:GPL-2.0-only
+o:apk-tools
+m:BellSoft <info@bell-sw.com>
+t:1787046040
+c:f101e7599d3e22383710219f545cd59457465c96
+D:musl>=1.2.4 libcrypto3>=3.5 libapk=3.0.7-r1 ca-certificates-bundle so:libapk.so.3.0.0 so:libc.musl-aarch64.so.1 so:libz.so.1
+p:cmd:apk=3.0.7-r1
+F:etc
+F:etc/apk
+F:etc/apk/keys
+F:etc/apk/protected_paths.d
+F:usr
+F:usr/sbin
+R:apk
+a:0:0:755
+Z:Q1GcPCmFyHFQ/5aW/+lYPvoN07zKQ=
+F:var
+F:var/cache
+F:var/cache/apk
+F:var/lib
+F:var/lib/apk
+F:var/lib/apk/db
+F:var/lib/apk/exec
+
+C:Q1MDnsAIX06bBfE6swUOalz+Y6nPk=
+P:busybox
+V:1.38.0-r2
+A:aarch64
+S:517444
+I:928676
+T:Modular toolbox of common UNIX utilities
+U:https://busybox.net/
+L:GPL-2.0-only
+o:busybox
+m:BellSoft <info@bell-sw.com>
+t:1786451948
+c:21e83cb44cc9e4b9aad7046c3ffd5fcba6311099
+D:so:libc.musl-aarch64.so.1
+p:cmd:busybox=1.38.0-r2
+r:busybox-initscripts
+F:etc
+R:securetty
+Z:Q1DinOf6JRpCRgM6vNqjOexd3oSnU=
+F:etc/busybox-paths.d
+R:busybox
+Z:Q15q8tu2bW6JwEuuvlhqyA92mLsKU=
+F:etc/logrotate.d
+R:acpid
+Z:Q1TylyCINVmnS+A/Tead4vZhE7Bks=
+F:etc/network
+F:etc/network/if-down.d
+F:etc/network/if-post-down.d
+F:etc/network/if-post-up.d
+F:etc/network/if-pre-down.d
+F:etc/network/if-pre-up.d
+F:etc/network/if-up.d
+R:dad
+a:0:0:775
+Z:Q13dmbwZfDboqaq5Rjqu69pEp6gCk=
+F:etc/udhcpc
+R:udhcpc.conf
+Z:Q1m8Bp5DQijmykQYSL+3prrCP6FIo=
+F:usr
+F:usr/bin
+R:busybox
+a:0:0:755
+Z:Q1KF01iv2TBIUuNkoh8+cybpz/MP0=
+F:usr/sbin
+F:usr/share
+F:usr/share/udhcpc
+R:default.script
+a:0:0:755
+Z:Q1we8+bp8eWkvyVyKXf78bRVikdp4=
+
+C:Q1hTpKuFZAk/PxYXd2qq0mgBViDjI=
+P:libapk
+V:3.0.7-r1
+A:aarch64
+S:138143
+I:330360
+T:APK Package Manager (Derivative from Alpine Package Keeper)
+U:https://gitlab.alpinelinux.org/alpine/apk-tools
+L:GPL-2.0-only
+o:apk-tools
+m:BellSoft <info@bell-sw.com>
+t:1787046040
+c:f101e7599d3e22383710219f545cd59457465c96
+D:so:libc.musl-aarch64.so.1 so:libcrypto.so.3 so:libssl.so.3 so:libz.so.1
+p:libapk2=3.0.7-r1 so:libapk.so.3.0.0=3.0.0
+F:usr
+F:usr/lib
+R:libapk.so.3.0.0
+a:0:0:755
+Z:Q13lRXojEQ7s4mZh0ylahHgopSsx0=
+
+C:Q1Unjdd+NZcszdXqaK/9tRY0ozeWc=
+P:musl-perf
+V:1.2.6-r2
+A:aarch64
+S:473593
+I:802800
+T:the musl c library (libc) implementation (optimized for performance)
+U:https://musl.libc.org/
+L:MIT
+o:musl-perf
+m:BellSoft <info@bell-sw.com>
+t:1776269188
+c:c7becca4fd4fef6a18ee7c1b8df66459bb9c3e45
+k:1
+B:1
+p:musl=1.2.6-r2 so:libc.musl-aarch64.so.1=1
+r:musl-default
+q:1
+F:
+R:bin
+a:0:0:777
+Z:Q1Qgf09u0AbJJEzNM1rvC/dcYhdBI=
+R:lib
+a:0:0:777
+Z:Q1dYdZNlBN9zgRDwf2iIAxbFovM1g=
+R:sbin
+a:0:0:777
+Z:Q1VgHWXEYopJNFac5RqaZi0vf4b6Q=
+F:usr
+F:usr/lib
+R:ld-musl-aarch64.so.1
+a:0:0:755
+Z:Q1/sitPW+VU6MGtxzgr+VxKxnaBTo=
+R:libc.musl-aarch64.so.1
+a:0:0:777
+Z:Q14RpiCEfZIqcg1XDcVqp8QEpc9ks=
+
+C:Q1SZXSczHXM/jv0U0LlCDXqKtsT8c=
+P:ssl_client
+V:1.38.0-r2
+A:aarch64
+S:5055
+I:67472
+T:External ssl_client for busybox wget
+U:https://busybox.net/
+L:GPL-2.0-only
+o:busybox
+m:BellSoft <info@bell-sw.com>
+t:1786451948
+c:21e83cb44cc9e4b9aad7046c3ffd5fcba6311099
+D:so:libc.musl-aarch64.so.1 so:libcrypto.so.3 so:libssl.so.3
+p:cmd:ssl_client=1.38.0-r2
+i:busybox=1.38.0-r2 libssl3
+r:busybox-initscripts
+F:usr
+F:usr/bin
+R:ssl_client
+a:0:0:755
+Z:Q1aEVtt7IGSdO5LNFs/jj0KwIphWc=
+

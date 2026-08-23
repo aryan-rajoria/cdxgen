@@ -1,0 +1,568 @@
+{
+  "$schema": "http://cyclonedx.org/schema/bom-1.6.schema.json",
+  "bomFormat": "CycloneDX",
+  "components": [
+    {
+      "bom-ref": "alpaquita-stream",
+      "name": "alpaquita",
+      "properties": [
+        {
+          "name": "aquasecurity:trivy:Class",
+          "value": "os-pkgs"
+        },
+        {
+          "name": "aquasecurity:trivy:OSEOL",
+          "value": "false"
+        },
+        {
+          "name": "aquasecurity:trivy:OSExtendedSupport",
+          "value": "false"
+        },
+        {
+          "name": "aquasecurity:trivy:OSFamily",
+          "value": "alpaquita"
+        },
+        {
+          "name": "aquasecurity:trivy:OSName",
+          "value": "stream"
+        },
+        {
+          "name": "aquasecurity:trivy:Type",
+          "value": "alpaquita"
+        }
+      ],
+      "type": "operating-system",
+      "version": "stream"
+    },
+    {
+      "bom-ref": "pkg:apk/alpaquita/apk-tools@3.0.7-r1?arch=aarch64&distro=alpaquita-stream",
+      "group": "alpaquita",
+      "hashes": [
+        {
+          "alg": "SHA-1",
+          "content": "66c6617fc6765a26b79d5b6fe279c2680bc57275"
+        }
+      ],
+      "licenses": [
+        {
+          "license": {
+            "id": "GPL-2.0-only"
+          }
+        }
+      ],
+      "name": "apk-tools",
+      "properties": [
+        {
+          "name": "aquasecurity:trivy:Capability",
+          "value": "cmd:apk"
+        },
+        {
+          "name": "aquasecurity:trivy:CapabilityCount",
+          "value": "1"
+        },
+        {
+          "name": "aquasecurity:trivy:InstalledCommand",
+          "value": "apk"
+        },
+        {
+          "name": "aquasecurity:trivy:InstalledCommandCount",
+          "value": "1"
+        },
+        {
+          "name": "aquasecurity:trivy:InstalledCommandPath",
+          "value": "usr/sbin/apk"
+        },
+        {
+          "name": "aquasecurity:trivy:InstalledFile",
+          "value": "usr/sbin/apk"
+        },
+        {
+          "name": "aquasecurity:trivy:InstalledFileCount",
+          "value": "1"
+        },
+        {
+          "name": "aquasecurity:trivy:PackageArchitecture",
+          "value": "aarch64"
+        },
+        {
+          "name": "aquasecurity:trivy:PackageLibc",
+          "value": "musl"
+        },
+        {
+          "name": "aquasecurity:trivy:PackageOrigin",
+          "value": "apk-tools"
+        },
+        {
+          "name": "aquasecurity:trivy:PackageSource",
+          "value": "55928"
+        },
+        {
+          "name": "aquasecurity:trivy:PkgID",
+          "value": "apk-tools@3.0.7-r1"
+        },
+        {
+          "name": "aquasecurity:trivy:PkgType",
+          "value": "alpaquita"
+        },
+        {
+          "name": "aquasecurity:trivy:SrcName",
+          "value": "apk-tools"
+        },
+        {
+          "name": "aquasecurity:trivy:SrcVersion",
+          "value": "3.0.7-r1"
+        }
+      ],
+      "purl": "pkg:apk/alpaquita/apk-tools@3.0.7-r1?arch=aarch64&distro=alpaquita-stream",
+      "supplier": {
+        "name": "BellSoft <info@bell-sw.com>"
+      },
+      "type": "library",
+      "version": "3.0.7-r1"
+    },
+    {
+      "bom-ref": "pkg:apk/alpaquita/busybox@1.38.0-r2?arch=aarch64&distro=alpaquita-stream",
+      "group": "alpaquita",
+      "hashes": [
+        {
+          "alg": "SHA-1",
+          "content": "3039ec0085f4e9b05f13ab3050e6a5cfe63a9cf9"
+        }
+      ],
+      "licenses": [
+        {
+          "license": {
+            "id": "GPL-2.0-only"
+          }
+        }
+      ],
+      "name": "busybox",
+      "properties": [
+        {
+          "name": "aquasecurity:trivy:Capability",
+          "value": "cmd:busybox"
+        },
+        {
+          "name": "aquasecurity:trivy:CapabilityCount",
+          "value": "1"
+        },
+        {
+          "name": "aquasecurity:trivy:InstalledCommand",
+          "value": "busybox"
+        },
+        {
+          "name": "aquasecurity:trivy:InstalledCommandCount",
+          "value": "1"
+        },
+        {
+          "name": "aquasecurity:trivy:InstalledCommandPath",
+          "value": "usr/bin/busybox"
+        },
+        {
+          "name": "aquasecurity:trivy:InstalledFile",
+          "value": "etc/busybox-paths.d/busybox"
+        },
+        {
+          "name": "aquasecurity:trivy:InstalledFile",
+          "value": "etc/logrotate.d/acpid"
+        },
+        {
+          "name": "aquasecurity:trivy:InstalledFile",
+          "value": "etc/network/if-up.d/dad"
+        },
+        {
+          "name": "aquasecurity:trivy:InstalledFile",
+          "value": "etc/securetty"
+        },
+        {
+          "name": "aquasecurity:trivy:InstalledFile",
+          "value": "etc/udhcpc/udhcpc.conf"
+        },
+        {
+          "name": "aquasecurity:trivy:InstalledFile",
+          "value": "usr/bin/busybox"
+        },
+        {
+          "name": "aquasecurity:trivy:InstalledFile",
+          "value": "usr/share/udhcpc/default.script"
+        },
+        {
+          "name": "aquasecurity:trivy:InstalledFileCount",
+          "value": "7"
+        },
+        {
+          "name": "aquasecurity:trivy:PackageArchitecture",
+          "value": "aarch64"
+        },
+        {
+          "name": "aquasecurity:trivy:PackageLibc",
+          "value": "musl"
+        },
+        {
+          "name": "aquasecurity:trivy:PackageOrigin",
+          "value": "busybox"
+        },
+        {
+          "name": "aquasecurity:trivy:PackageSource",
+          "value": "517444"
+        },
+        {
+          "name": "aquasecurity:trivy:PkgID",
+          "value": "busybox@1.38.0-r2"
+        },
+        {
+          "name": "aquasecurity:trivy:PkgType",
+          "value": "alpaquita"
+        },
+        {
+          "name": "aquasecurity:trivy:SrcName",
+          "value": "busybox"
+        },
+        {
+          "name": "aquasecurity:trivy:SrcVersion",
+          "value": "1.38.0-r2"
+        }
+      ],
+      "purl": "pkg:apk/alpaquita/busybox@1.38.0-r2?arch=aarch64&distro=alpaquita-stream",
+      "supplier": {
+        "name": "BellSoft <info@bell-sw.com>"
+      },
+      "type": "library",
+      "version": "1.38.0-r2"
+    },
+    {
+      "bom-ref": "pkg:apk/alpaquita/libapk@3.0.7-r1?arch=aarch64&distro=alpaquita-stream",
+      "group": "alpaquita",
+      "hashes": [
+        {
+          "alg": "SHA-1",
+          "content": "853a4ab8564093f3f1617776aaad268015620e32"
+        }
+      ],
+      "licenses": [
+        {
+          "license": {
+            "id": "GPL-2.0-only"
+          }
+        }
+      ],
+      "name": "libapk",
+      "properties": [
+        {
+          "name": "aquasecurity:trivy:Capability",
+          "value": "libapk2"
+        },
+        {
+          "name": "aquasecurity:trivy:Capability",
+          "value": "so:libapk.so.3.0.0"
+        },
+        {
+          "name": "aquasecurity:trivy:CapabilityCount",
+          "value": "2"
+        },
+        {
+          "name": "aquasecurity:trivy:InstalledCommandCount",
+          "value": "0"
+        },
+        {
+          "name": "aquasecurity:trivy:InstalledFile",
+          "value": "usr/lib/libapk.so.3.0.0"
+        },
+        {
+          "name": "aquasecurity:trivy:InstalledFileCount",
+          "value": "1"
+        },
+        {
+          "name": "aquasecurity:trivy:PackageArchitecture",
+          "value": "aarch64"
+        },
+        {
+          "name": "aquasecurity:trivy:PackageLibc",
+          "value": "musl"
+        },
+        {
+          "name": "aquasecurity:trivy:PackageOrigin",
+          "value": "apk-tools"
+        },
+        {
+          "name": "aquasecurity:trivy:PackageSource",
+          "value": "138143"
+        },
+        {
+          "name": "aquasecurity:trivy:PkgID",
+          "value": "libapk@3.0.7-r1"
+        },
+        {
+          "name": "aquasecurity:trivy:PkgType",
+          "value": "alpaquita"
+        },
+        {
+          "name": "aquasecurity:trivy:SrcName",
+          "value": "apk-tools"
+        },
+        {
+          "name": "aquasecurity:trivy:SrcVersion",
+          "value": "3.0.7-r1"
+        }
+      ],
+      "purl": "pkg:apk/alpaquita/libapk@3.0.7-r1?arch=aarch64&distro=alpaquita-stream",
+      "supplier": {
+        "name": "BellSoft <info@bell-sw.com>"
+      },
+      "type": "library",
+      "version": "3.0.7-r1"
+    },
+    {
+      "bom-ref": "pkg:apk/alpaquita/musl-perf@1.2.6-r2?arch=aarch64&distro=alpaquita-stream",
+      "group": "alpaquita",
+      "hashes": [
+        {
+          "alg": "SHA-1",
+          "content": "5278dd77e35972ccdd5ea68affdb51634a337967"
+        }
+      ],
+      "licenses": [
+        {
+          "license": {
+            "id": "MIT"
+          }
+        }
+      ],
+      "name": "musl-perf",
+      "properties": [
+        {
+          "name": "aquasecurity:trivy:Capability",
+          "value": "musl"
+        },
+        {
+          "name": "aquasecurity:trivy:Capability",
+          "value": "so:libc.musl-aarch64.so.1"
+        },
+        {
+          "name": "aquasecurity:trivy:CapabilityCount",
+          "value": "2"
+        },
+        {
+          "name": "aquasecurity:trivy:InstalledCommandCount",
+          "value": "0"
+        },
+        {
+          "name": "aquasecurity:trivy:InstalledFile",
+          "value": "bin"
+        },
+        {
+          "name": "aquasecurity:trivy:InstalledFile",
+          "value": "lib"
+        },
+        {
+          "name": "aquasecurity:trivy:InstalledFile",
+          "value": "sbin"
+        },
+        {
+          "name": "aquasecurity:trivy:InstalledFile",
+          "value": "usr/lib/ld-musl-aarch64.so.1"
+        },
+        {
+          "name": "aquasecurity:trivy:InstalledFile",
+          "value": "usr/lib/libc.musl-aarch64.so.1"
+        },
+        {
+          "name": "aquasecurity:trivy:InstalledFileCount",
+          "value": "5"
+        },
+        {
+          "name": "aquasecurity:trivy:PackageArchitecture",
+          "value": "aarch64"
+        },
+        {
+          "name": "aquasecurity:trivy:PackageLibc",
+          "value": "musl"
+        },
+        {
+          "name": "aquasecurity:trivy:PackageOrigin",
+          "value": "musl-perf"
+        },
+        {
+          "name": "aquasecurity:trivy:PackageSource",
+          "value": "473593"
+        },
+        {
+          "name": "aquasecurity:trivy:PkgID",
+          "value": "musl-perf@1.2.6-r2"
+        },
+        {
+          "name": "aquasecurity:trivy:PkgType",
+          "value": "alpaquita"
+        },
+        {
+          "name": "aquasecurity:trivy:SrcName",
+          "value": "musl-perf"
+        },
+        {
+          "name": "aquasecurity:trivy:SrcVersion",
+          "value": "1.2.6-r2"
+        }
+      ],
+      "purl": "pkg:apk/alpaquita/musl-perf@1.2.6-r2?arch=aarch64&distro=alpaquita-stream",
+      "supplier": {
+        "name": "BellSoft <info@bell-sw.com>"
+      },
+      "type": "library",
+      "version": "1.2.6-r2"
+    },
+    {
+      "bom-ref": "pkg:apk/alpaquita/ssl_client@1.38.0-r2?arch=aarch64&distro=alpaquita-stream",
+      "group": "alpaquita",
+      "hashes": [
+        {
+          "alg": "SHA-1",
+          "content": "4995d27331d733f8efd14d0b9420d7a8ab6c4fc7"
+        }
+      ],
+      "licenses": [
+        {
+          "license": {
+            "id": "GPL-2.0-only"
+          }
+        }
+      ],
+      "name": "ssl_client",
+      "properties": [
+        {
+          "name": "aquasecurity:trivy:Capability",
+          "value": "cmd:ssl_client"
+        },
+        {
+          "name": "aquasecurity:trivy:CapabilityCount",
+          "value": "1"
+        },
+        {
+          "name": "aquasecurity:trivy:InstalledCommand",
+          "value": "ssl_client"
+        },
+        {
+          "name": "aquasecurity:trivy:InstalledCommandCount",
+          "value": "1"
+        },
+        {
+          "name": "aquasecurity:trivy:InstalledCommandPath",
+          "value": "usr/bin/ssl_client"
+        },
+        {
+          "name": "aquasecurity:trivy:InstalledFile",
+          "value": "usr/bin/ssl_client"
+        },
+        {
+          "name": "aquasecurity:trivy:InstalledFileCount",
+          "value": "1"
+        },
+        {
+          "name": "aquasecurity:trivy:PackageArchitecture",
+          "value": "aarch64"
+        },
+        {
+          "name": "aquasecurity:trivy:PackageLibc",
+          "value": "musl"
+        },
+        {
+          "name": "aquasecurity:trivy:PackageOrigin",
+          "value": "busybox"
+        },
+        {
+          "name": "aquasecurity:trivy:PackageSource",
+          "value": "5055"
+        },
+        {
+          "name": "aquasecurity:trivy:PkgID",
+          "value": "ssl_client@1.38.0-r2"
+        },
+        {
+          "name": "aquasecurity:trivy:PkgType",
+          "value": "alpaquita"
+        },
+        {
+          "name": "aquasecurity:trivy:SrcName",
+          "value": "busybox"
+        },
+        {
+          "name": "aquasecurity:trivy:SrcVersion",
+          "value": "1.38.0-r2"
+        }
+      ],
+      "purl": "pkg:apk/alpaquita/ssl_client@1.38.0-r2?arch=aarch64&distro=alpaquita-stream",
+      "supplier": {
+        "name": "BellSoft <info@bell-sw.com>"
+      },
+      "type": "library",
+      "version": "1.38.0-r2"
+    }
+  ],
+  "dependencies": [
+    {
+      "dependsOn": [
+        "pkg:apk/alpaquita/apk-tools@3.0.7-r1?arch=aarch64&distro=alpaquita-stream",
+        "pkg:apk/alpaquita/ssl_client@1.38.0-r2?arch=aarch64&distro=alpaquita-stream"
+      ],
+      "ref": "alpaquita-stream"
+    },
+    {
+      "dependsOn": [
+        "pkg:apk/alpaquita/libapk@3.0.7-r1?arch=aarch64&distro=alpaquita-stream",
+        "pkg:apk/alpaquita/musl-perf@1.2.6-r2?arch=aarch64&distro=alpaquita-stream"
+      ],
+      "ref": "pkg:apk/alpaquita/apk-tools@3.0.7-r1?arch=aarch64&distro=alpaquita-stream"
+    },
+    {
+      "dependsOn": [
+        "pkg:apk/alpaquita/musl-perf@1.2.6-r2?arch=aarch64&distro=alpaquita-stream"
+      ],
+      "ref": "pkg:apk/alpaquita/busybox@1.38.0-r2?arch=aarch64&distro=alpaquita-stream"
+    },
+    {
+      "dependsOn": [
+        "pkg:apk/alpaquita/musl-perf@1.2.6-r2?arch=aarch64&distro=alpaquita-stream"
+      ],
+      "ref": "pkg:apk/alpaquita/libapk@3.0.7-r1?arch=aarch64&distro=alpaquita-stream"
+    },
+    {
+      "ref": "pkg:apk/alpaquita/musl-perf@1.2.6-r2?arch=aarch64&distro=alpaquita-stream"
+    },
+    {
+      "dependsOn": [
+        "pkg:apk/alpaquita/musl-perf@1.2.6-r2?arch=aarch64&distro=alpaquita-stream"
+      ],
+      "ref": "pkg:apk/alpaquita/ssl_client@1.38.0-r2?arch=aarch64&distro=alpaquita-stream"
+    }
+  ],
+  "metadata": {
+    "component": {
+      "bom-ref": "rootfs-target",
+      "name": "rootfs",
+      "properties": [
+        {
+          "name": "aquasecurity:trivy:SchemaVersion",
+          "value": "2"
+        }
+      ],
+      "type": "application"
+    },
+    "timestamp": "2026-08-21T10:58:49+00:00",
+    "tools": {
+      "components": [
+        {
+          "group": "aquasecurity",
+          "manufacturer": {
+            "name": "Aqua Security Software Ltd."
+          },
+          "name": "trivy",
+          "type": "application",
+          "version": "dev"
+        }
+      ]
+    }
+  },
+  "serialNumber": "urn:uuid:545c9a0a-92b7-4da3-a94a-5a584e97f9f5",
+  "specVersion": "1.6",
+  "version": 1,
+  "vulnerabilities": []
+}
