@@ -14,29 +14,33 @@ export declare function getDependencyTrackBomApiUrl(serverUrl: string): URL | un
  */
 export declare function getDependencyTrackBomUrl(serverUrl: string): string | undefined;
 /**
- * Build the form fields for Dependency-Track BOM submission. The BOM itself is
- * transmitted as a separate multipart file part and is therefore not included here.
+ * Build the form fields for a Dependency-Track BOM submission.
+ *
+ * Field names follow the `multipart/form-data` variant of `/api/v1/bom`, which differs
+ * from the JSON variant: the JSON body calls the flag `isLatestProjectVersion` and takes
+ * `projectTags` as an array of objects, while the form takes `isLatest` and a
+ * comma-separated tag list.
  *
  * @param {Object} args CLI/server arguments
- * @returns {Object | undefined} field map if project coordinates are valid
+ * @returns {Object | undefined} field map if the project coordinates are valid
  */
 export declare function buildDependencyTrackBomPayload(args: Object): Object | undefined;
 /**
- * Encode fields and a single file part as a `multipart/form-data` body.
+ * Encode text fields and a single file part as a `multipart/form-data` body.
  *
  * @param {Object} fields Text fields keyed by field name
  * @param {Object} file File part
  * @param {string} file.name Field name of the file part
  * @param {string} file.filename File name reported to the server
  * @param {string} file.contentType Content type of the file part
- * @param {Buffer | string} file.content File content
+ * @param {Buffer} file.content File content
  * @returns {{ body: Buffer, contentType: string }} encoded body and its content type
  */
 export declare function encodeMultipartFormData(fields: Object, file: {
     name: string;
     filename: string;
     contentType: string;
-    content: Buffer | string;
+    content: Buffer;
 }): {
     body: Buffer;
     contentType: string;
@@ -44,9 +48,10 @@ export declare function encodeMultipartFormData(fields: Object, file: {
 /**
  * Build the `multipart/form-data` request for Dependency-Track BOM submission.
  *
- * Dependency-Track rejects large BOMs sent as base64 inside a JSON body, since the
- * encoded string exceeds Jackson's maximum string length. The multipart endpoint
- * transmits the BOM verbatim and has no such limit.
+ * The JSON variant of the endpoint carries the BOM as a base64 string, which Jackson
+ * refuses to read beyond 20,000,000 characters - roughly a 15 MB BOM, which container
+ * image scans exceed routinely. The form variant carries the BOM as a file part and has
+ * no such limit, and is what the server recommends for large uploads.
  *
  * @param {Object} args CLI/server arguments
  * @param {Object | string} bomContents BOM Json
