@@ -1,0 +1,10 @@
+# malformed entries mixed with valid ones
+not-a-pair
+maven=3.9.9
+maven=
+gradle 9.6.1
+java=21
+# unknown candidates are ignored
+foo=1.0
+sbt=1.10.11
+gradle=9.6.1;rm -rf

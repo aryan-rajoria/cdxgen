@@ -702,6 +702,51 @@ cdxgen -t java26
 
 [sdkman](https://sdkman.io) must be installed and setup for these arguments to work.
 
+### Pinning JVM build tools
+
+The JVM build tools themselves can be pinned the same way by appending an sdkman version to the tool type. cdxgen installs exactly that version with sdkman, sets `MAVEN_HOME`/`GRADLE_HOME`/`SBT_HOME` plus the matching command variables, and uses it for dependency resolution — overriding any wrapper scripts the project may contain.
+
+```shell
+cdxgen -t maven3.9.9 -t java17     # Maven 3.9.9 plus a Temurin 17 JDK
+cdxgen -t gradle8.14               # resolves the newest stable 8.14.x
+cdxgen -t sbt1.10.11
+cdxgen -t scala3.6.4
+```
+
+Version identifiers must be exact sdkman identifiers (see `sdk list maven`), except that a partial prefix such as `maven3.9` is resolved to the newest stable matching release. A compatible JDK is derived automatically from the tool requirements (Maven 4 and Gradle 9 need Java 17+, for example) and provisioned first when the current Java is older. When no JDK type is passed, cdxgen defaults to Java 21. `MAVEN_TOOL`, `GRADLE_TOOL`, `SBT_TOOL`, and `SCALA_TOOL` environment variables can declare the same pins without CLI types.
+
+With the `jvm-tool-setup` feature flag, cdxgen can also derive the toolchain from the repository itself before generating the BOM:
+
+```shell
+cdxgen --feature-flags jvm-tool-setup -t java /src
+```
+
+In this mode, versions are read from a `.sdkmanrc` file, the `MAVEN_VERSION`/`GRADLE_VERSION`/`SBT_VERSION`/`SCALA_VERSION` environment hints used by container images, and Gradle/Maven wrapper properties or sbt's `project/build.properties`. Projects that pin a tool through a wrapper are left alone — the wrapper provisions its own distribution — and only JDK compatibility is checked. Repositories that use a tool without a wrapper get a sensible default installed when no usable command exists.
+
+Since the versions come from the repository, review them before scanning code you do not trust: a repository can ask for an old build tool, and cdxgen would install and run it. Use `--dry-run` to see the toolchain first.
+
+#### Previewing the toolchain with a dry run
+
+`--dry-run` reports the toolchain cdxgen would set up without downloading, installing, or executing anything. Each install, each JDK decision, and each command variable that would be rewritten appears in the activity summary as a blocked entry:
+
+```shell
+cdxgen --dry-run --feature-flags jvm-tool-setup -t java /src
+```
+
+```
+| ACT-0096 | java | maven  | provision | sdkman:maven@3.0.4 | blocked                                       |
+|          |      |        |           |                    | Would install maven 3.0.4 with sdkman:        |
+|          |      |        |           |                    | pinned by the project's .sdkmanrc.            |
+| ACT-0100 | java | gradle | discover  | gradle@8.14.3      | completed                                     |
+|          |      |        |           |                    | Detected gradle 8.14.3 pinned by the          |
+|          |      |        |           |                    | project's build tool wrapper. Nothing would   |
+|          |      |        |           |                    | be installed because the project provisions   |
+|          |      |        |           |                    | it itself.                                    |
+| ACT-0101 | java | java   | decision  | java>=17           | blocked                                       |
+```
+
+Tool versions are left unresolved in this mode, because resolving a partial pin such as `maven3.9` means querying sdkman over the network. The JDK is reported as a requirement rather than an install unless a `javaNN` type was passed explicitly, since cdxgen would run `java --version` to decide whether the active JDK is new enough, and a dry run does not run it.
+
 ## Nydus - next-generation container image
 
 [Nydus](https://github.com/dragonflyoss/nydus) enhances the current OCI image specification by improving container launch speed, image space and network bandwidth efficiency, and data integrity. cdxgen container images are available in nydus format with the `-nydus` suffix.

@@ -602,6 +602,7 @@ const args = _yargs
       "suggest-build-tools",
       "ruby-docker-install",
       "resolve-gradle-distribution",
+      "jvm-tool-setup",
     ],
   })
   .option("min-confidence", {

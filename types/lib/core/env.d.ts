@@ -144,6 +144,23 @@ export declare const PACKAGE_MANAGER_ALIASES: {
     scala: string[];
 };
 /**
+ * Project-type prefixes that accept a version suffix pinning a JVM build
+ * tool, e.g. `maven3.9.9`, `mvn3.9.9`, `gradle8.14`, `sbt1.10`, or
+ * `scala3.6.4`. Kept alongside the alias map because both describe how CLI
+ * project types map to base types.
+ *
+ * @type {string[]}
+ */
+export declare const JVM_BUILD_TOOL_TYPE_PREFIXES: string[];
+/**
+ * Check whether a project type pins a JVM build tool version, i.e. it starts
+ * with one of the JVM build tool prefixes followed by a digit.
+ *
+ * @param {string} projectType Project type from the CLI
+ * @returns {boolean} True for versioned JVM build tool types.
+ */
+export declare function isVersionedJvmToolProjectType(projectType: string): boolean;
+/**
  * Method to check if a given feature flag is enabled.
  *
  * @param {Object} cliOptions CLI options
