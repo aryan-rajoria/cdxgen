@@ -1,0 +1,5 @@
+# Enable auto-env through the sdkman_auto_env config
+java=21.0.7-tem
+maven=3.9.16
+gradle=9.6.1
+sbt=1.10.11

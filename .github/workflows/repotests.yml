@@ -445,7 +445,7 @@ jobs:
         with:
           persist-credentials: false
       - name: Set up JDK ${{ matrix.java-version }}
-        uses: actions/setup-java@b6effb05e454b25005698d916606bdc6ffcbf961  # v5.7.0
+        uses: actions/setup-java@dd06d9cba3e5552c54d9f8ea23572deb30010f7c  # v6.0.0
         with:
           distribution: 'temurin'
           java-version: ${{ matrix.java-version }}
@@ -470,7 +470,7 @@ jobs:
         run: |
           chmod +x contrib/free_disk_space.sh
           ./contrib/free_disk_space.sh
-      - uses: sbt/setup-sbt@8feba82adc7f01ddcf8165b86f778bdb5b82cebc  # v1.5.7
+      - uses: sbt/setup-sbt@c7d2d6258b4bd0d3ec5129e6b3453199d3c79729  # v1.5.8
       - name: Install bazelisk - linux
         if: matrix.os == 'ubuntu-24.04'
         run: |
@@ -1333,11 +1333,11 @@ jobs:
           dotnet nuget locals all --clear || true
         shell: bash
       - name: Set up JDK
-        uses: actions/setup-java@b6effb05e454b25005698d916606bdc6ffcbf961  # v5.7.0
+        uses: actions/setup-java@dd06d9cba3e5552c54d9f8ea23572deb30010f7c  # v6.0.0
         with:
           distribution: 'temurin'
           java-version: '21'
-      - uses: sbt/setup-sbt@8feba82adc7f01ddcf8165b86f778bdb5b82cebc  # v1.5.7
+      - uses: sbt/setup-sbt@c7d2d6258b4bd0d3ec5129e6b3453199d3c79729  # v1.5.8
       - uses: coursier/setup-action@9b7939bf01fd1185ce2babe16135168361bf2c62  # v3.0.2
         with:
           apps: scala3 scalac
@@ -1594,7 +1594,7 @@ jobs:
         with:
           persist-credentials: false
       - name: Set up JDK ${{ matrix.java-version }}
-        uses: actions/setup-java@b6effb05e454b25005698d916606bdc6ffcbf961  # v5.7.0
+        uses: actions/setup-java@dd06d9cba3e5552c54d9f8ea23572deb30010f7c  # v6.0.0
         with:
           distribution: 'temurin'
           java-version: ${{ matrix.java-version }}
@@ -2057,7 +2057,7 @@ jobs:
         with:
           persist-credentials: false
       - name: Set up JDK
-        uses: actions/setup-java@b6effb05e454b25005698d916606bdc6ffcbf961  # v5.7.0
+        uses: actions/setup-java@dd06d9cba3e5552c54d9f8ea23572deb30010f7c  # v6.0.0
         with:
           distribution: 'temurin'
           java-version: '21'
@@ -2088,6 +2088,68 @@ jobs:
           jq -e 'any(.components[]; .group == "com.google.android.gms" and .name == "play-services-basement" and any((.externalReferences // [])[]; .type == "distribution" and (.url | contains("dl.google.com"))))' bomresults/bom-gradle-repotest-resolve-dist.json
         shell: bash
 
+  jvm-tools-repotest:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1  # v7.0.1
+        with:
+          persist-credentials: false
+      - name: Set up JDK
+        uses: actions/setup-java@dd06d9cba3e5552c54d9f8ea23572deb30010f7c  # v6.0.0
+        with:
+          distribution: 'temurin'
+          java-version: '21'
+      - name: Setup pnpm
+        uses: pnpm/action-setup@0977fd99725f1db4007ccb2928dbb4e90d06cc86  # v6.0.10
+      - name: Use Node.js
+        uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020  # v7.0.0
+        with:
+          node-version-file: .nvmrc
+          package-manager-cache: false
+      - name: pnpm install
+        run: |
+          pnpm install:frozen
+          mkdir -p bomresults
+          rm -rf $CDXGEN_TEMP_DIR && mkdir -p $CDXGEN_TEMP_DIR
+        env:
+          CI: true
+          CDXGEN_TEMP_DIR: ${{ runner.temp }}/cdxgen-repotests
+      - name: setup sdkman
+        run: |
+          curl -s "https://get.sdkman.io" | bash
+      - name: repotests jvm build tools
+        run: |
+          # cdxgen writes its progress and decision messages to stderr, so
+          # every log captured below has to redirect stderr into the file.
+          # Explicit pin: installs maven 3.9.9 via sdkman and uses it for a
+          # wrapper-less pom project.
+          bin/cdxgen.js -t maven3.9.9 test/data/jvm-tools/maven-nowrapper -o bomresults/bom-jvm-tools-pin.json --fail-on-error 2>&1 | tee /tmp/jvm-tools-pin.log
+          # Matches whether maven 3.9.9 was installed now or already present,
+          # so a warm sdkman cache cannot break this.
+          grep -q "maven/3.9.9\|About to install maven 3.9.9" /tmp/jvm-tools-pin.log
+          jq -e '.components | length > 0' bomresults/bom-jvm-tools-pin.json
+          jq -e 'any(.components[]; .group == "org.slf4j" and .name == "slf4j-api" and .version == "2.0.7")' bomresults/bom-jvm-tools-pin.json
+          jq -e 'any(.components[]; .group == "com.fasterxml.jackson.core" and .name == "jackson-databind" and .version == "2.17.0")' bomresults/bom-jvm-tools-pin.json
+          # Idempotency: a second run must not reinstall anything.
+          bin/cdxgen.js -t maven3.9.9 test/data/jvm-tools/maven-nowrapper -o bomresults/bom-jvm-tools-pin2.json --fail-on-error > /tmp/jvm-tools-pin2.log 2>&1
+          # Assert the log has content first, so the negative check below
+          # cannot pass just because nothing was captured.
+          grep -q "Preparing environment" /tmp/jvm-tools-pin2.log
+          ! grep -q "About to install" /tmp/jvm-tools-pin2.log
+          # Automatic mode: .sdkmanrc pins are provisioned and honoured.
+          bin/cdxgen.js --feature-flags jvm-tool-setup -t java test/data/jvm-tools/sdkmanrc-full -o bomresults/bom-jvm-tools-sdkmanrc.json --fail-on-error 2>&1 | tee /tmp/jvm-tools-sdkmanrc.log
+          grep -q "Using maven 3.9.16 from the .sdkmanrc file." /tmp/jvm-tools-sdkmanrc.log
+          grep -q "Using gradle 9.6.1 from the .sdkmanrc file." /tmp/jvm-tools-sdkmanrc.log
+          grep -q "Using sbt 1.10.11 from the .sdkmanrc file." /tmp/jvm-tools-sdkmanrc.log
+          # Automatic mode keeps wrapper-pinned gradle untouched: the project
+          # wrapper provisions itself and no gradle install happens.
+          bin/cdxgen.js --feature-flags jvm-tool-setup -t java test/data/gradle-repotest -o bomresults/bom-jvm-tools-wrapper.json --fail-on-error > /tmp/jvm-tools-wrapper.log 2>&1
+          grep -q "Preparing environment" /tmp/jvm-tools-wrapper.log
+          ! grep -q "About to install gradle" /tmp/jvm-tools-wrapper.log
+          jq -e 'any(.components[]; .group == "org.slf4j" and .name == "slf4j-api" and .version == "2.0.7")' bomresults/bom-jvm-tools-wrapper.json
+        shell: bash
+
+
   secure-mode-tests:
     strategy:
       fail-fast: true
@@ -2102,11 +2164,11 @@ jobs:
         with:
           persist-credentials: false
       - name: Set up JDK ${{ matrix.java-version }}
-        uses: actions/setup-java@b6effb05e454b25005698d916606bdc6ffcbf961  # v5.7.0
+        uses: actions/setup-java@dd06d9cba3e5552c54d9f8ea23572deb30010f7c  # v6.0.0
         with:
           distribution: 'temurin'
           java-version: ${{ matrix.java-version }}
-      - uses: sbt/setup-sbt@8feba82adc7f01ddcf8165b86f778bdb5b82cebc  # v1.5.7
+      - uses: sbt/setup-sbt@c7d2d6258b4bd0d3ec5129e6b3453199d3c79729  # v1.5.8
       - uses: coursier/setup-action@9b7939bf01fd1185ce2babe16135168361bf2c62  # v3.0.2
         with:
           apps: scala3 scalac
@@ -2125,7 +2187,7 @@ jobs:
         run: |
           chmod +x contrib/free_disk_space.sh
           ./contrib/free_disk_space.sh
-      - uses: sbt/setup-sbt@8feba82adc7f01ddcf8165b86f778bdb5b82cebc  # v1.5.7
+      - uses: sbt/setup-sbt@c7d2d6258b4bd0d3ec5129e6b3453199d3c79729  # v1.5.8
       - name: Install bazelisk - linux
         if: matrix.os == 'ubuntu-24.04'
         run: |

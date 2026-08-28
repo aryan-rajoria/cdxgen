@@ -101,7 +101,7 @@ jobs:
       - name: Set up QEMU
         uses: docker/setup-qemu-action@96fe6ef7f33517b61c61be40b68a1882f3264fb8  # v4.2.0
       - name: Set up Docker Buildx
-        uses: docker/setup-buildx-action@bb05f3f5519dd87d3ba754cc423b652a5edd6d2c  # v4.2.0
+        uses: docker/setup-buildx-action@37fe631027851001ddb9b187196cc803df7f5f0e  # v4.3.0
       - name: Log in to the Container registry
         uses: docker/login-action@dbcb813823bdd20940b903addbd779551569679f  # v4.6.0
         with:
@@ -145,7 +145,7 @@ jobs:
       - name: Set up QEMU
         uses: docker/setup-qemu-action@96fe6ef7f33517b61c61be40b68a1882f3264fb8  # v4.2.0
       - name: Set up Docker Buildx
-        uses: docker/setup-buildx-action@bb05f3f5519dd87d3ba754cc423b652a5edd6d2c  # v4.2.0
+        uses: docker/setup-buildx-action@37fe631027851001ddb9b187196cc803df7f5f0e  # v4.3.0
       - name: Log in to the Container registry
         uses: docker/login-action@dbcb813823bdd20940b903addbd779551569679f  # v4.6.0
         with:
@@ -197,7 +197,7 @@ jobs:
         id: metadata
         with:
           images: ghcr.io/${{ github.repository }}
-      - uses: int128/docker-manifest-create-action@1e15cac7af24af7153ff7968c09072d61bb4456b  # v2.26.0
+      - uses: int128/docker-manifest-create-action@5e40f15c10aaa54f5d2bc91864e2708e11ad629f  # v2.27.0
         id: build
         with:
           index-annotations: ${{ steps.metadata.outputs.labels }}
@@ -227,7 +227,7 @@ jobs:
           chmod +x contrib/free_disk_space.sh
           ./contrib/free_disk_space.sh
       - name: Set up Docker Buildx
-        uses: docker/setup-buildx-action@bb05f3f5519dd87d3ba754cc423b652a5edd6d2c  # v4.2.0
+        uses: docker/setup-buildx-action@37fe631027851001ddb9b187196cc803df7f5f0e  # v4.3.0
       - name: Log in to the Container registry
         uses: docker/login-action@dbcb813823bdd20940b903addbd779551569679f  # v4.6.0
         with:
@@ -279,7 +279,7 @@ jobs:
           chmod +x contrib/free_disk_space.sh
           ./contrib/free_disk_space.sh
       - name: Set up Docker Buildx
-        uses: docker/setup-buildx-action@bb05f3f5519dd87d3ba754cc423b652a5edd6d2c  # v4.2.0
+        uses: docker/setup-buildx-action@37fe631027851001ddb9b187196cc803df7f5f0e  # v4.3.0
       - name: Log in to the Container registry
         uses: docker/login-action@dbcb813823bdd20940b903addbd779551569679f  # v4.6.0
         with:
@@ -356,7 +356,7 @@ jobs:
             type=raw,value=latest,enable=${{ github.event_name == 'push' || github.event.inputs.latest == 'true' }}
             type=ref,event=branch,enable=${{ startsWith(env.REF, 'refs/heads/') }}
       - name: Merge and push manifest
-        uses: int128/docker-manifest-create-action@1e15cac7af24af7153ff7968c09072d61bb4456b  # v2.26.0
+        uses: int128/docker-manifest-create-action@5e40f15c10aaa54f5d2bc91864e2708e11ad629f  # v2.27.0
         with:
           index-annotations: ${{ steps.meta.outputs.labels }}
           tags: ${{ steps.meta.outputs.tags }}
@@ -434,7 +434,7 @@ jobs:
           chmod +x contrib/free_disk_space.sh
           ./contrib/free_disk_space.sh
       - name: Set up Docker Buildx
-        uses: docker/setup-buildx-action@bb05f3f5519dd87d3ba754cc423b652a5edd6d2c  # v4.2.0
+        uses: docker/setup-buildx-action@37fe631027851001ddb9b187196cc803df7f5f0e  # v4.3.0
       - name: Log in to the Container registry
         uses: docker/login-action@dbcb813823bdd20940b903addbd779551569679f  # v4.6.0
         with:
@@ -486,7 +486,7 @@ jobs:
           chmod +x contrib/free_disk_space.sh
           ./contrib/free_disk_space.sh
       - name: Set up Docker Buildx
-        uses: docker/setup-buildx-action@bb05f3f5519dd87d3ba754cc423b652a5edd6d2c  # v4.2.0
+        uses: docker/setup-buildx-action@37fe631027851001ddb9b187196cc803df7f5f0e  # v4.3.0
       - name: Log in to the Container registry
         uses: docker/login-action@dbcb813823bdd20940b903addbd779551569679f  # v4.6.0
         with:
@@ -563,7 +563,7 @@ jobs:
             type=raw,value=latest,enable=${{ github.event_name == 'push' || github.event.inputs.latest == 'true' }}
             type=ref,event=branch,enable=${{ startsWith(env.REF, 'refs/heads/') }}
       - name: Merge and push manifest
-        uses: int128/docker-manifest-create-action@1e15cac7af24af7153ff7968c09072d61bb4456b  # v2.26.0
+        uses: int128/docker-manifest-create-action@5e40f15c10aaa54f5d2bc91864e2708e11ad629f  # v2.27.0
         with:
           index-annotations: ${{ steps.meta.outputs.labels }}
           tags: ${{ steps.meta.outputs.tags }}
@@ -626,7 +626,7 @@ jobs:
           chmod +x contrib/free_disk_space.sh
           ./contrib/free_disk_space.sh
       - name: Set up Docker Buildx
-        uses: docker/setup-buildx-action@bb05f3f5519dd87d3ba754cc423b652a5edd6d2c  # v4.2.0
+        uses: docker/setup-buildx-action@37fe631027851001ddb9b187196cc803df7f5f0e  # v4.3.0
       - name: Log in to the Container registry
         uses: docker/login-action@dbcb813823bdd20940b903addbd779551569679f  # v4.6.0
         with:
@@ -678,7 +678,7 @@ jobs:
           chmod +x contrib/free_disk_space.sh
           ./contrib/free_disk_space.sh
       - name: Set up Docker Buildx
-        uses: docker/setup-buildx-action@bb05f3f5519dd87d3ba754cc423b652a5edd6d2c  # v4.2.0
+        uses: docker/setup-buildx-action@37fe631027851001ddb9b187196cc803df7f5f0e  # v4.3.0
       - name: Log in to the Container registry
         uses: docker/login-action@dbcb813823bdd20940b903addbd779551569679f  # v4.6.0
         with:
@@ -755,7 +755,7 @@ jobs:
             type=raw,value=latest,enable=${{ github.event_name == 'push' || github.event.inputs.latest == 'true' }}
             type=ref,event=branch,enable=${{ startsWith(env.REF, 'refs/heads/') }}
       - name: Merge and push manifest
-        uses: int128/docker-manifest-create-action@1e15cac7af24af7153ff7968c09072d61bb4456b  # v2.26.0
+        uses: int128/docker-manifest-create-action@5e40f15c10aaa54f5d2bc91864e2708e11ad629f  # v2.27.0
         with:
           index-annotations: ${{ steps.meta.outputs.labels }}
           tags: ${{ steps.meta.outputs.tags }}
@@ -825,7 +825,7 @@ jobs:
       - name: Set up QEMU
         uses: docker/setup-qemu-action@96fe6ef7f33517b61c61be40b68a1882f3264fb8  # v4.2.0
       - name: Set up Docker Buildx
-        uses: docker/setup-buildx-action@bb05f3f5519dd87d3ba754cc423b652a5edd6d2c  # v4.2.0
+        uses: docker/setup-buildx-action@37fe631027851001ddb9b187196cc803df7f5f0e  # v4.3.0
       - name: Log in to the Container registry
         uses: docker/login-action@dbcb813823bdd20940b903addbd779551569679f  # v4.6.0
         with:
@@ -876,7 +876,7 @@ jobs:
           chmod +x contrib/free_disk_space.sh
           ./contrib/free_disk_space.sh
       - name: Set up Docker Buildx
-        uses: docker/setup-buildx-action@bb05f3f5519dd87d3ba754cc423b652a5edd6d2c  # v4.2.0
+        uses: docker/setup-buildx-action@37fe631027851001ddb9b187196cc803df7f5f0e  # v4.3.0
       - name: Log in to the Container registry
         uses: docker/login-action@dbcb813823bdd20940b903addbd779551569679f  # v4.6.0
         with:
@@ -927,7 +927,7 @@ jobs:
           chmod +x contrib/free_disk_space.sh
           ./contrib/free_disk_space.sh
       - name: Set up Docker Buildx
-        uses: docker/setup-buildx-action@bb05f3f5519dd87d3ba754cc423b652a5edd6d2c  # v4.2.0
+        uses: docker/setup-buildx-action@37fe631027851001ddb9b187196cc803df7f5f0e  # v4.3.0
       - name: Log in to the Container registry
         uses: docker/login-action@dbcb813823bdd20940b903addbd779551569679f  # v4.6.0
         with:
@@ -1004,7 +1004,7 @@ jobs:
             type=raw,value=latest,enable=${{ github.event_name == 'push' || github.event.inputs.latest == 'true' }}
             type=ref,event=branch,enable=${{ startsWith(env.REF, 'refs/heads/') }}
       - name: Merge and push manifest
-        uses: int128/docker-manifest-create-action@1e15cac7af24af7153ff7968c09072d61bb4456b  # v2.26.0
+        uses: int128/docker-manifest-create-action@5e40f15c10aaa54f5d2bc91864e2708e11ad629f  # v2.27.0
         with:
           index-annotations: ${{ steps.meta.outputs.labels }}
           tags: ${{ steps.meta.outputs.tags }}

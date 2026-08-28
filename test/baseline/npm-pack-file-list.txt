@@ -187,6 +187,7 @@ lib/inventory/forgeEnricher.js
 lib/inventory/formulationParsers.js
 lib/inventory/gtfobins.js
 lib/inventory/hbom.js
+lib/inventory/jvmToolEnv.js
 lib/inventory/hbomAnalysis.js
 lib/inventory/hbomLoader.js
 lib/inventory/hostTopology.js
