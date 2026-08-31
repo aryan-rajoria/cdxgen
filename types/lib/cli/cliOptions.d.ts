@@ -50,7 +50,8 @@ export declare function isUserProvided(value: any, yaDefault: any): boolean;
  * @returns {object} A shallow copy of args with alias-based defaults applied
  */
 export declare function applyCommandNameDefaults(args: object, invokedCommandName: string): object;
-export declare function buildInitialOptions(args: any, { filePath, isRemoteOrPurl }: {
+export declare function buildInitialOptions(args: any, { filePath, isRemoteOrPurl, argv }: {
+    argv?: any;
     filePath: any;
     isRemoteOrPurl: any;
 }): any;

@@ -1,11 +1,5 @@
-/** Map of severity names to numeric ordering used for threshold comparisons. */
-export declare const SEVERITY_ORDER: {
-    none: number;
-    low: number;
-    medium: number;
-    high: number;
-    critical: number;
-};
+import { SEVERITY_ORDER } from "../core/severity.js";
+export { SEVERITY_ORDER };
 /**
  * Convert a numeric confidence score into a human readable label.
  *

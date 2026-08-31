@@ -59,6 +59,39 @@ export declare function parseGradleProperties(rawOutput: string, gradleModuleNam
  */
 export declare function executeParallelGradleProperties(dir: string, allProjectsStr: array, extraArgs?: array): string;
 /**
+ * Forget the causes diagnosed so far, so a process that generates more than
+ * one BOM diagnoses each run on its own.
+ *
+ * @returns {void}
+ */
+export declare function resetGradleFailureCauses(): void;
+/**
+ * Whether a gradle invocation has already failed outright this run, so a
+ * caller can skip reporting a consequence of that failure as its own
+ * degradation.
+ *
+ * @returns {boolean} True once an invocation failure has been recorded.
+ */
+export declare function hasGradleInvocationFailure(): boolean;
+/**
+ * Record why a gradle invocation failed. Every failure also records the
+ * `jvm.gradle.invocation-failed` degradation so the reflection can rank the
+ * repair; version-incompatibility causes additionally record a
+ * `tool.mismatch` event naming the versions, which is the fact the report
+ * cannot derive from an empty BOM alone. Diagnosis events are recorded once
+ * per cause per run; the degradation dedupes in the reflection by id.
+ *
+ * @param {Object} result The spawnSync result of the failed invocation.
+ * @param {Object} context Call-site facts.
+ * @param {string} [context.command] The redacted command that was attempted.
+ * @param {string} [context.gradleVersion] The gradle version in play, when the caller knows it.
+ * @returns {void}
+ */
+export declare function recordGradleInvocationFailure(result: Object, context?: {
+    command?: string;
+    gradleVersion?: string;
+}): void;
+/**
  * Method to resolve dependencies from a gradle output
  *
  * @param {string} rawOutput Text output from gradle dependencies task

@@ -60,7 +60,11 @@ export declare function getJavaCommand(): string;
 export declare const PYTHON_CMD: string;
 /**
  * Returns the Python executable command to use, resolved in priority order:
- * PYTHON_CMD env var > CONDA_PYTHON_EXE env var > "python".
+ * PYTHON_CMD env var > CONDA_PYTHON_EXE env var > "python" > "python3".
+ *
+ * Distributions that ship only a versioned interpreter leave a bare "python"
+ * unresolvable, which would fail every virtualenv this tool creates, so the
+ * versioned name is used when it is the only one PATH offers.
  *
  * @returns {string} Path or name of the Python executable
  */
