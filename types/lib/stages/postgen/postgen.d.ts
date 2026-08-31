@@ -5,9 +5,9 @@
  * @param {Object} options CLI options
  * @param {string} [filePath] Source path used for formulation and metadata context
  *
- * @returns {Object} Modified bomNSData
+ * @returns {Promise<Object>} Modified bomNSData
  */
-export declare function postProcess(bomNSData: Object, options: Object, filePath?: string): Object;
+export declare function postProcess(bomNSData: Object, options: Object, filePath?: string): Promise<Object>;
 /**
  * Apply additional metadata based on components
  *

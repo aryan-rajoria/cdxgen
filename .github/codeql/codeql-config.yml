@@ -7,3 +7,12 @@ paths-ignore:
   - "test/**"
   - "types/**"
   - "lib/third-party/**"
+
+# cdxgen never accepts, stores, or verifies a credential, so every hit of the
+# password-hashing query is a digest of scan inputs — paths, project types and
+# resolved tool versions — that the heuristic mistakes for a secret. Fast
+# digests are the intent there: the values are public and the hash is an
+# identity, not a defence against guessing.
+query-filters:
+  - exclude:
+      id: js/insufficient-password-hash

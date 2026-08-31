@@ -92,6 +92,14 @@ export declare function createHBom(_path: string, options: Object): Promise<Obje
  * @param {Object} options Parse options from the cli
  * @returns {Promise<Object>} Promise resolving to BOM object
  */
+/**
+ * Generate a BOM for one path, letting a deferred fail-on-error abort return
+ * the empty BOM the flag promises rather than unwinding past the reports.
+ *
+ * @param {string} path Source path.
+ * @param {Object} options CLI options.
+ * @returns {Promise<Object>} BOM NS data.
+ */
 export declare function createBom(path: string, options: Object): Promise<Object>;
 /**
  * Method to submit the generated bom to dependency-track or cyclonedx server

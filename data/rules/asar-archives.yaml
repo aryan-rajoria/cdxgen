@@ -103,7 +103,7 @@
   condition: |
     components[
       $propBool($, 'cdx:npm:hasInstallScript') = true
-      and $contains($prop($, 'internal:SrcFile'), '.asar#/')
+      and $contains($nullSafeProp($, 'internal:SrcFile'), '.asar#/')
     ]
   location: |
     {

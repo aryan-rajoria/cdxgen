@@ -338,7 +338,7 @@ ensureCycloneDxInput(args.input);
     // Analyze the project using atom. Convert package namespaces to purl using the db
     const sliceArtefacts = await analyzeProject(dbObjMap, args);
     // Create the SBOM with Evidence
-    const bomJson = createEvinseFile(sliceArtefacts, args);
+    const bomJson = await createEvinseFile(sliceArtefacts, args);
     // Validate our final SBOM
     if (!(await validateBom(bomJson))) {
       process.exit(1);

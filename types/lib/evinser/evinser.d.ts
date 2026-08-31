@@ -289,7 +289,7 @@ export declare function extractEndpoints(language: string, code: string): string
  * @param {Object} options Command line options
  * @returns
  */
-export declare function createEvinseFile(sliceArtefacts: Object, options: Object): any;
+export declare function createEvinseFile(sliceArtefacts: Object, options: Object): Promise<any>;
 /**
  * Method to convert dataflow slice into usable callstack frames
  * Implemented based on the logic proposed here - https://github.com/AppThreat/atom/blob/main/specification/docs/slices.md#data-flow-slice

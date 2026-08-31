@@ -75,6 +75,7 @@
 - [Tutorials - Trust enrichment with trustinspector](LESSON29.md)
 - [Tutorials - Monorepos and large-project scanning](LESSON30.md)
 - [Tutorials - DevOps BOMs: Helm, Jenkins, and GitHub Actions](LESSON31.md)
+- [Tutorials - Build introspection: grading your SBOM](LESSON32.md)
 - [Tutorials - Generating OBOM](OBOM_LESSONS.md)
 - [Trust enrichment BOM diff examples](TRUST_ENRICHMENT_DIFF.md)
 - [macOS OBOM troubleshooting](OBOM_MACOS_TROUBLESHOOTING.md)

@@ -272,6 +272,127 @@ When using any filters, cdxgen would automatically set the [compositions.aggrega
 
 To disable this behavior, pass `--no-auto-compositions`.
 
+## Build fidelity rules
+
+The `build-fidelity` rule pack (`data/rules/build-fidelity.yaml`) reviews a
+finished BOM for signs that it does not faithfully represent the project's real
+dependency set: a resolver that never ran, a lockfile that was ignored, or
+components missing the coordinates a healthy scan produces.
+
+Key facts about the pack:
+
+- It is **not** part of a default `--bom-audit` run. The category only activates
+  when explicitly requested with `--bom-audit-categories build-fidelity` or
+  through the `--introspect` reflection step, which is its primary consumer.
+- Every rule reads only BOM structure, so all rules support dry runs in full.
+- Each rule names the fidelity `tier-signal` it demotes the ecosystem to:
+  `resolved` (resolver ran) > `lockfile` (complete lockfile read) >
+  `manifest` (declared dependencies only) > `heuristic` (inferred from
+  artifacts) > `absent` (markers found, nothing produced).
+- Rules declare `applies-to` (a list of purl types) so that ecosystems with no
+  resolver cdxgen can drive stay silent. BOMs from unsupported project types
+  and container/rootfs inventories are never fidelity findings.
+
+| Rule           | Fires when                                                                          | Tier signal |
+| -------------- | ----------------------------------------------------------------------------------- | ----------- |
+| `BF-GEN-001`   | More than half of the components appear nowhere in `dependencies[]`                 | `manifest`  |
+| `BF-GEN-002`   | More than 20% of components have no version                                         | `heuristic` |
+| `BF-GEN-003`   | More than 10% of package components have no purl                                    | `heuristic` |
+| `BF-GEN-004`   | No component carries a hash or identity evidence in npm/cargo scans                 | `heuristic` |
+| `BF-GEN-005`   | `metadata.lifecycles` claims `post-build` but no component has evidence             | `manifest`  |
+| `BF-GEN-006`   | A supported ecosystem's BOM has zero components (typed parent purl)                 | `absent`    |
+| `BF-GEN-007`   | 10+ dependency nodes but at most one carries `dependsOn` entries                    | `manifest`  |
+| `BF-JVM-001`   | `pkg:maven` components exist with no dependency graph (pom.xml fallback)            | `manifest`  |
+| `BF-JVM-002`   | Maven graph holds fewer than half as many edges as maven components                 | `manifest`  |
+| `BF-JVM-003`   | Maven BOM built from jar scanning only (no evidence, hashes, or graph)              | `heuristic` |
+| `BF-JVM-004`   | `cdx:gradle:GradleRootPath` marker present but no `pkg:maven` components            | `absent`    |
+| `BF-JS-001`    | `pkg:npm` components exist but none carries an integrity hash                       | `manifest`  |
+| `BF-JS-002`    | More than half of `pkg:npm` components have range versions (`^`, `~`, `>`, `*`)     | `manifest`  |
+| `BF-JS-003`    | `cdx:npm:isWorkspace` marker with at most one dependency node                       | `manifest`  |
+| `BF-PY-001`    | `pkg:pypi` components are referenced by no dependency node                          | `manifest`  |
+| `BF-PY-002`    | `pkg:pypi` components with no hashes, no graph position, and no provenance property | `manifest`  |
+| `BF-PY-003`    | More than 20% of `pkg:pypi` components have range or absent versions                | `heuristic` |
+| `BF-GO-001`    | `pkg:golang` components in a graph where no node has `dependsOn` entries            | `manifest`  |
+| `BF-RB-001`    | `pkg:gem` components in a graph where no node has `dependsOn` entries               | `manifest`  |
+| `BF-RS-001`    | `pkg:cargo` components in a graph where no node has `dependsOn` entries             | `manifest`  |
+| `BF-CS-001`    | `pkg:nuget` components in a graph where no node has `dependsOn` entries             | `manifest`  |
+| `BF-SWIFT-001` | `pkg:swift` components with no dependency graph (ceiling shape)                     | `lockfile`  |
+
+The generic coverage threshold (50%) and the scoped rules were calibrated
+against measured BOM pairs; the thresholds and their measuring notes live as
+comments in `data/rules/build-fidelity.yaml`.
+
+## Build introspection
+
+The build-fidelity rules are one input of build introspection, the feature
+that turns them into a verdict. Run with `--introspect` (or
+`--profile introspect`, or `CDXGEN_INTROSPECT=true`) and cdxgen joins three
+evidence sources — the build ledger it recorded during the run, the
+build-fidelity rule findings, and the ecosystem markers it finds on disk —
+into a per-ecosystem fidelity verdict, an overall score, and a ranked list of
+remediations. Introspection measures the environment the user actually has: it
+never installs dependencies and never implies `--bom-audit`. The full feature
+page — tiers, report anatomy, the agent loop, and a worked degraded-to-repaired
+transition with both real reports — lives in
+[docs/INTROSPECTION.md](./INTROSPECTION.md).
+
+A degraded run looks like this:
+
+```shell
+$ MVN_CMD=/nonexistent/mvn cdxgen -t java --introspect -o bom.json .
+Build introspection: overall manifest (45/100), confidence high
+Build introspection: 3 remediation(s) ranked
+Build introspection: markdown report: bom.json.introspection.md
+Build introspection: json report: bom.json.introspection.json
+```
+
+The markdown report names what is missing, ranks the fixes by expected score
+gain, and reproduces the exact invocation:
+
+````markdown
+# cdxgen build introspection
+
+Overall: manifest (45/100) — the SBOM is missing transitive dependencies for java; 2 remediation(s) proposed.
+
+## What to fix
+
+### 1. Maven build failed; only the direct dependencies declared in pom.xml were captured
+
+- Remediation: `jvm.maven.manifest-fallback` (source: ledger) — ecosystem: `java`, confidence: high
+- Score: 45 → 100 (tier `resolved`); expected overall gain: +55.00
+- Also resolves: `BF-JVM-001`
+
+POSIX:
+
+```sh
+sdk install java {{version}}
+sdk install maven {{version}}
+mvn -q package -DskipTests
+```
+````
+
+The fix is in the agent's or developer's hands, not cdxgen's: build the
+project (or let `--install-deps` drive the resolver), then re-run. The report
+ends with the original invocation, so the improved re-run is a copy-paste:
+
+```shell
+$ cdxgen -t java --no-install-deps -o bom.json . --introspect
+Build introspection: overall resolved (100/100), confidence high
+Build introspection: 0 remediation(s) ranked
+```
+
+Because the inputs fingerprint in the report moves only when the resolved
+toolchain moves, an automation loop can diff consecutive JSON reports to prove
+the fix took effect instead of trusting the exit status.
+
+The verdict also travels inside the BOM: eight `cdx:introspection:*` metadata
+properties plus document-level annotations (one summary, one per actionable
+remediation), documented in `docs/CUSTOM_PROPERTIES.md`. Pass
+`--no-introspect-annotate` to keep the BOM untouched. When the report matters
+more than the BOM, the CI gate `--introspect-fail-below <n>` exits with
+status 4 after the BOM is written if the overall score is below the threshold;
+see `docs/CLI.md`.
+
 ## Output streams and log discipline
 
 cdxgen follows a strict stream contract:

@@ -112,6 +112,7 @@ Key rules to be aware of (see `biome.json`):
 ## Repository layout
 
 ```
+.agents/         Agent-facing skills and workspace configuration (see .agents/README.md)
 bin/             CLI entry points (audit.js, cdxgen.js, convert.js, evinse.js, repl.js, verify.js, sign.js, validate.js)
 lib/
   audit/         Predictive supply-chain audit engine, scoring, progress, and reporters for `cdx-audit`
@@ -370,10 +371,11 @@ if (isSecureMode) {
 ```
 
 Always use the safe wrappers rather than the raw Node.js equivalents:
-| Safe wrapper | Replaces |
-|---|---|
-| `safeExistsSync(path)` | `existsSync(path)` |
-| `safeMkdirSync(path, opts)` | `mkdirSync(path, opts)` |
+
+| Safe wrapper                     | Replaces                     |
+| -------------------------------- | ---------------------------- |
+| `safeExistsSync(path)`           | `existsSync(path)`           |
+| `safeMkdirSync(path, opts)`      | `mkdirSync(path, opts)`      |
 | `safeSpawnSync(cmd, args, opts)` | `spawnSync(cmd, args, opts)` |
 
 `safeSpawnSync` also validates `cmd` against `CDXGEN_ALLOWED_COMMANDS` and records every invocation in `commandsExecuted`.

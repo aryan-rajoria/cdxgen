@@ -96,6 +96,15 @@ export declare function prefetchJson(requests: Array<{
     timeoutMs?: number;
 }): Promise<Map<string, BatchEntry>>;
 /**
+ * Record the run-level policy or connectivity condition carried by a caught
+ * fetch error, if it names one. Shared by the batch retry loop and by the
+ * serial enrichment paths that catch and swallow the same typed errors.
+ *
+ * @param {Error} err Error caught from a `cdxgenAgent` request.
+ * @returns {void}
+ */
+export declare function recordPolicyDegradationFromError(err: Error): void;
+/**
  * Read a prefetched response, or signal that the caller should fetch it itself.
  *
  * @param {Map<string, BatchEntry>} prefetched Result of {@link prefetchJson}.

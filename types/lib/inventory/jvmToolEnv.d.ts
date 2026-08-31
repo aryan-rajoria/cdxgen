@@ -1,3 +1,11 @@
+import { compareVersions, extractJavaMajor, isPrereleaseVersion } from "./toolRequirements.js";
+/**
+ * The general-purpose version comparator, prerelease classifier, and JDK
+ * major extractor live in `toolRequirements.js` so every ecosystem shares one
+ * comparator; they are re-exported here under the names this module's
+ * consumers already use.
+ */
+export { compareVersions as compareSdkmanVersions, extractJavaMajor, isPrereleaseVersion, };
 /**
  * Anchored validator for sdkman version identifiers such as `3.9.9`,
  * `4.0.0-rc-5`, `8.14`, or `21.0.7-tem`. Versions are interpolated into a
@@ -110,17 +118,6 @@ export declare function determineRequiredJavaVersion(toolPins: Array<{
     version: string;
 }>): number | undefined;
 /**
- * Extract the JDK major from a `java --version` style description such as
- * `openjdk 21.0.11 2025-04-15` or a bare sdkman java identifier such as
- * `25-tem`. General availability releases print an undotted major
- * (`openjdk 25 2025-09-16`), so the first token starting with a digit is
- * used rather than requiring a dotted version.
- *
- * @param {string} versionDesc Version description string
- * @returns {number|undefined} JDK major version.
- */
-export declare function extractJavaMajor(versionDesc: string): number | undefined;
-/**
  * Minimum Gradle version that can run on the given JDK major, when such a cap
  * is known.
  *
@@ -138,27 +135,6 @@ export declare function minimumGradleVersionForJava(javaMajor: number): string |
  * @returns {string[]} Version identifiers found in the output.
  */
 export declare function extractSdkListVersions(stdout: string): string[];
-/**
- * Check whether a version identifier carries a prerelease suffix such as
- * `-rc-3`, `-M2`, or `-milestone-1`. The marker list is exact so that vendor
- * suffixes that merely begin with the same letters, such as the `-crac` java
- * distributions, stay classified as stable.
- *
- * @param {string} version Version identifier
- * @returns {boolean} True for prerelease versions.
- */
-export declare function isPrereleaseVersion(version: string): boolean;
-/**
- * Compare two sdkman version identifiers. Numeric dotted components are
- * compared numerically, stable releases rank above prereleases, and
- * prerelease suffixes are compared token-wise so `rc-9` beats `rc-10` only
- * when numerically larger.
- *
- * @param {string} a First version
- * @param {string} b Second version
- * @returns {number} Negative when a < b, positive when a > b, zero on equality.
- */
-export declare function compareSdkmanVersions(a: string, b: string): number;
 /**
  * Resolve a partial version prefix such as `3.9` or `8.14` to the newest
  * matching version in `sdk list` output. Stable versions are preferred unless

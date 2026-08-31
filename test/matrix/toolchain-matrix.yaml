@@ -1,0 +1,537 @@
+# Toolchain version matrix — one cell per (image, project) pair.
+#
+# The matrix varies one dimension at a time: the container image pins the
+# toolchain, the project stays fixed, and the introspection verdict is the
+# measurement. Images come from the published fleet in ci/images/README.md;
+# this deliverable adds none. Project paths beginning with repo:// name a
+# vendored fixture under test/repotests/ (scanned from the branch mount
+# inside the container); every other path is a host directory mounted
+# read-only, so a missing corpus row skips its cell instead of failing it.
+#
+# expect is deliberately coarse — tier, the remediation-id set, a component
+# floor, and optionally the blocked shape — because exact component counts
+# against a moving corpus produce a suite that fails for reasons unrelated to
+# the feature, and a suite that cries wolf gets muted. Every note records the
+# run that measured the row, so an expectation is always traceable to a
+# measurement rather than to an assumption; test/matrix/baseline.json carries
+# the exact numbers --update-baseline recorded.
+#
+# The corpus is read-only. Degradation comes from the image choice, never
+# from mutating a project.
+cells:
+
+  # ---------------------------------------------------------------- Group C
+
+  # The false-positive gate: healthy projects on the image built for them
+
+  # must produce zero remediations. A container is exactly where a spurious
+
+  # "tool missing" fires, because minimal images legitimately lack tools the
+
+  # host had.
+
+  - id: golang-ipsw
+    group: C
+    image: ghcr.io/cdxgen/cdxgen-golang:v13
+    project: ~/sandbox/ipsw
+    type: go
+    expect:
+      tier: resolved
+      remediations: []
+      minComponents: 100
+    note: measured 2026-08-31 — resolved (100), 0 remediations, 204
+      components; go 1.27 serves ipsw's declared go 1.26.
+
+  - id: rust-binwalk
+    group: C
+    image: ghcr.io/cdxgen/cdxgen-debian-rust:v13
+    project: ~/sandbox/binwalk
+    type: rust
+    expect:
+      tier: lockfile
+      remediations: []
+      minComponents: 50
+    note: measured 2026-08-31 — lockfile (100) at-ceiling, 0 remediations,
+      228 components.
+
+  - id: python-poetry
+    group: C
+    image: ghcr.io/cdxgen/cdxgen-python:v13
+    project: ~/sandbox/v13-corpus/poetry
+    type: python
+    expect:
+      tier: lockfile
+      remediations: []
+      minComponents: 100
+    note: measured 2026-08-31 — lockfile (100) at-ceiling, 0 remediations,
+      248 components.
+
+  - id: dotnet10-eshop
+    group: C
+    image: ghcr.io/cdxgen/cdxgen-ubuntu-dotnet10:v13
+    project: ~/sandbox/v13-corpus/eShop
+    type: csharp
+    expect:
+      tier: resolved
+      remediations: []
+      minComponents: 50
+    note: measured 2026-08-31 — resolved (100), 0 remediations, 304
+      components; the SDK matching eShop's net10.0 target.
+
+  # ---------------------------------------------------------------- Group A
+
+  # Version skew: the tool is present and the wrong version. Some axes
+
+  # genuinely degrade (dotnet SDK older than TargetFramework); others measure
+
+  # invariance (the parse does not depend on the interpreter version), which
+
+  # is its own confidence result — a future cdxgen that starts depending on
+
+  # the interpreter fails these cells.
+
+  # Java. java-sec-code declares source/target 1.8, so java8 is its
+
+  # declared-correct row and the modern JDKs must not degrade it. The gradle
+
+  # rows below are where the JDK axis actually skews: every temurin image
+
+  # bundles Gradle 8, so the fixture resolves on java8 and is refused outright
+
+  # on the JDKs Gradle 8 cannot run.
+  - id: java8-javaseccode
+    group: A
+    image: ghcr.io/cdxgen/cdxgen-temurin-java8:v13
+    project: ~/sandbox/java-sec-code
+    type: java
+    expect:
+      tier: resolved
+      remediations: []
+      minComponents: 50
+    note: measured 2026-08-31 — resolved (100), 0 remediations, 204
+      components; maven 3.9 runs on Java 8 and the pom targets 1.8.
+
+  - id: java21-javaseccode
+    group: A
+    image: ghcr.io/cdxgen/cdxgen-temurin-java21:v13
+    project: ~/sandbox/java-sec-code
+    type: java
+    expect:
+      tier: resolved
+      remediations: []
+      minComponents: 50
+    note: measured 2026-08-31 — resolved (100), 0 remediations, 204
+      components, identical to every other JDK row.
+
+  - id: java24-javaseccode
+    group: A
+    image: ghcr.io/cdxgen/cdxgen-temurin-java24:v13
+    project: ~/sandbox/java-sec-code
+    type: java
+    expect:
+      tier: resolved
+      remediations: []
+      minComponents: 50
+    note: measured 2026-08-31 — resolved (100), 0 remediations, 204
+      components, identical to every other JDK row.
+
+  - id: java26-javaseccode
+    group: A
+    image: ghcr.io/cdxgen/cdxgen-temurin-java26:v13
+    project: ~/sandbox/java-sec-code
+    type: java
+    expect:
+      tier: resolved
+      remediations: []
+      minComponents: 50
+    note: measured 2026-08-31 — resolved (100), 0 remediations, 204
+      components. The maven axis is invariant on this project; the gradle
+      rows below carry the skew.
+
+  # Gradle. The vendored fixture is wrapper-less, so the image's own Gradle 8
+
+  # runs it, and --install-deps lets the dependencies task produce components.
+
+  # java8 is the declared-correct pair; on java24 and java26 the Gradle 8
+
+  # build refuses the JDK outright, which the invocation-failure
+
+  # instrumentation must name as a tool mismatch instead of shipping a silent
+
+  # empty BOM.
+  - id: java8-gradlefixture
+    group: A
+    image: ghcr.io/cdxgen/cdxgen-temurin-java8:v13
+    project: repo://introspect-gradle-manifest
+    type: gradle
+    env:
+      GRADLE_ARGS: "--project-cache-dir /tmp/cdxgen-gradle-project-cache"
+    extraArgs:
+      - --install-deps
+    expect:
+      tier: resolved
+      remediations: []
+      minComponents: 1
+    note: measured 2026-08-31 in-container — resolved (100), 0 remediations,
+      1 component; Gradle 8.14.5 runs on Java 8, so the fixture's
+      declared-correct pair holds.
+
+  - id: java24-gradlefixture
+    group: A
+    image: ghcr.io/cdxgen/cdxgen-temurin-java24:v13
+    project: repo://introspect-gradle-manifest
+    type: gradle
+    env:
+      GRADLE_ARGS: "--project-cache-dir /tmp/cdxgen-gradle-project-cache"
+    extraArgs:
+      - --install-deps
+    expect:
+      tier: resolved
+      remediations: []
+      minComponents: 1
+    note: measured 2026-08-31 in-container — resolved, 0 remediations, 1
+      component. The bundled Gradle 8.14.5 still runs on Java 24, so this
+      row is invariance, not skew; the refusal on this image starts at
+      Java 26.
+
+  - id: java26-gradlefixture
+    group: A
+    image: ghcr.io/cdxgen/cdxgen-temurin-java26:v13
+    project: repo://introspect-gradle-manifest
+    type: gradle
+    env:
+      GRADLE_ARGS: "--project-cache-dir /tmp/cdxgen-gradle-project-cache"
+    extraArgs:
+      - --install-deps
+    expect:
+      tier: absent
+      remediations:
+        - jvm.gradle.invocation-failed
+    note: measured 2026-08-31 in-container — the skew row. Gradle 8.14.5
+      refuses Java 26 ("Unsupported class file major version 70"), the
+      tool.mismatch names Gradle 9.4.0 as the minimum that runs Java 26, and
+      the report grades absent with the invocation failure ranked instead of
+      shipping a silent empty BOM.
+
+  # Python. Lockfile parses are interpreter-independent; python36 is the
+
+  # documented no-tree-support end of the fleet.
+  - id: python36-poetry
+    group: A
+    image: ghcr.io/cdxgen/cdxgen-python36:v13
+    project: ~/sandbox/v13-corpus/poetry
+    type: python
+    expect:
+      tier: lockfile
+      remediations: []
+      minComponents: 100
+    note: measured 2026-08-31 — lockfile (100) at-ceiling, 0 remediations,
+      149 components against python-poetry's 248, so the lockfile parse is
+      interpreter-independent while the environment capture is not.
+
+  - id: python311-poetry
+    group: A
+    image: ghcr.io/cdxgen/cdxgen-python311:v13
+    project: ~/sandbox/v13-corpus/poetry
+    type: python
+    expect:
+      tier: lockfile
+      remediations: []
+      minComponents: 100
+    note: measured 2026-08-31 — lockfile (100) at-ceiling, 0 remediations,
+      249 components.
+
+  - id: python313-poetry
+    group: A
+    image: ghcr.io/cdxgen/cdxgen-python313:v13
+    project: ~/sandbox/v13-corpus/poetry
+    type: python
+    expect:
+      tier: lockfile
+      remediations: []
+      minComponents: 100
+    note: measured 2026-08-31 — lockfile (100) at-ceiling, 0 remediations,
+      245 components.
+
+  # Node. lockfileVersion handling across the three shipped runtimes.
+  - id: node24-npmsmoke
+    group: A
+    image: ghcr.io/cdxgen/cdxgen-alpine-node24:v13
+    project: repo://npm-smoke
+    type: js
+    expect:
+      tier: lockfile
+      remediations: []
+      minComponents: 1
+    note: measured 2026-08-31 — lockfile (100) at-ceiling, 0 remediations,
+      4 components.
+
+  - id: node26-npmsmoke
+    group: A
+    image: ghcr.io/cdxgen/cdxgen-alpine-node26:v13
+    project: repo://npm-smoke
+    type: js
+    expect:
+      tier: lockfile
+      remediations: []
+      minComponents: 1
+    note: measured 2026-08-31 — lockfile (100) at-ceiling, 0 remediations,
+      4 components.
+
+  # Go. ipsw declares go 1.26; the 1.23 image cannot run the module graph and
+
+  # produces the plausible-but-flatter BOM this deliverable hunts, while 1.26
+
+  # is the declared match.
+  - id: golang123-ipsw
+    group: A
+    image: ghcr.io/cdxgen/cdxgen-debian-golang123:v13
+    project: ~/sandbox/ipsw
+    type: go
+    expect:
+      tier: manifest
+      remediations:
+        - BF-GEN-001
+      minComponents: 100
+    note: measured 2026-08-30 — manifest (55), 258 components with no go-anchored
+      graph, BF-GEN-001 ranked; the old toolchain cannot serve go 1.26.
+
+  - id: golang126-ipsw
+    group: A
+    image: ghcr.io/cdxgen/cdxgen-debian-golang126:v13
+    project: ~/sandbox/ipsw
+    type: go
+    expect:
+      tier: resolved
+      remediations: []
+      minComponents: 100
+    note: measured 2026-08-31 — resolved (100), 0 remediations, 204
+      components; the declared-correct toolchain for ipsw's go 1.26.
+
+  # .NET. eShop targets net10.0, but cdxgen reads the resolver output from
+
+  # project.assets.json, which any SDK parses — measured invariance, not the
+
+  # presumed skew. The dotnet8/9 images are amd64-only, hence the platform.
+  - id: dotnet8-eshop
+    group: A
+    image: ghcr.io/cdxgen/cdxgen-dotnet8:v13
+    platform: linux/amd64
+    project: ~/sandbox/v13-corpus/eShop
+    type: csharp
+    expect:
+      tier: resolved
+      remediations: []
+      minComponents: 50
+    note: measured 2026-08-30 (under Rosetta on arm64) — resolved with 0
+      remediations and 304 components; the assets parse does not need the
+      newer SDK.
+
+  - id: dotnet9-eshop
+    group: A
+    image: ghcr.io/cdxgen/cdxgen-dotnet9:v13
+    platform: linux/amd64
+    project: ~/sandbox/v13-corpus/eShop
+    type: csharp
+    expect:
+      tier: resolved
+      remediations: []
+      minComponents: 50
+    note: measured 2026-08-31 — resolved (100), 0 remediations, 304
+      components, matching the dotnet8 row, so the assets parse does not need
+      the newer SDK.
+
+  # Ruby. Gemfile.lock parses are interpreter-independent; the old-bundler
+
+  # rows must not degrade the vendored fixture. ruby25 is amd64-only.
+  - id: ruby25-rubysmoke
+    group: A
+    image: ghcr.io/cdxgen/cdxgen-ruby25:v13
+    platform: linux/amd64
+    project: repo://ruby-smoke
+    type: ruby
+    expect:
+      tier: resolved
+      remediations: []
+      minComponents: 50
+    note: measured 2026-08-31 — resolved (100), 0 remediations, 94
+      components.
+
+  - id: ruby33-rubysmoke
+    group: A
+    image: ghcr.io/cdxgen/cdxgen-debian-ruby33:v13
+    project: repo://ruby-smoke
+    type: ruby
+    expect:
+      tier: resolved
+      remediations: []
+      minComponents: 50
+    note: measured 2026-08-31 — resolved (100), 0 remediations, 94
+      components.
+
+  - id: ruby4-rubysmoke
+    group: A
+    image: ghcr.io/cdxgen/cdxgen-debian-ruby4:v13
+    project: repo://ruby-smoke
+    type: ruby
+    expect:
+      tier: resolved
+      remediations: []
+      minComponents: 50
+    note: measured 2026-08-31 — resolved (100), 0 remediations, 94
+      components; the Gemfile.lock parse is interpreter-independent across
+      ruby 2.5 to 4.
+
+  # ---------------------------------------------------------------- Group B
+
+  # Runtime: the same vendored lockfile-only rows under the deno and bun
+
+  # images and the default all-in-one. The ledger must record on every
+
+  # runtime and the verdict must not crash or nag.
+  - id: default-pnpm
+    group: B
+    image: ghcr.io/cdxgen/cdxgen:v13
+    project: repo://pnpm-smoke
+    type: js
+    expect:
+      tier: lockfile
+      remediations: []
+      minComponents: 1
+    note: measured 2026-08-31 — lockfile (100) at-ceiling, 0 remediations,
+      4 components.
+
+  - id: default-poetry
+    group: B
+    image: ghcr.io/cdxgen/cdxgen:v13
+    project: repo://poetry-smoke
+    type: python
+    expect:
+      tier: lockfile
+      remediations: []
+      minComponents: 1
+    note: measured 2026-08-31 — lockfile (100) at-ceiling, 0 remediations,
+      80 components.
+
+  - id: default-cargo
+    group: B
+    image: ghcr.io/cdxgen/cdxgen:v13
+    project: repo://cargo-smoke
+    type: rust
+    expect:
+      tier: lockfile
+      remediations: []
+      minComponents: 1
+    note: measured 2026-08-31 — lockfile (100) at-ceiling, 0 remediations,
+      225 components.
+
+  # deno.json sets nodeModulesDir "auto", so deno materialises node_modules
+
+  # next to the script it runs — inside the read-only branch mount, which
+
+  # fails with "Read-only file system" before cdxgen starts. Resolving from
+
+  # the container's own deno cache instead keeps the mount read-only.
+  - id: deno-pnpm
+    group: B
+    image: ghcr.io/cdxgen/cdxgen-deno:v13
+    runtime: deno
+    runtimeArgs:
+      - --node-modules-dir=none
+    project: repo://pnpm-smoke
+    type: js
+    expect:
+      tier: lockfile
+      remediations: []
+      minComponents: 1
+      ledgerComplete: true
+    note: measured 2026-08-31 — lockfile (100) at-ceiling, 0 remediations,
+      4 components; the permission model denied no probe this scan needed.
+
+  - id: bun-pnpm
+    group: B
+    image: ghcr.io/cdxgen/cdxgen-bun:v13
+    runtime: bun
+    project: repo://pnpm-smoke
+    type: js
+    expect:
+      tier: lockfile
+      remediations: []
+      minComponents: 1
+    note: measured 2026-08-31 — lockfile (100) at-ceiling, 0 remediations,
+      4 components.
+
+  # ---------------------------------------------------------------- Group D
+
+  # Secure mode. The secure image ships NODE_OPTIONS with --permission and
+
+  # fs grants scoped to /app, so its cells mount the branch, the project and
+
+  # the output under /app. The first cell runs the shipped policy as-is.
+
+  # The second restricts the command policy the way D03/D06 classify: a
+
+  # denied spawn must read as "secure mode restricted this", never as an
+
+  # unblocked remediation telling an agent to install Maven. No
+
+  # --no-fail-on-error is needed: since the deferred fail-on-error exit, the
+
+  # secure-mode default still produces the BOM and both reports (exiting 5)
+
+  # instead of aborting before any output.
+  - id: secure-maven-shipped
+    group: D
+    image: ghcr.io/cdxgen/cdxgen-secure:v13
+    mountPrefix: /app
+    project: repo://maven-smoke
+    type: java
+    expect:
+      tier: resolved
+      remediations: []
+      minComponents: 1
+      ledgerComplete: true
+    note: measured 2026-08-30 in-container — resolved (100), 0 remediations,
+      8 components, so the shipped grants let maven resolve. This cell needs no
+      --no-fail-on-error; the policy cell below does.
+
+  - id: secure-maven-policy
+    group: D
+    image: ghcr.io/cdxgen/cdxgen:v13
+    project: repo://maven-smoke
+    type: java
+    env:
+      CDXGEN_SECURE_MODE: "true"
+      CDXGEN_ALLOWED_COMMANDS: "git,node,npm,python3,find"
+    expect:
+      tier: absent
+      blockedRemediations:
+        - jvm.maven.manifest-fallback
+      remediationsBlocked: all
+      ledgerComplete: true
+    note: measured 2026-08-31 in-container — exit 5 (deferred fail-on-error),
+      reports written, java graded absent, and the maven repair ranked with
+      every action blocked by the command-execution policy, so a denied maven
+      reads as "the policy stopped this" and never as an unblocked
+      install-Maven instruction.
+
+  - id: secure-maven-policy-nofee
+    group: D
+    image: ghcr.io/cdxgen/cdxgen:v13
+    project: repo://maven-smoke
+    type: java
+    env:
+      CDXGEN_SECURE_MODE: "true"
+      CDXGEN_ALLOWED_COMMANDS: "git,node,npm,python3,find"
+    extraArgs:
+      - --no-fail-on-error
+    expect:
+      tier: manifest
+      blockedRemediations:
+        - jvm.maven.manifest-fallback
+      minComponents: 1
+    note: measured 2026-08-30 in-container — manifest (45) with
+      jvm.maven.manifest-fallback and BF-GEN-001 ranked, the maven entry
+      blocked by the command-execution policy. This shape needs
+      --no-fail-on-error because fail-on-error forbids the pom fallback the
+      manifest tier is made of; the cell above holds the shipped posture.

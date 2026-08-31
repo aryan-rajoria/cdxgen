@@ -1,0 +1,9 @@
+Package: introspectUnsupportedMarkers
+Type: Package
+Title: Minimal R fixture for the build-introspection unsupported row
+Version: 1.0.0
+Description: Minimal R package description used to detect the R ecosystem marker in build introspection coverage-gap tests.
+Imports:
+    jsonlite (>= 1.8.0),
+    httr (>= 1.4.0)
+License: MIT

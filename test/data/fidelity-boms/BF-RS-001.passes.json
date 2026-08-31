@@ -1,0 +1,258 @@
+{
+  "bomFormat": "CycloneDX",
+  "specVersion": "1.5",
+  "serialNumber": "urn:uuid:00000000-0000-0000-0000-000000000001",
+  "version": 1,
+  "metadata": {
+    "lifecycles": [
+      {
+        "phase": "pre-build"
+      }
+    ],
+    "component": {
+      "type": "application",
+      "bom-ref": "root",
+      "name": "fixture-app",
+      "version": "1.0.0",
+      "purl": "pkg:cargo/fixture-app@1.0.0"
+    }
+  },
+  "components": [
+    {
+      "type": "library",
+      "bom-ref": "pkg:cargo/cargo-pkg-0@1.0.0",
+      "name": "cargo-pkg-0",
+      "version": "1.0.0",
+      "purl": "pkg:cargo/cargo-pkg-0@1.0.0",
+      "hashes": [
+        {
+          "alg": "SHA-256",
+          "content": "Zm9vYmFyYmF6cXV1eGZvb2JhcmJhemF1dWZvb2JhcmJhei41"
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "bom-ref": "pkg:cargo/cargo-pkg-1@1.1.0",
+      "name": "cargo-pkg-1",
+      "version": "1.1.0",
+      "purl": "pkg:cargo/cargo-pkg-1@1.1.0",
+      "hashes": [
+        {
+          "alg": "SHA-256",
+          "content": "Zm9vYmFyYmF6cXV1eGZvb2JhcmJhemF1dWZvb2JhcmJhei41"
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "bom-ref": "pkg:cargo/cargo-pkg-2@1.2.0",
+      "name": "cargo-pkg-2",
+      "version": "1.2.0",
+      "purl": "pkg:cargo/cargo-pkg-2@1.2.0",
+      "hashes": [
+        {
+          "alg": "SHA-256",
+          "content": "Zm9vYmFyYmF6cXV1eGZvb2JhcmJhemF1dWZvb2JhcmJhei41"
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "bom-ref": "pkg:cargo/cargo-pkg-3@1.3.0",
+      "name": "cargo-pkg-3",
+      "version": "1.3.0",
+      "purl": "pkg:cargo/cargo-pkg-3@1.3.0",
+      "hashes": [
+        {
+          "alg": "SHA-256",
+          "content": "Zm9vYmFyYmF6cXV1eGZvb2JhcmJhemF1dWZvb2JhcmJhei41"
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "bom-ref": "pkg:cargo/cargo-pkg-4@1.4.0",
+      "name": "cargo-pkg-4",
+      "version": "1.4.0",
+      "purl": "pkg:cargo/cargo-pkg-4@1.4.0",
+      "hashes": [
+        {
+          "alg": "SHA-256",
+          "content": "Zm9vYmFyYmF6cXV1eGZvb2JhcmJhemF1dWZvb2JhcmJhei41"
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "bom-ref": "pkg:cargo/cargo-pkg-5@1.5.0",
+      "name": "cargo-pkg-5",
+      "version": "1.5.0",
+      "purl": "pkg:cargo/cargo-pkg-5@1.5.0",
+      "hashes": [
+        {
+          "alg": "SHA-256",
+          "content": "Zm9vYmFyYmF6cXV1eGZvb2JhcmJhemF1dWZvb2JhcmJhei41"
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "bom-ref": "pkg:cargo/cargo-pkg-6@1.6.0",
+      "name": "cargo-pkg-6",
+      "version": "1.6.0",
+      "purl": "pkg:cargo/cargo-pkg-6@1.6.0",
+      "hashes": [
+        {
+          "alg": "SHA-256",
+          "content": "Zm9vYmFyYmF6cXV1eGZvb2JhcmJhemF1dWZvb2JhcmJhei41"
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "bom-ref": "pkg:cargo/cargo-pkg-7@1.7.0",
+      "name": "cargo-pkg-7",
+      "version": "1.7.0",
+      "purl": "pkg:cargo/cargo-pkg-7@1.7.0",
+      "hashes": [
+        {
+          "alg": "SHA-256",
+          "content": "Zm9vYmFyYmF6cXV1eGZvb2JhcmJhemF1dWZvb2JhcmJhei41"
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "bom-ref": "pkg:cargo/cargo-pkg-8@1.8.0",
+      "name": "cargo-pkg-8",
+      "version": "1.8.0",
+      "purl": "pkg:cargo/cargo-pkg-8@1.8.0",
+      "hashes": [
+        {
+          "alg": "SHA-256",
+          "content": "Zm9vYmFyYmF6cXV1eGZvb2JhcmJhemF1dWZvb2JhcmJhei41"
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "bom-ref": "pkg:cargo/cargo-pkg-9@1.9.0",
+      "name": "cargo-pkg-9",
+      "version": "1.9.0",
+      "purl": "pkg:cargo/cargo-pkg-9@1.9.0",
+      "hashes": [
+        {
+          "alg": "SHA-256",
+          "content": "Zm9vYmFyYmF6cXV1eGZvb2JhcmJhemF1dWZvb2JhcmJhei41"
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "bom-ref": "pkg:cargo/cargo-pkg-10@1.10.0",
+      "name": "cargo-pkg-10",
+      "version": "1.10.0",
+      "purl": "pkg:cargo/cargo-pkg-10@1.10.0",
+      "hashes": [
+        {
+          "alg": "SHA-256",
+          "content": "Zm9vYmFyYmF6cXV1eGZvb2JhcmJhemF1dWZvb2JhcmJhei41"
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "bom-ref": "pkg:cargo/cargo-pkg-11@1.11.0",
+      "name": "cargo-pkg-11",
+      "version": "1.11.0",
+      "purl": "pkg:cargo/cargo-pkg-11@1.11.0",
+      "hashes": [
+        {
+          "alg": "SHA-256",
+          "content": "Zm9vYmFyYmF6cXV1eGZvb2JhcmJhemF1dWZvb2JhcmJhei41"
+        }
+      ]
+    }
+  ],
+  "dependencies": [
+    {
+      "ref": "root",
+      "dependsOn": [
+        "pkg:cargo/cargo-pkg-0@1.0.0",
+        "pkg:cargo/cargo-pkg-1@1.1.0",
+        "pkg:cargo/cargo-pkg-2@1.2.0",
+        "pkg:cargo/cargo-pkg-3@1.3.0",
+        "pkg:cargo/cargo-pkg-4@1.4.0",
+        "pkg:cargo/cargo-pkg-5@1.5.0",
+        "pkg:cargo/cargo-pkg-6@1.6.0",
+        "pkg:cargo/cargo-pkg-7@1.7.0",
+        "pkg:cargo/cargo-pkg-8@1.8.0",
+        "pkg:cargo/cargo-pkg-9@1.9.0",
+        "pkg:cargo/cargo-pkg-10@1.10.0",
+        "pkg:cargo/cargo-pkg-11@1.11.0"
+      ]
+    },
+    {
+      "ref": "pkg:cargo/cargo-pkg-0@1.0.0",
+      "dependsOn": [
+        "pkg:cargo/cargo-pkg-1@1.1.0",
+        "pkg:cargo/cargo-pkg-2@1.2.0"
+      ]
+    },
+    {
+      "ref": "pkg:cargo/cargo-pkg-3@1.3.0",
+      "dependsOn": [
+        "pkg:cargo/cargo-pkg-4@1.4.0"
+      ]
+    },
+    {
+      "ref": "pkg:cargo/cargo-pkg-0@1.0.0",
+      "dependsOn": []
+    },
+    {
+      "ref": "pkg:cargo/cargo-pkg-1@1.1.0",
+      "dependsOn": []
+    },
+    {
+      "ref": "pkg:cargo/cargo-pkg-2@1.2.0",
+      "dependsOn": []
+    },
+    {
+      "ref": "pkg:cargo/cargo-pkg-3@1.3.0",
+      "dependsOn": []
+    },
+    {
+      "ref": "pkg:cargo/cargo-pkg-4@1.4.0",
+      "dependsOn": []
+    },
+    {
+      "ref": "pkg:cargo/cargo-pkg-5@1.5.0",
+      "dependsOn": []
+    },
+    {
+      "ref": "pkg:cargo/cargo-pkg-6@1.6.0",
+      "dependsOn": []
+    },
+    {
+      "ref": "pkg:cargo/cargo-pkg-7@1.7.0",
+      "dependsOn": []
+    },
+    {
+      "ref": "pkg:cargo/cargo-pkg-8@1.8.0",
+      "dependsOn": []
+    },
+    {
+      "ref": "pkg:cargo/cargo-pkg-9@1.9.0",
+      "dependsOn": []
+    },
+    {
+      "ref": "pkg:cargo/cargo-pkg-10@1.10.0",
+      "dependsOn": []
+    },
+    {
+      "ref": "pkg:cargo/cargo-pkg-11@1.11.0",
+      "dependsOn": []
+    }
+  ]
+}

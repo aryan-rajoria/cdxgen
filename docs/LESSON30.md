@@ -115,6 +115,9 @@ nothing. The ones you will reach for in a monorepo:
 - `operational`: adds the `os` project type plus BOM audit
 - `threat-modeling`: `--deep`, evidence, BOM audit
 - `license-compliance`: license fetching on (`FETCH_LICENSE=true`)
+- `introspect`: build introspection with annotations, formulation, and
+  evidence; never `--install-deps` or `--deep`, because introspection measures
+  the environment the user actually has
 
 ```shell
 cdxgen -r -t python . --profile research -o bom.json

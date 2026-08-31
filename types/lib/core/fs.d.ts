@@ -17,6 +17,18 @@ export declare function safeExistsSync(filePath: string): any;
  */
 export declare function safeWriteSync(filePath: string, data: string | Buffer, options?: Object): void;
 /**
+ * Permission-aware wrapper around readFileSync that returns undefined instead
+ * of throwing. Reads are allowed in dry-run mode, so unlike the write wrappers
+ * this only guards secure-mode read permission; the read itself is not recorded
+ * in the activity ledger because inspection of classified paths is already
+ * recorded by safeExistsSync and a read has no side effect to audit.
+ *
+ * @param {string} filePath File path to read.
+ * @param {Object|string} [options] readFileSync options; defaults to UTF-8 text.
+ * @returns {string|Buffer|undefined} File content, or undefined when the path cannot be read.
+ */
+export declare function safeReadFileSync(filePath: string, options?: Object | string): string | Buffer | undefined;
+/**
  * Safely create a directory without crashing due to a lack of permissions
  *
  * @param {String} filePath File path

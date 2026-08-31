@@ -1,0 +1,50 @@
+{
+  "runId": "00000000-0000-4000-8000-000000000001",
+  "inputsFingerprint": "f000000000000000000000000000000000000000000000000000000000000000",
+  "generatedAt": "2026-08-30T00:00:00.000Z",
+  "cdxgenVersion": "13.0.0",
+  "runtime": {
+    "name": "Node.js",
+    "version": "22.0.0"
+  },
+  "ledgerSource": "sidecar",
+  "ledgerComplete": true,
+  "ledgerEventCount": 2,
+  "projectPath": "",
+  "projectTypes": [
+    "go"
+  ],
+  "ecosystems": [
+    {
+      "ecosystem": "go",
+      "state": "at-ceiling",
+      "tier": "resolved",
+      "ceilingTier": "resolved",
+      "tierReasons": [
+        {
+          "source": "bom",
+          "id": "no-demoting-signal",
+          "detail": "No fidelity finding fired and no corroborated degradation was recorded for this ecosystem.",
+          "determining": true
+        }
+      ],
+      "componentCount": 3,
+      "dependencyEdgeCount": 2,
+      "markersOnDisk": [],
+      "toolsExpected": [],
+      "toolsResolved": [
+        {
+          "tool": "go",
+          "found": "1.23.0",
+          "source": "PATH"
+        }
+      ],
+      "toolsMissing": [],
+      "toolsMismatched": [],
+      "degradations": [],
+      "findings": []
+    }
+  ],
+  "globalFindings": [],
+  "observations": []
+}

@@ -5,6 +5,7 @@ on:
     paths:
       - '.github/workflows/repotests.yml'
       - 'ci/assertions.sh'
+      - 'ci/introspection-tests.sh'
       - '.nvmrc'
       - '.pnpmfile.cjs'
       - 'bin/**'
@@ -14,6 +15,7 @@ on:
       - 'package.json'
       - 'pnpm-lock.yaml'
       - 'test/data/atom-exclude-repotest/**'
+      - 'test/data/introspection-polyglot/**'
       - 'test/data/angular-cli-scripts-repotest/**'
       - 'test/data/angular-css-config-repotest/**'
       - 'test/data/angular-template-repotest/**'
@@ -32,6 +34,7 @@ on:
       - 'test/data/npm-hidden-lockfile-repotest/**'
       - 'test/data/pixi-workspace-repotest/**'
       - 'test/data/type-only-repotest/**'
+      - 'test/repotests/introspect-*/**'
       - '!**.poku.js'
   # Release branches run the full suite unconditionally — no path filter. The
   # v13 purl work showed that failures surface from data files and generated
@@ -229,6 +232,7 @@ jobs:
             "./bin",
             "./lib/audit",
             "./lib/managers",
+            "./lib/stages",
           ]);
           const inventory = {};
           for (const target of targets) {
@@ -256,7 +260,8 @@ jobs:
           jq -e '([.["./lib/helpers"][], .["./bin"][], .["./lib/audit"][], .["./lib/managers"][]]) | all(.[]?; .type != "cryptographic-asset" or ((.cryptoProperties.assetType // "") != "algorithm") or (all((.evidence.occurrences // [])[]?; .location != null and (.line? == null or (.line | type == "number")) and (.offset? == null))))' bomresults/bom-cdxgen-self-source-cbom.json
           jq -e '([.["./lib/helpers"][], .["./bin"][], .["./lib/audit"][], .["./lib/managers"][]]) | all(.[]?; .type != "cryptographic-asset" or ((.cryptoProperties.assetType // "") != "algorithm") or ((((.evidence.identity // []) | length) > 0) and (((.evidence.occurrences // []) | length) > 0)))' bomresults/bom-cdxgen-self-source-cbom.json
           jq -e '((.["./bin"] | length) > 0) and ((.["./lib/audit"] | length) > 0) and ((.["./lib/managers"] | length) > 0)' bomresults/bom-cdxgen-self-source-cbom.json
-          jq -e '((.["./lib/stages"] | length) == 0) and ((.["./lib/server"] | length) == 0) and ((.["./lib/evinser"] | length) == 0) and ((.["./lib/parsers"] | length) == 0)' bomresults/bom-cdxgen-self-source-cbom.json
+          jq -e '((.["./lib/server"] | length) == 0) and ((.["./lib/evinser"] | length) == 0) and ((.["./lib/parsers"] | length) == 0)' bomresults/bom-cdxgen-self-source-cbom.json
+          jq -e 'any(.["./lib/stages"][]; .type == "cryptographic-asset" and .name == "sha-256" and .cryptoProperties.assetType == "algorithm")' bomresults/bom-cdxgen-self-source-cbom.json
         shell: bash
       - name: repotests cache-disable fixture
         run: |
@@ -2275,3 +2280,67 @@ jobs:
           CDXGEN_TEMP_DIR: ${{ runner.temp }}/cdxgen-repotests
           CDXGEN_TRACE_ID: foo
           CDXGEN_DEBUG_MODE: debug
+
+  introspection:
+    # The build-introspection vendored fixture matrix: healthy rows must stay
+    # silent, ceiling and unsupported rows must be reported without noise, and
+    # the two vendored transition rows must repair through the actions their
+    # own reports emitted. Group B and C need only manifests and lockfiles;
+    # the maven transition needs java and maven, which the hosted runners
+    # provide.
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, macos-latest, windows-latest]
+    runs-on: ${{ matrix.os }}
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1  # v7.0.1
+        with:
+          persist-credentials: false
+      - name: Setup java
+        uses: actions/setup-java@dd06d9cba3e5552c54d9f8ea23572deb30010f7c  # v6.0.0
+        with:
+          distribution: temurin
+          java-version: 21
+      - name: Setup pnpm
+        uses: pnpm/action-setup@0977fd99725f1db4007ccb2928dbb4e90d06cc86  # v6.0.10
+      - name: Use Node.js
+        uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020  # v7.0.0
+        with:
+          node-version-file: .nvmrc
+          package-manager-cache: false
+      - uses: denoland/setup-deno@22d081ff2d3a40755e97629de92e3bcbfa7cf2ed  # v2.0.5
+        if: matrix.os == 'ubuntu-latest'
+        with:
+          deno-version: 2.9.4
+      - uses: oven-sh/setup-bun@0c5077e51419868618aeaa5fe8019c62421857d6 # v2.2.0
+        if: matrix.os == 'ubuntu-latest'
+        with:
+          bun-version: 1.3.14
+      - name: pnpm install
+        run: pnpm install:frozen
+      - name: Vendored introspection matrix
+        run: bash ci/introspection-tests.sh
+        shell: bash
+        env:
+          CDXGEN_TEMP_DIR: ${{ runner.temp }}/cdxgen-introspection
+      - name: Cross-runtime gate (deno and bun)
+        if: matrix.os == 'ubuntu-latest'
+        run: |
+          bash ci/introspection-tests.sh --with-runtimes
+        shell: bash
+        env:
+          CDXGEN_TEMP_DIR: ${{ runner.temp }}/cdxgen-introspection
+      - name: Checkout the public repo row
+        if: matrix.os == 'ubuntu-latest'
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1  # v7.0.1
+        with:
+          persist-credentials: false
+          repository: 'hoolicorp/java-sec-code'
+          path: 'repotests/java-sec-code'
+      - name: Public repo passes the fidelity gate
+        if: matrix.os == 'ubuntu-latest'
+        run: |
+          mkdir -p bomresults
+          node bin/cdxgen.js --profile introspect --introspect-fail-below 70 -t java --no-install-deps -o bomresults/introspection-java-sec-code.json repotests/java-sec-code
+        shell: bash

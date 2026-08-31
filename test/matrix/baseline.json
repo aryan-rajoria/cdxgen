@@ -1,0 +1,202 @@
+{
+  "cells": {
+    "dotnet8-eshop": {
+      "tier": "resolved",
+      "remediationIds": [],
+      "componentCount": 304,
+      "score": 100
+    },
+    "golang123-ipsw": {
+      "tier": "manifest",
+      "remediationIds": [
+        "BF-GEN-001"
+      ],
+      "componentCount": 258,
+      "score": 55
+    },
+    "golang126-ipsw": {
+      "tier": "resolved",
+      "remediationIds": [],
+      "componentCount": 204,
+      "score": 100
+    },
+    "node24-npmsmoke": {
+      "tier": "lockfile",
+      "remediationIds": [],
+      "componentCount": 4,
+      "score": 100
+    },
+    "python36-poetry": {
+      "tier": "lockfile",
+      "remediationIds": [],
+      "componentCount": 149,
+      "score": 100
+    },
+    "secure-maven-policy": {
+      "tier": "absent",
+      "remediationIds": [
+        "jvm.maven.manifest-fallback"
+      ],
+      "componentCount": 0,
+      "score": 0
+    },
+    "secure-maven-shipped": {
+      "tier": "resolved",
+      "remediationIds": [],
+      "componentCount": 8,
+      "score": 100
+    },
+    "dotnet10-eshop": {
+      "tier": "resolved",
+      "remediationIds": [],
+      "componentCount": 304,
+      "score": 100
+    },
+    "golang-ipsw": {
+      "tier": "resolved",
+      "remediationIds": [],
+      "componentCount": 204,
+      "score": 100
+    },
+    "python-poetry": {
+      "tier": "lockfile",
+      "remediationIds": [],
+      "componentCount": 248,
+      "score": 100
+    },
+    "rust-binwalk": {
+      "tier": "lockfile",
+      "remediationIds": [],
+      "componentCount": 228,
+      "score": 100
+    },
+    "dotnet9-eshop": {
+      "tier": "resolved",
+      "remediationIds": [],
+      "componentCount": 304,
+      "score": 100
+    },
+    "java21-javaseccode": {
+      "tier": "resolved",
+      "remediationIds": [],
+      "componentCount": 204,
+      "score": 100
+    },
+    "java24-javaseccode": {
+      "tier": "resolved",
+      "remediationIds": [],
+      "componentCount": 204,
+      "score": 100
+    },
+    "java26-javaseccode": {
+      "tier": "resolved",
+      "remediationIds": [],
+      "componentCount": 204,
+      "score": 100
+    },
+    "java8-javaseccode": {
+      "tier": "resolved",
+      "remediationIds": [],
+      "componentCount": 204,
+      "score": 100
+    },
+    "node26-npmsmoke": {
+      "tier": "lockfile",
+      "remediationIds": [],
+      "componentCount": 4,
+      "score": 100
+    },
+    "python311-poetry": {
+      "tier": "lockfile",
+      "remediationIds": [],
+      "componentCount": 249,
+      "score": 100
+    },
+    "python313-poetry": {
+      "tier": "lockfile",
+      "remediationIds": [],
+      "componentCount": 245,
+      "score": 100
+    },
+    "ruby25-rubysmoke": {
+      "tier": "resolved",
+      "remediationIds": [],
+      "componentCount": 94,
+      "score": 100
+    },
+    "ruby33-rubysmoke": {
+      "tier": "resolved",
+      "remediationIds": [],
+      "componentCount": 94,
+      "score": 100
+    },
+    "ruby4-rubysmoke": {
+      "tier": "resolved",
+      "remediationIds": [],
+      "componentCount": 94,
+      "score": 100
+    },
+    "bun-pnpm": {
+      "tier": "lockfile",
+      "remediationIds": [],
+      "componentCount": 4,
+      "score": 100
+    },
+    "default-cargo": {
+      "tier": "lockfile",
+      "remediationIds": [],
+      "componentCount": 225,
+      "score": 100
+    },
+    "default-pnpm": {
+      "tier": "lockfile",
+      "remediationIds": [],
+      "componentCount": 4,
+      "score": 100
+    },
+    "default-poetry": {
+      "tier": "lockfile",
+      "remediationIds": [],
+      "componentCount": 80,
+      "score": 100
+    },
+    "deno-pnpm": {
+      "tier": "lockfile",
+      "remediationIds": [],
+      "componentCount": 4,
+      "score": 100
+    },
+    "java24-gradlefixture": {
+      "tier": "resolved",
+      "remediationIds": [],
+      "componentCount": 1,
+      "score": 100
+    },
+    "java26-gradlefixture": {
+      "tier": "absent",
+      "remediationIds": [
+        "jvm.gradle.invocation-failed",
+        "jvm.gradle.unresolved-config"
+      ],
+      "componentCount": 0,
+      "score": 0
+    },
+    "java8-gradlefixture": {
+      "tier": "resolved",
+      "remediationIds": [],
+      "componentCount": 1,
+      "score": 100
+    },
+    "secure-maven-policy-nofee": {
+      "tier": "manifest",
+      "remediationIds": [
+        "BF-GEN-001",
+        "jvm.maven.manifest-fallback"
+      ],
+      "componentCount": 2,
+      "score": 45
+    }
+  },
+  "updated": "2026-08-31T06:18:07.779Z",
+  "sourceRun": "d12-review"
+}

@@ -1,0 +1,10 @@
+apiVersion: v2
+name: introspect-helm-ceiling
+description: Minimal chart fixture for the build-introspection at-ceiling row. Helm charts carry pinned dependencies with no resolver to run, so the ecosystem grades manifest (at-ceiling) whatever the environment looks like.
+version: 1.0.0
+appVersion: "1.0"
+dependencies:
+  - name: common
+    version: 2.x.x
+    repository: https://charts.example.com
+    condition: common.enabled

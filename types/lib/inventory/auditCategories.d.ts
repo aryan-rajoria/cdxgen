@@ -6,6 +6,14 @@ export declare const CBOM_AUDIT_CATEGORIES: readonly string[];
 export declare const HOST_TOPOLOGY_AUDIT_CATEGORIES: readonly string[];
 /** Frozen list of Golem (Go Evinse) audit categories. */
 export declare const GOLEM_AUDIT_CATEGORIES: readonly string[];
+/**
+ * Frozen list of audit categories that never activate on their own. These
+ * rule packs serve a specific feature (`--introspect` for build-fidelity) and
+ * stay inactive unless the caller explicitly requests the category, so a
+ * default `--bom-audit` run - which evaluates every loaded rule - cannot pick
+ * them up.
+ */
+export declare const OPT_IN_BOM_AUDIT_CATEGORIES: readonly string[];
 /** Frozen list of AI-bill-of-materials audit categories. */
 export declare const AI_BOM_AUDIT_CATEGORIES: readonly string[];
 /** Comma-separated default HBOM category string used when none is specified. */
