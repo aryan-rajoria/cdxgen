@@ -1,0 +1,142 @@
+{
+  "runId": "00000000-0000-4000-8000-000000000002",
+  "inputsFingerprint": "a1b2c3d4e5f60718293a4b5c6d7e8f90a1b2c3d4e5f60718293a4b5c6d7e8f90",
+  "generatedAt": "2026-08-30T00:00:00.000Z",
+  "cdxgenVersion": "13.0.0",
+  "runtime": {
+    "name": "Node.js",
+    "version": "22.0.0"
+  },
+  "ledgerSource": "sidecar",
+  "ledgerComplete": true,
+  "ledgerEventCount": 5,
+  "projectPath": "",
+  "projectTypes": [
+    "java"
+  ],
+  "ecosystems": [
+    {
+      "ecosystem": "java",
+      "state": "graded",
+      "tier": "manifest",
+      "ceilingTier": "resolved",
+      "tierReasons": [
+        {
+          "source": "rule",
+          "id": "BF-GEN-001",
+          "detail": "Only 0 of 3 components appear in the dependency graph (100% uncovered); the BOM reads like a flat list of declarations",
+          "determining": true
+        },
+        {
+          "source": "rule",
+          "id": "BF-JVM-001",
+          "detail": "3 pkg:maven components were captured with no dependency graph, so only declared dependencies are present",
+          "determining": true
+        },
+        {
+          "source": "ledger",
+          "id": "jvm.maven.manifest-fallback",
+          "detail": "Maven build failed; the dependency tree fell back to the pom.xml declarations.",
+          "determining": true
+        }
+      ],
+      "componentCount": 3,
+      "dependencyEdgeCount": 0,
+      "markersOnDisk": [],
+      "toolsExpected": [
+        {
+          "tool": "java",
+          "wanted": "21",
+          "source": "wrapper"
+        },
+        {
+          "tool": "maven",
+          "wanted": "3.9.9",
+          "source": "wrapper"
+        }
+      ],
+      "toolsResolved": [
+        {
+          "tool": "java",
+          "found": "21.0.7-tem",
+          "source": "PATH"
+        },
+        {
+          "tool": "maven",
+          "found": "3.9.9",
+          "source": "PATH"
+        }
+      ],
+      "toolsMissing": [],
+      "toolsMismatched": [],
+      "degradations": [
+        {
+          "remediationId": "jvm.maven.manifest-fallback",
+          "impact": "transitive-deps",
+          "detail": "Maven build failed; the dependency tree fell back to the pom.xml declarations."
+        }
+      ],
+      "findings": [
+        {
+          "attack": {
+            "tactics": [],
+            "techniques": []
+          },
+          "attackTactics": [],
+          "attackTechniques": [],
+          "ruleId": "BF-GEN-001",
+          "name": "Dependency graph covers less than half of the components",
+          "description": "More than 50% of the components with a bom-ref appear nowhere in dependencies[] - neither as a graph node nor as a dependsOn target - which means the resolver or lockfile that would have connected them did not run.",
+          "severity": "high",
+          "category": "build-fidelity",
+          "message": "Only 0 of 3 components appear in the dependency graph (100% uncovered); the BOM reads like a flat list of declarations",
+          "mitigation": "Run the ecosystem resolver before generating the BOM (or let cdxgen --install-deps drive it) so transitive edges are captured, then re-scan",
+          "location": {
+            "componentCount": 3,
+            "dependencyCount": 0
+          },
+          "evidence": {
+            "total": 3,
+            "covered": 0,
+            "uncovered": 3,
+            "uncoveredPercent": 100
+          },
+          "_match": {
+            "total": 3,
+            "covered": 0,
+            "uncovered": 3,
+            "uncoveredPercent": 100
+          },
+          "tierSignal": "manifest"
+        },
+        {
+          "attack": {
+            "tactics": [],
+            "techniques": []
+          },
+          "attackTactics": [],
+          "attackTechniques": [],
+          "ruleId": "BF-JVM-001",
+          "name": "Maven components with no dependency entries",
+          "description": "pkg:maven components exist but no dependency graph node references any of them, which is the pom.xml fallback shape: only declared dependencies were captured and the resolver never ran.",
+          "severity": "high",
+          "category": "build-fidelity",
+          "message": "3 pkg:maven components were captured with no dependency graph, so only declared dependencies are present",
+          "mitigation": "Build the project with `mvn package -Dmaven.test.skip=true` (or `gradle build`) using the correct JDK before invoking cdxgen so the dependency tree is resolved",
+          "location": {
+            "mavenComponentCount": 3
+          },
+          "evidence": {
+            "mavenComponentCount": 3
+          },
+          "_match": {
+            "mavenComponentCount": 3
+          },
+          "tierSignal": "manifest"
+        }
+      ]
+    }
+  ],
+  "globalFindings": [],
+  "observations": []
+}

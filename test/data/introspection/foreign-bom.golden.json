@@ -1,0 +1,79 @@
+{
+  "schemaVersion": "1.0",
+  "runId": "00000000-0000-4000-8000-000000000003",
+  "inputsFingerprint": "sha256:0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef",
+  "generatedAt": "2026-08-30T00:00:00.000Z",
+  "cdxgen": {
+    "version": "13.0.0",
+    "runtime": {
+      "name": "Node.js",
+      "version": "22.0.0"
+    }
+  },
+  "bom": {
+    "path": "bom.json"
+  },
+  "ledger": {
+    "source": "none",
+    "complete": true,
+    "eventCount": 0,
+    "truncated": false
+  },
+  "overall": {
+    "score": 55,
+    "tier": "manifest",
+    "confidence": "low"
+  },
+  "ecosystems": [
+    {
+      "ecosystem": "dart",
+      "state": "graded",
+      "tier": "manifest",
+      "ceilingTier": "resolved",
+      "score": 55,
+      "confidence": "low",
+      "componentCount": 344,
+      "dependencyEdgeCount": 103,
+      "tierReasons": [
+        {
+          "source": "rule",
+          "id": "BF-GEN-001",
+          "detail": "Only 104 of 344 components appear in the dependency graph (69.8% uncovered); the BOM reads like a flat list of declarations",
+          "determining": true
+        }
+      ],
+      "tools": {
+        "expected": [],
+        "resolved": [],
+        "missing": [],
+        "mismatched": []
+      }
+    }
+  ],
+  "coverageGaps": [],
+  "remediation": [
+    {
+      "remediationId": "BF-GEN-001",
+      "source": "rule",
+      "ecosystem": "dart",
+      "confidence": "low",
+      "severity": "high",
+      "summary": "Only 104 of 344 components appear in the dependency graph (69.8% uncovered); the BOM reads like a flat list of declarations",
+      "guidance": "Run the ecosystem resolver before generating the BOM (or let cdxgen --install-deps drive it) so transitive edges are captured, then re-scan",
+      "targetTier": "lockfile",
+      "currentScore": 55,
+      "projectedScore": 85,
+      "expectedGain": 30,
+      "evidenceCount": 1,
+      "actions": [],
+      "verify": {
+        "rules": [
+          "BF-GEN-001"
+        ],
+        "expectTier": "lockfile"
+      },
+      "blocked": false
+    }
+  ],
+  "observations": []
+}

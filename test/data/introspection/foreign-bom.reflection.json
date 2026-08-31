@@ -1,0 +1,77 @@
+{
+  "runId": "00000000-0000-4000-8000-000000000003",
+  "inputsFingerprint": "0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef",
+  "generatedAt": "2026-08-30T00:00:00.000Z",
+  "cdxgenVersion": "13.0.0",
+  "runtime": {
+    "name": "Node.js",
+    "version": "22.0.0"
+  },
+  "ledgerSource": "none",
+  "ledgerComplete": true,
+  "ledgerEventCount": 0,
+  "projectPath": "",
+  "projectTypes": [
+    "dart"
+  ],
+  "ecosystems": [
+    {
+      "ecosystem": "dart",
+      "state": "graded",
+      "tier": "manifest",
+      "ceilingTier": "resolved",
+      "tierReasons": [
+        {
+          "source": "rule",
+          "id": "BF-GEN-001",
+          "detail": "Only 104 of 344 components appear in the dependency graph (69.8% uncovered); the BOM reads like a flat list of declarations",
+          "determining": true
+        }
+      ],
+      "componentCount": 344,
+      "dependencyEdgeCount": 103,
+      "markersOnDisk": [],
+      "toolsExpected": [],
+      "toolsResolved": [],
+      "toolsMissing": [],
+      "toolsMismatched": [],
+      "degradations": [],
+      "findings": [
+        {
+          "attack": {
+            "tactics": [],
+            "techniques": []
+          },
+          "attackTactics": [],
+          "attackTechniques": [],
+          "ruleId": "BF-GEN-001",
+          "name": "Dependency graph covers less than half of the components",
+          "description": "More than 50% of the components with a bom-ref appear nowhere in dependencies[] - neither as a graph node nor as a dependsOn target - which means the resolver or lockfile that would have connected them did not run.",
+          "severity": "high",
+          "category": "build-fidelity",
+          "message": "Only 104 of 344 components appear in the dependency graph (69.8% uncovered); the BOM reads like a flat list of declarations",
+          "mitigation": "Run the ecosystem resolver before generating the BOM (or let cdxgen --install-deps drive it) so transitive edges are captured, then re-scan",
+          "location": {
+            "componentCount": 344,
+            "dependencyCount": 0
+          },
+          "evidence": {
+            "total": 344,
+            "covered": 104,
+            "uncovered": 240,
+            "uncoveredPercent": 69.8
+          },
+          "_match": {
+            "total": 344,
+            "covered": 104,
+            "uncovered": 240,
+            "uncoveredPercent": 69.8
+          },
+          "tierSignal": "manifest"
+        }
+      ]
+    }
+  ],
+  "globalFindings": [],
+  "observations": []
+}

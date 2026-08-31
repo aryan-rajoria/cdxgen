@@ -44,27 +44,27 @@ cdxgen [path] [options]
 
 ## 🔑 Key Parameters & Profiles
 
-| Category       | Flag                      | Purpose                                                                                                                                                          |
-| -------------- | ------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| **Scope**      | `-t, --type <type>`       | Language/platform (auto-detected if omitted). Pass multiple: `-t java -t js`                                                                                     |
-|                | `-r, --recurse`           | Scan mono-repos (default: `true`). Use `--no-recurse` to disable                                                                                                 |
-|                | `--deep`                  | Enable deep parsing (C/C++, OS, OCI, live systems)                                                                                                               |
-| **Output**     | `-o, --output <file>`     | Destination path (default: `bom.json`)                                                                                                                           |
-|                | `-p, --print`             | Print human-readable table/tree to stdout                                                                                                                        |
-|                | `--dry-run`               | Read-only preview mode. Record reads plus blocked writes, commands, temp dirs, network, and submissions before any real execution                                |
-|                | `--activity-report <fmt>` | Hidden machine-readable dry-run/debug report: `json` or `jsonl`                                                                                                  |
-|                | `--spec-version <ver>`    | CycloneDX version: `1.4`, `1.5`, `1.6` (default), `1.7`                                                                                                          |
-| **Profiles**   | `--profile <name>`        | `generic` (default), `appsec`, `research`, `operational`, `threat-modeling`, `license-compliance`, `ml`/`machine-learning`, `ml-deep`/`deep-learning`, `ml-tiny` |
-| **Lifecycles** | `--lifecycle <phase>`     | `pre-build` (no installs), `build` (default), `post-build` (binaries/containers)                                                                                 |
-| **Filtering**  | `--required-only`         | Include only production/non-dev dependencies                                                                                                                     |
-|                | `--filter <purl>`         | Exclude components matching string in purl/properties                                                                                                            |
-|                | `--only <purl>`           | Include ONLY components matching string in purl                                                                                                                  |
-| **Advanced**   | `--evidence`              | Generate SaaSBOM with usage/callstack evidence                                                                                                                   |
-|                | `--include-crypto`        | Include CBOM-oriented cryptographic assets, certificates, and source-derived crypto algorithms                                                                   |
-|                | `--include-formulation`   | Add git metadata & build tool versions                                                                                                                           |
-|                | `--server`                | Start HTTP server on `127.0.0.1:9090`                                                                                                                            |
-|                | `--validate`              | Auto-validate BOM against JSON schema (default: `true`)                                                                                                          |
-|                | `--generate-key-and-sign` | Generate RSA keys & sign BOM with JWS                                                                                                                            |
+| Category       | Flag                      | Purpose                                                                                                                                                                        |
+| -------------- | ------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| **Scope**      | `-t, --type <type>`       | Language/platform (auto-detected if omitted). Pass multiple: `-t java -t js`                                                                                                   |
+|                | `-r, --recurse`           | Scan mono-repos (default: `true`). Use `--no-recurse` to disable                                                                                                               |
+|                | `--deep`                  | Enable deep parsing (C/C++, OS, OCI, live systems)                                                                                                                             |
+| **Output**     | `-o, --output <file>`     | Destination path (default: `bom.json`)                                                                                                                                         |
+|                | `-p, --print`             | Print human-readable table/tree to stdout                                                                                                                                      |
+|                | `--dry-run`               | Read-only preview mode. Record reads plus blocked writes, commands, temp dirs, network, and submissions before any real execution                                              |
+|                | `--activity-report <fmt>` | Hidden machine-readable dry-run/debug report: `json` or `jsonl`                                                                                                                |
+|                | `--spec-version <ver>`    | CycloneDX version: `1.4`, `1.5`, `1.6` (default), `1.7`                                                                                                                        |
+| **Profiles**   | `--profile <name>`        | `generic` (default), `appsec`, `research`, `operational`, `threat-modeling`, `license-compliance`, `ml`/`machine-learning`, `ml-deep`/`deep-learning`, `ml-tiny`, `introspect` |
+| **Lifecycles** | `--lifecycle <phase>`     | `pre-build` (no installs), `build` (default), `post-build` (binaries/containers)                                                                                               |
+| **Filtering**  | `--required-only`         | Include only production/non-dev dependencies                                                                                                                                   |
+|                | `--filter <purl>`         | Exclude components matching string in purl/properties                                                                                                                          |
+|                | `--only <purl>`           | Include ONLY components matching string in purl                                                                                                                                |
+| **Advanced**   | `--evidence`              | Generate SaaSBOM with usage/callstack evidence                                                                                                                                 |
+|                | `--include-crypto`        | Include CBOM-oriented cryptographic assets, certificates, and source-derived crypto algorithms                                                                                 |
+|                | `--include-formulation`   | Add git metadata & build tool versions                                                                                                                                         |
+|                | `--server`                | Start HTTP server on `127.0.0.1:9090`                                                                                                                                          |
+|                | `--validate`              | Auto-validate BOM against JSON schema (default: `true`)                                                                                                                        |
+|                | `--generate-key-and-sign` | Generate RSA keys & sign BOM with JWS                                                                                                                                          |
 
 ## 📖 Common Workflows
 
@@ -250,6 +250,10 @@ These indicators affect **which packages are audited first**, not the final seve
 3. Summarize the planned actions for the user.
 4. Ask for permission before rerunning without `--dry-run`.
 5. Only perform real execution after the user explicitly approves it.
+
+### Fidelity-loop workflow for agents
+
+When the goal is a more accurate SBOM rather than a first scan, follow the `sbom-fidelity-loop` skill at [`.agents/skills/sbom-fidelity-loop/SKILL.md`](.agents/skills/sbom-fidelity-loop/SKILL.md): scan with `--profile introspect`, read the JSON fidelity report, apply its ranked remediations (asking before installs, never modifying the project), and re-scan until the fidelity tiers stop improving.
 
 ## 📚 Reference Links
 

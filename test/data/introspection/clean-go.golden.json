@@ -1,0 +1,62 @@
+{
+  "schemaVersion": "1.0",
+  "runId": "00000000-0000-4000-8000-000000000001",
+  "inputsFingerprint": "sha256:f000000000000000000000000000000000000000000000000000000000000000",
+  "generatedAt": "2026-08-30T00:00:00.000Z",
+  "cdxgen": {
+    "version": "13.0.0",
+    "runtime": {
+      "name": "Node.js",
+      "version": "22.0.0"
+    }
+  },
+  "bom": {
+    "path": "bom.json"
+  },
+  "ledger": {
+    "source": "sidecar",
+    "complete": true,
+    "eventCount": 2,
+    "truncated": false
+  },
+  "overall": {
+    "score": 100,
+    "tier": "resolved",
+    "confidence": "medium"
+  },
+  "ecosystems": [
+    {
+      "ecosystem": "go",
+      "state": "at-ceiling",
+      "tier": "resolved",
+      "ceilingTier": "resolved",
+      "score": 100,
+      "confidence": "medium",
+      "componentCount": 3,
+      "dependencyEdgeCount": 2,
+      "tierReasons": [
+        {
+          "source": "bom",
+          "id": "no-demoting-signal",
+          "detail": "No fidelity finding fired and no corroborated degradation was recorded for this ecosystem.",
+          "determining": true
+        }
+      ],
+      "tools": {
+        "expected": [],
+        "resolved": [
+          {
+            "tool": "go",
+            "source": "PATH",
+            "found": "1.23.0"
+          }
+        ],
+        "missing": [],
+        "mismatched": []
+      }
+    }
+  ],
+  "coverageGaps": [],
+  "remediation": [],
+  "observations": []
+}

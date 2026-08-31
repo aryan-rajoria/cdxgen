@@ -32,15 +32,16 @@ Supported output document formats:
 
 ## Choose your path
 
-| Persona               | What cdxgen helps you do                                                                                             | First command                                                              | Read next                                                                                                 |
-| --------------------- | -------------------------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------- |
-| **Developers**        | Generate a CycloneDX BOM from a local repo, git URL, purl, or container image                                        | `cdxgen -o bom.json .`                                                     | [CLI Usage][docs-cli], [Supported Project Types][docs-project-types]                                      |
-| **AI platform teams** | Generate AI/ML BOMs, catalog prompt/model/MCP surfaces, and run AI-BOM governance                                    | `aibom .`                                                                  | [AI-BOM Guide](docs/AI_BOM.md), [AI-BOM lesson](docs/LESSON15.md)                                         |
-| **Hardware teams**    | Generate an HBOM or merged HBOM+OBOM host view for the current host                                                  | `hbom -o hbom.json`                                                        | [HBOM guide](docs/HBOM.md), [HBOM lesson](docs/LESSON13.md)                                               |
-| **AppSec**            | Enrich BOMs with evidence, run BOM audit rules, and feed downstream security workflows                               | `cdxgen -o bom.json --profile appsec --evidence --bom-audit .`             | [BOM Audit](docs/BOM_AUDIT.md), [Threat Model](docs/THREAT_MODEL.md)                                      |
-| **SOC analysts**      | Build OBOM inventories for live hosts and triage runtime posture issues                                              | `obom -o obom.json --deep --bom-audit --bom-audit-categories obom-runtime` | [OBOM lessons](docs/OBOM_LESSONS.md), [Server Usage][docs-server]                                         |
-| **Compliance teams**  | Validate BOM quality, check SCVS/CRA posture, and export SPDX deliverables                                           | `cdx-validate -i bom.json --benchmark scvs-l2,cra`                         | [cdx-validate](docs/CDX_VALIDATE.md), [cdx-convert](docs/CDX_CONVERT.md), [Permissions][docs-permissions] |
-| **Security Teams**    | Dynamically trace executions to capture cryptographic activities, CBOM properties, software components, and services | `tracebom --cbom-output cbom.json -- npm test`                             | [Threat Model](docs/THREAT_MODEL.md)                                                                      |
+| Persona               | What cdxgen helps you do                                                                                             | First command                                                              | Read next                                                                                                       |
+| --------------------- | -------------------------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------- |
+| **Developers**        | Generate a CycloneDX BOM from a local repo, git URL, purl, or container image                                        | `cdxgen -o bom.json .`                                                     | [CLI Usage][docs-cli], [Supported Project Types][docs-project-types]                                            |
+| **AI platform teams** | Generate AI/ML BOMs, catalog prompt/model/MCP surfaces, and run AI-BOM governance                                    | `aibom .`                                                                  | [AI-BOM Guide](docs/AI_BOM.md), [AI-BOM lesson](docs/LESSON15.md)                                               |
+| **Hardware teams**    | Generate an HBOM or merged HBOM+OBOM host view for the current host                                                  | `hbom -o hbom.json`                                                        | [HBOM guide](docs/HBOM.md), [HBOM lesson](docs/LESSON13.md)                                                     |
+| **AppSec**            | Enrich BOMs with evidence, run BOM audit rules, and feed downstream security workflows                               | `cdxgen -o bom.json --profile appsec --evidence --bom-audit .`             | [BOM Audit](docs/BOM_AUDIT.md), [Threat Model](docs/THREAT_MODEL.md)                                            |
+| **Build engineers**   | Grade how completely the SBOM captured the project, and get ranked fixes when the build environment degraded it      | `cdxgen --profile introspect --introspect-fail-below 70 -o bom.json .`     | [Build Introspection](docs/INTROSPECTION.md), [Fidelity loop skill](.agents/skills/sbom-fidelity-loop/SKILL.md) |
+| **SOC analysts**      | Build OBOM inventories for live hosts and triage runtime posture issues                                              | `obom -o obom.json --deep --bom-audit --bom-audit-categories obom-runtime` | [OBOM lessons](docs/OBOM_LESSONS.md), [Server Usage][docs-server]                                               |
+| **Compliance teams**  | Validate BOM quality, check SCVS/CRA posture, and export SPDX deliverables                                           | `cdx-validate -i bom.json --benchmark scvs-l2,cra`                         | [cdx-validate](docs/CDX_VALIDATE.md), [cdx-convert](docs/CDX_CONVERT.md), [Permissions][docs-permissions]       |
+| **Security Teams**    | Dynamically trace executions to capture cryptographic activities, CBOM properties, software components, and services | `tracebom --cbom-output cbom.json -- npm test`                             | [Threat Model](docs/THREAT_MODEL.md)                                                                            |
 
 ### Role-based quick starts
 
@@ -214,7 +215,7 @@ Common asset names:
 #### Linux
 
 ```bash
-VERSION="v13.0.1"
+VERSION="v13.1.0"
 ASSET="cdx-audit-linux-amd64"
 BASE_URL="https://github.com/cdxgen/cdxgen/releases/download/${VERSION}"
 
@@ -228,7 +229,7 @@ chmod +x "${ASSET}"
 #### macOS
 
 ```bash
-VERSION="v13.0.1"
+VERSION="v13.1.0"
 ASSET="cdx-audit-darwin-arm64"
 BASE_URL="https://github.com/cdxgen/cdxgen/releases/download/${VERSION}"
 
@@ -242,7 +243,7 @@ chmod +x "${ASSET}"
 #### Windows (PowerShell)
 
 ```powershell
-$Version = "v13.0.1"
+$Version = "v13.1.0"
 $Asset = "cdx-audit-windows-amd64.exe"
 $BaseUrl = "https://github.com/cdxgen/cdxgen/releases/download/$Version"
 
@@ -267,7 +268,7 @@ steps:
     env:
       GH_TOKEN: ${{ github.token }}
     run: |
-      gh release download v13.0.1 \
+      gh release download v13.1.0 \
         --repo cdxgen/cdxgen \
         --pattern 'cdx-audit-linux-amd64' \
         --pattern 'cdx-audit-linux-amd64.sha256'

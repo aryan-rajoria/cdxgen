@@ -4,6 +4,7 @@ import crypto from "node:crypto";
 import fs from "node:fs";
 import http from "node:http";
 import https from "node:https";
+import { tmpdir } from "node:os";
 import {
   basename,
   dirname,
@@ -25,6 +26,12 @@ import {
   validateSpecVersion,
 } from "../lib/cli/cliOptions.js";
 import { createBom, submitBom } from "../lib/cli/index.js";
+import { closeLedger } from "../lib/core/buildLedger.js";
+import {
+  getDeferredFailures,
+  INTROSPECTION_FAILURE_EXIT_CODE,
+  isDeferredFailOnError,
+} from "../lib/core/deferredExit.js";
 import { TRACE_MODE, thoughtEnd, thoughtLog } from "../lib/core/logger.js";
 import {
   PROJECT_CONFIG_FILENAMES,
@@ -57,6 +64,7 @@ import {
   retrieveCdxgenVersion,
   safeExistsSync,
   safeMkdirSync,
+  safeRmSync,
   safeSpawnSync,
   safeWriteSync,
   setActivityContext,
@@ -486,7 +494,32 @@ const args = _yargs
       "deep-learning",
       "ml-deep",
       "ml-tiny",
+      "introspect",
     ],
+  })
+  .option("introspect", {
+    type: "boolean",
+    description:
+      "Reflect on how the build environment limited BOM completeness and write an introspection report. Enabled by --profile introspect or CDXGEN_INTROSPECT=true. Pass --no-introspect to keep it off.",
+  })
+  .option("introspect-report", {
+    description:
+      "Path for the markdown introspection report. Defaults to <output>.introspection.md; '-' writes the report to stderr.",
+  })
+  .option("introspect-json", {
+    description:
+      "Path for the JSON introspection report consumed by remediation loops. Defaults to <output>.introspection.json.",
+  })
+  .option("introspect-fail-below", {
+    type: "number",
+    description:
+      "CI gate: exit with status 4 after the BOM is written when the overall introspection score is below this 0-100 threshold. Absent means the gate never fails.",
+  })
+  .option("introspect-annotate", {
+    type: "boolean",
+    default: true,
+    description:
+      "Carry the introspection verdict inside the BOM as metadata properties and annotations. Enabled with --introspect; pass --no-introspect-annotate to keep the BOM untouched.",
   })
   .option("lifecycle", {
     description: "Product lifecycle for the generated BOM.",
@@ -1011,6 +1044,29 @@ const { options, warnings: phase3Warnings } = buildOptionsFromArgs(args, {
   isDryRun,
   isSecureMode,
 });
+// Exit status reserved for the introspection CI gate: the BOM was generated
+// and written, but its introspection score missed the configured threshold.
+// Distinct from 1 so CI can tell a generation failure from a not-good-enough
+// SBOM.
+const INTROSPECTION_GATE_EXIT_CODE = 4;
+// The ledger recorder resolves its environment lazily, so the parsed flag is
+// bridged into the environment it reads: a run started with --introspect
+// records the same events as one started with CDXGEN_INTROSPECT=true. Without
+// an explicitly configured sidecar, an automatic temp sidecar captures
+// worker-thread events the main thread never sees; it is removed once the
+// reports are written. Dry-run creates no files, so it keeps an in-memory
+// ledger only.
+let autoLedgerSidecar;
+if (options.introspect) {
+  process.env.CDXGEN_INTROSPECT = "true";
+  if (!isDryRun && !readEnvironmentVariable("CDXGEN_INTROSPECT_LEDGER")) {
+    autoLedgerSidecar = join(
+      tmpdir(),
+      `cdxgen-introspect-ledger-${process.pid}.jsonl`,
+    );
+    process.env.CDXGEN_INTROSPECT_LEDGER = autoLedgerSidecar;
+  }
+}
 const cliActivityProjectType = Array.isArray(options.projectType)
   ? options.projectType.join(",")
   : options.projectType;
@@ -1684,8 +1740,14 @@ const writeCycloneDxOutput = (jsonFile, bomJson, options) => {
       prepareEnv(srcDir, options);
       prepPhase.succeed("");
     } catch (err) {
-      prepPhase.fail(err);
-      throw err;
+      if (isDeferredFailOnError(err)) {
+        // A deep-mode provisioning failure under --fail-on-error: the scan
+        // continues so the run still produces the verdict that explains it.
+        prepPhase.fail("environment preparation failed");
+      } else {
+        prepPhase.fail(err);
+        throw err;
+      }
     }
   }
   thoughtLog("Getting ready to generate the BOM ⚡️.");
@@ -1757,7 +1819,7 @@ const writeCycloneDxOutput = (jsonFile, bomJson, options) => {
   {
     const postPhase = defaultUi.phase("Post-processing BOM");
     try {
-      bomNSData = postProcess(
+      bomNSData = await postProcess(
         bomNSData,
         { ...options, executeOsQuery },
         srcDir,
@@ -2009,7 +2071,7 @@ const writeCycloneDxOutput = (jsonFile, bomJson, options) => {
           dbObjMap,
           evinseOptions,
         );
-        const evinseJson = evinserModule.createEvinseFile(
+        const evinseJson = await evinserModule.createEvinseFile(
           sliceArtefacts,
           evinseOptions,
         );
@@ -2147,6 +2209,64 @@ const writeCycloneDxOutput = (jsonFile, bomJson, options) => {
       console.log("Unable to produce BOM for", filePath);
       console.log("Try running the command with -t <type> or -r argument");
     }
+  }
+  // The reflection consumed the ledger while producing its reports, so an
+  // automatic sidecar can be released and removed. An explicitly configured
+  // sidecar belongs to the user and is left alone.
+  if (autoLedgerSidecar) {
+    closeLedger();
+    try {
+      safeRmSync(autoLedgerSidecar, { force: true });
+    } catch {
+      // Best-effort cleanup of our own temp file: a runtime whose permission
+      // model denies the removal must not fail a run whose BOM and reports
+      // are already written.
+    }
+  }
+  // A --fail-on-error extractor failure on an introspected run was deferred
+  // until the BOM and both reports existed; here it finally claims its
+  // non-zero exit. It outranks the fidelity gate because a failed toolchain is
+  // the more fundamental claim, and the report still carries the gate
+  // decision.
+  const deferredFailures = getDeferredFailures();
+  if (deferredFailures.length) {
+    const reported = new Set();
+    for (const failure of deferredFailures) {
+      const message = `fail-on-error: ${failure.detail} (tool: ${failure.tool}${failure.exitCode !== undefined ? `, exit ${failure.exitCode}` : ""}).`;
+      if (!reported.has(message)) {
+        reported.add(message);
+        console.error(message);
+      }
+    }
+    // Exit 5 is the promise that the outputs exist. A run that failed before
+    // producing any BOM never made that promise and keeps the historical
+    // exit 1, which is what "cdxgen failed to generate a BOM" has always
+    // meant.
+    const wroteBom = Boolean(bomNSData?.bomJson);
+    console.error(
+      wroteBom
+        ? `fail-on-error: ${reported.size} extractor failure(s) were deferred so the BOM and the introspection report could be written; exiting ${INTROSPECTION_FAILURE_EXIT_CODE}.`
+        : "fail-on-error: no BOM was produced, so there is no verdict to report; exiting 1.",
+    );
+    if (cleanup) {
+      cleanupSourceDir(srcDir);
+    }
+    process.exit(wroteBom ? INTROSPECTION_FAILURE_EXIT_CODE : 1);
+  }
+  // The introspection CI gate fires only after the BOM and the reports are
+  // written: a below-threshold score reports a not-good-enough SBOM, never a
+  // lost one.
+  if (
+    bomNSData?.introspectionGate &&
+    bomNSData.introspectionGate.passed === false
+  ) {
+    console.error(
+      `Build introspection: score ${bomNSData.introspectionGate.score} is below the --introspect-fail-below threshold ${bomNSData.introspectionGate.threshold}.`,
+    );
+    if (cleanup) {
+      cleanupSourceDir(srcDir);
+    }
+    process.exit(INTROSPECTION_GATE_EXIT_CODE);
   }
   thoughtEnd();
   // Automatically submit the bom data

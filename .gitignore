@@ -14,6 +14,15 @@ bomresults
 .v12-tmp/
 .bom-output.json
 
+# Build state the JVM tool fixtures accumulate when a build tool actually
+# resolves them. The fixtures are their build files; the output is not one.
+test/data/jvm-tools/**/target/
+test/data/jvm-tools/**/.bsp/
+
+# Toolchain matrix run artifacts (contrib/toolchain-matrix.js). These are
+# artifacts, not fixtures; the recorded baseline lives in test/matrix/.
+results/
+
 # Logs
 logs
 *.log

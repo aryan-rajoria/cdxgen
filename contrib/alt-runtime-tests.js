@@ -26,6 +26,7 @@ import process from "node:process";
 const KNOWN_GAPS = {
   bun: {
     "lib/cli/asar.poku.js": "asar extraction differs under bun",
+    "lib/cli/degradation.poku.js": "spawns the node CLI directly",
     "lib/core/parallel.poku.js":
       "worker threads are disabled outside node, so the fan-out assertions cannot hold",
     "lib/ecosystems/parsers-misc.poku.js": "parser output differs under bun",
@@ -33,18 +34,27 @@ const KNOWN_GAPS = {
       "spawns a helper that assumes the node CLI",
     "lib/managers/dockerConnection.poku.js":
       "listening on a unix socket in the temp dir fails under bun",
+    "lib/stages/postgen/introspection/reflect.poku.js": "spawns the node CLI directly",
+    "lib/stages/postgen/introspection/loop.poku.js": "spawns the node, deno and bun CLIs directly",
+    "lib/stages/postgen/introspection/skill.poku.js": "spawns the node CLI directly",
+    "lib/core/deferredExit.poku.js": "spawns the node CLI directly",
   },
   deno: {
     "bin/commands.poku.js":
       "spawns process.argv0 directly, which under deno needs a run subcommand and permission flags",
     "bin/tracebom.poku.js":
       "spawns process.argv0 directly, which under deno needs a run subcommand and permission flags",
+    "lib/cli/degradation.poku.js": "spawns the node CLI directly",
     "lib/core/parallel.poku.js":
       "worker threads are disabled outside node, so the fan-out assertions cannot hold",
     "lib/inventory/analyzer.poku.js":
       "spawns a helper that assumes the node CLI",
     "lib/managers/dockerConnection.poku.js":
       "listening on a unix socket in the temp dir fails under deno",
+    "lib/stages/postgen/introspection/reflect.poku.js": "spawns the node CLI directly",
+    "lib/stages/postgen/introspection/loop.poku.js": "spawns the node, deno and bun CLIs directly",
+    "lib/stages/postgen/introspection/skill.poku.js": "spawns the node CLI directly",
+    "lib/core/deferredExit.poku.js": "spawns the node CLI directly",
     "lib/packaging.poku.js": "drives npm pack, which assumes the node CLI",
     "lib/stages/pregen/envAudit.poku.js":
       "assigns globalThis.Deno, which is read only under deno",

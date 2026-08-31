@@ -90,6 +90,87 @@ cdxgen --dry-run -t asar -o bom.json /absolute/path/to/app.asar
 
 In normal mode, `-t asar` adds archive file inventory, SHA-256 hashes, per-file evidence, JavaScript capability summaries, and embedded Node.js package inventory from manifests shipped inside the archive.
 
+## Build introspection
+
+`--introspect` turns on build introspection: cdxgen records structured
+build-adequacy events while it runs, grades each scanned ecosystem against a
+fidelity tier ladder (`resolved` > `lockfile` > `manifest` > `heuristic` >
+`absent`), and reports how much the build environment limited the BOM's
+completeness. Introspection measures the environment the user actually has, so
+it never installs dependencies and never implies `--bom-audit`.
+
+```shell
+cdxgen -t java --introspect -o bom.json .
+```
+
+What a run produces:
+
+- A markdown report next to the BOM (`bom.json.introspection.md` by default)
+  with the verdict, per-ecosystem scores, ranked remediations, and the exact
+  invocation to reproduce the run.
+- A JSON report (`bom.json.introspection.json` by default) with the same
+  verdict as a versioned document for remediation loops.
+- A short console summary naming both report paths. Reports are written before
+  the summary prints, so the paths it names exist.
+- With `--introspect-annotate` (the default), eight
+  `cdx:introspection:*` metadata properties plus document-level annotations
+  inside the BOM itself, so a consumer who receives only the BOM still learns
+  how much to trust it.
+
+Destinations: pass `--introspect-report <path>` and `--introspect-json <path>`
+to choose your own paths. `-` writes the markdown report to stderr. When the
+BOM goes to stdout (`-o -`) or no output file is produced, the reports default
+to `cdxgen-introspection.md` and `cdxgen-introspection.json` in the working
+directory and the summary names where they went.
+
+Without `--introspect` on the command line, `CDXGEN_INTROSPECT=true` is an
+equivalent, and `--profile introspect` bundles introspection with annotations,
+formulation, and evidence collection. `--no-introspect` keeps introspection off
+even under the profile and warns; the profile's other settings still apply.
+
+Under `--dry-run`, the report is produced with every remediation marked
+blocked (nothing can be fixed without executing commands) and no file is
+written; the markdown report goes to stderr.
+
+### CI gate
+
+`--introspect-fail-below <n>` fails the run when the overall introspection
+score is below `n` (0-100):
+
+```shell
+cdxgen -t java --introspect --introspect-fail-below 70 -o bom.json .
+```
+
+The BOM and the reports are always written first — the gate never withholds
+output. The exit status is **4**, distinct from the generic failure status 1,
+so a CI job can tell "cdxgen failed to generate the SBOM" (exit 1) from "the
+SBOM was generated but is not good enough" (exit 4). The two need different
+responses: retry or fix the tooling for the first, fix the build environment
+and re-generate for the second.
+
+`--fail-on-error` interacts with introspection the same way: the failing
+extractor stops immediately and takes no incomplete-result fallback, but on
+an introspected run the BOM and both reports are still written and the exit
+status is **5** — "an extractor failed", distinct from 1 (no BOM), 4 (a
+below-threshold score) and 0. Without `--introspect`, `--fail-on-error` still
+exits 1 and writes no BOM. When a deferred failure and a failed gate both
+apply, the failure wins the exit status. A failure that leaves no BOM at all
+— an image archive that cannot be exported, say — keeps exit 1, because
+there is no verdict to read.
+
+Every dependency extractor defers this way: the JVM, JavaScript, Python,
+Ruby, PHP, .NET, Go, Rust, Clojure, Swift, CocoaPods and container
+collectors, plus deep-mode environment provisioning. BOM _submission_
+failures are unchanged and keep their own exit status.
+
+### Introspection in `cdx-audit`
+
+`cdx-audit --direct-bom-audit --introspect <bom.json>` grades a BOM it did not
+generate — including the previous iteration's BOM, which is how a remediation
+loop compares progress without re-running generation. Verdicts from audited
+BOMs rest on BOM structure alone and carry `ledger.source: "none"` in the JSON
+to say so.
+
 For source-based scans, the primary positional input accepted by `cdxgen` can be:
 
 - a local filesystem path such as `.` or `/path/to/repo`
@@ -328,7 +409,20 @@ Options:
                                   BOM and claim authorship.                        [array] [default: "OWASP Foundation"]
       --profile                   BOM profile to use for generation. Default generic.
   [choices: "appsec", "research", "operational", "threat-modeling", "license-compliance", "generic", "machine-learning",
-                                                       "ml", "deep-learning", "ml-deep", "ml-tiny"] [default: "generic"]
+                                     "ml", "deep-learning", "ml-deep", "ml-tiny", "introspect"] [default: "generic"]
+      --introspect                Reflect on how the build environment limited BOM completeness and write an
+                                  introspection report. Enabled by --profile introspect or CDXGEN_INTROSPECT=true.
+                                  Pass --no-introspect to keep it off.                                          [boolean]
+      --introspect-report         Path for the markdown introspection report. Defaults to
+                                  <output>.introspection.md; '-' writes the report to stderr.                    [string]
+      --introspect-json           Path for the JSON introspection report consumed by remediation loops. Defaults to
+                                  <output>.introspection.json.                                                   [string]
+      --introspect-fail-below     CI gate: exit with status 4 after the BOM is written when the overall
+                                  introspection score is below this 0-100 threshold. Absent means the gate never
+                                  fails.                                                                        [number]
+      --introspect-annotate       Carry the introspection verdict inside the BOM as metadata properties and
+                                  annotations. Enabled with --introspect; pass --no-introspect-annotate to keep the
+                                  BOM untouched.                                              [boolean] [default: true]
       --include-regex             glob pattern to include. This overrides the default pattern used during
                                   auto-detection.                                                               [string]
       --exclude, --exclude-regex  Additional glob pattern(s) to ignore                                           [array]

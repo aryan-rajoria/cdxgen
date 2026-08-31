@@ -1,0 +1,9 @@
+{
+  "name": "npm-smoke",
+  "version": "1.0.0",
+  "description": "Golden SBOM smoke fixture for npm manifest parsing",
+  "dependencies": {
+    "left-pad": "1.3.0",
+    "semver": "7.3.5"
+  }
+}

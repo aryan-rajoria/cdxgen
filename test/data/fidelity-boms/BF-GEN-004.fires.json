@@ -1,0 +1,186 @@
+{
+  "bomFormat": "CycloneDX",
+  "specVersion": "1.5",
+  "serialNumber": "urn:uuid:00000000-0000-0000-0000-000000000001",
+  "version": 1,
+  "metadata": {
+    "lifecycles": [
+      {
+        "phase": "pre-build"
+      }
+    ],
+    "component": {
+      "type": "application",
+      "bom-ref": "root",
+      "name": "fixture-app",
+      "version": "1.0.0",
+      "purl": "pkg:npm/fixture-app@1.0.0"
+    }
+  },
+  "components": [
+    {
+      "type": "library",
+      "bom-ref": "pkg:npm/npm-pkg-0@1.0.0",
+      "name": "npm-pkg-0",
+      "version": "1.0.0",
+      "purl": "pkg:npm/npm-pkg-0@1.0.0"
+    },
+    {
+      "type": "library",
+      "bom-ref": "pkg:npm/npm-pkg-1@1.1.0",
+      "name": "npm-pkg-1",
+      "version": "1.1.0",
+      "purl": "pkg:npm/npm-pkg-1@1.1.0"
+    },
+    {
+      "type": "library",
+      "bom-ref": "pkg:npm/npm-pkg-2@1.2.0",
+      "name": "npm-pkg-2",
+      "version": "1.2.0",
+      "purl": "pkg:npm/npm-pkg-2@1.2.0"
+    },
+    {
+      "type": "library",
+      "bom-ref": "pkg:npm/npm-pkg-3@1.3.0",
+      "name": "npm-pkg-3",
+      "version": "1.3.0",
+      "purl": "pkg:npm/npm-pkg-3@1.3.0"
+    },
+    {
+      "type": "library",
+      "bom-ref": "pkg:npm/npm-pkg-4@1.4.0",
+      "name": "npm-pkg-4",
+      "version": "1.4.0",
+      "purl": "pkg:npm/npm-pkg-4@1.4.0"
+    },
+    {
+      "type": "library",
+      "bom-ref": "pkg:npm/npm-pkg-5@1.5.0",
+      "name": "npm-pkg-5",
+      "version": "1.5.0",
+      "purl": "pkg:npm/npm-pkg-5@1.5.0"
+    },
+    {
+      "type": "library",
+      "bom-ref": "pkg:npm/npm-pkg-6@1.6.0",
+      "name": "npm-pkg-6",
+      "version": "1.6.0",
+      "purl": "pkg:npm/npm-pkg-6@1.6.0"
+    },
+    {
+      "type": "library",
+      "bom-ref": "pkg:npm/npm-pkg-7@1.7.0",
+      "name": "npm-pkg-7",
+      "version": "1.7.0",
+      "purl": "pkg:npm/npm-pkg-7@1.7.0"
+    },
+    {
+      "type": "library",
+      "bom-ref": "pkg:npm/npm-pkg-8@1.8.0",
+      "name": "npm-pkg-8",
+      "version": "1.8.0",
+      "purl": "pkg:npm/npm-pkg-8@1.8.0"
+    },
+    {
+      "type": "library",
+      "bom-ref": "pkg:npm/npm-pkg-9@1.9.0",
+      "name": "npm-pkg-9",
+      "version": "1.9.0",
+      "purl": "pkg:npm/npm-pkg-9@1.9.0"
+    },
+    {
+      "type": "library",
+      "bom-ref": "pkg:npm/npm-pkg-10@1.10.0",
+      "name": "npm-pkg-10",
+      "version": "1.10.0",
+      "purl": "pkg:npm/npm-pkg-10@1.10.0"
+    },
+    {
+      "type": "library",
+      "bom-ref": "pkg:npm/npm-pkg-11@1.11.0",
+      "name": "npm-pkg-11",
+      "version": "1.11.0",
+      "purl": "pkg:npm/npm-pkg-11@1.11.0"
+    }
+  ],
+  "dependencies": [
+    {
+      "ref": "root",
+      "dependsOn": [
+        "pkg:npm/npm-pkg-0@1.0.0",
+        "pkg:npm/npm-pkg-1@1.1.0",
+        "pkg:npm/npm-pkg-2@1.2.0",
+        "pkg:npm/npm-pkg-3@1.3.0",
+        "pkg:npm/npm-pkg-4@1.4.0",
+        "pkg:npm/npm-pkg-5@1.5.0",
+        "pkg:npm/npm-pkg-6@1.6.0",
+        "pkg:npm/npm-pkg-7@1.7.0",
+        "pkg:npm/npm-pkg-8@1.8.0",
+        "pkg:npm/npm-pkg-9@1.9.0",
+        "pkg:npm/npm-pkg-10@1.10.0",
+        "pkg:npm/npm-pkg-11@1.11.0"
+      ]
+    },
+    {
+      "ref": "pkg:npm/npm-pkg-0@1.0.0",
+      "dependsOn": [
+        "pkg:npm/npm-pkg-1@1.1.0",
+        "pkg:npm/npm-pkg-2@1.2.0"
+      ]
+    },
+    {
+      "ref": "pkg:npm/npm-pkg-3@1.3.0",
+      "dependsOn": [
+        "pkg:npm/npm-pkg-4@1.4.0"
+      ]
+    },
+    {
+      "ref": "pkg:npm/npm-pkg-0@1.0.0",
+      "dependsOn": []
+    },
+    {
+      "ref": "pkg:npm/npm-pkg-1@1.1.0",
+      "dependsOn": []
+    },
+    {
+      "ref": "pkg:npm/npm-pkg-2@1.2.0",
+      "dependsOn": []
+    },
+    {
+      "ref": "pkg:npm/npm-pkg-3@1.3.0",
+      "dependsOn": []
+    },
+    {
+      "ref": "pkg:npm/npm-pkg-4@1.4.0",
+      "dependsOn": []
+    },
+    {
+      "ref": "pkg:npm/npm-pkg-5@1.5.0",
+      "dependsOn": []
+    },
+    {
+      "ref": "pkg:npm/npm-pkg-6@1.6.0",
+      "dependsOn": []
+    },
+    {
+      "ref": "pkg:npm/npm-pkg-7@1.7.0",
+      "dependsOn": []
+    },
+    {
+      "ref": "pkg:npm/npm-pkg-8@1.8.0",
+      "dependsOn": []
+    },
+    {
+      "ref": "pkg:npm/npm-pkg-9@1.9.0",
+      "dependsOn": []
+    },
+    {
+      "ref": "pkg:npm/npm-pkg-10@1.10.0",
+      "dependsOn": []
+    },
+    {
+      "ref": "pkg:npm/npm-pkg-11@1.11.0",
+      "dependsOn": []
+    }
+  ]
+}

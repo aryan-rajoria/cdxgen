@@ -1,0 +1,684 @@
+{
+  "jvm.maven.build-first": {
+    "ecosystem": "java",
+    "kind": "fallback.engaged",
+    "impact": "transitive-deps",
+    "title": "Maven could not resolve dependencies; build the project before invoking cdxgen",
+    "targetTier": "resolved",
+    "actions": [
+      {
+        "kind": "install",
+        "tool": "java",
+        "versionFrom": "expected",
+        "via": "sdkman",
+        "command": "sdk install java {{version}}",
+        "windows": "winget install --id EclipseAdoptium.Temurin.{{major}}.JDK"
+      },
+      {
+        "kind": "install",
+        "tool": "maven",
+        "versionFrom": "expected",
+        "via": "sdkman",
+        "command": "sdk install maven {{version}}",
+        "windows": "winget install --id Apache.Maven"
+      },
+      {
+        "kind": "build",
+        "command": "mvn -q package -DskipTests"
+      },
+      {
+        "kind": "rerun"
+      }
+    ],
+    "verify": {
+      "rules": ["BF-JVM-001", "BF-JVM-002"],
+      "expectTier": "resolved"
+    },
+    "docs": "https://cyclonedx.github.io/cdxgen/#/PROJECT_TYPES?id=java"
+  },
+  "jvm.maven.manifest-fallback": {
+    "ecosystem": "java",
+    "kind": "fallback.engaged",
+    "impact": "transitive-deps",
+    "title": "Maven build failed; only the direct dependencies declared in pom.xml were captured",
+    "targetTier": "resolved",
+    "actions": [
+      {
+        "kind": "install",
+        "tool": "java",
+        "versionFrom": "expected",
+        "via": "sdkman",
+        "command": "sdk install java {{version}}",
+        "windows": "winget install --id EclipseAdoptium.Temurin.{{major}}.JDK"
+      },
+      {
+        "kind": "install",
+        "tool": "maven",
+        "versionFrom": "expected",
+        "via": "sdkman",
+        "command": "sdk install maven {{version}}",
+        "windows": "winget install --id Apache.Maven"
+      },
+      {
+        "kind": "build",
+        "command": "mvn -q package -DskipTests"
+      },
+      {
+        "kind": "rerun"
+      }
+    ],
+    "verify": {
+      "rules": ["BF-JVM-001", "BF-JVM-002"],
+      "expectTier": "resolved"
+    },
+    "docs": "https://cyclonedx.github.io/cdxgen/#/PROJECT_TYPES?id=java"
+  },
+  "jvm.maven.tree-unparseable": {
+    "ecosystem": "java",
+    "kind": "command.failed",
+    "impact": "transitive-deps",
+    "title": "Maven dependency:tree JSON output could not be parsed",
+    "targetTier": "resolved",
+    "actions": [
+      {
+        "kind": "install",
+        "tool": "maven",
+        "versionFrom": "expected",
+        "via": "sdkman",
+        "command": "sdk install maven {{version}}",
+        "windows": "winget install --id Apache.Maven"
+      },
+      {
+        "kind": "build",
+        "command": "mvn -q package -DskipTests"
+      },
+      {
+        "kind": "rerun"
+      }
+    ],
+    "verify": {
+      "rules": ["BF-JVM-001", "BF-JVM-002"],
+      "expectTier": "resolved"
+    },
+    "docs": "https://cyclonedx.github.io/cdxgen/#/PROJECT_TYPES?id=java"
+  },
+  "jvm.gradle.unresolved-config": {
+    "ecosystem": "java",
+    "kind": "fallback.engaged",
+    "impact": "transitive-deps",
+    "title": "Gradle resolved no dependency configuration; project components carry no resolved dependencies",
+    "targetTier": "resolved",
+    "actions": [
+      {
+        "kind": "install",
+        "tool": "gradle",
+        "versionFrom": "expected",
+        "via": "sdkman",
+        "command": "sdk install gradle {{version}}",
+        "windows": "winget install --id Gradle.Gradle"
+      },
+      {
+        "kind": "build",
+        "command": "gradle -q build"
+      },
+      {
+        "kind": "rerun"
+      }
+    ],
+    "verify": {
+      "rules": ["BF-JVM-001", "BF-JVM-002"],
+      "expectTier": "resolved"
+    },
+    "docs": "https://cyclonedx.github.io/cdxgen/#/PROJECT_TYPES?id=java"
+  },
+  "jvm.gradle.invocation-failed": {
+    "ecosystem": "java",
+    "kind": "command.failed",
+    "impact": "transitive-deps",
+    "title": "The gradle invocation failed outright; gradle produced no dependency evidence at all",
+    "targetTier": "resolved",
+    "actions": [
+      {
+        "kind": "install",
+        "tool": "java",
+        "versionFrom": "expected",
+        "via": "sdkman",
+        "command": "sdk install java {{version}}",
+        "windows": "winget install --id EclipseAdoptium.Temurin.{{major}}.JDK"
+      },
+      {
+        "kind": "install",
+        "tool": "gradle",
+        "versionFrom": "expected",
+        "via": "sdkman",
+        "command": "sdk install gradle {{version}}",
+        "windows": "winget install --id Gradle.Gradle"
+      },
+      {
+        "kind": "build",
+        "command": "gradle -q build"
+      },
+      {
+        "kind": "rerun"
+      }
+    ],
+    "verify": {
+      "rules": ["BF-GEN-006"],
+      "expectTier": "resolved"
+    },
+    "docs": "https://cyclonedx.github.io/cdxgen/#/PROJECT_TYPES?id=java"
+  },
+  "jvm.jar.heuristic": {
+    "ecosystem": "java",
+    "kind": "fallback.engaged",
+    "impact": "versions",
+    "title": "Components were inferred by scanning jar/war/ear files from disk",
+    "targetTier": "resolved",
+    "actions": [
+      {
+        "kind": "build",
+        "command": "mvn -q package -DskipTests"
+      },
+      {
+        "kind": "rerun"
+      }
+    ],
+    "verify": {
+      "rules": ["BF-JVM-003"],
+      "expectTier": "resolved"
+    },
+    "docs": "https://cyclonedx.github.io/cdxgen/#/PROJECT_TYPES?id=java"
+  },
+  "jvm.sbt.project-discovery": {
+    "ecosystem": "java",
+    "kind": "fallback.engaged",
+    "impact": "components",
+    "title": "sbt project discovery fell back to the build-file heuristic",
+    "targetTier": "resolved",
+    "actions": [
+      {
+        "kind": "install",
+        "tool": "sbt",
+        "versionFrom": "expected",
+        "via": "sdkman",
+        "command": "sdk install sbt {{version}}",
+        "windows": "winget install --id sbt.sbt"
+      },
+      {
+        "kind": "build",
+        "command": "sbt -batch compile"
+      },
+      {
+        "kind": "rerun"
+      }
+    ],
+    "verify": {
+      "rules": ["BF-JVM-001"],
+      "expectTier": "resolved"
+    },
+    "docs": "https://cyclonedx.github.io/cdxgen/#/PROJECT_TYPES?id=java"
+  },
+  "jvm.sbt.no-lockfile": {
+    "ecosystem": "java",
+    "kind": "evidence.degraded",
+    "impact": "versions",
+    "title": "sbt build failed; a build.sbt.lock would keep the SBOM deterministic",
+    "targetTier": "resolved",
+    "actions": [
+      {
+        "kind": "config",
+        "command": "Enable sbt dependency locking so the build writes build.sbt.lock"
+      },
+      {
+        "kind": "build",
+        "command": "sbt -batch compile"
+      },
+      {
+        "kind": "rerun"
+      }
+    ],
+    "verify": {
+      "rules": ["BF-JVM-001"],
+      "expectTier": "resolved"
+    },
+    "docs": "https://cyclonedx.github.io/cdxgen/#/PROJECT_TYPES?id=java"
+  },
+  "js.no-lockfile": {
+    "ecosystem": "npm",
+    "kind": "evidence.degraded",
+    "impact": "versions",
+    "title": "No JavaScript lockfile was found; the SBOM is non-deterministic",
+    "targetTier": "lockfile",
+    "actions": [
+      {
+        "kind": "build",
+        "command": "npm install --package-lock-only"
+      },
+      {
+        "kind": "rerun"
+      }
+    ],
+    "verify": {
+      "rules": ["BF-JS-001", "BF-JS-002"],
+      "expectTier": "lockfile"
+    },
+    "docs": "https://cyclonedx.github.io/cdxgen/#/PROJECT_TYPES"
+  },
+  "js.git-dependency": {
+    "ecosystem": "npm",
+    "kind": "evidence.degraded",
+    "impact": "integrity",
+    "title": "npm install may fetch git dependencies without integrity guarantees",
+    "targetTier": "lockfile",
+    "actions": [
+      {
+        "kind": "env",
+        "command": "Re-run with the git command permitted for this trusted project by adding it to CDXGEN_ALLOWED_COMMANDS",
+        "windows": "The same CDXGEN_ALLOWED_COMMANDS variable applies on Windows"
+      },
+      {
+        "kind": "rerun"
+      }
+    ],
+    "verify": {
+      "rules": [],
+      "expectTier": "lockfile",
+      "eventsCleared": ["js.git-dependency"]
+    },
+    "docs": "https://cyclonedx.github.io/cdxgen/#/ENV"
+  },
+  "js.no-node-modules": {
+    "ecosystem": "npm",
+    "kind": "evidence.degraded",
+    "impact": "transitive-deps",
+    "title": "node_modules is absent and no install was attempted",
+    "targetTier": "lockfile",
+    "actions": [
+      {
+        "kind": "build",
+        "command": "npm install"
+      },
+      {
+        "kind": "rerun"
+      }
+    ],
+    "verify": {
+      "rules": ["BF-JS-001"],
+      "expectTier": "lockfile"
+    },
+    "docs": "https://cyclonedx.github.io/cdxgen/#/PROJECT_TYPES"
+  },
+  "js.lockfile-version": {
+    "ecosystem": "npm",
+    "kind": "fallback.engaged",
+    "impact": "transitive-deps",
+    "title": "package-lock.json could not be parsed with current npm semantics",
+    "targetTier": "lockfile",
+    "actions": [
+      {
+        "kind": "install",
+        "tool": "npm",
+        "versionFrom": "latest",
+        "via": "npm",
+        "command": "npm install -g npm@latest",
+        "windows": "npm install -g npm@latest"
+      },
+      {
+        "kind": "build",
+        "command": "npm install --package-lock-only"
+      },
+      {
+        "kind": "rerun"
+      }
+    ],
+    "verify": {
+      "rules": [],
+      "expectTier": "lockfile",
+      "eventsCleared": ["js.lockfile-version"]
+    },
+    "docs": "https://cyclonedx.github.io/cdxgen/#/PROJECT_TYPES"
+  },
+  "js.pnpm-lock-unparseable": {
+    "ecosystem": "npm",
+    "kind": "evidence.degraded",
+    "impact": "transitive-deps",
+    "title": "pnpm-lock.yaml could not be parsed",
+    "targetTier": "lockfile",
+    "actions": [
+      {
+        "kind": "install",
+        "tool": "pnpm",
+        "versionFrom": "latest",
+        "via": "npm",
+        "command": "npm install -g pnpm@latest",
+        "windows": "npm install -g pnpm@latest"
+      },
+      {
+        "kind": "build",
+        "command": "pnpm install"
+      },
+      {
+        "kind": "rerun"
+      }
+    ],
+    "verify": {
+      "rules": [],
+      "expectTier": "lockfile",
+      "eventsCleared": ["js.pnpm-lock-unparseable"]
+    },
+    "docs": "https://cyclonedx.github.io/cdxgen/#/PROJECT_TYPES"
+  },
+  "python.lockfile-unparseable": {
+    "ecosystem": "python",
+    "kind": "evidence.degraded",
+    "impact": "transitive-deps",
+    "title": "The python lock file could not be parsed",
+    "targetTier": "lockfile",
+    "actions": [
+      {
+        "kind": "install",
+        "tool": "poetry",
+        "versionFrom": "latest",
+        "via": "pip",
+        "command": "pip install poetry",
+        "windows": "pip install poetry"
+      },
+      {
+        "kind": "build",
+        "command": "poetry lock --no-interaction"
+      },
+      {
+        "kind": "rerun"
+      }
+    ],
+    "verify": {
+      "rules": [],
+      "expectTier": "lockfile",
+      "eventsCleared": ["python.lockfile-unparseable"]
+    },
+    "docs": "https://cyclonedx.github.io/cdxgen/#/PROJECT_TYPES"
+  },
+  "clojure.lein.missing": {
+    "ecosystem": "clojure",
+    "kind": "fallback.engaged",
+    "impact": "transitive-deps",
+    "title": "lein is unavailable; project.clj was parsed manually",
+    "targetTier": "manifest",
+    "actions": [
+      {
+        "kind": "install",
+        "tool": "lein",
+        "versionFrom": "latest",
+        "via": "manual",
+        "command": "Install leiningen following https://codeberg.org/leiningen/leiningen#installation",
+        "windows": "Download the lein.bat script from the leiningen repository into a PATH directory"
+      },
+      {
+        "kind": "rerun"
+      }
+    ],
+    "verify": {
+      "rules": [],
+      "expectTier": "manifest",
+      "eventsCleared": ["clojure.lein.missing"]
+    },
+    "docs": "https://cyclonedx.github.io/cdxgen/#/PROJECT_TYPES"
+  },
+  "clojure.cli.missing": {
+    "ecosystem": "clojure",
+    "kind": "fallback.engaged",
+    "impact": "transitive-deps",
+    "title": "clojure CLI is unavailable; deps.edn was parsed manually",
+    "targetTier": "manifest",
+    "actions": [
+      {
+        "kind": "install",
+        "tool": "clojure",
+        "versionFrom": "latest",
+        "via": "manual",
+        "command": "Install the Clojure CLI following https://clojure.org/guides/install_clojure",
+        "windows": null,
+        "windowsReason": "The Clojure CLI ships a separate Windows installer; prefer the cdxgen container image there"
+      },
+      {
+        "kind": "rerun"
+      }
+    ],
+    "verify": {
+      "rules": [],
+      "expectTier": "manifest",
+      "eventsCleared": ["clojure.cli.missing"]
+    },
+    "docs": "https://cyclonedx.github.io/cdxgen/#/PROJECT_TYPES"
+  },
+  "swift.toolchain.missing": {
+    "ecosystem": "swift",
+    "kind": "fallback.engaged",
+    "impact": "transitive-deps",
+    "title": "Swift toolchain could not resolve the package graph",
+    "targetTier": "lockfile",
+    "actions": [
+      {
+        "kind": "container",
+        "image": "ghcr.io/cyclonedx/cdxgen",
+        "command": "docker run --rm -v \"$PWD:/app\" -w /app ghcr.io/cyclonedx/cdxgen -t swift /app",
+        "windows": "docker run --rm -v \"%cd%:/app\" -w /app ghcr.io/cyclonedx/cdxgen -t swift %cd%"
+      }
+    ],
+    "verify": {
+      "rules": ["BF-SWIFT-001"],
+      "expectTier": "lockfile"
+    },
+    "docs": "https://cyclonedx.github.io/cdxgen/#/PROJECT_TYPES"
+  },
+  "swift.package-command": {
+    "ecosystem": "swift",
+    "kind": "command.failed",
+    "impact": "transitive-deps",
+    "title": "swift package resolve did not produce a Package.resolved file",
+    "targetTier": "lockfile",
+    "actions": [
+      {
+        "kind": "build",
+        "command": "swift package resolve"
+      },
+      {
+        "kind": "rerun"
+      }
+    ],
+    "verify": {
+      "rules": [],
+      "expectTier": "lockfile",
+      "eventsCleared": ["swift.package-command"]
+    },
+    "docs": "https://cyclonedx.github.io/cdxgen/#/PROJECT_TYPES"
+  },
+  "dotnet.sdk.missing": {
+    "ecosystem": "csharp",
+    "kind": "evidence.degraded",
+    "impact": "components",
+    "title": ".NET SDK is not installed, so dotnet slices are degraded",
+    "targetTier": "resolved",
+    "actions": [
+      {
+        "kind": "container",
+        "image": "ghcr.io/cyclonedx/cdxgen",
+        "command": "docker run --rm -v \"$PWD:/app\" -w /app ghcr.io/cyclonedx/cdxgen -t csharp /app",
+        "windows": "docker run --rm -v \"%cd%:/app\" -w /app ghcr.io/cyclonedx/cdxgen -t csharp %cd%"
+      },
+      {
+        "kind": "install",
+        "tool": "dotnet",
+        "versionFrom": "expected",
+        "via": "manual",
+        "command": "Install the .NET SDK {{version}} from https://dotnet.microsoft.com/download",
+        "windows": "winget install --id Microsoft.DotNet.SDK.{{major}}"
+      }
+    ],
+    "verify": {
+      "rules": [],
+      "expectTier": "resolved",
+      "eventsCleared": ["dotnet.sdk.missing"]
+    },
+    "docs": "https://cyclonedx.github.io/cdxgen/#/PROJECT_TYPES"
+  },
+  "cocoa.pods.missing": {
+    "ecosystem": "cocoa",
+    "kind": "fallback.engaged",
+    "impact": "transitive-deps",
+    "title": "cocoapods is unavailable; the pod graph was not resolved",
+    "targetTier": "resolved",
+    "actions": [
+      {
+        "kind": "container",
+        "image": "ghcr.io/cyclonedx/cdxgen",
+        "command": "docker run --rm -v \"$PWD:/app\" -w /app ghcr.io/cyclonedx/cdxgen -t cocoa /app",
+        "windows": "docker run --rm -v \"%cd%:/app\" -w /app ghcr.io/cyclonedx/cdxgen -t cocoa %cd%"
+      }
+    ],
+    "verify": {
+      "rules": [],
+      "expectTier": "resolved",
+      "eventsCleared": ["cocoa.pods.missing"]
+    },
+    "docs": "https://cyclonedx.github.io/cdxgen/#/PROJECT_TYPES"
+  },
+  "ruby.build-deps.missing": {
+    "ecosystem": "ruby",
+    "kind": "evidence.degraded",
+    "impact": "transitive-deps",
+    "title": "Building the required Ruby version needs development libraries",
+    "targetTier": "resolved",
+    "actions": [
+      {
+        "kind": "container",
+        "image": "ghcr.io/cyclonedx/cdxgen",
+        "command": "docker run --rm -v \"$PWD:/app\" -w /app ghcr.io/cyclonedx/cdxgen -t ruby /app",
+        "windows": "docker run --rm -v \"%cd%:/app\" -w /app ghcr.io/cyclonedx/cdxgen -t ruby %cd%"
+      }
+    ],
+    "verify": {
+      "rules": [],
+      "expectTier": "resolved",
+      "eventsCleared": ["ruby.build-deps.missing"]
+    },
+    "docs": "https://cyclonedx.github.io/cdxgen/#/PROJECT_TYPES"
+  },
+  "ruby.version.unsupported-host": {
+    "ecosystem": "ruby",
+    "kind": "evidence.degraded",
+    "impact": "transitive-deps",
+    "title": "The required Ruby version needs a specific base image to build",
+    "targetTier": "resolved",
+    "actions": [
+      {
+        "kind": "container",
+        "image": "ghcr.io/cyclonedx/cdxgen",
+        "command": "docker run --rm -v \"$PWD:/app\" -w /app ghcr.io/cyclonedx/cdxgen -t ruby /app",
+        "windows": "docker run --rm -v \"%cd%:/app\" -w /app ghcr.io/cyclonedx/cdxgen -t ruby %cd%"
+      }
+    ],
+    "verify": {
+      "rules": [],
+      "expectTier": "resolved",
+      "eventsCleared": ["ruby.version.unsupported-host"]
+    },
+    "docs": "https://cyclonedx.github.io/cdxgen/#/PROJECT_TYPES"
+  },
+  "binary.paths.inferred": {
+    "ecosystem": "generic",
+    "kind": "fallback.engaged",
+    "impact": "none",
+    "title": "Image config carried no PATH; binary directories were inferred from disk",
+    "targetTier": null,
+    "actions": [
+      {
+        "kind": "config",
+        "command": "Rebuild the image with an explicit PATH in the image config so binary directories are read instead of inferred"
+      }
+    ],
+    "verify": {
+      "rules": [],
+      "expectTier": null,
+      "eventsCleared": ["binary.paths.inferred"]
+    },
+    "docs": "https://cyclonedx.github.io/cdxgen/#/PROJECT_TYPES"
+  },
+  "policy.secure-mode": {
+    "ecosystem": "generic",
+    "kind": "evidence.degraded",
+    "impact": "versions",
+    "title": "A policy restriction prevented command execution",
+    "targetTier": null,
+    "actions": [
+      {
+        "kind": "env",
+        "command": "Set CDXGEN_ALLOWED_COMMANDS to the exact commands this project's build needs and re-run",
+        "windows": "The same CDXGEN_ALLOWED_COMMANDS variable applies on Windows"
+      }
+    ],
+    "verify": {
+      "rules": [],
+      "expectTier": null,
+      "eventsCleared": ["policy.secure-mode"]
+    },
+    "docs": "https://cyclonedx.github.io/cdxgen/#/ENV"
+  },
+  "policy.host-blocked": {
+    "ecosystem": "generic",
+    "kind": "evidence.degraded",
+    "impact": "licenses",
+    "title": "A remote host was blocked by the host allow-list",
+    "targetTier": null,
+    "actions": [
+      {
+        "kind": "env",
+        "command": "Add the registry host that the run needed to CDXGEN_ALLOWED_HOSTS and re-run"
+      }
+    ],
+    "verify": {
+      "rules": [],
+      "expectTier": null,
+      "eventsCleared": ["policy.host-blocked"]
+    },
+    "docs": "https://cyclonedx.github.io/cdxgen/#/ENV"
+  },
+  "policy.dry-run": {
+    "ecosystem": "generic",
+    "kind": "evidence.degraded",
+    "impact": "none",
+    "title": "Dry-run mode short-circuited an action",
+    "targetTier": null,
+    "actions": [
+      {
+        "kind": "env",
+        "command": "Re-run without the --dry-run option to generate the full BOM"
+      }
+    ],
+    "verify": {
+      "rules": [],
+      "expectTier": null,
+      "eventsCleared": ["policy.dry-run"]
+    },
+    "docs": "https://cyclonedx.github.io/cdxgen/#/ENV"
+  },
+  "policy.offline": {
+    "ecosystem": "generic",
+    "kind": "evidence.degraded",
+    "impact": "licenses",
+    "title": "A network request failed with a transport error",
+    "targetTier": null,
+    "actions": [
+      {
+        "kind": "env",
+        "command": "Restore network access or point the registry environment variables at a reachable mirror, then re-run"
+      }
+    ],
+    "verify": {
+      "rules": [],
+      "expectTier": null,
+      "eventsCleared": ["policy.offline"]
+    },
+    "docs": "https://cyclonedx.github.io/cdxgen/#/ENV"
+  }
+}

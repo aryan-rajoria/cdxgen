@@ -1,0 +1,10 @@
+{
+  "name": "introspect-js-manifest",
+  "version": "1.0.0",
+  "description": "Manifest-only JavaScript fixture for the build-introspection degraded-to-repaired transition. No lockfile and no node_modules are committed: the degraded scan grades manifest and the report's npm actions repair it.",
+  "main": "index.js",
+  "dependencies": {
+    "semver": "^7.6.0"
+  },
+  "license": "MIT"
+}

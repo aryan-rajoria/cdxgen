@@ -1,0 +1,703 @@
+# Build Fidelity Rules
+# Category: build-fidelity (opt-in only)
+# Detects when the generated BOM does not faithfully represent the project's
+# real dependency set: an unresolved manifest passed off as a graph, a resolver
+# that silently failed, or components missing the coordinates a healthy scan
+# would produce.
+#
+# This category is activated by the `--introspect` reflection step, never by a
+# default `--bom-audit` run. lib/inventory/auditCategories.js lists it in
+# OPT_IN_BOM_AUDIT_CATEGORIES, which keeps auditBom() from activating it unless
+# it is explicitly requested.
+#
+# Thresholds were calibrated against measured BOM pairs, not chosen a priori.
+# The measured pairs (project: components/dep nodes/edges) are:
+#   healthy and must stay silent:
+#     ipsw (go) 203/204/387, binwalk (rust) 228/210/426, poetry (python)
+#     149/102/125, eShop (dotnet) 75/25/125, java-sec-code (java, maven
+#     available) 204/205/204
+#   degraded and must fire:
+#     spotube (dart) 344/1/103, helm-charts (helm) 52/0/0, babashka (clj)
+#     23/0/0, java-sec-code with maven hidden (java) 58/0/0
+# A 30% coverage-loss threshold would fire on the healthy poetry BOM (32.2% of
+# its components legitimately sit outside the dependency graph), so the
+# coverage rules use >50%. Every threshold below cites the pair that fixed it.
+#
+# Conditions reference only BOM structure, so every rule supports dry runs in
+# full. `tier-signal` names the fidelity tier the finding demotes the ecosystem
+# to (resolved > lockfile > manifest > heuristic > absent); `applies-to` names
+# the purl types the rule may fire on. A rule without `applies-to` is a rule
+# about BOM structure itself (lifecycle claims, empty component sets) and is
+# gated by its condition instead. Rules that assume a resolver or lockfile
+# ecosystem MUST declare `applies-to`; an unscoped coverage rule would fire on
+# every helm or clojure project forever. Ecosystems with no lockfile concept
+# (r, perl, elm, crystal, nim) and ecosystems cdxgen parses without ever
+# building a graph (mix.lock, Package.resolved) are kept out of `applies-to`
+# so the rules stay silent where no remediation can improve the BOM.
+#
+# NOTE: the strongest single signal - an ecosystem's marker file exists on disk
+# but the BOM has no components for it - is intentionally NOT expressed here.
+# The rule engine sees no filesystem. That check belongs to the reflection
+# step (markersOnDisk vs ecosystemsInBom). Do not add a BOM-only rule for it.
+
+- id: BF-GEN-001
+  name: "Dependency graph covers less than half of the components"
+  description: >-
+    More than 50% of the components with a bom-ref appear nowhere in
+    dependencies[] - neither as a graph node nor as a dependsOn target - which
+    means the resolver or lockfile that would have connected them did not run.
+  severity: high
+  category: build-fidelity
+  dry-run-support: full
+  tier-signal: manifest
+  applies-to: [maven, npm, pypi, golang, cargo, gem, nuget, composer, pub, helm, clojars]
+  condition: |
+    (
+      $refs := $exists(dependencies) ? dependencies.ref : [];
+      $targets := $exists(dependencies) ? dependencies.dependsOn : [];
+      $comps := $exists(components) ? components[$exists($."bom-ref")] : [];
+      $total := $count($comps);
+      $covered := $count($comps[$listContains($refs, $."bom-ref") or $listContains($targets, $."bom-ref")]);
+      $notContainer := $not($arrayContains(['container', 'operating-system', 'device'], $string(metadata.component.type)));
+      $notContainer and $count(components[purl][$arrayContains(['maven', 'npm', 'pypi', 'golang', 'cargo', 'gem', 'nuget', 'composer', 'pub', 'helm', 'clojars'], $substringBefore($substringAfter(purl, 'pkg:'), '/'))]) > 0 and $total > 0 and ($total - $covered) / $total > 0.5
+        ? { "total": $total, "covered": $covered, "uncovered": $total - $covered, "uncoveredPercent": $round(100 * ($total - $covered) / $total, 1) }
+        : undefined
+    )
+  location: |
+    { "componentCount": $count(components), "dependencyCount": $count(dependencies) }
+  message: "Only {{ covered }} of {{ total }} components appear in the dependency graph ({{ uncoveredPercent }}% uncovered); the BOM reads like a flat list of declarations"
+  mitigation: "Run the ecosystem resolver before generating the BOM (or let cdxgen --install-deps drive it) so transitive edges are captured, then re-scan"
+  evidence: |
+    {
+      "total": total,
+      "covered": covered,
+      "uncovered": uncovered,
+      "uncoveredPercent": uncoveredPercent
+    }
+
+- id: BF-GEN-002
+  name: "More than 20% of components carry no version"
+  description: >-
+    Components without a version cannot be pinned, compared, or audited; they
+    usually come from filename or artifact inference rather than a manifest
+    that pins versions.
+  severity: medium
+  category: build-fidelity
+  dry-run-support: full
+  tier-signal: heuristic
+  applies-to: [maven, npm, pypi, golang, cargo, gem, nuget, composer, pub, helm, clojars]
+  condition: |
+    (
+      $comps := $exists(components) ? components : [];
+      $total := $count($comps);
+      $missing := $count($comps[$not($exists(version)) or $string(version) = '']);
+      $notContainer := $not($arrayContains(['container', 'operating-system', 'device'], $string(metadata.component.type)));
+      $notContainer and $count($comps[purl][$arrayContains(['maven', 'npm', 'pypi', 'golang', 'cargo', 'gem', 'nuget', 'composer', 'pub', 'helm', 'clojars'], $substringBefore($substringAfter(purl, 'pkg:'), '/'))]) > 0 and $total > 0 and $missing / $total > 0.2
+        ? { "total": $total, "missingVersionCount": $missing, "missingVersionPercent": $round(100 * $missing / $total, 1) }
+        : undefined
+    )
+  location: |
+    { "componentCount": total }
+  message: "{{ missingVersionCount }} of {{ total }} components ({{ missingVersionPercent }}%) have no version, so the BOM cannot represent a reproducible dependency set"
+  mitigation: "Generate the BOM from a lockfile or a completed install so every component carries a pinned version"
+  evidence: |
+    {
+      "total": total,
+      "missingVersionCount": missingVersionCount,
+      "missingVersionPercent": missingVersionPercent
+    }
+
+- id: BF-GEN-003
+  name: "More than 10% of components carry no purl"
+  description: >-
+    Components of a package type that always has a purl are emitted without
+    one, which indicates the scanner guessed at them from the filesystem
+    instead of reading a manifest.
+  severity: medium
+  category: build-fidelity
+  dry-run-support: full
+  tier-signal: heuristic
+  applies-to: [maven, npm, pypi, golang, cargo, gem, nuget, composer, pub, helm, clojars]
+  condition: |
+    (
+      $comps := $exists(components) ? components : [];
+      $total := $count($comps);
+      $missing := $count($comps[$not($exists(purl)) and $not($arrayContains(['cryptographic-asset', 'file', 'data'], type))]);
+      $notContainer := $not($arrayContains(['container', 'operating-system', 'device'], $string(metadata.component.type)));
+      $notContainer and $count($comps[purl][$arrayContains(['maven', 'npm', 'pypi', 'golang', 'cargo', 'gem', 'nuget', 'composer', 'pub', 'helm', 'clojars'], $substringBefore($substringAfter(purl, 'pkg:'), '/'))]) > 0 and $total > 0 and $missing / $total > 0.1
+        ? { "total": $total, "missingPurlCount": $missing, "missingPurlPercent": $round(100 * $missing / $total, 1) }
+        : undefined
+    )
+  location: |
+    { "componentCount": total }
+  message: "{{ missingPurlCount }} of {{ total }} components ({{ missingPurlPercent }}%) have no package URL"
+  mitigation: "Regenerate the BOM from the project manifest or lockfile so components carry resolvable purls"
+  evidence: |
+    {
+      "total": total,
+      "missingPurlCount": missingPurlCount,
+      "missingPurlPercent": missingPurlPercent
+    }
+
+- id: BF-GEN-004
+  name: "No component carries a hash or identity evidence in a hash-bearing ecosystem"
+  description: >-
+    npm lockfiles record integrity strings and Cargo.lock records checksums,
+    so a BOM from those ecosystems where not a single component carries a hash
+    or identity evidence was produced without reading the lockfile's
+    integrity data. Other ecosystems (maven, pypi, gem, composer) legitimately
+    produce hashless BOMs even from a fully resolved graph, so they are out of
+    scope for this rule.
+  severity: low
+  category: build-fidelity
+  dry-run-support: full
+  tier-signal: heuristic
+  applies-to: [npm, cargo]
+  condition: |
+    (
+      $types := $distinct(components[purl].$substringBefore($substringAfter(purl, 'pkg:'), '/'));
+      $hashEco := $count($types[$arrayContains(['npm', 'cargo'], $)]) > 0;
+      $notContainer := $not($arrayContains(['container', 'operating-system', 'device'], $string(metadata.component.type)));
+      $notContainer and $hashEco and $count(components) > 0 and $count(components[hashes]) = 0 and $count(components[evidence.identity]) = 0
+        ? { "componentCount": $count(components) }
+        : undefined
+    )
+  location: |
+    { "componentCount": componentCount }
+  message: "None of the {{ componentCount }} components carries a hashes[] entry or identity evidence, so package integrity was not captured"
+  mitigation: "Scan the project with its lockfile present (package-lock.json, Cargo.lock) so integrity hashes flow into the BOM"
+  evidence: |
+    {
+      "componentCount": componentCount
+    }
+
+- id: BF-GEN-005
+  name: "Post-build lifecycle claimed without any component evidence"
+  description: >-
+    The BOM claims a post-build lifecycle phase, but no component carries
+    evidence, so the claim is not backed by the observed artifacts a
+    post-build scan would have collected.
+  severity: low
+  category: build-fidelity
+  dry-run-support: full
+  tier-signal: manifest
+  condition: |
+    (
+      $postBuild := $count(metadata.lifecycles[phase = 'post-build']) > 0;
+      $postBuild and $count(components) > 0 and $count(components[evidence]) = 0
+        ? { "componentCount": $count(components) }
+        : undefined
+    )
+  location: |
+    { "componentCount": componentCount }
+  message: "The BOM declares a post-build lifecycle for {{ componentCount }} components but none carries evidence"
+  mitigation: "Re-run cdxgen after the project build so post-build components carry identity and occurrence evidence"
+  evidence: |
+    {
+      "componentCount": componentCount
+    }
+
+- id: BF-GEN-006
+  name: "Supported ecosystem produced no components at all"
+  description: >-
+    The BOM's parent component is a known package ecosystem yet the
+    components array is empty. A parent purl is required so that BOMs from
+    ecosystems cdxgen cannot parse (zero components and an untyped parent)
+    stay silent; those are coverage gaps, not fidelity findings.
+  severity: high
+  category: build-fidelity
+  dry-run-support: full
+  tier-signal: absent
+  condition: |
+    (
+      $parentType := $substringBefore($substringAfter(metadata.component.purl, 'pkg:'), '/');
+      $count(components) = 0 and $arrayContains(['maven', 'npm', 'pypi', 'golang', 'cargo', 'gem', 'nuget', 'composer', 'pub', 'helm', 'clojars', 'cocoapods', 'swift'], $parentType)
+        ? { "parentPurlType": $parentType }
+        : undefined
+    )
+  location: |
+    { "parentPurlType": parentPurlType }
+  message: "The scan identified a {{ parentPurlType }} project but produced no components"
+  mitigation: "Install the ecosystem's build tool or use the cdxgen container image for that toolchain, then re-scan"
+  evidence: |
+    {
+      "parentPurlType": parentPurlType
+    }
+
+- id: BF-GEN-007
+  name: "Dependency graph has no depth"
+  description: >-
+    With ten or more dependency nodes, at most one node carries dependsOn
+    entries, so the graph is a flat list of direct references with the
+    transitive structure lost. Small graphs (fewer than ten nodes) are
+    legitimately shallow and stay silent.
+  severity: medium
+  category: build-fidelity
+  dry-run-support: full
+  tier-signal: manifest
+  applies-to: [maven, npm, pypi, golang, cargo, gem, nuget, composer, pub, helm, clojars]
+  condition: |
+    (
+      $deps := $exists(dependencies) ? dependencies : [];
+      $branching := $count($deps[$exists(dependsOn) and $count(dependsOn) > 0]);
+      $notContainer := $not($arrayContains(['container', 'operating-system', 'device'], $string(metadata.component.type)));
+      $notContainer and $count(components[purl][$arrayContains(['maven', 'npm', 'pypi', 'golang', 'cargo', 'gem', 'nuget', 'composer', 'pub', 'helm', 'clojars'], $substringBefore($substringAfter(purl, 'pkg:'), '/'))]) > 0 and $count($deps) >= 10 and $branching <= 1
+        ? { "dependencyCount": $count($deps), "nodesWithEdges": $branching }
+        : undefined
+    )
+  location: |
+    { "dependencyCount": dependencyCount }
+  message: "{{ dependencyCount }} dependency nodes exist but {{ nodesWithEdges }} carry dependsOn entries, so the transitive graph is missing"
+  mitigation: "Run the ecosystem resolver (mvn dependency:tree, go mod graph, cargo metadata and similar) before the scan so transitive edges are recorded"
+  evidence: |
+    {
+      "dependencyCount": dependencyCount,
+      "nodesWithEdges": nodesWithEdges
+    }
+
+- id: BF-JVM-001
+  name: "Maven components with no dependency entries"
+  description: >-
+    pkg:maven components exist but no dependency graph node references any of
+    them, which is the pom.xml fallback shape: only declared dependencies were
+    captured and the resolver never ran.
+  severity: high
+  category: build-fidelity
+  dry-run-support: full
+  tier-signal: manifest
+  applies-to: [maven]
+  condition: |
+    (
+      $mvnRefs := components[purl][$substringBefore($substringAfter(purl, 'pkg:'), '/') = 'maven'].$."bom-ref";
+      $notContainer := $not($arrayContains(['container', 'operating-system', 'device'], $string(metadata.component.type)));
+      $notContainer and $count($mvnRefs[$exists($)]) > 0 and $count(dependencies) = 0
+        ? { "mavenComponentCount": $count($mvnRefs[$exists($)]) }
+        : undefined
+    )
+  location: |
+    { "mavenComponentCount": mavenComponentCount }
+  message: "{{ mavenComponentCount }} pkg:maven components were captured with no dependency graph, so only declared dependencies are present"
+  mitigation: "Build the project with `mvn package -Dmaven.test.skip=true` (or `gradle build`) using the correct JDK before invoking cdxgen so the dependency tree is resolved"
+  evidence: |
+    {
+      "mavenComponentCount": mavenComponentCount
+    }
+
+- id: BF-JVM-002
+  name: "Maven dependency graph is thinner than the component set"
+  description: >-
+    A dependency graph exists for pkg:maven components but carries fewer than
+    half as many edges as there are maven components, which indicates the
+    tree stopped early or fell back partway. Fully resolved trees measured on
+    healthy projects have edges >= maven components (java-sec-code: 204/204);
+    the half-margin keeps small deep trees silent.
+  severity: medium
+  category: build-fidelity
+  dry-run-support: full
+  tier-signal: manifest
+  applies-to: [maven]
+  condition: |
+    (
+      $mvnCount := $count(components[purl][$substringBefore($substringAfter(purl, 'pkg:'), '/') = 'maven']);
+      $edges := $sum($append(0, dependencies[$exists(dependsOn)].$count(dependsOn)));
+      $notContainer := $not($arrayContains(['container', 'operating-system', 'device'], $string(metadata.component.type)));
+      $notContainer and $mvnCount > 0 and $count(dependencies) > 0 and $edges * 2 < $mvnCount
+        ? { "mavenComponentCount": $mvnCount, "edgeCount": $edges }
+        : undefined
+    )
+  location: |
+    { "mavenComponentCount": mavenComponentCount, "edgeCount": edgeCount }
+  message: "The dependency graph holds {{ edgeCount }} edges for {{ mavenComponentCount }} pkg:maven components, so transitive resolution stopped early"
+  mitigation: "Re-run the scan after a successful `mvn dependency:tree` or `gradle dependencies` on the same project"
+  evidence: |
+    {
+      "mavenComponentCount": mavenComponentCount,
+      "edgeCount": edgeCount
+    }
+
+- id: BF-JVM-003
+  name: "Maven BOM built from jar scanning only"
+  description: >-
+    Almost every component is a pkg:maven library, yet nothing carries
+    identity evidence or hashes and no dependency graph exists - the shape of
+    a BOM assembled from jars found on disk rather than from any manifest or
+    resolver output.
+  severity: medium
+  category: build-fidelity
+  dry-run-support: full
+  tier-signal: heuristic
+  applies-to: [maven]
+  condition: |
+    (
+      $mvnCount := $count(components[purl][$substringBefore($substringAfter(purl, 'pkg:'), '/') = 'maven']);
+      $total := $count(components);
+      $notContainer := $not($arrayContains(['container', 'operating-system', 'device'], $string(metadata.component.type)));
+      $notContainer and $total > 0 and $mvnCount / $total >= 0.9 and $count(dependencies) = 0 and $count(components[evidence.identity]) = 0 and $count(components[hashes]) = 0
+        ? { "mavenComponentCount": $mvnCount, "total": $total }
+        : undefined
+    )
+  location: |
+    { "mavenComponentCount": mavenComponentCount, "total": total }
+  message: "{{ mavenComponentCount }} of {{ total }} components are pkg:maven libraries with no evidence, hashes, or dependency graph, which matches jar scanning rather than a build"
+  mitigation: "Run the build inside the project (mvn package, gradle build) and re-scan so components come from the resolver with evidence attached"
+  evidence: |
+    {
+      "mavenComponentCount": mavenComponentCount,
+      "total": total
+    }
+
+- id: BF-JVM-004
+  name: "Gradle project produced no Maven components"
+  description: >-
+    A component carries the cdx:gradle:GradleRootPath marker, which proves a
+    Gradle project was detected, yet the BOM holds no pkg:maven components at
+    all - Gradle was seen but never produced its dependency set. The
+    filesystem-level counterpart (build.gradle present, zero components
+    emitted) needs disk access and belongs to the reflection step.
+  severity: medium
+  category: build-fidelity
+  dry-run-support: full
+  tier-signal: absent
+  applies-to: [maven]
+  condition: |
+    (
+      $gradleMarked := $count(components[$hasProp($, 'cdx:gradle:GradleRootPath')]) > 0 or $hasProp(metadata.component, 'cdx:gradle:GradleRootPath');
+      $gradleMarked and $count(components[purl][$substringBefore($substringAfter(purl, 'pkg:'), '/') = 'maven']) = 0
+        ? { "componentCount": $count(components) }
+        : undefined
+    )
+  location: |
+    { "componentCount": componentCount }
+  message: "A Gradle project was detected but the BOM carries no pkg:maven components"
+  mitigation: "Run `gradle build` or let cdxgen provision the Gradle toolchain, then re-scan so the resolved dependency set is captured"
+  evidence: |
+    {
+      "componentCount": componentCount
+    }
+
+- id: BF-JS-001
+  name: "npm components without integrity hashes"
+  description: >-
+    pkg:npm components exist but none carries a hashes[] entry, which means
+    the lockfile integrity data (package-lock.json, pnpm-lock.yaml, yarn.lock)
+    was not read - a package.json-only or node_modules-less scan shape.
+  severity: medium
+  category: build-fidelity
+  dry-run-support: full
+  tier-signal: manifest
+  applies-to: [npm]
+  condition: |
+    (
+      $npm := components[purl][$substringBefore($substringAfter(purl, 'pkg:'), '/') = 'npm'];
+      $notContainer := $not($arrayContains(['container', 'operating-system', 'device'], $string(metadata.component.type)));
+      $notContainer and $count($npm) > 0 and $count($npm[hashes]) = 0
+        ? { "npmComponentCount": $count($npm) }
+        : undefined
+    )
+  location: |
+    { "npmComponentCount": npmComponentCount }
+  message: "{{ npmComponentCount }} pkg:npm components carry no integrity hash, so the lockfile was not used"
+  mitigation: "Commit and generate from a lockfile (package-lock.json, pnpm-lock.yaml, or yarn.lock) so integrity data flows into hashes[]"
+  evidence: |
+    {
+      "npmComponentCount": npmComponentCount
+    }
+
+- id: BF-JS-002
+  name: "npm versions are ranges, not pins"
+  description: >-
+    More than half of the pkg:npm components carry a range-looking version
+    (^, ~, >, or *), which is the manifest shape rather than the lockfile
+    shape; the exact installed versions are unknown.
+  severity: high
+  category: build-fidelity
+  dry-run-support: full
+  tier-signal: manifest
+  applies-to: [npm]
+  condition: |
+    (
+      $npm := components[purl][$substringBefore($substringAfter(purl, 'pkg:'), '/') = 'npm'];
+      $ranges := $count($npm[$startsWith($string(version), '^') or $startsWith($string(version), '~') or $startsWith($string(version), '>') or $string(version) = '*']);
+      $notContainer := $not($arrayContains(['container', 'operating-system', 'device'], $string(metadata.component.type)));
+      $notContainer and $count($npm) > 0 and $ranges / $count($npm) > 0.5
+        ? { "npmComponentCount": $count($npm), "rangeVersionCount": $ranges, "rangeVersionPercent": $round(100 * $ranges / $count($npm), 1) }
+        : undefined
+    )
+  location: |
+    { "npmComponentCount": npmComponentCount }
+  message: "{{ rangeVersionCount }} of {{ npmComponentCount }} pkg:npm components ({{ rangeVersionPercent }}%) carry range versions instead of pinned ones"
+  mitigation: "Run the package manager install to produce a lockfile, then re-scan so components carry the resolved versions"
+  evidence: |
+    {
+      "npmComponentCount": npmComponentCount,
+      "rangeVersionCount": rangeVersionCount,
+      "rangeVersionPercent": rangeVersionPercent
+    }
+
+- id: BF-JS-003
+  name: "Workspace marker with a single package's graph"
+  description: >-
+    The BOM carries the cdx:npm:isWorkspace marker proving a monorepo was
+    detected, yet the dependency graph holds at most one node, so only one
+    package's dependencies made it into the BOM.
+  severity: medium
+  category: build-fidelity
+  dry-run-support: full
+  tier-signal: manifest
+  applies-to: [npm]
+  condition: |
+    (
+      $workspace := $prop(metadata.component, 'cdx:npm:isWorkspace') = 'true' or $count(components[$prop($, 'cdx:npm:isWorkspace') = 'true']) > 0;
+      $notContainer := $not($arrayContains(['container', 'operating-system', 'device'], $string(metadata.component.type)));
+      $notContainer and $workspace and $count(components) > 0 and $count(dependencies) <= 1
+        ? { "dependencyCount": $count(dependencies) }
+        : undefined
+    )
+  location: |
+    { "dependencyCount": dependencyCount }
+  message: "A workspace was detected but only {{ dependencyCount }} dependency node is present, so most workspace packages are missing their graphs"
+  mitigation: "Run the workspace install (npm/pnpm/yarn install at the repo root) before scanning so every workspace package resolves"
+  evidence: |
+    {
+      "dependencyCount": dependencyCount
+    }
+
+- id: BF-PY-001
+  name: "PyPI components with no dependency entries"
+  description: >-
+    pkg:pypi components exist but no dependency graph node references any of
+    them, which is the requirements.txt shape: declared dependencies without
+    resolution (pipenv's Pipfile.lock parse produces the same shape).
+  severity: high
+  category: build-fidelity
+  dry-run-support: full
+  tier-signal: manifest
+  applies-to: [pypi]
+  condition: |
+    (
+      $py := components[purl][$substringBefore($substringAfter(purl, 'pkg:'), '/') = 'pypi'].$."bom-ref";
+      $refs := $exists(dependencies) ? dependencies.ref : [];
+      $targets := $exists(dependencies) ? dependencies.dependsOn : [];
+      $notContainer := $not($arrayContains(['container', 'operating-system', 'device'], $string(metadata.component.type)));
+      $notContainer and $count($py[$exists($)]) > 0 and $count($py[$listContains($refs, $) or $listContains($targets, $)]) = 0
+        ? { "pypiComponentCount": $count($py[$exists($)]) }
+        : undefined
+    )
+  location: |
+    { "pypiComponentCount": pypiComponentCount }
+  message: "{{ pypiComponentCount }} pkg:pypi components were captured with no dependency graph, so the requirements were read without resolution"
+  mitigation: "Generate the BOM from a resolved environment or a poetry/uv lockfile so transitive dependencies are captured"
+  evidence: |
+    {
+      "pypiComponentCount": pypiComponentCount
+    }
+
+- id: BF-PY-002
+  name: "Bare PyPI components with no provenance"
+  description: >-
+    pkg:pypi components exist with no hashes, no dependency graph, and no
+    cdx:pypi:* provenance property at all - the shape of a parse that found
+    package names but recorded nothing else about them. Poetry lockfile parses
+    legitimately carry no hashes but do build a graph, and requirements parses
+    record cdx:pypi:versionSpecifiers, so both stay silent here.
+  severity: medium
+  category: build-fidelity
+  dry-run-support: full
+  tier-signal: manifest
+  applies-to: [pypi]
+  condition: |
+    (
+      $py := components[purl][$substringBefore($substringAfter(purl, 'pkg:'), '/') = 'pypi'];
+      $withProvenance := $count($py[$exists(properties[$startsWith(name, 'cdx:pypi:')])]);
+      $notContainer := $not($arrayContains(['container', 'operating-system', 'device'], $string(metadata.component.type)));
+      $notContainer and $count($py) > 0 and $withProvenance = 0 and $count(dependencies) = 0 and $count(components[hashes]) = 0
+        ? { "pypiComponentCount": $count($py) }
+        : undefined
+    )
+  location: |
+    { "pypiComponentCount": pypiComponentCount }
+  message: "{{ pypiComponentCount }} pkg:pypi components carry no hashes, no graph position, and no provenance properties"
+  mitigation: "Regenerate the BOM from a resolved environment (pip freeze, poetry lock, uv lock) so provenance and graph position are captured"
+  evidence: |
+    {
+      "pypiComponentCount": pypiComponentCount
+    }
+
+- id: BF-PY-003
+  name: "PyPI versions are ranges or absent"
+  description: >-
+    More than 20% of pkg:pypi components carry a range-looking version
+    (^, ~, >, <, *) or none, so the BOM does not pin what was installed.
+  severity: medium
+  category: build-fidelity
+  dry-run-support: full
+  tier-signal: heuristic
+  applies-to: [pypi]
+  condition: |
+    (
+      $py := components[purl][$substringBefore($substringAfter(purl, 'pkg:'), '/') = 'pypi'];
+      $unpinned := $count($py[$not($exists(version)) or $startsWith($string(version), '^') or $startsWith($string(version), '~') or $startsWith($string(version), '>') or $startsWith($string(version), '<') or $string(version) = '*']);
+      $notContainer := $not($arrayContains(['container', 'operating-system', 'device'], $string(metadata.component.type)));
+      $notContainer and $count($py) > 0 and $unpinned / $count($py) > 0.2
+        ? { "pypiComponentCount": $count($py), "unpinnedCount": $unpinned, "unpinnedPercent": $round(100 * $unpinned / $count($py), 1) }
+        : undefined
+    )
+  location: |
+    { "pypiComponentCount": pypiComponentCount }
+  message: "{{ unpinnedCount }} of {{ pypiComponentCount }} pkg:pypi components ({{ unpinnedPercent }}%) have unpinned versions"
+  mitigation: "Generate the BOM from a lockfile or a frozen environment so versions are exact"
+  evidence: |
+    {
+      "pypiComponentCount": pypiComponentCount,
+      "unpinnedCount": unpinnedCount,
+      "unpinnedPercent": unpinnedPercent
+    }
+
+- id: BF-GO-001
+  name: "Go components in a flat graph"
+  description: >-
+    pkg:golang components exist with dependency nodes but none carries
+    dependsOn entries, which is the go.mod shape: declared module requires
+    without the resolved module graph.
+  severity: medium
+  category: build-fidelity
+  dry-run-support: full
+  tier-signal: manifest
+  applies-to: [golang]
+  condition: |
+    (
+      $goCount := $count(components[purl][$substringBefore($substringAfter(purl, 'pkg:'), '/') = 'golang']);
+      $branching := $count(dependencies[$exists(dependsOn) and $count(dependsOn) > 0]);
+      $notContainer := $not($arrayContains(['container', 'operating-system', 'device'], $string(metadata.component.type)));
+      $notContainer and $goCount > 0 and $count(dependencies) > 0 and $branching = 0
+        ? { "goComponentCount": $goCount, "dependencyCount": $count(dependencies) }
+        : undefined
+    )
+  location: |
+    { "goComponentCount": goComponentCount, "dependencyCount": dependencyCount }
+  message: "{{ goComponentCount }} pkg:golang components sit in {{ dependencyCount }} dependency nodes with no edges, so the module graph was not resolved"
+  mitigation: "Run `go mod download` (or build the project) before scanning so the resolved module graph is captured"
+  evidence: |
+    {
+      "goComponentCount": goComponentCount,
+      "dependencyCount": dependencyCount
+    }
+
+- id: BF-RB-001
+  name: "Ruby gems in a flat graph"
+  description: >-
+    pkg:gem components exist with dependency nodes but none carries dependsOn
+    entries, which is a declared-gems list rather than the Bundler-resolved
+    definition.
+  severity: medium
+  category: build-fidelity
+  dry-run-support: full
+  tier-signal: manifest
+  applies-to: [gem]
+  condition: |
+    (
+      $gemCount := $count(components[purl][$substringBefore($substringAfter(purl, 'pkg:'), '/') = 'gem']);
+      $branching := $count(dependencies[$exists(dependsOn) and $count(dependsOn) > 0]);
+      $notContainer := $not($arrayContains(['container', 'operating-system', 'device'], $string(metadata.component.type)));
+      $notContainer and $gemCount > 0 and $count(dependencies) > 0 and $branching = 0
+        ? { "gemComponentCount": $gemCount, "dependencyCount": $count(dependencies) }
+        : undefined
+    )
+  location: |
+    { "gemComponentCount": gemComponentCount, "dependencyCount": dependencyCount }
+  message: "{{ gemComponentCount }} pkg:gem components sit in {{ dependencyCount }} dependency nodes with no edges, so the bundle was not resolved"
+  mitigation: "Run `bundle install` (or `bundle lock`) before scanning so the resolved Gemfile.lock definition is captured"
+  evidence: |
+    {
+      "gemComponentCount": gemComponentCount,
+      "dependencyCount": dependencyCount
+    }
+
+- id: BF-RS-001
+  name: "Cargo components in a flat graph"
+  description: >-
+    pkg:cargo components exist with dependency nodes but none carries
+    dependsOn entries, which is the Cargo.toml shape rather than the resolved
+    Cargo.lock graph.
+  severity: medium
+  category: build-fidelity
+  dry-run-support: full
+  tier-signal: manifest
+  applies-to: [cargo]
+  condition: |
+    (
+      $cargoCount := $count(components[purl][$substringBefore($substringAfter(purl, 'pkg:'), '/') = 'cargo']);
+      $branching := $count(dependencies[$exists(dependsOn) and $count(dependsOn) > 0]);
+      $notContainer := $not($arrayContains(['container', 'operating-system', 'device'], $string(metadata.component.type)));
+      $notContainer and $cargoCount > 0 and $count(dependencies) > 0 and $branching = 0
+        ? { "cargoComponentCount": $cargoCount, "dependencyCount": $count(dependencies) }
+        : undefined
+    )
+  location: |
+    { "cargoComponentCount": cargoComponentCount, "dependencyCount": dependencyCount }
+  message: "{{ cargoComponentCount }} pkg:cargo components sit in {{ dependencyCount }} dependency nodes with no edges, so the crate graph was not resolved"
+  mitigation: "Run `cargo metadata` or `cargo build` before scanning so the resolved lockfile graph is captured"
+  evidence: |
+    {
+      "cargoComponentCount": cargoComponentCount,
+      "dependencyCount": dependencyCount
+    }
+
+- id: BF-CS-001
+  name: "NuGet components in a flat graph"
+  description: >-
+    pkg:nuget components exist with dependency nodes but none carries
+    dependsOn entries, which is a project-file read rather than the resolved
+    dependency graph.
+  severity: medium
+  category: build-fidelity
+  dry-run-support: full
+  tier-signal: manifest
+  applies-to: [nuget]
+  condition: |
+    (
+      $nugetCount := $count(components[purl][$substringBefore($substringAfter(purl, 'pkg:'), '/') = 'nuget']);
+      $branching := $count(dependencies[$exists(dependsOn) and $count(dependsOn) > 0]);
+      $notContainer := $not($arrayContains(['container', 'operating-system', 'device'], $string(metadata.component.type)));
+      $notContainer and $nugetCount > 0 and $count(dependencies) > 0 and $branching = 0
+        ? { "nugetComponentCount": $nugetCount, "dependencyCount": $count(dependencies) }
+        : undefined
+    )
+  location: |
+    { "nugetComponentCount": nugetComponentCount, "dependencyCount": dependencyCount }
+  message: "{{ nugetComponentCount }} pkg:nuget components sit in {{ dependencyCount }} dependency nodes with no edges, so the package graph was not restored"
+  mitigation: "Run `dotnet restore` (or build the solution) before scanning so the resolved package graph is captured"
+  evidence: |
+    {
+      "nugetComponentCount": nugetComponentCount,
+      "dependencyCount": dependencyCount
+    }
+
+- id: BF-SWIFT-001
+  name: "Swift packages with no dependency graph"
+  description: >-
+    pkg:swift components exist but the BOM holds no dependency nodes at all.
+    cdxgen parses Package.resolved but never builds a Swift graph, so this
+    finding reports the ecosystem's ceiling; the reflection step classifies
+    it as at-ceiling rather than asking anyone to fix it.
+  severity: low
+  category: build-fidelity
+  dry-run-support: full
+  tier-signal: lockfile
+  applies-to: [swift]
+  condition: |
+    (
+      $swiftCount := $count(components[purl][$substringBefore($substringAfter(purl, 'pkg:'), '/') = 'swift']);
+      $notContainer := $not($arrayContains(['container', 'operating-system', 'device'], $string(metadata.component.type)));
+      $notContainer and $swiftCount > 0 and $count(dependencies) = 0
+        ? { "swiftComponentCount": $swiftCount }
+        : undefined
+    )
+  location: |
+    { "swiftComponentCount": swiftComponentCount }
+  message: "{{ swiftComponentCount }} pkg:swift components were captured from the package resolved list with no dependency graph"
+  mitigation: "No action resolves this today; cdxgen does not build a Swift dependency graph. Treat the BOM as a package list"
+  evidence: |
+    {
+      "swiftComponentCount": swiftComponentCount
+    }

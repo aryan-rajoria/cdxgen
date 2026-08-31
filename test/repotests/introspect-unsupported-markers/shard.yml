@@ -1,0 +1,7 @@
+name: introspect-unsupported-markers
+version: 1.0.0
+crystal: ">= 1.10.0"
+dependencies:
+  kemal:
+    github: kemalcr/kemal
+    version: "~> 1.4.0"
