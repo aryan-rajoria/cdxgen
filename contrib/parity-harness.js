@@ -29,6 +29,7 @@
 import { readFileSync, readdirSync, existsSync } from "node:fs";
 import { dirname, join, resolve } from "node:path";
 import process from "node:process";
+import { fileURLToPath } from "node:url";
 import { spawnSync } from "node:child_process";
 
 import { validateBom } from "../lib/validator/bomValidator.js";
@@ -132,7 +133,7 @@ async function jsValidate(bomJson) {
 // ---------------------------------------------------------------------------
 
 function collectBoms() {
-  const here = dirname(new URL(import.meta.url).pathname);
+  const here = dirname(fileURLToPath(import.meta.url));
   const root = resolve(here, "..");
   // cdxgen-plugins-bin is a sibling of cdxgen, not a subdirectory.
   const pluginsBinRoot = resolve(root, "..", "cdxgen-plugins-bin");
