@@ -42,18 +42,6 @@ cells:
     note: measured 2026-08-31 — resolved (100), 0 remediations, 204
       components; go 1.27 serves ipsw's declared go 1.26.
 
-  - id: rust-binwalk
-    group: C
-    image: ghcr.io/cdxgen/cdxgen-debian-rust:v13
-    project: ~/sandbox/binwalk
-    type: rust
-    expect:
-      tier: lockfile
-      remediations: []
-      minComponents: 50
-    note: measured 2026-08-31 — lockfile (100) at-ceiling, 0 remediations,
-      228 components.
-
   - id: python-poetry
     group: C
     image: ghcr.io/cdxgen/cdxgen-python:v13
@@ -291,10 +279,16 @@ cells:
     expect:
       tier: manifest
       remediations:
-        - BF-GEN-001
+        - go.mod-only-fallback
       minComponents: 100
-    note: measured 2026-08-30 — manifest (55), 258 components with no go-anchored
-      graph, BF-GEN-001 ranked; the old toolchain cannot serve go 1.26.
+    note: >-
+      measured 2026-08-30 — manifest (55), 258 components with no go-anchored
+      graph, BF-GEN-001 ranked; the old toolchain cannot serve go 1.26. Moved
+      2026-09-02 (D16) — the manual go.mod fallback that row already exercised
+      is now instrumented, so go.mod-only-fallback ranks and subsumes
+      BF-GEN-001; measured on the branch, the run reports the same manifest
+      tier and component count with the go entry ranked. The baseline row for
+      this cell needs the reviewer's --update-baseline.
 
   - id: golang126-ipsw
     group: A
@@ -535,3 +529,292 @@ cells:
       blocked by the command-execution policy. This shape needs
       --no-fail-on-error because fail-on-error forbids the pom fallback the
       manifest tier is made of; the cell above holds the shipped posture.
+
+  # ------------------------------------------------ Group D — evidence
+
+  # Deliverable 12 puts tool output into the report for the first time.
+  # evidencePresent asserts remediation[0].evidence exists with a non-empty
+  # outputExcerpt; evidenceContains names a real error marker of the
+  # ecosystem; absentStrings asserts a planted literal appears in neither
+  # report. Every cell here must fail on master: the evidence block does not
+  # exist there. Each note records the measured master behaviour.
+  - id: D-evidence-maven-offline
+    group: D
+    image: ghcr.io/cdxgen/cdxgen-temurin-java21:v13
+    network: none
+    project: ~/sandbox/java-sec-code
+    type: java
+    expect:
+      remediations:
+        - BF-GEN-001
+        - jvm.maven.manifest-fallback
+      evidencePresent: true
+      evidenceContains: "[ERROR]"
+      evidenceNonZeroExit: true
+      minComponents: 1
+    note: measured 2026-09-01 in-container — with `--network none` the maven
+      dependency:tree fails ("Non-resolvable parent POM", `[ERROR]` on the
+      stream, exit 1), the report grades manifest and ranks the maven repair
+      plus BF-GEN-001 with the redacted excerpt on remediation[0].evidence.
+      On master the same cell fails because remediation entries carry no
+      evidence block there, so evidencePresent, evidenceContains and
+      evidenceNonZeroExit all fail on master.
+
+  - id: D-evidence-gradle-javaskew
+    group: D
+    image: ghcr.io/cdxgen/cdxgen-temurin-java8:v13
+    project: ~/sandbox/gradle-sample-app
+    type: gradle
+    expect:
+      remediations:
+        - jvm.gradle.invocation-failed
+      evidencePresent: true
+      evidenceContains: "FAILURE:"
+      evidenceNonZeroExit: true
+      noPlaceholders: true
+      versionFrom: mismatch
+    note: measured 2026-09-01 in-container — the wrapper downloads its pinned
+      Gradle 9.7.0-milestone-1, which refuses the image's JDK 8 with
+      "FAILURE — Build failed with an exception" and the demand for JVM 17
+      or later, the report grades absent with `jvm.gradle.invocation-failed`
+      ranked and the excerpt on remediation[0].evidence. The refusal's own
+      phrasing now parses into a `tool.mismatch` (java 17), so `sdk install
+      java 17` is fully substituted from the mismatch and no action carries
+      a placeholder. On master the same cell fails because remediation
+      entries carry no evidence block, the demand phrasing parses into
+      nothing, and the java install keeps its `{{version}}`.
+
+  - id: D-redaction-secret
+    group: D
+    image: ghcr.io/cdxgen/cdxgen:v13
+    needsFixture: true
+    project: repo://introspect-redaction-secret
+    type: java
+    env:
+      PLANT_MATRIX_TOKEN: "cdxgen-redaction-fixture-9b2c"
+      MVN_CMD: "/cdxgen-branch/test/repotests/introspect-redaction-secret/leaking-mvn.sh"
+    expect:
+      remediations:
+        - BF-GEN-001
+        - jvm.maven.manifest-fallback
+      evidencePresent: true
+      evidenceContains: "[ERROR]"
+      absentStrings:
+        - cdxgen-redaction-fixture-9b2c
+        - cdxgen-plant-hunter2
+        - cdxplant:cdxplantsecret
+    note: measured 2026-09-01 in-container — the fixture's stand-in maven
+      echoes planted, deliberately fake credentials from its environment and
+      output, and the cell found every one of them redacted in both reports
+      (`[redacted]` in the excerpt, no absentStrings delta). A missing
+      fixture row fails this cell, it is never skipped. Measured on master
+      with the harness backported, the cell fails there on evidencePresent
+      because master has no evidence block to redact.
+
+  - id: D-version-gradle-javaskew
+    group: D
+    image: ghcr.io/cdxgen/cdxgen-temurin-java8:v13
+    project: repo://introspect-gradle-javaskew
+    type: gradle
+    env:
+      GRADLE_CMD: >-
+        /cdxgen-branch/test/repotests/introspect-gradle-javaskew/failing-gradle.sh
+    expect:
+      remediations:
+        - jvm.gradle.invocation-failed
+      evidencePresent: true
+      evidenceContains: "UnsupportedClassVersionError"
+      evidenceNonZeroExit: true
+      noPlaceholders: true
+      versionFrom: mismatch
+    note: >-
+      measured 2026-09-01 in-container — the fixture's stand-in gradle
+      fails the way a JVM 8 launcher does against classes compiled for Java
+      17 (UnsupportedClassVersionError naming class file 61.0 over 52.0), the
+      report grades absent with `jvm.gradle.invocation-failed` ranked, and
+      `sdk install java 17` is fully substituted with a mismatch-sourced
+      version and its diagnosis as versionSource, while the gradle install
+      resolves from the fixture's wrapper pin. Measured on a clean
+      origin/master worktree with only the harness, this yaml and the
+      fixture backported, the run records the same tool.mismatch event but
+      routes it into nothing — java keeps the placeholder and every
+      versionFrom stays the catalog's expected — so the cell fails there on
+      noPlaceholders, versionFrom, and the three evidence keys (master
+      predates the evidence block).
+
+  # ------------------------------------------------ Group D — command shaping
+  # Deliverable 14 makes the suggested commands name the executables this
+  # project actually drives: the wrapper script it ships, the Python manager
+  # that owns its lock files. shapedBy carries the detection into the report;
+  # every cell here must fail on master, where commands are static guesses.
+
+  - id: D-shape-maven-wrapper
+    group: D
+    image: ghcr.io/cdxgen/cdxgen-temurin-java21:v13
+    project: repo://introspect-maven-wrapper
+    type: java
+    expect:
+      remediations:
+        - BF-GEN-001
+        - jvm.maven.manifest-fallback
+      evidencePresent: true
+      evidenceContains: "[ERROR]"
+      evidenceNonZeroExit: true
+      shapedBy: wrapper:./mvnw
+    note: >-
+      measured 2026-09-01 in-container — the fixture ships an executable
+      ./mvnw whose readiness probe succeeds and whose build fails with real
+      `[ERROR]` output, so the run drives the wrapper itself; the maven
+      repair's build action reads `./mvnw -q package -DskipTests` with
+      shapedBy wrapper:./mvnw, and the java install keeps its unresolved
+      `{{version}}` (the fixture pins no JDK). On master the same cell fails
+      because the build action is the static `mvn -q package -DskipTests`
+      and no action carries a shapedBy.
+
+  - id: D-shape-gradle-wrapper
+    group: D
+    image: ghcr.io/cdxgen/cdxgen-temurin-java8:v13
+    project: ~/sandbox/gradle-sample-app
+    type: gradle
+    expect:
+      remediations:
+        - jvm.gradle.invocation-failed
+      evidencePresent: true
+      evidenceNonZeroExit: true
+      shapedBy: wrapper:./gradlew
+      noPlaceholders: true
+      versionFrom: mismatch
+    note: >-
+      measured 2026-09-01 in-container — the project's ./gradlew wrapper
+      takes precedence over the image's own Gradle, downloads its pinned
+      distribution, refuses the image's JDK 8 ("Gradle requires JVM 17 or
+      later to run"), and the report ranks the gradle repair whose build
+      action reads `./gradlew -q build` with shapedBy wrapper:./gradlew;
+      the java install resolves from the mismatch the refusal produced. On
+      master the cell fails on shapedBy, noPlaceholders and versionFrom
+      (the refusal text parses into nothing there) plus the evidence keys.
+
+  - id: D-shape-uv-lockfile
+    group: D
+    image: ghcr.io/cdxgen/cdxgen-python:v13
+    project: repo://introspect-uv-lockfile
+    type: python
+    expect:
+      remediations:
+        - BF-GEN-006
+        - python.lockfile-unparseable.uv
+      shapedBy: manager:uv
+      noPlaceholders: true
+    note: >-
+      measured 2026-09-01 in-container — the fixture's corrupt uv.lock fails
+      its TOML parse, the uv entry ranks (alongside BF-GEN-006, the no-
+      components finding the empty parse earns) with `uv lock` as the build
+      action and shapedBy manager:uv, never `poetry lock`. This is the cell
+      the deliverable exists for: on master the same run emits the one-size
+      poetry entry (`pip install poetry`, `poetry lock --no-interaction`)
+      for a uv project, so the remediation id, the command and shapedBy all
+      fail there.
+
+  # ------------------------------------------------ Group D — formulation
+  # Deliverable 15 makes the BOM's formulation section a third evidence
+  # source. The foreign cell re-scans a committed BOM (captured from a real
+  # introspect run, with the toolchain record and CI commands of the machine
+  # that generated it) in an image whose toolchain differs, where the
+  # formulation is the only surviving trace of the generating run. The
+  # same-run cell is the regression that matters most: formulation must move
+  # nothing on a healthy scan that already has a ledger.
+
+  - id: D-formulation-foreign
+    group: D
+    image: ghcr.io/cdxgen/cdxgen-alpine-node24:v13
+    entry: audit
+    project: repo://introspect-formulation-foreign
+    bomFile: foreign.bom.json
+    expect:
+      remediations:
+        - BF-FORM-002
+      maxConfidence: medium
+    note: >-
+      measured 2026-09-02 in-container — the committed fixture BOM was
+      generated by a real `--profile introspect` run on a machine recording
+      java 25.0.2, python 3.14.6 and Node.js 26.7.0 in its formulation; the
+      bare alpine node24 image (Node.js 24.18.0) shares none of that
+      toolchain, so the re-scan grades manifest with BF-FORM-002 ranked (the
+      formulation's runtime entry describes a different machine), confidence
+      capped at medium, the java row's tools.resolved filled with source
+      formulation, and the declared `mvn -B dependency:tree` travelling on
+      the entry as an attemptedCommand hypothesis. Measured on the base
+      worktree (expectation relaxed — the base has no BF-FORM ids): the same
+      run grades resolved (100), confidence low, zero remediations, and no
+      tool fact, so the cell fails there through exactly the remediations key.
+
+  - id: D-formulation-samerun-neutral
+    group: D
+    image: ghcr.io/cdxgen/cdxgen-golang:v13
+    project: ~/sandbox/ipsw
+    type: go
+    expect:
+      tier: resolved
+      remediations: []
+      minComponents: 100
+      absentStrings:
+        - "make build"
+    note: >-
+      measured 2026-09-02 in-container — the same healthy cell as group C's
+      golang-ipsw, whose repo ships GitHub Actions workflows declaring 144
+      commands (`make build` among them): the run's own ledger observed the
+      scan, so formulation is corroboration only and the report stays at
+      resolved (100) with zero remediations, never naming a declared CI
+      command. Behaves identically on the base (also zero remediations
+      there) — this cell is the regression guard, not a must-fail-on-base
+      cell; the acceptance arithmetic lives in formulationEvidence.poku.js.
+
+  # ------------------------------------------------ Group D — catalog breadth
+  # Deliverable 16 gives the ecosystems whose degraded runs produced a score
+  # below 100 with an empty remediation[] a ranked repair of their own. The
+  # image axis removes the toolchain; every cell must fail on the base worktree,
+  # where the same scan ranks nothing.
+
+  - id: D-go-notoolchain
+    group: D
+    image: ghcr.io/cdxgen/cdxgen-alpine-node24:v13
+    project: ~/sandbox/ipsw
+    type: go
+    expect:
+      tier: manifest
+      remediations:
+        - go.mod-only-fallback
+        - go.toolchain.missing
+      minComponents: 1
+    note: >-
+      measured 2026-09-02 in-container — with no go executable on the image
+      the go list -deps spawn fails, the run parses go.mod manually and grades
+      manifest with both go entries ranked (BF-GEN-001 subsumed into the
+      fallback entry it verifies); the loop is told to install go and rebuild
+      the module graph instead of receiving an empty remediation[]. On the
+      base worktree the same run grades the same manifest tier through
+      BF-GEN-001 alone and ranks nothing, so the cell fails there through
+      exactly the remediations key. The tier demotion alone was already on
+      master; what this cell asserts is the new catalog ids ranking.
+
+  - id: D-rust-notoolchain
+    group: D
+    image: ghcr.io/cdxgen/cdxgen-alpine-node24:v13
+    project: repo://introspect-cargo-lockless
+    type: rust
+    expect:
+      tier: manifest
+      remediations:
+        - rust.cargo-lock-missing
+      minComponents: 1
+    note: >-
+      measured 2026-09-02 in-container — the vendored fixture carries a
+      Cargo.toml and no Cargo.lock, which is the one rust degradation that
+      exists: no matrix cell can invoke cargo at all (the parser spawns it
+      only under --deep or with install-deps plus a build lifecycle), so a
+      missing rust toolchain degrades nothing and the image axis is irrelevant
+      for this cell. The manifest-only parse grades manifest and ranks
+      rust.cargo-lock-missing with BF-GEN-001 and BF-RS-001 subsumed into it.
+      On the base worktree the same fixture grades manifest through those two
+      rules and ranks nothing, so the cell fails there through exactly the
+      remediations key.

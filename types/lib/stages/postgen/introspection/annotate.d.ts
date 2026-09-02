@@ -57,6 +57,18 @@ export declare function applyIntrospectionToBom(bomJson: Object, reflection: Obj
     annotations?: boolean;
 }): Object;
 /**
+ * Stamp every formulation workflow with the id of the run that reflected over
+ * the document, so a later consumer of the BOM can tell a formulation record
+ * this run generated from one that arrived with a foreign BOM. The stamp is
+ * replace-by-name, matching how the rest of the verdict mutates the
+ * document: a BOM enriched twice keeps only the latest run's id.
+ *
+ * @param {Object} bomJson CycloneDX BOM, mutated in place.
+ * @param {string} runId Run id of the introspection pass.
+ * @returns {Object} The mutated BOM.
+ */
+export declare function applyFormulationRunIdMarker(bomJson: Object, runId: string): Object;
+/**
  * Whether a BOM already carries an introspection verdict.
  *
  * Evidence collection re-processes a finished BOM through a fresh wrapper, so

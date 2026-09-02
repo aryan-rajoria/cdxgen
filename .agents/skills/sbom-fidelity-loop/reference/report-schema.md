@@ -1,4 +1,4 @@
-# Report schema — `buildIntrospectionJson` v1.0
+# Report schema — `buildIntrospectionJson` v1.1
 
 The JSON report is the loop's contract. It is written by `--introspect` (the
 JSON path defaults to `<output>.introspection.json`, or
@@ -8,14 +8,16 @@ and free text is redacted, so consecutive iterations diff cleanly everywhere
 except `runId` and `generatedAt`, which identify the run rather than describe
 it; `inputsFingerprint` is the field to compare across iterations. This
 document describes
-`schemaVersion: "1.0"`; new fields arrive as additive minor bumps, so read
-reports tolerantly.
+`schemaVersion: "1.1"`; new fields arrive as additive minor bumps, so read
+reports tolerantly. A `1.0` report (no `evidence` blocks) is still valid
+input for the loop; every `1.1` field is optional and absent, never null,
+when the run recorded no such fact.
 
 ## Document at a glance
 
 ```json
 {
-  "schemaVersion": "1.0",
+  "schemaVersion": "1.1",
   "runId": "dfef56e9-aa87-4b91-965d-20dc7981f0d9",
   "inputsFingerprint": "sha256:4c734642d88a9bc75b9496f2840397d14320cd3bb28a3ba14d45b00c5e3d69c6",
   "generatedAt": "2026-08-30T13:21:11.300Z",
@@ -59,9 +61,9 @@ value shown is real output.
 
 | Field                                  | Meaning                                                                                                                                                                                 |
 | -------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `schemaVersion`                        | Report contract version, currently `"1.0"`                                                                                                                                              |
+| `schemaVersion`                        | Report contract version, currently `"1.1"` — `"1.1"` adds the optional remediation `evidence` block; `"1.0"` reports lack it, and every consumer must tolerate both                      |
 | `runId`                                | Identifier of the cdxgen run that produced the report                                                                                                                                   |
-| `inputsFingerprint`                    | `sha256:` over project path, project types, resolved tool versions and cdxgen version; changes when an install takes effect, invariant to timestamps — the loop's stalled/attempted key |
+| `inputsFingerprint`                    | `sha256:` over project path, project types, resolved tool versions and cdxgen version; invariant to timestamps — the loop's stalled/attempted key. It moves when an install takes effect only on the scan paths that record a `tool.resolved` event; the go path records none today, so installing go leaves it unchanged and a go row's progress must be read from its tier |
 | `generatedAt`                          | ISO timestamp of the report                                                                                                                                                             |
 | `cdxgen.version`, `cdxgen.runtime`     | The cdxgen release and host runtime that produced the verdict                                                                                                                           |
 | `bom`                                  | Serial number, component count and output path of the BOM this report grades                                                                                                            |
@@ -121,12 +123,21 @@ value shown is real output.
 - `confidence` is `high` when ledger and rule evidence agree, `medium`
   otherwise, and `low` when the verdict rests on marker detection alone.
 - `tierReasons[]` carries `determining: true` on the reasons that decided the
-  tier. `source` is `ledger`, `rule`, or `marker`.
+  tier. `source` is `ledger`, `rule`, `marker`, or — for findings derived
+  from the BOM's formulation section on a foreign BOM — `formulation`.
 - `tools.*` entries join what the project declared (`expected` — `wanted` from
   a pin file or CLI type), what answered (`resolved` — `found`; a resolved
   entry without `found` means present, version unknown), and what failed
   (`missing`, `mismatched`). These resolve `{{version}}`/`{{major}}`
-  placeholders in remediation actions.
+  placeholders in remediation actions, strongest evidence first: a `mismatched`
+  entry — the build refused the running version and named the one it needs —
+  outranks a pin file, which outranks a CLI type pin, which outranks anything
+  else the run recorded. Each resolved action names the band that answered in
+  `versionFrom` and, where it adds information, the reason in `versionSource`.
+  On a foreign BOM (no ledger), `resolved` additionally carries the
+  toolchain record from the BOM's formulation section with
+  `source: "formulation"` — what the generating run probed, not what this
+  run observed.
 
 ## `remediation[]` — ranked, expected gain first
 
@@ -143,21 +154,29 @@ value shown is real output.
   "projectedScore": 100,
   "expectedGain": 55,
   "evidenceCount": 1,
+  "evidence": {
+    "failedCommand": "mvn -B dependency:tree -DoutputFile=/tmp/cdxgen-mvn-tree.txt",
+    "exitCode": 1,
+    "cause": "The maven dependency tree did not succeed, so at best the direct dependencies parsed from pom.xml are available.",
+    "outputExcerpt": "[ERROR] Failed to execute goal … Could not resolve dependencies for project com.example:demo:jar:1.0\n[ERROR] … Could not transfer artifact … from/to central (https://repo.maven.apache.org/maven2): Connection timed out"
+  },
   "subsumes": ["BF-JVM-001"],
   "actions": [
     {
       "kind": "install",
       "tool": "java",
       "via": "sdkman",
-      "versionFrom": "expected",
-      "command": "sdk install java {{version}}",
-      "windows": "winget install --id EclipseAdoptium.Temurin.{{major}}.JDK"
+      "versionFrom": "pin",
+      "versionSource": "pinned in .java-version",
+      "command": "sdk install java 21",
+      "windows": "winget install --id EclipseAdoptium.Temurin.21.JDK"
     },
     {
       "kind": "install",
       "tool": "maven",
       "via": "sdkman",
-      "versionFrom": "expected",
+      "versionFrom": "unresolved",
+      "versionSourceMissing": true,
       "command": "sdk install maven {{version}}",
       "windows": "winget install --id Apache.Maven"
     },
@@ -183,14 +202,29 @@ is the loop's next candidate. Field notes:
 
 - `source` is `ledger` (a recorded build degradation) or `rule` (a build
   fidelity rule finding, ids beginning `BF-`). Rule-derived entries carry
-  `severity` and `guidance` instead of `impact`, and `actions: []` — their
-  fix is the re-scan in which cdxgen itself drives the ecosystem's resolver
-  (`cdxgen <user args> --install-deps`), which the markdown report renders as
-  a command block.
+  `severity` and `guidance` instead of `impact` and `evidence`, and
+  `actions: []` — their fix is the re-scan in which cdxgen itself drives the
+  ecosystem's resolver (`cdxgen <user args> --install-deps`), which the
+  markdown report renders as a command block.
+- `evidence` is the failure the run recorded, attached to the entry it
+  explains, so the agent reading `remediation[0]` sees why without cross-
+  referencing observations. Every subfield is optional and omitted when the
+  run recorded none: `failedCommand` (the redacted command line), `exitCode`
+  (the tool's exit status), `cause` (the diagnosed cause, falling back to the
+  recorded consequence sentence), and `outputExcerpt` — redacted, at most the
+  last 2000 characters of the command's combined output with interior
+  newlines preserved, so the error at the end of a build log is what an agent
+  reads first. A run whose operator sets `CDXGEN_INTROSPECT_NO_OUTPUT=true`
+  never carries `outputExcerpt`. Rule-derived entries carry no `evidence`.
 - `subsumes[]` names rule findings the same fix clears; executing one entry
   resolves them too.
-- `actions[]` kinds, safe execution, Windows variants and placeholders are
-  documented in [remediation-actions.md](remediation-actions.md).
+- `versionFrom`, `versionSource` and `versionSourceMissing` live on the
+  `actions[]` entries and are documented in
+  [remediation-actions.md](remediation-actions.md).
+- `actions[]` kinds, safe execution, Windows variants, `shapedBy` (the
+  detection behind a command shaped for this project's wrappers and package
+  managers) and placeholders are documented in
+  [remediation-actions.md](remediation-actions.md).
 - `verify` is the acceptance test for the _next_ iteration's report: the named
   rules must stop firing (`rules`), the tier must reach `expectTier`, and/or
   no further event of the named `eventsCleared` remediation ids may be
@@ -220,9 +254,9 @@ is the loop's next candidate. Field notes:
     {
       "kind": "evidence.degraded",
       "ecosystem": "python",
-      "remediationId": "python.lockfile-unparseable",
+      "remediationId": "python.lockfile-unparseable.poetry",
       "impact": "transitive-deps",
-      "detail": "The python lock file could not be parsed, so no locked versions were captured from it."
+      "detail": "The poetry lock file could not be parsed, so no locked versions were captured from it."
     }
   ]
 }

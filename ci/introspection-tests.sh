@@ -81,6 +81,13 @@ for row in \
   type="${rest%%:*}"
   tier="${rest##*:}"
   output="$TMP/group-b-${fixture}.bom.json"
+  # go-smoke ships no go.sum, so `resolved` is a claim about a machine that
+  # has go. Without the toolchain the row measures the environment rather
+  # than the feature, and the remediation it earns is the correct report.
+  if [ "$fixture" = "go-smoke" ] && ! command -v go >/dev/null 2>&1; then
+    echo "skip: group-b $fixture (go is not installed)"
+    continue
+  fi
   if scan "$output" "test/repotests/$fixture" -t "$type"; then
     assert_silent "group-b $fixture" "${output}.introspection.json" "$tier"
   else
@@ -239,6 +246,10 @@ if [ "${1:-}" = "--with-runtimes" ]; then
       rest="${row#*:}"
       type="${rest%%:*}"
       tier="${rest##*:}"
+      if [ "$fixture" = "go-smoke" ] && ! command -v go >/dev/null 2>&1; then
+        echo "skip: cross-runtime $runtime $fixture (go is not installed)"
+        continue
+      fi
       output="$TMP/${runtime}-${fixture}.bom.json"
       if [ "$runtime" = "deno" ]; then
         runtime_cmd=("$runtime" run -A)

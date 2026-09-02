@@ -168,6 +168,25 @@ export declare function parseNvmrc(content: string): Object | undefined;
  */
 export declare function parsePythonVersionFile(content: string): Object | undefined;
 /**
+ * Parse a `.java-version` file into the JDK version it pins. Both the bare
+ * major (`21`) and a full version (`21.0.5`) occur in the wild, and both are
+ * passed through verbatim — an install command needs the exact declaration.
+ *
+ * The legacy `1.N` spelling of a pre-9 release (`1.8`, `1.8.0_302`) is
+ * normalised to its modern major (`8`), because it is the major line that
+ * names a package: the literal declaration yields `Temurin.1.JDK`, which no
+ * provisioner offers.
+ *
+ * Distribution-prefixed values written by version managers (`temurin-21`,
+ * `openjdk64-17.0.1`) name a vendor build rather than a release, so they are
+ * left unparsed rather than turned into an install argument no provisioner
+ * accepts; the run then reports the version as unresolved and the agent asks.
+ *
+ * @param {string} content `.java-version` content
+ * @returns {Object|undefined} Map with the `java` requirement.
+ */
+export declare function parseJavaVersionFile(content: string): Object | undefined;
+/**
  * Parse the `BUNDLED WITH` section of a `Gemfile.lock` into the bundler
  * version the lockfile was written with.
  *
@@ -177,7 +196,7 @@ export declare function parsePythonVersionFile(content: string): Object | undefi
 export declare function parseGemfileLockBundlerVersion(content: string): string | undefined;
 /**
  * Read every declared tool requirement a project directory declares through
- * its well-known tool pin files: `.tool-versions`, `.nvmrc`,
+ * its well-known tool pin files: `.tool-versions`, `.nvmrc`, `.java-version`,
  * `.python-version`, `pyproject.toml`, `go.mod`, `rust-toolchain.toml`,
  * `rust-toolchain`, `package.json`, and `global.json`. Missing files are
  * skipped; each entry names the file that declared it so the report can

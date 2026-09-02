@@ -1,0 +1,10 @@
+#!/bin/sh
+# Stand-in maven wrapper: the readiness probe succeeds, the build fails the
+# way a build with an unreachable registry does, so the run exercises the
+# wrapper path end to end with real [ERROR] output.
+if [ "$1" = "--version" ]; then
+  echo "Apache Maven 3.9.9 (introspect-maven-wrapper stand-in)"
+  exit 0
+fi
+echo "[ERROR] Failed to execute goal org.apache.maven.plugins:maven-dependency-plugin:3.6.1:tree on project sbom-fidelity-maven-wrapper: Could not resolve dependencies for project com.example:introspect-maven-wrapper:jar:1.0.0: Could not transfer artifact org.apache:x:y from/to central: The remote repository's server has not been configured" >&2
+exit 1

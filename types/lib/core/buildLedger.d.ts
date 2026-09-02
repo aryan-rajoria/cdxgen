@@ -26,9 +26,9 @@
  *    {@link closeLedger}.
  *
  * Values that could carry credentials are scrubbed before they are stored or
- * written: `command`, `path` and `detail` pass through sensitive-assignment
- * redaction plus the BOM property sanitizer, so a leaked token can never reach
- * a report file that agents upload.
+ * written: `command`, `path`, `detail`, `causeDetail` and `outputExcerpt` pass
+ * through sensitive-assignment redaction plus the BOM property sanitizer, so a
+ * leaked token can never reach a report file that agents upload.
  */
 export type LedgerEvent = {
     /**
@@ -69,6 +69,14 @@ export type LedgerEvent = {
      */
     detail?: string;
     /**
+     * Short diagnosed cause of a failure ("gradle cannot run on Java 21"), when the producer derived one.
+     */
+    causeDetail?: string;
+    /**
+     * Redacted, at most the last 2000 characters of the failed command's combined stdout and stderr, with interior newlines preserved. Suppressed entirely by `CDXGEN_INTROSPECT_NO_OUTPUT`.
+     */
+    outputExcerpt?: string;
+    /**
      * Key into the remediation catalog (Deliverable 06).
      */
     remediationId?: string;
@@ -95,6 +103,8 @@ export type LedgerEvent = {
  * @property {string}  [command]   Command line, already redacted.
  * @property {number}  [exitCode]
  * @property {string}  [detail]    One sentence, present tense, no remediation text.
+ * @property {string}  [causeDetail] Short diagnosed cause of a failure ("gradle cannot run on Java 21"), when the producer derived one.
+ * @property {string}  [outputExcerpt] Redacted, at most the last 2000 characters of the failed command's combined stdout and stderr, with interior newlines preserved. Suppressed entirely by `CDXGEN_INTROSPECT_NO_OUTPUT`.
  * @property {string}  [remediationId] Key into the remediation catalog (Deliverable 06).
  * @property {string}  [impact]    One of LEDGER_EVENT_IMPACTS.
  * @property {string}  timestamp   ISO 8601.
@@ -156,6 +166,25 @@ export declare const LEDGER_ENABLED: boolean;
 export declare function isIntrospectionEnabled(options?: Object): boolean;
 export declare function isLedgerEnabled(): boolean;
 /**
+ * Redact a free-text introspection value with the ledger's own redactor. Both
+ * report renderers run their free text through this function so a field can
+ * never be redacted differently in the ledger, the JSON report and the
+ * markdown report.
+ *
+ * @param {string|undefined} value Free text of untrusted origin.
+ * @returns {string|undefined} Redacted text.
+ */
+export declare function redactIntrospectionText(value: string | undefined): string | undefined;
+/**
+ * Combined stdout and stderr of a spawned command, as the raw material of an
+ * output excerpt. Producers that already hold a spawn result call this so the
+ * recorder, not the producer, owns truncation and redaction.
+ *
+ * @param {Object|undefined} spawnResult A spawnSync-style result.
+ * @returns {string|undefined} The combined output, or undefined when the command produced none.
+ */
+export declare function commandOutputText(spawnResult: Object | undefined): string | undefined;
+/**
  * Record one build-adequacy event. Returns immediately after a single boolean
  * test when introspection is disabled, so producers may pass plain values
  * without gating the call themselves.
@@ -165,7 +194,7 @@ export declare function isLedgerEnabled(): boolean;
  * ledger is instrumentation, and a producer bug must never fail an SBOM run.
  *
  * @param {string} kind Event kind; one of LEDGER_EVENT_KINDS.
- * @param {Partial<LedgerEvent>} [fields] Event fields; `command`, `path` and `detail` are redacted before storage.
+ * @param {Partial<LedgerEvent>} [fields] Event fields; `command`, `path`, `detail`, `causeDetail` and `outputExcerpt` are redacted before storage, and `outputExcerpt` is additionally bounded to its tail.
  * @returns {LedgerEvent|undefined} The stored event, or undefined when recording is disabled or the event was dropped.
  */
 export declare function recordLedgerEvent(kind: string, fields?: Partial<LedgerEvent>): LedgerEvent | undefined;

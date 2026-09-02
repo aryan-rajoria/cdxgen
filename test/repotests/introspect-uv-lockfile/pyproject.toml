@@ -1,0 +1,5 @@
+[project]
+name = "introspect-uv-lockfile"
+version = "1.0.0"
+description = "A uv project whose lock file a parse cannot read"
+requires-python = ">=3.12"

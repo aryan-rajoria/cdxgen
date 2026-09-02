@@ -24,7 +24,7 @@
       },
       {
         "kind": "build",
-        "command": "mvn -q package -DskipTests"
+        "command": "{{mvn}} -q package -DskipTests"
       },
       {
         "kind": "rerun"
@@ -61,7 +61,7 @@
       },
       {
         "kind": "build",
-        "command": "mvn -q package -DskipTests"
+        "command": "{{mvn}} -q package -DskipTests"
       },
       {
         "kind": "rerun"
@@ -90,7 +90,7 @@
       },
       {
         "kind": "build",
-        "command": "mvn -q package -DskipTests"
+        "command": "{{mvn}} -q package -DskipTests"
       },
       {
         "kind": "rerun"
@@ -119,7 +119,7 @@
       },
       {
         "kind": "build",
-        "command": "gradle -q build"
+        "command": "{{gradle}} -q build"
       },
       {
         "kind": "rerun"
@@ -156,7 +156,7 @@
       },
       {
         "kind": "build",
-        "command": "gradle -q build"
+        "command": "{{gradle}} -q build"
       },
       {
         "kind": "rerun"
@@ -177,7 +177,7 @@
     "actions": [
       {
         "kind": "build",
-        "command": "mvn -q package -DskipTests"
+        "command": "{{mvn}} -q package -DskipTests"
       },
       {
         "kind": "rerun"
@@ -376,16 +376,8 @@
     "targetTier": "lockfile",
     "actions": [
       {
-        "kind": "install",
-        "tool": "poetry",
-        "versionFrom": "latest",
-        "via": "pip",
-        "command": "pip install poetry",
-        "windows": "pip install poetry"
-      },
-      {
         "kind": "build",
-        "command": "poetry lock --no-interaction"
+        "command": "{{pythonManager}} lock"
       },
       {
         "kind": "rerun"
@@ -395,6 +387,126 @@
       "rules": [],
       "expectTier": "lockfile",
       "eventsCleared": ["python.lockfile-unparseable"]
+    },
+    "docs": "https://cyclonedx.github.io/cdxgen/#/PROJECT_TYPES"
+  },
+  "python.lockfile-unparseable.uv": {
+    "ecosystem": "python",
+    "kind": "evidence.degraded",
+    "impact": "transitive-deps",
+    "title": "The uv lock file could not be parsed",
+    "targetTier": "lockfile",
+    "actions": [
+      {
+        "kind": "install",
+        "tool": "uv",
+        "versionFrom": "latest",
+        "via": "pip",
+        "command": "pip install uv",
+        "windows": "pip install uv"
+      },
+      {
+        "kind": "build",
+        "command": "{{pythonManager}} lock"
+      },
+      {
+        "kind": "rerun"
+      }
+    ],
+    "verify": {
+      "rules": [],
+      "expectTier": "lockfile",
+      "eventsCleared": ["python.lockfile-unparseable.uv"]
+    },
+    "docs": "https://cyclonedx.github.io/cdxgen/#/PROJECT_TYPES"
+  },
+  "python.lockfile-unparseable.poetry": {
+    "ecosystem": "python",
+    "kind": "evidence.degraded",
+    "impact": "transitive-deps",
+    "title": "The poetry lock file could not be parsed",
+    "targetTier": "lockfile",
+    "actions": [
+      {
+        "kind": "install",
+        "tool": "poetry",
+        "versionFrom": "latest",
+        "via": "pip",
+        "command": "pip install poetry",
+        "windows": "pip install poetry"
+      },
+      {
+        "kind": "build",
+        "command": "{{pythonManager}} lock --no-interaction"
+      },
+      {
+        "kind": "rerun"
+      }
+    ],
+    "verify": {
+      "rules": [],
+      "expectTier": "lockfile",
+      "eventsCleared": ["python.lockfile-unparseable.poetry"]
+    },
+    "docs": "https://cyclonedx.github.io/cdxgen/#/PROJECT_TYPES"
+  },
+  "python.lockfile-unparseable.pdm": {
+    "ecosystem": "python",
+    "kind": "evidence.degraded",
+    "impact": "transitive-deps",
+    "title": "The pdm lock file could not be parsed",
+    "targetTier": "lockfile",
+    "actions": [
+      {
+        "kind": "install",
+        "tool": "pdm",
+        "versionFrom": "latest",
+        "via": "pip",
+        "command": "pip install pdm",
+        "windows": "pip install pdm"
+      },
+      {
+        "kind": "build",
+        "command": "{{pythonManager}} lock"
+      },
+      {
+        "kind": "rerun"
+      }
+    ],
+    "verify": {
+      "rules": [],
+      "expectTier": "lockfile",
+      "eventsCleared": ["python.lockfile-unparseable.pdm"]
+    },
+    "docs": "https://cyclonedx.github.io/cdxgen/#/PROJECT_TYPES"
+  },
+  "python.lockfile-unparseable.pipenv": {
+    "ecosystem": "python",
+    "kind": "evidence.degraded",
+    "impact": "transitive-deps",
+    "title": "The Pipfile.lock could not be parsed",
+    "targetTier": "lockfile",
+    "actions": [
+      {
+        "kind": "install",
+        "tool": "pipenv",
+        "versionFrom": "latest",
+        "via": "pip",
+        "command": "pip install pipenv",
+        "windows": "pip install pipenv"
+      },
+      {
+        "kind": "build",
+        "command": "{{pythonManager}} lock"
+      },
+      {
+        "kind": "rerun"
+      }
+    ],
+    "verify": {
+      "rules": [],
+      "expectTier": "lockfile",
+      "eventsCleared": ["python.lockfile-unparseable.pipenv"]
     },
     "docs": "https://cyclonedx.github.io/cdxgen/#/PROJECT_TYPES"
   },
@@ -584,6 +696,242 @@
       "eventsCleared": ["ruby.version.unsupported-host"]
     },
     "docs": "https://cyclonedx.github.io/cdxgen/#/PROJECT_TYPES"
+  },
+  "go.toolchain.missing": {
+    "ecosystem": "go",
+    "kind": "evidence.degraded",
+    "impact": "transitive-deps",
+    "title": "The go toolchain could not be executed, so the module graph was not resolved",
+    "targetTier": "resolved",
+    "actions": [
+      {
+        "kind": "container",
+        "image": "ghcr.io/cyclonedx/cdxgen",
+        "command": "docker run --rm -v \"$PWD:/app\" -w /app ghcr.io/cyclonedx/cdxgen -t go /app",
+        "windows": "docker run --rm -v \"%cd%:/app\" -w /app ghcr.io/cyclonedx/cdxgen -t go %cd%"
+      },
+      {
+        "kind": "install",
+        "tool": "go",
+        "versionFrom": "latest",
+        "via": "manual",
+        "command": "Install Go following https://go.dev/dl/",
+        "windows": "winget install --id GoLang.Go"
+      },
+      {
+        "kind": "rerun"
+      }
+    ],
+    "verify": {
+      "rules": [],
+      "expectTier": "resolved",
+      "eventsCleared": ["go.toolchain.missing"]
+    },
+    "docs": "https://cyclonedx.github.io/cdxgen/#/PROJECT_TYPES?id=go"
+  },
+  "go.mod-only-fallback": {
+    "ecosystem": "go",
+    "kind": "fallback.engaged",
+    "impact": "transitive-deps",
+    "title": "go.mod was parsed manually because the go toolchain could not resolve the module graph",
+    "targetTier": "resolved",
+    "actions": [
+      {
+        "kind": "install",
+        "tool": "go",
+        "versionFrom": "expected",
+        "via": "manual",
+        "command": "Install the Go version pinned in go.mod following https://go.dev/dl/",
+        "windows": "winget install --id GoLang.Go"
+      },
+      {
+        "kind": "build",
+        "command": "{{go}} mod download"
+      },
+      {
+        "kind": "rerun"
+      }
+    ],
+    "verify": {
+      "rules": ["BF-GEN-001"],
+      "expectTier": "resolved"
+    },
+    "docs": "https://cyclonedx.github.io/cdxgen/#/PROJECT_TYPES?id=go"
+  },
+  "rust.toolchain.missing": {
+    "ecosystem": "rust",
+    "kind": "evidence.degraded",
+    "impact": "transitive-deps",
+    "title": "cargo could not be executed, so the lock file could not be generated",
+    "targetTier": "lockfile",
+    "actions": [
+      {
+        "kind": "container",
+        "image": "ghcr.io/cyclonedx/cdxgen",
+        "command": "docker run --rm -v \"$PWD:/app\" -w /app ghcr.io/cyclonedx/cdxgen -t rust /app",
+        "windows": "docker run --rm -v \"%cd%:/app\" -w /app ghcr.io/cyclonedx/cdxgen -t rust %cd%"
+      },
+      {
+        "kind": "install",
+        "tool": "rust",
+        "versionFrom": "latest",
+        "via": "manual",
+        "command": "Install rustup following https://rustup.rs",
+        "windows": "winget install --id Rustlang.Rustup"
+      },
+      {
+        "kind": "build",
+        "command": "{{cargo}} generate-lockfile"
+      },
+      {
+        "kind": "rerun"
+      }
+    ],
+    "verify": {
+      "rules": [],
+      "expectTier": "lockfile",
+      "eventsCleared": ["rust.toolchain.missing"]
+    },
+    "docs": "https://cyclonedx.github.io/cdxgen/#/PROJECT_TYPES?id=rust"
+  },
+  "rust.cargo-lock-missing": {
+    "ecosystem": "rust",
+    "kind": "fallback.engaged",
+    "impact": "transitive-deps",
+    "title": "No Cargo.lock was found, so components carry the manifest's declared dependencies without locked versions",
+    "targetTier": "lockfile",
+    "actions": [
+      {
+        "kind": "build",
+        "command": "{{cargo}} generate-lockfile"
+      },
+      {
+        "kind": "rerun"
+      }
+    ],
+    "verify": {
+      "rules": ["BF-GEN-001", "BF-RS-001"],
+      "expectTier": "lockfile"
+    },
+    "docs": "https://cyclonedx.github.io/cdxgen/#/PROJECT_TYPES?id=rust"
+  },
+  "php.composer.missing": {
+    "ecosystem": "php",
+    "kind": "evidence.degraded",
+    "impact": "components",
+    "title": "composer is unavailable, so composer.lock could not be generated",
+    "targetTier": "resolved",
+    "actions": [
+      {
+        "kind": "install",
+        "tool": "composer",
+        "versionFrom": "latest",
+        "via": "manual",
+        "command": "Install Composer following https://getcomposer.org/doc/00-intro.md",
+        "windows": "winget install --id Composer.Composer"
+      },
+      {
+        "kind": "build",
+        "command": "{{composer}} install --ignore-platform-reqs"
+      },
+      {
+        "kind": "rerun"
+      }
+    ],
+    "verify": {
+      "rules": [],
+      "expectTier": "resolved",
+      "eventsCleared": ["php.composer.missing"]
+    },
+    "docs": "https://cyclonedx.github.io/cdxgen/#/PROJECT_TYPES?id=php"
+  },
+  "php.no-lockfile": {
+    "ecosystem": "php",
+    "kind": "evidence.degraded",
+    "impact": "components",
+    "title": "No composer.lock was found or generated, so the Composer components could not be captured",
+    "targetTier": "resolved",
+    "actions": [
+      {
+        "kind": "build",
+        "command": "{{composer}} install --ignore-platform-reqs"
+      },
+      {
+        "kind": "rerun"
+      }
+    ],
+    "verify": {
+      "rules": [],
+      "expectTier": "resolved",
+      "eventsCleared": ["php.no-lockfile"]
+    },
+    "docs": "https://cyclonedx.github.io/cdxgen/#/PROJECT_TYPES?id=php"
+  },
+  "dart.pub-get-needed": {
+    "ecosystem": "dart",
+    "kind": "evidence.degraded",
+    "impact": "versions",
+    "title": "pubspec.yaml was parsed without pubspec.lock, so components carry version constraints instead of locked versions",
+    "targetTier": "manifest",
+    "actions": [
+      {
+        "kind": "build",
+        "command": "{{dart}} pub get"
+      },
+      {
+        "kind": "rerun"
+      }
+    ],
+    "verify": {
+      "rules": ["BF-GEN-002"],
+      "expectTier": "manifest",
+      "eventsCleared": ["dart.pub-get-needed"]
+    },
+    "docs": "https://cyclonedx.github.io/cdxgen/#/PROJECT_TYPES?id=dart"
+  },
+  "elixir.deps-not-fetched": {
+    "ecosystem": "elixir",
+    "kind": "evidence.degraded",
+    "impact": "components",
+    "title": "mix.exs was found without mix.lock, so the Hex dependencies were not captured",
+    "targetTier": "resolved",
+    "actions": [
+      {
+        "kind": "build",
+        "command": "{{mix}} deps get"
+      },
+      {
+        "kind": "rerun"
+      }
+    ],
+    "verify": {
+      "rules": [],
+      "expectTier": "resolved",
+      "eventsCleared": ["elixir.deps-not-fetched"]
+    },
+    "docs": "https://cyclonedx.github.io/cdxgen/#/PROJECT_TYPES?id=elixir"
+  },
+  "haskell.freeze-missing": {
+    "ecosystem": "haskell",
+    "kind": "evidence.degraded",
+    "impact": "components",
+    "title": "No cabal.project.freeze was found, so the Hackage package set was not captured",
+    "targetTier": "resolved",
+    "actions": [
+      {
+        "kind": "build",
+        "command": "{{cabal}} freeze"
+      },
+      {
+        "kind": "rerun"
+      }
+    ],
+    "verify": {
+      "rules": [],
+      "expectTier": "resolved",
+      "eventsCleared": ["haskell.freeze-missing"]
+    },
+    "docs": "https://cyclonedx.github.io/cdxgen/#/PROJECT_TYPES?id=haskell"
   },
   "binary.paths.inferred": {
     "ecosystem": "generic",

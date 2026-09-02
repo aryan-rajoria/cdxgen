@@ -701,3 +701,82 @@
     {
       "swiftComponentCount": swiftComponentCount
     }
+
+# Formulation-derived rules. Both gate on $formulationOrigin() = 'foreign':
+# on a same-run scan the formulation's platform components are the ledger's
+# own probes reported twice and its commands were never observed to run, so
+# they must not move a verdict that already has a ledger. On a foreign BOM
+# no ledger observed the run, and the formulation is the only surviving
+# trace of what its build attempted. Both attribute their finding through
+# the parent component's purl type.
+- id: BF-FORM-001
+  name: "A resolver command is declared with no dependency graph in the BOM"
+  description: >-
+    The BOM's formulation declares resolver or build commands in its CI
+    workflows, yet dependencies[] carries no edges at all: the resolution the
+    project expects produced nothing here. On a foreign BOM this separates
+    "no build attempted" from "build attempted and failed", which otherwise
+    look identical.
+  severity: medium
+  category: build-fidelity
+  dry-run-support: full
+  tier-signal: manifest
+  reason-source: formulation
+  condition: |
+    (
+      $commands := $exists(formulation) ? [formulation.workflows.tasks.steps.commands.executed] : [];
+      $resolverTokens := ['mvn','mvnw','gradle','gradlew','ant','sbt','npm','pnpm','yarn','bun','deno','npx','pip','pip3','poetry','uv','pdm','pipenv','conda','python','python3','cargo','go','bundle','gem','rake','dotnet','nuget','composer','dart','flutter','helm','lein','clj','swift','pod','mix','cmake','make','meson','cabal','stack'];
+      $isResolver := function($cmd) { $lowercase($split($substringBefore($trim($string($cmd)), ' '), '/')[$count($split($substringBefore($trim($string($cmd)), ' '), '/')) - 1]) in $resolverTokens };
+      $resolvers := $count($commands[$isResolver($)]);
+      $edges := $exists(dependencies) ? $count(dependencies.dependsOn) : 0;
+      $formulationOrigin() = 'foreign' and $resolvers > 0 and $edges = 0
+        ? {
+            "resolverCommands": $resolvers,
+            "parentPurlType": $exists(metadata.component.purl) ? $substringBefore($substringAfter(metadata.component.purl, 'pkg:'), '/') : undefined
+          }
+        : undefined
+    )
+  location: |
+    { "resolverCommands": resolverCommands }
+  message: "{{ resolverCommands }} resolver command(s) declared in the BOM's CI workflows, yet the BOM carries no dependency edges — the resolution was attempted and produced nothing here"
+  mitigation: "Run the ecosystem resolver this BOM's CI declares so the dependency graph is captured, then re-scan; the declared command is a hypothesis to check, not something this run observed"
+  evidence: |
+    {
+      "resolverCommands": resolverCommands
+    }
+
+- id: BF-FORM-002
+  name: "The BOM's toolchain record does not describe this environment"
+  description: >-
+    The formulation section records the toolchain the generating run probed,
+    and its entry for this runtime's own family carries a version different
+    from the runtime re-scanning the BOM. The environment that produced this
+    BOM is not the one re-scanning it, so the record's claims cannot be
+    verified here without regenerating the BOM locally.
+  severity: medium
+  category: build-fidelity
+  dry-run-support: full
+  tier-signal: manifest
+  reason-source: formulation
+  condition: |
+    (
+      $mismatch := $formulationOrigin() = 'foreign' ? $formulationRuntimeMismatch() : undefined;
+      $exists($mismatch)
+        ? {
+            "recordedTool": $string($mismatch.tool),
+            "recordedVersion": $exists($mismatch.recordedVersion) ? $string($mismatch.recordedVersion) : 'none recorded',
+            "runtimeVersion": $string($mismatch.runtimeVersion),
+            "parentPurlType": $exists(metadata.component.purl) ? $substringBefore($substringAfter(metadata.component.purl, 'pkg:'), '/') : undefined
+          }
+        : undefined
+    )
+  location: |
+    { "recordedTool": recordedTool }
+  message: "This BOM's formulation records {{ recordedTool }} {{ recordedVersion }}, but this environment runs {{ recordedTool }} {{ runtimeVersion }} — the record describes a different environment (another machine, or the same machine under a different runtime), so the BOM cannot be verified as-is here"
+  mitigation: "Re-generate the BOM on this machine so the verdict describes an observed run; install the recorded toolchain first if this environment lacks it"
+  evidence: |
+    {
+      "recordedTool": recordedTool,
+      "recordedVersion": recordedVersion,
+      "runtimeVersion": runtimeVersion
+    }

@@ -43,6 +43,7 @@ import { fileURLToPath } from "node:url";
 
 import YAML from "yaml";
 
+import { SEVERITY_ORDER } from "../lib/core/severity.js";
 import { TIER_LADDER } from "../lib/stages/postgen/introspection/score.js";
 import { bomGraphFacts } from "../test/helpers/introspection-e2e.js";
 
@@ -302,6 +303,10 @@ function imageDigest(image) {
  * the branch mount is read-only, so a runtime that materialises a dependency
  * directory beside the script needs to be told not to.
  *
+ * An `entry: audit` cell re-scans a committed BOM with `cdx-audit
+ * --direct-bom-audit --introspect` instead of generating one, which is the
+ * foreign-BOM path: the verdict rests on the BOM alone, with no ledger.
+ *
  * @param {Object} cell Cell declaration.
  * @param {string} cellDir Results directory of the cell.
  * @param {string} containerName Container name for cleanup on timeout.
@@ -326,6 +331,7 @@ function dockerArgsFor(cell, cellDir, containerName) {
     "-v",
     `${cellDir}:${outPath}`,
     ...(cell.platform ? ["--platform", cell.platform] : []),
+    ...(cell.network ? ["--network", cell.network] : []),
     ...Object.entries(cell.env || {}).flatMap(([name, value]) => [
       "-e",
       `${name}=${value}`,
@@ -335,18 +341,32 @@ function dockerArgsFor(cell, cellDir, containerName) {
     cell.image,
     ...runtime.prefix,
     ...(cell.runtimeArgs || []),
-    `${branchPath}/bin/cdxgen.js`,
-    ...(cell.type ? ["-t", cell.type] : []),
-    "--no-install-deps",
-    "--introspect",
-    "-o",
-    `${outPath}/bom.json`,
-    "--introspect-json",
-    `${outPath}/introspection.json`,
-    "--introspect-report",
-    `${outPath}/introspection.md`,
-    ...(cell.extraArgs || []),
-    containerPath,
+    ...(cell.entry === "audit"
+      ? [
+          `${branchPath}/bin/audit.js`,
+          "--bom",
+          `${containerPath}/${cell.bomFile || "bom.json"}`,
+          "--direct-bom-audit",
+          "--introspect",
+          "--report",
+          "json",
+          "--report-file",
+          `${outPath}/audit-report.json`,
+        ]
+      : [
+          `${branchPath}/bin/cdxgen.js`,
+          ...(cell.type ? ["-t", cell.type] : []),
+          "--no-install-deps",
+          "--introspect",
+          "-o",
+          `${outPath}/bom.json`,
+          "--introspect-json",
+          `${outPath}/introspection.json`,
+          "--introspect-report",
+          `${outPath}/introspection.md`,
+          ...(cell.extraArgs || []),
+          containerPath,
+        ]),
   ];
   return { args, scanPath: containerPath };
 }
@@ -356,9 +376,13 @@ function dockerArgsFor(cell, cellDir, containerName) {
  *
  * @param {Object} verdict Extracted report verdict.
  * @param {Object} expect Cell expectation.
+ * @param {Object} [report] Parsed introspection JSON report, for expectations
+ *   that read the remediation entries' evidence blocks.
+ * @param {string} [rawReports] The raw text of both written reports, for
+ *   expectations that assert on file bytes rather than parsed fields.
  * @returns {Object[]} One {field, expected, got} entry per unmet expectation.
  */
-function evaluateExpectation(verdict, expect) {
+function evaluateExpectation(verdict, expect, report, rawReports = "") {
   const deltas = [];
   if (expect.tier !== undefined && verdict.tier !== expect.tier) {
     deltas.push({
@@ -437,6 +461,95 @@ function evaluateExpectation(verdict, expect) {
       got: verdict.ledgerComplete,
     });
   }
+  if (expect.evidencePresent !== undefined) {
+    const present = verdict.evidencePresent;
+    if (present !== expect.evidencePresent) {
+      deltas.push({
+        field: "evidencePresent",
+        expected: expect.evidencePresent,
+        got: present,
+      });
+    }
+  }
+  if (
+    expect.evidenceNonZeroExit !== undefined &&
+    verdict.evidenceNonZeroExit !== expect.evidenceNonZeroExit
+  ) {
+    deltas.push({
+      field: "evidenceNonZeroExit",
+      expected: expect.evidenceNonZeroExit,
+      got: verdict.evidenceNonZeroExit,
+    });
+  }
+  if (expect.evidenceContains !== undefined) {
+    if (!verdict.evidenceExcerptText.includes(expect.evidenceContains)) {
+      deltas.push({
+        field: "evidenceContains",
+        expected: `excerpt contains ${JSON.stringify(expect.evidenceContains)}`,
+        got: verdict.evidencePresent
+          ? "the excerpt does not contain it"
+          : "no evidence block",
+      });
+    }
+  }
+  for (const absent of expect.absentStrings || []) {
+    if (rawReports.includes(absent)) {
+      deltas.push({
+        field: "absentStrings",
+        expected: `${JSON.stringify(absent)} appears in neither report`,
+        got: `${JSON.stringify(absent)} appears in a report`,
+      });
+    }
+  }
+  if (expect.noPlaceholders === true && verdict.placeholderActions > 0) {
+    deltas.push({
+      field: "noPlaceholders",
+      expected: "no unresolved placeholder in any action",
+      got: `${verdict.placeholderActions} action(s) still carry "{{"`,
+    });
+  }
+  if (expect.versionFrom !== undefined) {
+    if (!verdict.versionFromValues.includes(expect.versionFrom)) {
+      deltas.push({
+        field: "versionFrom",
+        expected: `an action resolved with versionFrom ${expect.versionFrom}`,
+        got: verdict.versionFromValues.length
+          ? verdict.versionFromValues.join(", ")
+          : "no action carried a versionFrom",
+      });
+    }
+  }
+  if (expect.shapedBy !== undefined) {
+    const shapedByValues = [
+      ...new Set(
+        verdict.allActions.map((action) => action?.shapedBy).filter(Boolean),
+      ),
+    ].sort();
+    if (!shapedByValues.includes(expect.shapedBy)) {
+      deltas.push({
+        field: "shapedBy",
+        expected: `an action carries shapedBy ${expect.shapedBy}`,
+        got: shapedByValues.length
+          ? shapedByValues.join(", ")
+          : "no action carries a shapedBy",
+      });
+    }
+  }
+  if (expect.maxConfidence !== undefined) {
+    const cap = SEVERITY_ORDER[expect.maxConfidence];
+    const rank = SEVERITY_ORDER[verdict.confidence ?? "low"];
+    if (
+      typeof cap !== "number" ||
+      typeof rank !== "number" ||
+      rank > cap
+    ) {
+      deltas.push({
+        field: "maxConfidence",
+        expected: `overall confidence no stronger than ${expect.maxConfidence}`,
+        got: verdict.confidence ?? "none",
+      });
+    }
+  }
   return deltas;
 }
 
@@ -454,6 +567,9 @@ function extractVerdict(report, bom) {
   const remediations = Array.isArray(report.remediation)
     ? report.remediation
     : [];
+  const evidenceBlocks = remediations
+    .map((entry) => entry?.evidence)
+    .filter((evidence) => evidence && typeof evidence === "object");
   const graph = bomGraphFacts(bom);
   return {
     tier: report.overall?.tier ?? null,
@@ -461,6 +577,18 @@ function extractVerdict(report, bom) {
     confidence: report.overall?.confidence ?? null,
     remediationIds: remediations.map((entry) => entry.remediationId).sort(),
     remediationCount: remediations.length,
+    evidencePresent:
+      remediations.length > 0 &&
+      remediations[0]?.evidence !== undefined &&
+      typeof remediations[0].evidence.outputExcerpt === "string" &&
+      remediations[0].evidence.outputExcerpt.length > 0,
+    evidenceNonZeroExit: evidenceBlocks.some(
+      (evidence) =>
+        typeof evidence.exitCode === "number" && evidence.exitCode !== 0,
+    ),
+    evidenceExcerptText: evidenceBlocks
+      .map((evidence) => `${evidence.outputExcerpt || ""}`)
+      .join("\n"),
     blockedIds: remediations
       .filter((entry) => entry.blocked === true)
       .map((entry) => entry.remediationId)
@@ -479,7 +607,35 @@ function extractVerdict(report, bom) {
       ? report.coverageGaps
       : []
     ).map((gap) => gap.ecosystem),
+    // The top remediation's action version facts: how many commands still
+    // carry an unresolved placeholder, and which provenance bands answered.
+    placeholderActions: topActionList(remediations).filter((action) =>
+      `${action?.command || ""}${action?.windows || ""}`.includes("{{"),
+    ).length,
+    versionFromValues: [
+      ...new Set(
+        topActionList(remediations)
+          .map((action) => action?.versionFrom)
+          .filter(Boolean),
+      ),
+    ].sort(),
+    // Every action of every entry, because a rule finding (which carries no
+    // actions) can outrank the repair the cell is about.
+    allActions: remediations.flatMap((entry) =>
+      Array.isArray(entry?.actions) ? entry.actions : [],
+    ),
   };
+}
+
+/**
+ * The top-ranked remediation's actions, when one exists.
+ *
+ * @param {Object[]} remediations Ranked remediation entries.
+ * @returns {Object[]} Actions of the first entry.
+ */
+function topActionList(remediations) {
+  const entry = remediations[0];
+  return Array.isArray(entry?.actions) ? entry.actions : [];
 }
 
 /**
@@ -553,7 +709,7 @@ async function runCell(cell, runDir, baseline) {
 
   const { hostPath } = resolveProject(cell.project, cell.mountPrefix || "");
   if (hostPath && !existsSync(hostPath)) {
-    result.status = "skip";
+    result.status = cell.needsFixture ? "fail" : "skip";
     result.reason = `project not found: ${hostPath}`;
     writeResult(join(cellDir, "result.json"), result);
     return result;
@@ -598,10 +754,32 @@ async function runCell(cell, runDir, baseline) {
   const report = existsSync(join(cellDir, "introspection.json"))
     ? JSON.parse(readFileSync(join(cellDir, "introspection.json"), "utf-8"))
     : undefined;
-  const bom = existsSync(join(cellDir, "bom.json"))
-    ? JSON.parse(readFileSync(join(cellDir, "bom.json"), "utf-8"))
+  // An audit cell embeds the verdict inside the audit report instead of
+  // writing a standalone one, and grades the committed BOM rather than a
+  // freshly generated one, so both inputs come from where the cell scanned.
+  const auditReport =
+    cell.entry === "audit" && existsSync(join(cellDir, "audit-report.json"))
+      ? JSON.parse(readFileSync(join(cellDir, "audit-report.json"), "utf-8"))
+      : undefined;
+  const reportForVerdict =
+    cell.entry === "audit"
+      ? auditReport?.results?.find((result) => result?.introspection)
+          ?.introspection
+      : report;
+  const bomPath =
+    cell.entry === "audit" && cell.project?.startsWith("repo://")
+      ? join(
+          repoRoot,
+          "test",
+          "repotests",
+          cell.project.slice("repo://".length),
+          cell.bomFile || "bom.json",
+        )
+      : join(cellDir, "bom.json");
+  const bom = existsSync(bomPath)
+    ? JSON.parse(readFileSync(bomPath, "utf-8"))
     : undefined;
-  result.verdict = extractVerdict(report, bom);
+  result.verdict = extractVerdict(reportForVerdict, bom);
   if (!result.verdict) {
     result.status = "fail";
     result.reason =
@@ -609,7 +787,22 @@ async function runCell(cell, runDir, baseline) {
         ? "cdxgen exited 0 but wrote no introspection report"
         : `cdxgen exited ${run.status}`;
   } else {
-    result.deltas = evaluateExpectation(result.verdict, cell.expect || {});
+    // The raw bytes of both reports back the absentStrings expectation: a
+    // secret must survive in neither the parsed fields nor a rendered one.
+    const rawReports = [
+      join(cellDir, "introspection.json"),
+      join(cellDir, "introspection.md"),
+      join(cellDir, "audit-report.json"),
+    ]
+      .filter((path) => existsSync(path))
+      .map((path) => readFileSync(path, "utf-8"))
+      .join("\n");
+    result.deltas = evaluateExpectation(
+      result.verdict,
+      cell.expect || {},
+      report,
+      rawReports,
+    );
     result.baselineDeltas = baselineDeltas(
       result.verdict,
       baseline.cells?.[cell.id],

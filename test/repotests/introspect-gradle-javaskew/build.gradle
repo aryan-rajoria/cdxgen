@@ -1,0 +1,3 @@
+// Minimal single-project gradle build for the D-version-gradle-javaskew
+// matrix cell: the build itself never runs, because the stand-in gradle
+// command fails before any project is configured.

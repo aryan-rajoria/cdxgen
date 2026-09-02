@@ -69,6 +69,8 @@ export declare function getDeferredFailures(): Array<Object>;
  * @param {string} failure.detail One sentence, present tense.
  * @param {number} [failure.exitCode] The tool's exit status, when known.
  * @param {string} [failure.command] The redacted command that was attempted.
+ * @param {string} [failure.outputExcerpt] The failed command's combined output,
+ *   when the caller already holds it; the recorder bounds and redacts it.
  * @returns {void} Never returns on an introspected run; it throws.
  */
 export declare function deferFailOnError(options: Object, failure: {
@@ -77,5 +79,6 @@ export declare function deferFailOnError(options: Object, failure: {
     detail: string;
     exitCode?: number;
     command?: string;
+    outputExcerpt?: string;
 }): void;
 //# sourceMappingURL=deferredExit.d.ts.map

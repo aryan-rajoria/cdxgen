@@ -56,6 +56,13 @@ export declare const PROVISIONER_TOOLS: ReadonlySet<string>;
  * sources on the row, `low` covers an absent or incomplete ledger and
  * disk-marker-only verdicts, and everything else is `medium`.
  *
+ * A foreign BOM's formulation is the asymmetric case. It substitutes for the
+ * absent ledger events as primary evidence, which lifts the verdict off the
+ * marker-only floor; because the run was never observed, `medium` is a cap
+ * it can never exceed, and a formulation without a toolchain record leaves
+ * the row at `low`. On a same-run scan the formulation is the ledger's own
+ * evidence reported twice, so it moves nothing in either direction.
+ *
  * @param {Object} row Ecosystem row.
  * @param {Object} reflection Reflection document.
  * @returns {"high"|"medium"|"low"} Confidence label.
@@ -90,6 +97,24 @@ export declare function scoreEcosystemRow(row: Object, catalog: Object | null): 
     deduction: number;
     weight: number;
 } | null;
+export type ResolvedActionVersion = {
+    /**
+     * Declared version, when a source answered.
+     */
+    version: string | undefined;
+    /**
+     * Cascade band that answered.
+     */
+    versionFrom: "mismatch" | "pin" | "expected" | "unresolved";
+    /**
+     * Where the version came from.
+     */
+    versionSource: string | undefined;
+    /**
+     * True when no source answered.
+     */
+    versionSourceMissing: boolean | undefined;
+};
 /**
  * Order remediations for the loop: the largest expected gain first, then the
  * largest per-ecosystem recovery, then the most confident evidence, then the
@@ -111,6 +136,7 @@ export declare function rankRemediations(entries: Object[]): Object[];
  * @param {boolean} [runContext.inContainer] The run executed inside a container.
  * @param {boolean} [runContext.offline] Overrides the offline fact derived from the ledger observations.
  * @param {string[]} [runContext.unavailableProvisioners] Overrides the provisioners derived from the reflection.
+ * @param {Object} [runContext.commandFacts] Project facts the command variables (`{{mvn}}`, `{{gradle}}`, `{{pythonManager}}`, `{{npmClient}}`) resolve from; without them the variables fall back to the plain executables.
  * @returns {Object} Scoring document with the overall score, per-ecosystem scores, coverage gaps and the ranked remediation list.
  */
 export declare function scoreReflection(reflection: Object, catalog: Object | null, runContext?: {
@@ -118,5 +144,6 @@ export declare function scoreReflection(reflection: Object, catalog: Object | nu
     inContainer?: boolean;
     offline?: boolean;
     unavailableProvisioners?: string[];
+    commandFacts?: Object;
 }): Object;
 //# sourceMappingURL=score.d.ts.map
