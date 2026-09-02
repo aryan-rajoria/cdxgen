@@ -1,5 +1,5 @@
 {
-  "schemaVersion": "1.0",
+  "schemaVersion": "1.1",
   "runId": "00000000-0000-4000-8000-000000000002",
   "inputsFingerprint": "sha256:a1b2c3d4e5f60718293a4b5c6d7e8f90a1b2c3d4e5f60718293a4b5c6d7e8f90",
   "generatedAt": "2026-08-30T00:00:00.000Z",
@@ -98,6 +98,9 @@
       "projectedScore": 100,
       "expectedGain": 55,
       "evidenceCount": 1,
+      "evidence": {
+        "cause": "Maven build failed; the dependency tree fell back to the pom.xml declarations."
+      },
       "subsumes": [
         "BF-JVM-001"
       ],
@@ -106,7 +109,8 @@
           "kind": "install",
           "tool": "java",
           "via": "sdkman",
-          "versionFrom": "expected",
+          "versionFrom": "pin",
+          "versionSource": "pinned in wrapper",
           "command": "sdk install java 21",
           "windows": "winget install --id EclipseAdoptium.Temurin.21.JDK"
         },
@@ -114,7 +118,8 @@
           "kind": "install",
           "tool": "maven",
           "via": "sdkman",
-          "versionFrom": "expected",
+          "versionFrom": "pin",
+          "versionSource": "pinned in wrapper",
           "command": "sdk install maven 3.9.9",
           "windows": "winget install --id Apache.Maven"
         },

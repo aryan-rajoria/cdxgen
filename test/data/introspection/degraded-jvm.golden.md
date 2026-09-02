@@ -16,6 +16,7 @@ Ranked by expected score gain.
 
 - Remediation: `jvm.maven.manifest-fallback` (source: ledger) — ecosystem: `java`, confidence: high
 - Why: transitive dependency evidence was lost (1 event).
+- Cause: Maven build failed; the dependency tree fell back to the pom.xml declarations.
 - Score: 45 → 100 (tier `resolved`); expected overall gain: +55.00
 - Also resolves: `BF-JVM-001`
 - Confirm `BF-JVM-001`, `BF-JVM-002` no longer fire and the tier reaches `resolved`.
@@ -37,6 +38,8 @@ winget install --id Apache.Maven
 mvn -q package -DskipTests
 ```
 
+- java version pinned in wrapper (pin)
+- maven version pinned in wrapper (pin)
 - Re-run the cdxgen invocation from the Reproduce section to confirm the fix.
 
 ### 2. Only 0 of 3 components appear in the dependency graph (100% uncovered); the BOM reads like a flat list of declarations

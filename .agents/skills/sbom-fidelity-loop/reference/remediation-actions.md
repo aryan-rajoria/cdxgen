@@ -25,9 +25,19 @@ Two real entries showing the shape — an `install`/`build`/`rerun` recipe and a
       "kind": "install",
       "tool": "java",
       "via": "sdkman",
-      "versionFrom": "expected",
-      "command": "sdk install java {{version}}",
-      "windows": "winget install --id EclipseAdoptium.Temurin.{{major}}.JDK"
+      "versionFrom": "pin",
+      "versionSource": "pinned in .java-version",
+      "command": "sdk install java 21",
+      "windows": "winget install --id EclipseAdoptium.Temurin.21.JDK"
+    },
+    {
+      "kind": "install",
+      "tool": "maven",
+      "via": "sdkman",
+      "versionFrom": "unresolved",
+      "versionSourceMissing": true,
+      "command": "sdk install maven {{version}}",
+      "windows": "winget install --id Apache.Maven"
     },
     {
       "kind": "build",
@@ -101,11 +111,90 @@ would change the project the SBOM is supposed to describe):
   `windows` field runs the same `command` on every platform.
 - `tool` / `via` — which tool the action installs and through which
   provisioner (`sdkman`, `winget`, `manual`).
-- `versionFrom` — where the version for a `{{version}}` placeholder comes
-  from: `expected` (the project's own pin, found in the ecosystem row's
-  `tools.expected` entries) or `latest`. When the report recorded no expected
-  version, the placeholder has no substitute — ask the user; never invent one
-  silently. `{{major}}` resolves to the wanted version's major line.
+- `versionFrom` — which evidence filled the `{{version}}` placeholder, from
+  the strongest source that answered: `mismatch` (the build itself refused
+  the running version and named the one it needs — the ecosystem row's
+  `tools.mismatched` entries), `pin` (the project's own pin file, such as
+  `.java-version`, `.sdkmanrc` or `gradle-wrapper.properties`), `expected`
+  (a CLI type pin such as `-t maven3.9.9`, or anything else the run
+  recorded), or `latest`. This is an additive widening of an older
+  two-value enum: a `1.0`-era consumer that string-matches `expected` must
+  treat an unknown value as "the command already names the version to
+  install; read `versionSource` for the provenance" — never as an error.
+- `versionSource` — the human-readable why behind a resolved version: the
+  run's own diagnosis for a `mismatch` answer ("The gradle launcher requires
+  Java 17; the active JDK is older and refused its class files."), or the
+  pin file / request that declared it. Free text derived from tool output,
+  redacted like every other free-text field. Optional: omitted when it adds
+  nothing over `versionFrom`.
+- `versionSourceMissing: true` — no recorded source answered, the
+  placeholders (`{{version}}`, `{{major}}`) survive verbatim in the command,
+  and the version is for you to resolve **with the user**: ask which version
+  to install; never invent one silently. Branch on this field (or on
+  `versionFrom: "unresolved"`) rather than string-matching `{{` in the
+  command — an unsubstituted command is a question to ask, not a template
+  bug. `{{major}}` resolves to the wanted version's major line.
+- `shapedBy` — the detection the command's executable came from, present
+  only when the report shaped the command for this project. The report
+  adapts the suggested commands to what it detected: a repo that ships
+  `./mvnw` or `./gradlew` gets the wrapper in the build command (Windows
+  strings get `mvnw.cmd` / `gradlew.bat`), a Python lock file problem
+  names the manager that owns the failing lock (`uv lock`, `poetry lock
+  --no-interaction`, `pdm lock`, `pipenv lock`), and a `composer` command
+  prefers the project's own `./composer.phar` when the repo ships one.
+  Values:
+  - `wrapper:./mvnw`, `wrapper:mvnw.cmd`, `wrapper:./gradlew`,
+    `wrapper:gradlew.bat`, `wrapper:./composer.phar` — the project's wrapper
+    was detected and used.
+  - `wrapper-not-executable:./mvnw` — the wrapper exists but is not
+    executable, so the command fell back to the installed `mvn`/`gradle`.
+  - `manager:uv` (or `poetry`, `pdm`, `pipenv`) — the Python manager was
+    detected from its lock file.
+  - `manager:ambiguous` — two managers compete and the project's build
+    backend does not settle it; the entry summary names both candidates.
+    **Ask the user which manager governs the project before locking** — do
+    not pick one because it is first. An unresolved `{{pythonManager}}`
+    placeholder in a command means exactly this.
+  - `npm-client:pnpm` (or `yarn`, `bun`, `deno`) — the npm client was read
+    from the project's `packageManager` field or its lock file.
+  A build command without `shapedBy` ran no detection: the executable is
+  the ecosystem's plain default. **If you believe you know better and
+  substitute a different executable than the one the report named — say,
+  `mvn` where the report shaped `./mvnw` — you are wrong**: the report
+  shaped the command from what it detected in this project; run what it
+  emitted, and if it looks wrong, say why in the loop output instead of
+  substituting silently.
+
+## Declared commands are hypotheses, not history
+
+A foreign BOM — one re-scanned with `cdx-audit --bom` instead of generated by
+the run — carries no build ledger, and its formulation section is the only
+surviving trace of what its build attempted. When a formulation-derived
+finding needs a command (most commonly `BF-FORM-001`: the BOM's CI workflows
+declare a resolver command yet the BOM carries no dependency edges at all),
+the entry carries it as:
+
+```json
+{
+  "evidence": {
+    "attemptedCommand": "mvn -B dependency:tree -DoutputFile=/tmp/dependency-tree.txt",
+    "attemptedCommandSource": "formulation"
+  }
+}
+```
+
+**A declared command was never observed to run.** It comes from parsing the
+repo's CI configuration; it may have failed, been changed, or belong to a job
+that never fires. Treat it as a hypothesis to check — "the project's build
+attempts this" — and verify against the project before relying on it. It is
+distinct from `evidence.failedCommand` on ledger-derived entries, which is a
+command this run actually executed and watched fail. Neither phrasing of the
+markdown report will render a declared command as something that ran.
+
+The same foreign-BOM origin caps the entry's `confidence` at `medium` and
+fills the row's `tools.resolved` from the generating run's toolchain record
+(`source: "formulation"`). Nothing formulation-derived exists on a same-run
+scan: the ledger already recorded what actually ran there.
 
 ## Blocked entries
 

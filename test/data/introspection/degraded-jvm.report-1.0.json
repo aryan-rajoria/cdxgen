@@ -1,0 +1,163 @@
+{
+  "schemaVersion": "1.0",
+  "runId": "00000000-0000-4000-8000-000000000002",
+  "inputsFingerprint": "sha256:a1b2c3d4e5f60718293a4b5c6d7e8f90a1b2c3d4e5f60718293a4b5c6d7e8f90",
+  "generatedAt": "2026-08-30T00:00:00.000Z",
+  "cdxgen": {
+    "version": "13.0.0",
+    "runtime": {
+      "name": "Node.js",
+      "version": "22.0.0"
+    }
+  },
+  "bom": {
+    "path": "bom.json"
+  },
+  "ledger": {
+    "source": "sidecar",
+    "complete": true,
+    "eventCount": 5,
+    "truncated": false
+  },
+  "overall": {
+    "score": 45,
+    "tier": "manifest",
+    "confidence": "high"
+  },
+  "ecosystems": [
+    {
+      "ecosystem": "java",
+      "state": "graded",
+      "tier": "manifest",
+      "ceilingTier": "resolved",
+      "score": 45,
+      "confidence": "high",
+      "componentCount": 3,
+      "dependencyEdgeCount": 0,
+      "tierReasons": [
+        {
+          "source": "ledger",
+          "id": "jvm.maven.manifest-fallback",
+          "detail": "Maven build failed; the dependency tree fell back to the pom.xml declarations.",
+          "determining": true
+        },
+        {
+          "source": "rule",
+          "id": "BF-GEN-001",
+          "detail": "Only 0 of 3 components appear in the dependency graph (100% uncovered); the BOM reads like a flat list of declarations",
+          "determining": true
+        },
+        {
+          "source": "rule",
+          "id": "BF-JVM-001",
+          "detail": "3 pkg:maven components were captured with no dependency graph, so only declared dependencies are present",
+          "determining": true
+        }
+      ],
+      "tools": {
+        "expected": [
+          {
+            "tool": "java",
+            "source": "wrapper",
+            "wanted": "21"
+          },
+          {
+            "tool": "maven",
+            "source": "wrapper",
+            "wanted": "3.9.9"
+          }
+        ],
+        "resolved": [
+          {
+            "tool": "java",
+            "source": "PATH",
+            "found": "21.0.7-tem"
+          },
+          {
+            "tool": "maven",
+            "source": "PATH",
+            "found": "3.9.9"
+          }
+        ],
+        "missing": [],
+        "mismatched": []
+      }
+    }
+  ],
+  "coverageGaps": [],
+  "remediation": [
+    {
+      "remediationId": "jvm.maven.manifest-fallback",
+      "source": "ledger",
+      "ecosystem": "java",
+      "confidence": "high",
+      "summary": "Maven build failed; only the direct dependencies declared in pom.xml were captured",
+      "impact": "transitive-deps",
+      "targetTier": "resolved",
+      "currentScore": 45,
+      "projectedScore": 100,
+      "expectedGain": 55,
+      "evidenceCount": 1,
+      "subsumes": [
+        "BF-JVM-001"
+      ],
+      "actions": [
+        {
+          "kind": "install",
+          "tool": "java",
+          "via": "sdkman",
+          "versionFrom": "expected",
+          "command": "sdk install java 21",
+          "windows": "winget install --id EclipseAdoptium.Temurin.21.JDK"
+        },
+        {
+          "kind": "install",
+          "tool": "maven",
+          "via": "sdkman",
+          "versionFrom": "expected",
+          "command": "sdk install maven 3.9.9",
+          "windows": "winget install --id Apache.Maven"
+        },
+        {
+          "kind": "build",
+          "command": "mvn -q package -DskipTests"
+        },
+        {
+          "kind": "rerun"
+        }
+      ],
+      "verify": {
+        "rules": [
+          "BF-JVM-001",
+          "BF-JVM-002"
+        ],
+        "expectTier": "resolved"
+      },
+      "docs": "https://cyclonedx.github.io/cdxgen/#/PROJECT_TYPES?id=java",
+      "blocked": false
+    },
+    {
+      "remediationId": "BF-GEN-001",
+      "source": "rule",
+      "ecosystem": "java",
+      "confidence": "high",
+      "severity": "high",
+      "summary": "Only 0 of 3 components appear in the dependency graph (100% uncovered); the BOM reads like a flat list of declarations",
+      "guidance": "Run the ecosystem resolver before generating the BOM (or let cdxgen --install-deps drive it) so transitive edges are captured, then re-scan",
+      "targetTier": "lockfile",
+      "currentScore": 45,
+      "projectedScore": 75,
+      "expectedGain": 30,
+      "evidenceCount": 1,
+      "actions": [],
+      "verify": {
+        "rules": [
+          "BF-GEN-001"
+        ],
+        "expectTier": "lockfile"
+      },
+      "blocked": false
+    }
+  ],
+  "observations": []
+}

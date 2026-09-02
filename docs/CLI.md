@@ -132,6 +132,36 @@ Under `--dry-run`, the report is produced with every remediation marked
 blocked (nothing can be fixed without executing commands) and no file is
 written; the markdown report goes to stderr.
 
+### Evidence in the reports
+
+A remediation the ledger ranked carries an `evidence` block — the failed
+command, its exit code, the diagnosed cause, and an `outputExcerpt` of at
+most the last 2000 characters of the command's combined output — in both
+reports and in the markdown's "Failed command output" block, so the entry an
+agent is about to act on shows the failure it fixes. Excerpts are redacted
+with the same field-aware redactor as every other free-text field: sensitive
+assignments and space-separated credential flags (`--password x`,
+`-p x`, `--registry-token x`, `PGPASSWORD=x`), echoed `Authorization` and
+`Cookie` headers, 32+-character token runs beside a credential name, URL
+userinfo and query strings, and the user's home directory path. Set
+`CDXGEN_INTROSPECT_NO_OUTPUT=true` to suppress excerpts entirely while
+keeping the exit codes and causes.
+
+### Version pins in the reports
+
+cdxgen reads the version pins a project declares through its well-known tool
+pin files — `.tool-versions`, `.nvmrc`, `.java-version`, `.python-version`,
+`pyproject.toml`, `go.mod`, `rust-toolchain`/`rust-toolchain.toml`,
+`package.json`, `global.json`, `.sdkmanrc`, and the Gradle/Maven wrapper
+properties — and records what it found in the introspection reports.
+Install commands in remediation actions substitute the strongest source that
+answers: a version the build itself named in a mismatch report first, then a
+pin file, then a `-t` type pin, then any other recorded expectation. Each
+resolved action names the source in `versionFrom` with the reason in
+`versionSource`; when nothing answers, the command keeps its `{{version}}`
+placeholder and the action says so with `versionSourceMissing: true` — the
+version is then the user's decision, never an invention.
+
 ### CI gate
 
 `--introspect-fail-below <n>` fails the run when the overall introspection

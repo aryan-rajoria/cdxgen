@@ -84,6 +84,31 @@ Ecosystems cdxgen cannot parse at all (elm, crystal, nim, perl, r today) are
 `unsupported`: they are excluded from the score and appear in
 `coverageGaps[]` as cdxgen's backlog, never as a defect in the project.
 
+### Remediation catalog coverage
+
+Every remediation id in `data/remediations.json` names an ecosystem, and a
+producer in `lib/` records it at a specific fallback or failure; the catalog
+and the producers are kept in lock-step by a test that fails when an id
+appears on one side only. The per-ecosystem coverage today:
+
+| Ecosystem | Entries | Produced by |
+| --------- | ------- | ----------- |
+| java | 8 | Maven, Gradle and sbt fallbacks and command failures |
+| npm | 5 | Missing lockfile, missing `node_modules`, unparseable lockfiles, git dependencies |
+| python | 5 | The generic lockfile entry plus per-manager uv/poetry/pdm/pipenv variants |
+| generic | 5 | Binary inventory, secure mode, host allow-list, dry-run and offline policy |
+| go | 2 | `go.toolchain.missing` (the go executable could not run) and `go.mod-only-fallback` (the manual `go.mod` parse) |
+| rust | 2 | `rust.cargo-lock-missing` (manifest-only parse) and `rust.toolchain.missing` (cargo could not run) |
+| php | 2 | `php.no-lockfile` and `php.composer.missing` |
+| clojure | 2 | lein and the Clojure CLI unavailable |
+| swift | 2 | toolchain and `swift package resolve` failures |
+| ruby | 2 | host build-requirements gaps |
+| csharp, cocoa | 1 each | .NET SDK, cocoapods unavailable |
+| dart | 1 | `dart.pub-get-needed` — `pubspec.yaml` parsed without `pubspec.lock` |
+| elixir | 1 | `elixir.deps-not-fetched` — `mix.exs` without `mix.lock` |
+| haskell | 1 | `haskell.freeze-missing` — no `cabal.project.freeze` |
+| helm | none | A chart is `manifest` forever (`at-ceiling`); it scores 100 and proposes nothing |
+
 ## The report
 
 Every run writes a markdown report for people and a JSON report for tools. The
@@ -96,14 +121,74 @@ Build introspection: markdown report: bom.json.introspection.md
 Build introspection: json report: bom.json.introspection.json
 ```
 
-The JSON document (`schemaVersion: "1.0"`) is the contract agents read; it is
+The JSON document (`schemaVersion: "1.1"`) is the contract agents read; it is
 documented field for field in
 [the skill's report schema reference](../.agents/skills/sbom-fidelity-loop/reference/report-schema.md).
 `overall.tier` is the worst tier among scored rows, `overall.score` is the
 component-count-weighted mean, and `remediation[]` is ranked by expected score
-gain. Entries sourced from the build ledger carry `actions[]` — concrete
-install/build/rerun steps with Windows variants — while rule-sourced entries
-(`BF-*` ids) propose the re-scan in which cdxgen drives the resolver itself.
+gain. Ledger-sourced entries carry an `evidence` block — the failed command,
+its exit code, the diagnosed cause, and a bounded, redacted `outputExcerpt` of
+the command's combined output — so the entry an agent is about to act on
+shows why it exists. Excerpts are redacted through the same field-aware
+redactor as every other free-text field (assignment and space-separated
+credential flags, echoed `Authorization` headers, credential-adjacent token
+runs, URL userinfo and the home directory path), and
+`CDXGEN_INTROSPECT_NO_OUTPUT=true` suppresses them entirely for users who
+will not ship tool output under any redaction. Entries sourced from the
+build ledger also carry `actions[]` — concrete install/build/rerun steps
+with Windows variants — while rule-sourced entries (`BF-*` ids) propose the
+re-scan in which cdxgen drives the resolver itself. Suggested commands adapt
+to the project: a repo that ships a `mvnw` or `gradlew` wrapper gets the
+wrapper in the build command, a Python lock file problem names the
+manager that owns the failing lock (`uv lock`, `poetry lock`, `pdm lock`,
+`pipenv lock`) instead of one command for every manager, and a `composer`
+command prefers the project's own `composer.phar` when the repo ships one.
+Each shaped action
+carries a `shapedBy` field naming the detection behind the command, so a
+reviewer can tell a correct detection from a default; an action without
+`shapedBy` names the ecosystem's plain default executable.
+
+## Re-scanning a foreign BOM
+
+Introspection can also grade a BOM nobody generated in this run —
+`cdx-audit --bom <file> --direct-bom-audit --introspect`. Such a BOM carries
+no build ledger, so on its own the verdict rests on BOM structure alone
+(confidence `low`). Most BOMs generated with `--introspect` or
+`--profile introspect`, though, carry a `formulation` section, and that
+section is evidence of two different kinds:
+
+- **Run-derived** — the `type: "platform"` components record the toolchain
+  the generating run actually probed, with names and versions. On a foreign
+  re-scan this record substitutes for the missing `tool.resolved` events and
+  appears in the row's `tools.resolved` with `source: "formulation"`. It is
+  also how the report shows the BOM was not generated by the environment
+  re-scanning it: when the formulation's entry for the runtime's own family
+  carries a different version (or names other toolchains and no entry for
+  this family at all), the `BF-FORM-002` finding fires — a different
+  environment produced the record (another machine, or the same machine
+  under a different runtime), and the verdict cannot be verified as-is here
+  without regenerating.
+- **Config-parsed** — the commands under `formulation[].workflows[]` come
+  from the repo's CI configuration. A declared command was **never observed
+  to run**; it may have failed, or belong to a job that never fires. When a
+  finding needs the command the build attempted (`BF-FORM-001`: a resolver
+  command is declared yet the BOM carries no dependency edges at all), it
+  travels as `evidence.attemptedCommand` with
+  `attemptedCommandSource: "formulation"`, and every surface renders it as a
+  hypothesis to check, never as something that ran. Action references
+  (`actions/checkout@<sha>`) are not commands and never surface as one.
+
+Formulation-derived findings exist **only** on this foreign path. In a
+same-run scan the formulation's toolchain record is the ledger's own probes
+reported twice and its commands were not observed either, so a scan with a
+ledger keeps its verdict untouched: no score moves, no confidence changes,
+and no declared command appears in the report. The `D-formulation-foreign`
+and `D-formulation-samerun-neutral` matrix cells pin both directions.
+
+Because the run was not observed, foreign-BOM confidence is capped at
+`medium` even with formulation evidence in hand — `high` is reserved for a
+verdict corroborated by an observed run. A foreign BOM whose formulation
+records no toolchain stays at `low`.
 
 ## The loop
 
@@ -112,6 +197,16 @@ is the agent contract: scan, read the report, execute the ranked remediation's
 actions, re-scan, and stop in one of six ways (`success`, `stalled`, `blocked`,
 `nothing-further-available`, `unverifiable`, `budget-exhausted`). The loop
 fixes the environment; it never modifies the project to make a rule pass.
+
+One latitude beyond the catalog is documented, and bounded: when a report's
+evidence names a cause the catalog has no action for — a `JAVA_HOME` pointing
+at a deleted JDK, say — the skill allows exactly one evidence-driven host
+repair, which must be recorded in `.cdxgen/introspection-history.json`
+(schema `1.1`) with `inferred: true`, a `remediationId` prefixed `inferred:`,
+and the evidence quote it rests on. An inferred entry without the quote is
+malformed. The repair is judged by the next report like any catalog fix, and
+at most one is allowed per `inputsFingerprint`, so a stalled loop cannot
+churn through guesses.
 
 ## A worked transition
 
@@ -163,6 +258,8 @@ winget install --id Apache.Maven
 mvn -q package -DskipTests
 ```
 
+- no version for `java` was recorded by this run, so `{{version}}` is left unsubstituted — ask the user which version to install; never invent one
+- no version for `maven` was recorded by this run, so `{{version}}` is left unsubstituted — ask the user which version to install; never invent one
 - Re-run the cdxgen invocation from the Reproduce section to confirm the fix.
 
 ### 2. Only 0 of 2 components appear in the dependency graph (100% uncovered); the BOM reads like a flat list of declarations
@@ -265,10 +362,10 @@ verdict drifted from it.
 
 Groups, one axis at a time:
 
-- **C — the false-positive gate.** Healthy projects (ipsw, binwalk, poetry,
-  eShop) on the image built for them must produce zero remediations. A
-  container is exactly where a spurious "tool missing" fires, because minimal
-  images legitimately lack tools the host had. Build this group green first.
+- **C — the false-positive gate.** Healthy projects (ipsw, poetry, eShop) on
+  the image built for them must produce zero remediations. A container is
+  exactly where a spurious "tool missing" fires, because minimal images
+  legitimately lack tools the host had. Build this group green first.
 - **A — version skew.** One image axis at a time (Java, Python, Node, Go,
   .NET, Ruby) over a fixed project. Some cells genuinely degrade — measured:
   the Go 1.23 image cannot serve ipsw's declared `go 1.26` and grades

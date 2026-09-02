@@ -9,10 +9,10 @@
     "golang123-ipsw": {
       "tier": "manifest",
       "remediationIds": [
-        "BF-GEN-001"
+        "go.mod-only-fallback"
       ],
       "componentCount": 258,
-      "score": 55
+      "score": 45
     },
     "golang126-ipsw": {
       "tier": "resolved",
@@ -62,12 +62,6 @@
       "tier": "lockfile",
       "remediationIds": [],
       "componentCount": 248,
-      "score": 100
-    },
-    "rust-binwalk": {
-      "tier": "lockfile",
-      "remediationIds": [],
-      "componentCount": 228,
       "score": 100
     },
     "dotnet9-eshop": {
@@ -175,8 +169,7 @@
     "java26-gradlefixture": {
       "tier": "absent",
       "remediationIds": [
-        "jvm.gradle.invocation-failed",
-        "jvm.gradle.unresolved-config"
+        "jvm.gradle.invocation-failed"
       ],
       "componentCount": 0,
       "score": 0
@@ -197,6 +190,6 @@
       "score": 45
     }
   },
-  "updated": "2026-08-31T06:18:07.779Z",
-  "sourceRun": "d12-review"
+  "updated": "2026-09-02T17:43:24.129Z",
+  "sourceRun": "d12-review; java26-gradlefixture refreshed 2026-09-02; rust-binwalk dropped 2026-09-02; golang123-ipsw refreshed from 2026-09-02T17-42-44.259Z (D16: go.mod-only-fallback subsumes BF-GEN-001)"
 }

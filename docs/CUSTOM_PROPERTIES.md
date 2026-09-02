@@ -1387,10 +1387,10 @@ are emitted on `metadata.properties` when generation runs with `--introspect`,
 `confidence` properties are omitted when the run produced no scored ecosystem,
 and per-ecosystem entries cover scored ecosystems only (unsupported ones have
 neither a tier nor a score). The same names appear as structured facts in the
-introspection annotations' text; a value of `1.0` for `schemaVersion` matches
+introspection annotations' text; a value of `1.1` for `schemaVersion` matches
 the JSON report's `schemaVersion`.
 
-- `cdx:introspection:schemaVersion` — Version of the introspection BOM surface and report contract. Always `1.0` today.
+- `cdx:introspection:schemaVersion` — Version of the introspection BOM surface and report contract. Always `1.1` today.
 - `cdx:introspection:tier` — Overall fidelity tier: the worst tier among the scored ecosystems (`resolved`, `lockfile`, `manifest`, `heuristic`, `absent`).
 - `cdx:introspection:score` — Overall score, 0-100: the component-count-weighted mean of the scored ecosystem scores.
 - `cdx:introspection:confidence` — Overall confidence: the worst confidence among the scored ecosystems (`high`, `medium`, `low`).
@@ -1398,6 +1398,15 @@ the JSON report's `schemaVersion`.
 - `cdx:introspection:ecosystem:<eco>:tier` — Fidelity tier assigned to one ecosystem, e.g. `cdx:introspection:ecosystem:java:tier`.
 - `cdx:introspection:ecosystem:<eco>:score` — Score for one ecosystem, 0-100, e.g. `cdx:introspection:ecosystem:java:score`.
 - `cdx:introspection:remediationCount` — Number of ranked remediations the loop can act on (blocked entries excluded).
+
+One further property is emitted inside the document itself, on the
+`properties` of every entry under `formulation[].workflows[]`, when the run
+reflected over the freshly generated BOM. It marks the formulation section as
+a record of *this* run, which is how a later re-scan of the BOM tells the
+run-derived half of formulation (the toolchain the generating run probed)
+from a record that arrived with a foreign document:
+
+- `cdx:introspection:runId` — Identifier of the cdxgen run that generated the formulation section and stamped the BOM. Replaced on every introspected re-write of the document.
 
 The annotation blocks also carry these entry-level names, rendered into the
 annotation text exactly the way `cdx:audit:*` findings are:
