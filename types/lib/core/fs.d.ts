@@ -7,6 +7,15 @@ import { Buffer } from "node:buffer";
  */
 export declare function safeExistsSync(filePath: string): any;
 /**
+ * Permission-aware check for whether a path exists and carries the executable
+ * bit for the current user. Answers false instead of throwing when the path
+ * is absent, unreadable, or blocked by secure mode.
+ *
+ * @param {string} filePath File path to check.
+ * @returns {boolean} True when the path exists and is executable.
+ */
+export declare function safeIsExecutableSync(filePath: string): boolean;
+/**
  * Permission- and dry-run-aware wrapper around writeFileSync. Records the
  * activity and returns undefined when blocked.
  *
