@@ -5,19 +5,19 @@ ARG SWIFT_PLATFORM=ubi9
 ARG SWIFT_BRANCH=swift-6.3-release
 ARG SWIFT_VERSION=swift-6.3-RELEASE
 ARG SWIFT_WEBROOT=https://download.swift.org
-ARG JAVA_VERSION=25.0.2-tem
+ARG JAVA_VERSION=25.0.4-tem
 ARG SBT_VERSION=1.12.9
 # renovate: datasource=maven lookupName=org.apache.maven:maven
-ARG MAVEN_VERSION=3.9.12
+ARG MAVEN_VERSION=3.9.16
 # renovate: datasource=gradle-version depName=gradle
 ARG GRADLE_VERSION=9.6.1
 # renovate: datasource=golang-version depName=golang
-ARG GO_VERSION=1.27.0
+ARG GO_VERSION=1.27.1
 # renovate: datasource=node-version depName=node
-ARG NODE_VERSION=24.18.0
-ARG RUBY_VERSION=4.0.5
+ARG NODE_VERSION=24.20.0
+ARG RUBY_VERSION=4.0.6
 ARG JAVA_TOOL_OPTIONS="-Dfile.encoding=UTF-8"
-ARG SCALA_VERSION=3.8.3
+ARG SCALA_VERSION=3.8.4
 
 ENV GOPATH=/opt/app-root/go \
     JAVA_VERSION=$JAVA_VERSION \
@@ -55,7 +55,7 @@ ENV GOPATH=/opt/app-root/go \
     SDKMAN_DIR=/opt/.sdkman \
     SDKMAN_CANDIDATES_DIR=/opt/.sdkman/candidates \
     RBENV_ROOT=/opt/.rbenv
-ENV PATH=${PATH}:/opt/bin:/opt/.nvm/versions/node/v${NODE_VERSION}/bin:${JAVA_HOME}/bin:${MAVEN_HOME}/bin:${GRADLE_HOME}/bin:${SCALA_HOME}/bin:${SBT_HOME}/bin:${GOPATH}/bin:/usr/local/go/bin:/usr/local/bin/:/opt/.local/bin:${PYTHONPATH}/bin:/opt/.rbenv/bin:/opt/.rbenv/versions/4.0.5/bin
+ENV PATH=${PATH}:/opt/bin:/opt/.nvm/versions/node/v${NODE_VERSION}/bin:${JAVA_HOME}/bin:${MAVEN_HOME}/bin:${GRADLE_HOME}/bin:${SCALA_HOME}/bin:${SBT_HOME}/bin:${GOPATH}/bin:/usr/local/go/bin:/usr/local/bin/:/opt/.local/bin:${PYTHONPATH}/bin:/opt/.rbenv/bin:/opt/.rbenv/versions/4.0.6/bin
 
 RUN set -e; \
     ARCH_NAME="$(rpm --eval '%{_arch}')"; \
@@ -86,7 +86,7 @@ RUN set -e; \
     && mkdir -p /opt/bin /opt/.nvm /tmp/cdxgen-temp \
     && cargo --version \
     && rustc --version \
-    && curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.40.1/install.sh | bash \
+    && curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.40.7/install.sh | bash \
     && source ${NVM_DIR}/nvm.sh \
     && nvm install ${NODE_VERSION} \
     && node --version \

@@ -13,11 +13,11 @@ LABEL maintainer="cyclonedx" \
 
 ARG SBT_VERSION=1.12.9
 # renovate: datasource=maven lookupName=org.apache.maven:maven
-ARG MAVEN_VERSION=3.9.12
+ARG MAVEN_VERSION=3.9.16
 # renovate: datasource=gradle-version depName=gradle
 ARG GRADLE_VERSION=9.6.1
 # renovate: datasource=golang-version depName=golang
-ARG GO_VERSION=1.27.0
+ARG GO_VERSION=1.27.1
 ARG PYTHON_VERSION=3.12
 
 ENV GOPATH=/opt/app-root/go \
