@@ -5,7 +5,7 @@ ARG ATOM_RUBY_VERSION=4.0.6
 ARG DEBIAN_REPO
 ARG GITHUB_RAW_URL=https://raw.githubusercontent.com
 ARG GITHUB_URL=https://github.com
-ARG JAVA_VERSION=21.0.12+1.1-tem
+ARG JAVA_VERSION=21.0.12-tem
 ARG NODE_24
 ARG NODE_VERSION=${NODE_24}
 ARG NODEJS_DIST_URL
@@ -94,8 +94,8 @@ RUN set -e; \
       if [ -f /etc/apt/sources.list.d/debian.sources ]; then \
         sed -i "s|$DEBIAN_REPO|http://deb.debian.org|g" /etc/apt/sources.list.d/debian.sources; \
       fi \
-    fi; \
-    if [ -n "$RUBYGEMS_REPO" ]; then \
+    fi \
+ && if [ -n "$RUBYGEMS_REPO" ]; then \
       gem sources --add https://rubygems.org/; \
       gem sources --remove $RUBYGEMS_REPO/; \
       gem sources -c; \
