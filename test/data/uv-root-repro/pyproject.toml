@@ -1,0 +1,18 @@
+[project]
+name = "uv-root-repro"
+version = "2.0.0"
+description = "Independent repro for issue #4343: uv.lock root dependsOn"
+requires-python = ">=3.12"
+dependencies = [
+    "Click==8.1.7",
+    "packaging>=24.1",
+]
+
+[tool.uv]
+dev-dependencies = [
+    "pytest==8.3.5",
+]
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
