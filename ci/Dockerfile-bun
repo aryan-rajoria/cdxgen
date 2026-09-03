@@ -1,10 +1,10 @@
-FROM almalinux:10.2-minimal@sha256:bafd259fb7b0475eed28376ddddea19f209e24efafc9eb21f4e9d5ed9825d2ef
+FROM almalinux:10.2-minimal@sha256:77aeeeef6889af731a91d83f65b08ef9930bde10332ae2e3fd6e0f0c47066a7b
 
 LABEL maintainer="cyclonedx" \
       org.opencontainers.image.authors="Prabhu Subramanian <prabhu@appthreat.com>" \
       org.opencontainers.image.source="https://github.com/cdxgen/cdxgen" \
       org.opencontainers.image.url="https://github.com/cdxgen/cdxgen" \
-      org.opencontainers.image.version="13.0.x" \
+      org.opencontainers.image.version="13.1.x" \
       org.opencontainers.image.vendor="cyclonedx" \
       org.opencontainers.image.licenses="Apache-2.0" \
       org.opencontainers.image.title="cdxgen" \
@@ -16,14 +16,14 @@ ARG SWIFT_PLATFORM=ubi9
 ARG SWIFT_BRANCH=swift-6.3-release
 ARG SWIFT_VERSION=swift-6.3-RELEASE
 ARG SWIFT_WEBROOT=https://download.swift.org
-ARG JAVA_VERSION=25.0.2-tem
+ARG JAVA_VERSION=25.0.4-tem
 ARG SBT_VERSION=1.12.9
 # renovate: datasource=maven lookupName=org.apache.maven:maven
-ARG MAVEN_VERSION=3.9.12
+ARG MAVEN_VERSION=3.9.16
 # renovate: datasource=gradle-version depName=gradle
 ARG GRADLE_VERSION=9.6.1
 # renovate: datasource=golang-version depName=golang
-ARG GO_VERSION=1.27.0
+ARG GO_VERSION=1.27.1
 ARG PYTHON_VERSION=3.12
 
 ENV GOPATH=/opt/app-root/go \

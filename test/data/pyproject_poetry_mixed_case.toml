@@ -1,0 +1,23 @@
+[tool.poetry]
+name = "poetry-mixed-case"
+version = "1.0.0"
+description = "Regression fixture: mixed-case keys in [tool.poetry.dependencies]"
+authors = ["Team AppThreat <cloud@appthreat.com>"]
+
+[tool.poetry.dependencies]
+python = ">=3.9"
+# Deliberately mixed-case and an underscore variant, to pin that
+# directDepsKeys are normalised before being matched against the lock.
+Click = "^8.1"
+PackageURL_Python = "^0.10"
+# Not present in poetry1.lock; must not dangle in the root dependsOn.
+HTTPX = "^0.24"
+
+[tool.poetry.group.dev.dependencies]
+# Mixed-case here too, to pin that group membership is matched against the
+# normalised package names from the lock file.
+Rich = "^12.6"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"

@@ -4,13 +4,13 @@ FROM ruby:4.0.5-slim-trixie@sha256:42ad5227a4b2758f32563b34b5967e1055e75c80243ee
 ARG DEBIAN_REPO
 ARG GITHUB_RAW_URL=https://raw.githubusercontent.com
 ARG GITHUB_URL=https://github.com
-ARG JAVA_VERSION=21.0.10-tem
+ARG JAVA_VERSION=21.0.12-tem
 ARG NODE_24
 ARG NODE_VERSION=${NODE_24}
 ARG NODEJS_DIST_URL
 ARG NPM_REPO
 ARG NVM
-ARG NVM_VERSION=${NVM:-v0.40.5}
+ARG NVM_VERSION=${NVM:-v0.40.7}
 ARG PIP_CONFIG
 ARG RUBYGEMS_REPO
 ARG SDKMAN_URL=https://api.sdkman.io/2
@@ -95,8 +95,8 @@ RUN set -e; \
       if [ -f /etc/apt/sources.list.d/debian.sources ]; then \
         sed -i "s|$DEBIAN_REPO|http://deb.debian.org|g" /etc/apt/sources.list.d/debian.sources; \
       fi \
-    fi; \
-    if [ -n "$RUBYGEMS_REPO" ]; then \
+    fi \
+ && if [ -n "$RUBYGEMS_REPO" ]; then \
       gem sources --add https://rubygems.org/; \
       gem sources --remove $RUBYGEMS_REPO/; \
       gem sources -c; \

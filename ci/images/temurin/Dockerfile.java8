@@ -1,5 +1,5 @@
 # Base-image
-FROM eclipse-temurin:8-jdk-ubi9-minimal@sha256:ee6c5908385d2818c873c9169fd2083d58de438ebaf287ec73d7468921530979 AS base
+FROM eclipse-temurin:8-jdk-ubi9-minimal@sha256:313100efac6f1c69d32c970b9a5c6f1b07cfd3f9696b4ee0235eb174d7cb7c82 AS base
 
 ARG GITHUB_RAW_URL=https://raw.githubusercontent.com
 ARG GRADLE_8
@@ -11,7 +11,7 @@ ARG NODE_VERSION=${NODE_24}
 ARG NODEJS_DIST_URL
 ARG NPM_REPO
 ARG NVM
-ARG NVM_VERSION=${NVM:-v0.40.5}
+ARG NVM_VERSION=${NVM:-v0.40.7}
 ARG PIP_CONFIG
 ARG PYTHON_VERSION=3.12
 ARG REDHAT_REPO

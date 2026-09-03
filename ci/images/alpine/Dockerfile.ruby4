@@ -68,8 +68,8 @@ RUN set -e; \
  && rm -rf $HOME/.npmrc $HOME/.pip /var/cache/apk/* \
  && if [ -n "$ALPINE_REPO" ]; then \
       sed -i "s|$ALPINE_REPO|https://dl-cdn.alpinelinux.org|g" /etc/apk/repositories; \
-    fi; \
-    if [ -n "$RUBYGEMS_REPO" ]; then \
+    fi \
+ && if [ -n "$RUBYGEMS_REPO" ]; then \
       gem sources --add https://rubygems.org/; \
       gem sources --remove $RUBYGEMS_REPO; \
       gem sources -c; \
