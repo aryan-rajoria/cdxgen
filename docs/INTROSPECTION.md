@@ -91,23 +91,23 @@ producer in `lib/` records it at a specific fallback or failure; the catalog
 and the producers are kept in lock-step by a test that fails when an id
 appears on one side only. The per-ecosystem coverage today:
 
-| Ecosystem | Entries | Produced by |
-| --------- | ------- | ----------- |
-| java | 8 | Maven, Gradle and sbt fallbacks and command failures |
-| npm | 5 | Missing lockfile, missing `node_modules`, unparseable lockfiles, git dependencies |
-| python | 5 | The generic lockfile entry plus per-manager uv/poetry/pdm/pipenv variants |
-| generic | 5 | Binary inventory, secure mode, host allow-list, dry-run and offline policy |
-| go | 2 | `go.toolchain.missing` (the go executable could not run) and `go.mod-only-fallback` (the manual `go.mod` parse) |
-| rust | 2 | `rust.cargo-lock-missing` (manifest-only parse) and `rust.toolchain.missing` (cargo could not run) |
-| php | 2 | `php.no-lockfile` and `php.composer.missing` |
-| clojure | 2 | lein and the Clojure CLI unavailable |
-| swift | 2 | toolchain and `swift package resolve` failures |
-| ruby | 2 | host build-requirements gaps |
-| csharp, cocoa | 1 each | .NET SDK, cocoapods unavailable |
-| dart | 1 | `dart.pub-get-needed` — `pubspec.yaml` parsed without `pubspec.lock` |
-| elixir | 1 | `elixir.deps-not-fetched` — `mix.exs` without `mix.lock` |
-| haskell | 1 | `haskell.freeze-missing` — no `cabal.project.freeze` |
-| helm | none | A chart is `manifest` forever (`at-ceiling`); it scores 100 and proposes nothing |
+| Ecosystem     | Entries | Produced by                                                                                                     |
+| ------------- | ------- | --------------------------------------------------------------------------------------------------------------- |
+| java          | 8       | Maven, Gradle and sbt fallbacks and command failures                                                            |
+| npm           | 5       | Missing lockfile, missing `node_modules`, unparseable lockfiles, git dependencies                               |
+| python        | 5       | The generic lockfile entry plus per-manager uv/poetry/pdm/pipenv variants                                       |
+| generic       | 5       | Binary inventory, secure mode, host allow-list, dry-run and offline policy                                      |
+| go            | 2       | `go.toolchain.missing` (the go executable could not run) and `go.mod-only-fallback` (the manual `go.mod` parse) |
+| rust          | 2       | `rust.cargo-lock-missing` (manifest-only parse) and `rust.toolchain.missing` (cargo could not run)              |
+| php           | 2       | `php.no-lockfile` and `php.composer.missing`                                                                    |
+| clojure       | 2       | lein and the Clojure CLI unavailable                                                                            |
+| swift         | 2       | toolchain and `swift package resolve` failures                                                                  |
+| ruby          | 2       | host build-requirements gaps                                                                                    |
+| csharp, cocoa | 1 each  | .NET SDK, cocoapods unavailable                                                                                 |
+| dart          | 1       | `dart.pub-get-needed` — `pubspec.yaml` parsed without `pubspec.lock`                                            |
+| elixir        | 1       | `elixir.deps-not-fetched` — `mix.exs` without `mix.lock`                                                        |
+| haskell       | 1       | `haskell.freeze-missing` — no `cabal.project.freeze`                                                            |
+| helm          | none    | A chart is `manifest` forever (`at-ceiling`); it scores 100 and proposes nothing                                |
 
 ## The report
 
