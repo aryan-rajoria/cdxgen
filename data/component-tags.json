@@ -119,7 +119,14 @@
       "projections",
       "performance",
       "plugins",
-      "non-block"
+      "non-block",
+      "http",
+      "grpc",
+      "graphql",
+      "wsgi",
+      "asgi",
+      "llm",
+      "mcp"
     ]
   },
   "properties": {

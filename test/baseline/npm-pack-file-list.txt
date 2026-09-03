@@ -134,6 +134,7 @@ lib/ecosystems/parsers-rust.js
 lib/ecosystems/parsers-zig.js
 lib/ecosystems/pep770.js
 lib/ecosystems/pylockutils.js
+lib/ecosystems/pypiClassifiers.js
 lib/ecosystems/pythonutils.js
 lib/ecosystems/registryProvenance.js
 lib/ecosystems/remote/huggingface.js
