@@ -16,6 +16,26 @@ export declare function getVenvMetadata(env?: Object, explicitPath?: string): Ob
  */
 export declare function get_python_command_from_env(env: string): string;
 /**
+ * Is this import satisfied by a module that lives in the project itself?
+ *
+ * `atom parsedeps` reports every non-stdlib import it sees, including imports of the
+ * project's own packages. Attributing those to a distribution invents dependencies:
+ * `data/pypi-pkg-aliases.json` maps the module `app` to `zope2`, `test` to `pytabix`,
+ * `models` to `asposestorage` and `src` to `auto-mix-prep`, so any project with a
+ * local package of that name acquires an obscure component it never depended on -
+ * along with every namespace and tag that component carries downstream. Filtering by
+ * name would need a denylist of every plausible first-party name; asking the
+ * filesystem whether the module is ours answers it exactly.
+ *
+ * Checks the project root and a `src/` layout for a module file, a package directory,
+ * and a PEP 420 namespace package directory.
+ *
+ * @param {string} src Path to the project being analysed
+ * @param {string} name Imported top-level module name
+ * @returns {boolean} `true` if the project supplies this module itself
+ */
+export declare function isFirstPartyModule(src: string, name: string): boolean;
+/**
  * Method to find python modules by parsing the imports and then checking with PyPI to obtain the latest version
  *
  * @param {string} src directory
