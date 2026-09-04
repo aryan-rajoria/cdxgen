@@ -20,3 +20,18 @@ Skills follow the [Agent Skills](https://agentskills.io/specification) open stan
 | **Ecosystem Onboarding** | Add support for a new language, package manager, or lockfile format: aliases, parsers, dispatch, purls, fixtures, tests, and docs. | [`skills/ecosystem-onboarding/SKILL.md`](skills/ecosystem-onboarding/SKILL.md) |
 | **Custom Property Author** | Define and emit new `cdx:` properties safely: naming, value hygiene, and the `docs/CUSTOM_PROPERTIES.md` documentation gate. | [`skills/custom-property-author/SKILL.md`](skills/custom-property-author/SKILL.md) |
 | **SBOM Fidelity Loop** | Improve SBOM accuracy by running the `--introspect` remediation loop: read the cdxgen fidelity report, execute its ranked build-tool remediations safely, and re-scan until the fidelity tiers stop improving. | [`skills/sbom-fidelity-loop/SKILL.md`](skills/sbom-fidelity-loop/SKILL.md) |
+
+---
+
+## Relationship to the Claude Code plugin
+
+[`claude-plugin/`](../claude-plugin/README.md) packages the user-facing cdxgen
+capabilities as a Claude Code plugin, distributed through the marketplace
+manifest at [`.claude-plugin/marketplace.json`](../.claude-plugin/marketplace.json).
+
+Two skills are mirrored into that plugin: **BOM Slimmer** and **SBOM Fidelity
+Loop**. This directory remains their source of truth — change them here first,
+then copy into `claude-plugin/skills/`. The contributor-facing skills
+(**Ecosystem Onboarding**, **Custom Property Author**, **CycloneDX Spec
+Reviewer**) are intentionally not shipped in the plugin, since its audience runs
+cdxgen against their own projects rather than developing cdxgen itself.
