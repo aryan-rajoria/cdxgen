@@ -15,7 +15,7 @@ tracebom --cmd <command> [options]
 | `--cmd`               | string  | —          | **Required.** Command to execute and trace.                                                                      |
 | `-d, --working-dir`   | string  | `cwd()`    | Working directory for the traced process.                                                                        |
 | `-o, --output`        | string  | `bom.json` | Output SBOM file path.                                                                                           |
-| `--spec-version`      | number  | `1.6`      | CycloneDX spec version.                                                                                          |
+| `--spec-version`      | number  | `1.7`      | CycloneDX spec version.                                                                                          |
 | `--project-name`      | string  | —          | Override component name.                                                                                         |
 | `--project-version`   | string  | —          | Override component version.                                                                                      |
 | `--read-paths`        | string  | —          | Comma-separated extra filesystem read paths for the sandbox.                                                     |
@@ -28,9 +28,7 @@ tracebom --cmd <command> [options]
 | `--trace-http-urls`   | boolean | `false`    | Enable eBPF-based HTTP URL tracing (Linux only, kernel >= 5.8). Requires CAP_BPF.                                |
 | `--trace-crypto`      | boolean | `true`     | Enable eBPF-based cryptographic library and cipher suite tracing (Linux only, kernel >= 5.8).                    |
 | `--crypto-probe-mode` | string  | `tls-only` | Crypto probe mode controlling tracing depth: `tls-only` (default) or `operations` (digest, encrypt, sign).       |
-| `--cbom-output`       | string  | —          | Save a standalone CycloneDX CBOM JSON file at this path.                                                         |
 | `--trace-period`      | number  | —          | Stop tracing after N seconds. Useful for tracing long-running or persistent commands.                            |
-| `--sanitize-env`      | boolean | `false`    | Strip sensitive environment variables (TOKEN, SECRET, AUTH, etc.) before sandboxed execution.                    |
 | `--diff`              | boolean | `false`    | Enable filesystem mutation diffing. Tracks which files are created, modified, or deleted.                        |
 | `--strict`            | boolean | `false`    | Treat sandbox setup warnings as hard errors. Useful for CI/CD pipelines.                                         |
 | `--allow-host`        | string  | —          | Comma-separated hostnames to allow network access to (when network is enabled).                                  |
@@ -44,6 +42,13 @@ tracebom --cmd <command> [options]
 | `--allow-exec`        | string  | —          | Comma-separated list of executables the traced command is allowed to run.                                        |
 | `--block-exec`        | string  | —          | Comma-separated list of executables to block from running.                                                       |
 | `--print`             | boolean | `false`    | Print BOM to stdout.                                                                                             |
+
+### Library-only options
+
+`runTrace` in `lib/inventory/traceRunner.js` accepts `sanitizeEnv`, which strips
+sensitive environment variables before sandboxed execution. It has no CLI flag;
+use `--allow-envs` to control which host variables reach the sandbox from
+`tracebom`.
 
 ## Examples
 
@@ -60,11 +65,11 @@ tracebom --cmd "node app.js" --max-memory 256 --timeout 30000 --print
 # Collect HTTP URLs as services from a persistent server (stop after 30 seconds)
 tracebom --cmd "node server.js" --trace-http-urls --trace-period 30 -o bom.json
 
-# Trace cryptographic library operations and generate CBOM
-tracebom --cmd "node app.js" --trace-crypto --cbom-output cbom.json -o bom.json
+# Trace cryptographic library operations, including digest/encrypt/sign
+tracebom --cmd "node app.js" --trace-crypto --crypto-probe-mode operations -o bom.json
 
-# Trace with CPU limit and environment sanitization
-tracebom --cmd "node app.js" --max-cpu 0.5 --sanitize-env -o bom.json
+# Trace with a CPU limit
+tracebom --cmd "node app.js" --max-cpu 0.5 -o bom.json
 
 # Trace with strict mode and filesystem diff (CI/CD use case)
 tracebom --cmd "npm install" --strict --diff --write-paths /tmp/npm-cache -o bom.json

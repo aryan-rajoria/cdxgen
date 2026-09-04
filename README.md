@@ -121,6 +121,7 @@ Sections include:
 - [MCP Inventory](docs/MCP.md)
 - [REPL Guide](docs/REPL.md)
 - [Custom Properties](docs/CUSTOM_PROPERTIES.md)
+- [Claude Code Plugin](claude-plugin/README.md)
 - [Deprecations](docs/DEPRECATIONS.md)
 - [Security Policy](SECURITY.md)
 - [Threat Model](docs/THREAT_MODEL.md)
@@ -620,6 +621,17 @@ cdxgen can retain the dependency tree under the `dependencies` attribute for a s
 ```shell
 pnpm dlx @cdxgen/cdxgen-plugins-bin
 ```
+
+## Claude Code plugin
+
+The cdxgen toolkit is also packaged as a [Claude Code](https://claude.com/claude-code) plugin, so agents drive the correct command and flags — including the dry-run-first and no-auto-install safety constraints — instead of guessing.
+
+```shell
+claude plugin marketplace add cdxgen/cdxgen
+claude plugin install cdxgen@cdxgen-plugins
+```
+
+It ships skills covering SBOM generation, container and rootfs scans, OBOM/HBOM, CBOM, AI-BOM and MCP inventory, BOM auditing, signing, validation, conversion, evidence enrichment, runtime tracing, and Dependency-Track publishing. See [claude-plugin/README.md](claude-plugin/README.md).
 
 ## Rust accelerator (cdxrs)
 
