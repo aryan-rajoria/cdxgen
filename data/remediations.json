@@ -31,7 +31,10 @@
       }
     ],
     "verify": {
-      "rules": ["BF-JVM-001", "BF-JVM-002"],
+      "rules": [
+        "BF-JVM-001",
+        "BF-JVM-002"
+      ],
       "expectTier": "resolved"
     },
     "docs": "https://cyclonedx.github.io/cdxgen/#/PROJECT_TYPES?id=java"
@@ -68,7 +71,10 @@
       }
     ],
     "verify": {
-      "rules": ["BF-JVM-001", "BF-JVM-002"],
+      "rules": [
+        "BF-JVM-001",
+        "BF-JVM-002"
+      ],
       "expectTier": "resolved"
     },
     "docs": "https://cyclonedx.github.io/cdxgen/#/PROJECT_TYPES?id=java"
@@ -97,7 +103,10 @@
       }
     ],
     "verify": {
-      "rules": ["BF-JVM-001", "BF-JVM-002"],
+      "rules": [
+        "BF-JVM-001",
+        "BF-JVM-002"
+      ],
       "expectTier": "resolved"
     },
     "docs": "https://cyclonedx.github.io/cdxgen/#/PROJECT_TYPES?id=java"
@@ -126,7 +135,10 @@
       }
     ],
     "verify": {
-      "rules": ["BF-JVM-001", "BF-JVM-002"],
+      "rules": [
+        "BF-JVM-001",
+        "BF-JVM-002"
+      ],
       "expectTier": "resolved"
     },
     "docs": "https://cyclonedx.github.io/cdxgen/#/PROJECT_TYPES?id=java"
@@ -163,7 +175,9 @@
       }
     ],
     "verify": {
-      "rules": ["BF-GEN-006"],
+      "rules": [
+        "BF-GEN-006"
+      ],
       "expectTier": "resolved"
     },
     "docs": "https://cyclonedx.github.io/cdxgen/#/PROJECT_TYPES?id=java"
@@ -184,7 +198,9 @@
       }
     ],
     "verify": {
-      "rules": ["BF-JVM-003"],
+      "rules": [
+        "BF-JVM-003"
+      ],
       "expectTier": "resolved"
     },
     "docs": "https://cyclonedx.github.io/cdxgen/#/PROJECT_TYPES?id=java"
@@ -213,7 +229,9 @@
       }
     ],
     "verify": {
-      "rules": ["BF-JVM-001"],
+      "rules": [
+        "BF-JVM-001"
+      ],
       "expectTier": "resolved"
     },
     "docs": "https://cyclonedx.github.io/cdxgen/#/PROJECT_TYPES?id=java"
@@ -238,7 +256,9 @@
       }
     ],
     "verify": {
-      "rules": ["BF-JVM-001"],
+      "rules": [
+        "BF-JVM-001"
+      ],
       "expectTier": "resolved"
     },
     "docs": "https://cyclonedx.github.io/cdxgen/#/PROJECT_TYPES?id=java"
@@ -259,7 +279,10 @@
       }
     ],
     "verify": {
-      "rules": ["BF-JS-001", "BF-JS-002"],
+      "rules": [
+        "BF-JS-001",
+        "BF-JS-002"
+      ],
       "expectTier": "lockfile"
     },
     "docs": "https://cyclonedx.github.io/cdxgen/#/PROJECT_TYPES"
@@ -283,7 +306,9 @@
     "verify": {
       "rules": [],
       "expectTier": "lockfile",
-      "eventsCleared": ["js.git-dependency"]
+      "eventsCleared": [
+        "js.git-dependency"
+      ]
     },
     "docs": "https://cyclonedx.github.io/cdxgen/#/ENV"
   },
@@ -303,7 +328,9 @@
       }
     ],
     "verify": {
-      "rules": ["BF-JS-001"],
+      "rules": [
+        "BF-JS-001"
+      ],
       "expectTier": "lockfile"
     },
     "docs": "https://cyclonedx.github.io/cdxgen/#/PROJECT_TYPES"
@@ -334,7 +361,9 @@
     "verify": {
       "rules": [],
       "expectTier": "lockfile",
-      "eventsCleared": ["js.lockfile-version"]
+      "eventsCleared": [
+        "js.lockfile-version"
+      ]
     },
     "docs": "https://cyclonedx.github.io/cdxgen/#/PROJECT_TYPES"
   },
@@ -364,7 +393,9 @@
     "verify": {
       "rules": [],
       "expectTier": "lockfile",
-      "eventsCleared": ["js.pnpm-lock-unparseable"]
+      "eventsCleared": [
+        "js.pnpm-lock-unparseable"
+      ]
     },
     "docs": "https://cyclonedx.github.io/cdxgen/#/PROJECT_TYPES"
   },
@@ -386,7 +417,33 @@
     "verify": {
       "rules": [],
       "expectTier": "lockfile",
-      "eventsCleared": ["python.lockfile-unparseable"]
+      "eventsCleared": [
+        "python.lockfile-unparseable"
+      ]
+    },
+    "docs": "https://cyclonedx.github.io/cdxgen/#/PROJECT_TYPES"
+  },
+  "python.pyproject-unparseable": {
+    "ecosystem": "python",
+    "kind": "evidence.degraded",
+    "impact": "transitive-deps",
+    "title": "The pyproject.toml could not be parsed, so the workspace structure was not reconstructed",
+    "targetTier": "manifest",
+    "actions": [
+      {
+        "kind": "config",
+        "detail": "Check the file with a TOML 1.0 validator. cdxgen's TOML parser predates TOML 1.0 and rejects arrays that mix inline tables with strings, which PEP 735 `dependency-groups` produce when they use `include-group`."
+      },
+      {
+        "kind": "rerun"
+      }
+    ],
+    "verify": {
+      "rules": [],
+      "expectTier": "manifest",
+      "eventsCleared": [
+        "python.pyproject-unparseable"
+      ]
     },
     "docs": "https://cyclonedx.github.io/cdxgen/#/PROJECT_TYPES"
   },
@@ -416,7 +473,9 @@
     "verify": {
       "rules": [],
       "expectTier": "lockfile",
-      "eventsCleared": ["python.lockfile-unparseable.uv"]
+      "eventsCleared": [
+        "python.lockfile-unparseable.uv"
+      ]
     },
     "docs": "https://cyclonedx.github.io/cdxgen/#/PROJECT_TYPES"
   },
@@ -446,7 +505,9 @@
     "verify": {
       "rules": [],
       "expectTier": "lockfile",
-      "eventsCleared": ["python.lockfile-unparseable.poetry"]
+      "eventsCleared": [
+        "python.lockfile-unparseable.poetry"
+      ]
     },
     "docs": "https://cyclonedx.github.io/cdxgen/#/PROJECT_TYPES"
   },
@@ -476,7 +537,9 @@
     "verify": {
       "rules": [],
       "expectTier": "lockfile",
-      "eventsCleared": ["python.lockfile-unparseable.pdm"]
+      "eventsCleared": [
+        "python.lockfile-unparseable.pdm"
+      ]
     },
     "docs": "https://cyclonedx.github.io/cdxgen/#/PROJECT_TYPES"
   },
@@ -506,7 +569,9 @@
     "verify": {
       "rules": [],
       "expectTier": "lockfile",
-      "eventsCleared": ["python.lockfile-unparseable.pipenv"]
+      "eventsCleared": [
+        "python.lockfile-unparseable.pipenv"
+      ]
     },
     "docs": "https://cyclonedx.github.io/cdxgen/#/PROJECT_TYPES"
   },
@@ -532,7 +597,9 @@
     "verify": {
       "rules": [],
       "expectTier": "manifest",
-      "eventsCleared": ["clojure.lein.missing"]
+      "eventsCleared": [
+        "clojure.lein.missing"
+      ]
     },
     "docs": "https://cyclonedx.github.io/cdxgen/#/PROJECT_TYPES"
   },
@@ -559,7 +626,9 @@
     "verify": {
       "rules": [],
       "expectTier": "manifest",
-      "eventsCleared": ["clojure.cli.missing"]
+      "eventsCleared": [
+        "clojure.cli.missing"
+      ]
     },
     "docs": "https://cyclonedx.github.io/cdxgen/#/PROJECT_TYPES"
   },
@@ -578,7 +647,9 @@
       }
     ],
     "verify": {
-      "rules": ["BF-SWIFT-001"],
+      "rules": [
+        "BF-SWIFT-001"
+      ],
       "expectTier": "lockfile"
     },
     "docs": "https://cyclonedx.github.io/cdxgen/#/PROJECT_TYPES"
@@ -601,7 +672,9 @@
     "verify": {
       "rules": [],
       "expectTier": "lockfile",
-      "eventsCleared": ["swift.package-command"]
+      "eventsCleared": [
+        "swift.package-command"
+      ]
     },
     "docs": "https://cyclonedx.github.io/cdxgen/#/PROJECT_TYPES"
   },
@@ -630,7 +703,9 @@
     "verify": {
       "rules": [],
       "expectTier": "resolved",
-      "eventsCleared": ["dotnet.sdk.missing"]
+      "eventsCleared": [
+        "dotnet.sdk.missing"
+      ]
     },
     "docs": "https://cyclonedx.github.io/cdxgen/#/PROJECT_TYPES"
   },
@@ -651,7 +726,9 @@
     "verify": {
       "rules": [],
       "expectTier": "resolved",
-      "eventsCleared": ["cocoa.pods.missing"]
+      "eventsCleared": [
+        "cocoa.pods.missing"
+      ]
     },
     "docs": "https://cyclonedx.github.io/cdxgen/#/PROJECT_TYPES"
   },
@@ -672,7 +749,9 @@
     "verify": {
       "rules": [],
       "expectTier": "resolved",
-      "eventsCleared": ["ruby.build-deps.missing"]
+      "eventsCleared": [
+        "ruby.build-deps.missing"
+      ]
     },
     "docs": "https://cyclonedx.github.io/cdxgen/#/PROJECT_TYPES"
   },
@@ -693,7 +772,9 @@
     "verify": {
       "rules": [],
       "expectTier": "resolved",
-      "eventsCleared": ["ruby.version.unsupported-host"]
+      "eventsCleared": [
+        "ruby.version.unsupported-host"
+      ]
     },
     "docs": "https://cyclonedx.github.io/cdxgen/#/PROJECT_TYPES"
   },
@@ -725,7 +806,9 @@
     "verify": {
       "rules": [],
       "expectTier": "resolved",
-      "eventsCleared": ["go.toolchain.missing"]
+      "eventsCleared": [
+        "go.toolchain.missing"
+      ]
     },
     "docs": "https://cyclonedx.github.io/cdxgen/#/PROJECT_TYPES?id=go"
   },
@@ -753,7 +836,9 @@
       }
     ],
     "verify": {
-      "rules": ["BF-GEN-001"],
+      "rules": [
+        "BF-GEN-001"
+      ],
       "expectTier": "resolved"
     },
     "docs": "https://cyclonedx.github.io/cdxgen/#/PROJECT_TYPES?id=go"
@@ -790,7 +875,9 @@
     "verify": {
       "rules": [],
       "expectTier": "lockfile",
-      "eventsCleared": ["rust.toolchain.missing"]
+      "eventsCleared": [
+        "rust.toolchain.missing"
+      ]
     },
     "docs": "https://cyclonedx.github.io/cdxgen/#/PROJECT_TYPES?id=rust"
   },
@@ -810,7 +897,10 @@
       }
     ],
     "verify": {
-      "rules": ["BF-GEN-001", "BF-RS-001"],
+      "rules": [
+        "BF-GEN-001",
+        "BF-RS-001"
+      ],
       "expectTier": "lockfile"
     },
     "docs": "https://cyclonedx.github.io/cdxgen/#/PROJECT_TYPES?id=rust"
@@ -841,7 +931,9 @@
     "verify": {
       "rules": [],
       "expectTier": "resolved",
-      "eventsCleared": ["php.composer.missing"]
+      "eventsCleared": [
+        "php.composer.missing"
+      ]
     },
     "docs": "https://cyclonedx.github.io/cdxgen/#/PROJECT_TYPES?id=php"
   },
@@ -863,7 +955,9 @@
     "verify": {
       "rules": [],
       "expectTier": "resolved",
-      "eventsCleared": ["php.no-lockfile"]
+      "eventsCleared": [
+        "php.no-lockfile"
+      ]
     },
     "docs": "https://cyclonedx.github.io/cdxgen/#/PROJECT_TYPES?id=php"
   },
@@ -883,9 +977,13 @@
       }
     ],
     "verify": {
-      "rules": ["BF-GEN-002"],
+      "rules": [
+        "BF-GEN-002"
+      ],
       "expectTier": "manifest",
-      "eventsCleared": ["dart.pub-get-needed"]
+      "eventsCleared": [
+        "dart.pub-get-needed"
+      ]
     },
     "docs": "https://cyclonedx.github.io/cdxgen/#/PROJECT_TYPES?id=dart"
   },
@@ -907,7 +1005,9 @@
     "verify": {
       "rules": [],
       "expectTier": "resolved",
-      "eventsCleared": ["elixir.deps-not-fetched"]
+      "eventsCleared": [
+        "elixir.deps-not-fetched"
+      ]
     },
     "docs": "https://cyclonedx.github.io/cdxgen/#/PROJECT_TYPES?id=elixir"
   },
@@ -929,7 +1029,9 @@
     "verify": {
       "rules": [],
       "expectTier": "resolved",
-      "eventsCleared": ["haskell.freeze-missing"]
+      "eventsCleared": [
+        "haskell.freeze-missing"
+      ]
     },
     "docs": "https://cyclonedx.github.io/cdxgen/#/PROJECT_TYPES?id=haskell"
   },
@@ -948,7 +1050,9 @@
     "verify": {
       "rules": [],
       "expectTier": null,
-      "eventsCleared": ["binary.paths.inferred"]
+      "eventsCleared": [
+        "binary.paths.inferred"
+      ]
     },
     "docs": "https://cyclonedx.github.io/cdxgen/#/PROJECT_TYPES"
   },
@@ -968,7 +1072,9 @@
     "verify": {
       "rules": [],
       "expectTier": null,
-      "eventsCleared": ["policy.secure-mode"]
+      "eventsCleared": [
+        "policy.secure-mode"
+      ]
     },
     "docs": "https://cyclonedx.github.io/cdxgen/#/ENV"
   },
@@ -987,7 +1093,9 @@
     "verify": {
       "rules": [],
       "expectTier": null,
-      "eventsCleared": ["policy.host-blocked"]
+      "eventsCleared": [
+        "policy.host-blocked"
+      ]
     },
     "docs": "https://cyclonedx.github.io/cdxgen/#/ENV"
   },
@@ -1006,7 +1114,9 @@
     "verify": {
       "rules": [],
       "expectTier": null,
-      "eventsCleared": ["policy.dry-run"]
+      "eventsCleared": [
+        "policy.dry-run"
+      ]
     },
     "docs": "https://cyclonedx.github.io/cdxgen/#/ENV"
   },
@@ -1025,7 +1135,9 @@
     "verify": {
       "rules": [],
       "expectTier": null,
-      "eventsCleared": ["policy.offline"]
+      "eventsCleared": [
+        "policy.offline"
+      ]
     },
     "docs": "https://cyclonedx.github.io/cdxgen/#/ENV"
   }
