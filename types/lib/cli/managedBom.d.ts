@@ -102,4 +102,37 @@ export declare function createCsharpBom(path: string, options: Object): Promise<
  * @returns {Promise<Object>} Promise resolving to BOM object
  */
 export declare function createCryptoCertsBom(path: string, options: Object): Promise<Object>;
+/**
+ * Function to create bom string for R projects using renv.
+ *
+ * The `renv.lock` file carries the resolved package set for the project
+ * library, including the R version it was produced under.
+ *
+ * @param {string} path to the project
+ * @param {Object} options Parse options from the cli
+ * @returns {Object} BOM object
+ */
+export declare function createRBom(path: string, options: Object): Object;
+/**
+ * Function to create bom string for Perl projects using Carton.
+ *
+ * The `cpanfile.snapshot` carries the resolved install set; the declared
+ * `cpanfile` is consulted to distinguish direct dependencies.
+ *
+ * @param {string} path to the project
+ * @param {Object} options Parse options from the cli
+ * @returns {Object} BOM object
+ */
+export declare function createPerlBom(path: string, options: Object): Object;
+/**
+ * Function to create bom string for Terraform and OpenTofu projects.
+ *
+ * The `.terraform.lock.hcl` file pins the providers the configuration
+ * resolves to, with content hashes suitable for the CycloneDX hashes array.
+ *
+ * @param {string} path to the project
+ * @param {Object} options Parse options from the cli
+ * @returns {Object} BOM object
+ */
+export declare function createTerraformBom(path: string, options: Object): Object;
 //# sourceMappingURL=managedBom.d.ts.map

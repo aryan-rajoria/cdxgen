@@ -447,4 +447,27 @@ export declare function resetCocoaPodspecPrefetch(): void;
  * @returns {Promise<void>}
  */
 export declare function prefetchCocoaPodspecs(dependencies: Array<Object>): Promise<void>;
+/**
+ * Parse an xmake `xmake-requires.lock` file.
+ *
+ * The lock is a Lua table, written when the `package.requires_lock` policy is
+ * enabled. Its top level holds a `__meta__` entry plus one section per build
+ * configuration, keyed `platform|arch`; each section maps a requirement key
+ * (`"zlib#31fecfc4"`, or `"sol2 v3.2.1#72267bd5"` when the requirement
+ * carries a version) to a table with the resolved `version` and the
+ * `repo` revision the package definition came from.
+ *
+ * The same package appears once per configuration, so entries are collapsed
+ * by name and version, and the configurations a package was resolved for are
+ * kept as a property. A requirement key without a `version` field names a
+ * system package xmake did not resolve; it is inventoried without a version.
+ *
+ * No `xmake` purl type is registered, so packages are identified as generic
+ * carrying a `cdx:purl:proposedType=xmake` property, following the
+ * convention used for nix and zig.
+ *
+ * @param {string} lockFile Path to `xmake-requires.lock`
+ * @returns {Object[]} Package records for the pinned requirements
+ */
+export declare function parseXmakeRequiresLock(lockFile: string): Object[];
 //# sourceMappingURL=parsers-misc.d.ts.map

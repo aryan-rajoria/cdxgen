@@ -199,7 +199,7 @@ format-appropriate metadata without loading tensors or executing model code:
   pedigree). See the GGUF section below.
 - **safetensors** — reads the JSON header to summarize tensor count, dtypes, and parameter
   totals (`cdx:safetensors:*`), and derives a quantization method when present.
-- **ONNX** — recognized as a model artifact by extension.
+- **ONNX** — the protobuf header is read by offset (without loading the graph) to record the exporter, its version, the IR version, and the operator sets as `cdx:onnx:*` properties.
 - **PyTorch pickle** (`.bin`/`.pt`/`.pth`/`.ckpt`) — inventoried and flagged with
   `cdx:ai:unsafeDeserialization=true` because loading a pickle checkpoint executes code.
 

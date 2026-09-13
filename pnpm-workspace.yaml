@@ -12,8 +12,8 @@ preferSymlinkedExecutables: false
 strictDepBuilds: true
 trustPolicy: no-downgrade
 
-# pnpm 11 no longer reads the `pnpm` field in package.json; overrides and
-# built-dependency policy live here instead.
+# pnpm 11 and later no longer read the `pnpm` field in package.json;
+# overrides and built-dependency policy live here instead.
 onlyBuiltDependencies:
   - '@biomejs/biome'
 ignoredBuiltDependencies:

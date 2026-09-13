@@ -1,0 +1,11 @@
+name: shards-smoke
+version: 0.1.0
+crystal: ">= 1.10.0"
+
+dependencies:
+  http-f:
+    github: mamantoha/http-f
+
+development_dependencies:
+  ameba:
+    github: crystal-ameba/ameba

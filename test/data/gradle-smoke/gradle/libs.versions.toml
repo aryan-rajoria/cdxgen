@@ -1,0 +1,12 @@
+[versions]
+kotlin = "2.0.21"
+junit = "5.11.3"
+
+[libraries]
+kotlin-stdlib = { module = "org.jetbrains.kotlin:kotlin-stdlib", version.ref = "kotlin" }
+junit-bom = { module = "org.junit:junit-bom", version = "5.11.3" }
+okhttp = { module = "com.squareup.okhttp3:okhttp", version.ref = "missing-ref" }
+legacy-lib = { module = "com.example:legacy", version = "[1.0,2.0)" }
+
+[plugins]
+spring-boot = { id = "org.springframework.boot", version.ref = "kotlin" }

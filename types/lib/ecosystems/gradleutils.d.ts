@@ -169,4 +169,24 @@ export declare function getMillCommand(srcPath: string): string;
  * @param {string} rootPath Root directory to look for maven wrapper
  */
 export declare function getMavenCommand(srcPath: string, rootPath: string): string;
+/**
+ * Parse a Gradle version catalog (`gradle/libs.versions.toml`).
+ *
+ * A catalog declares coordinates the build scripts then reference by alias.
+ * It is a declaration, not a resolution: entries may go unused, and their
+ * versions may be references into the `[versions]` table. Because of that,
+ * catalog components are emitted only as a fallback when Gradle itself
+ * produced no dependency information, and every component carries a
+ * `cdx:gradle:catalog=true` property so consumers can tell declared catalog
+ * entries from a resolved graph.
+ *
+ * Only libraries whose version resolves to a literal (inline or via
+ * `version.ref`) are emitted; rich or unresolved versions would produce purls
+ * that identify no artifact. Plugins are skipped because they are build-time
+ * only.
+ *
+ * @param {string} catalogFile Path to `libs.versions.toml`
+ * @returns {Object[]} Package records for resolvable library entries
+ */
+export declare function parseGradleVersionCatalog(catalogFile: string): Object[];
 //# sourceMappingURL=gradleutils.d.ts.map

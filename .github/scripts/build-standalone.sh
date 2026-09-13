@@ -389,7 +389,7 @@ copy_runtime_sources() {
   if [[ -f .pnpmfile.cjs ]]; then
     cp .pnpmfile.cjs "$staging_dir/"
   fi
-  # pnpm 11 reads `overrides` from pnpm-workspace.yaml rather than the `pnpm`
+  # pnpm 11 and later read `overrides` from pnpm-workspace.yaml rather than the `pnpm`
   # field of package.json. Without it here the staging install disagrees with
   # the lockfile it was given (ERR_PNPM_LOCKFILE_CONFIG_MISMATCH under
   # --frozen-lockfile) and produces an incomplete node_modules otherwise. The

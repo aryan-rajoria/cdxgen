@@ -1,0 +1,1 @@
+{"version":3,"file":"parsers-r.d.ts","sourceRoot":"","sources":["../../../lib/ecosystems/parsers-r.js"],"names":[],"mappings":"AAIA;;;;;;;;;;;;;;GAcG;AAEH;;;;;;;;;;;GAWG;AACH,wBAAgB,aAAa,CAAC,YAAY,EAT/B,MAS+B,GAR7B;IACR,OAAO,EAAE,MAAM,EAAE,CAAC;IAClB,YAAY,EAAE,MAAM,EAAE,CAAC;IACvB,UAAU,EAAE,MAAM,EAAE,CAAC;IACrB,eAAe,EAAE,MAAM,CAAC;IACxB,QAAQ,EAAE,MAAM,GAAC,SAAS,CAAA;CAC3B,CAsGH"}

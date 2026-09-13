@@ -74,6 +74,19 @@ export declare function createCppBom(path: string, options: Object): Object;
  */
 export declare function createClojureBom(path: string, options: Object): Object;
 /**
+ * Locate the Stack lock files under a path.
+ *
+ * Stack names the lock after the configuration file it completes, so the
+ * default `stack.yaml` produces `stack.yaml.lock` and a project with several
+ * configurations produces one lock per configuration. `stack.lock` is also
+ * accepted because tooling and documentation examples have used that name.
+ *
+ * @param {string} path Project path
+ * @param {Object} options Parse options from the cli
+ * @returns {string[]} Lock file paths, deduplicated
+ */
+export declare function findStackLockFiles(path: string, options: Object): string[];
+/**
  * Function to create bom string for Haskell projects
  *
  * @param {string} path to the project
@@ -140,4 +153,70 @@ export declare function createZigBom(path: string, options: Object): Promise<Obj
  * @returns {Promise<Object>} Promise resolving to BOM object
  */
 export declare function createGleamBom(path: string, options: Object): Promise<Object>;
+/**
+ * Function to create bom string for Julia projects.
+ *
+ * The resolved `Manifest.toml` is preferred over the declared `Project.toml`
+ * so the BOM carries pinned versions and the package graph.
+ *
+ * @param {string} path to the project
+ * @param {Object} options Parse options from the cli
+ * @returns {Promise<Object>} BOM object
+ */
+export declare function createJuliaBom(path: string, options: Object): Promise<Object>;
+/**
+ * Function to create bom string for Erlang projects using rebar3.
+ *
+ * @param {string} path to the project
+ * @param {Object} options Parse options from the cli
+ * @returns {Promise<Object>} BOM object
+ */
+export declare function createErlangBom(path: string, options: Object): Promise<Object>;
+/**
+ * Function to create bom string for OCaml projects using opam.
+ *
+ * Resolved `.opam.locked` files are preferred; a plain `.opam` file is used
+ * as a declared fallback with unpinned versions.
+ *
+ * @param {string} path to the project
+ * @param {Object} options Parse options from the cli
+ * @returns {Promise<Object>} BOM object
+ */
+export declare function createOCamlBom(path: string, options: Object): Promise<Object>;
+/**
+ * Function to create bom string for Crystal projects using shards.
+ *
+ * @param {string} path to the project
+ * @param {Object} options Parse options from the cli
+ * @returns {Promise<Object>} BOM object
+ */
+export declare function createCrystalBom(path: string, options: Object): Promise<Object>;
+/**
+ * Function to create bom string for Nim projects using nimble.
+ *
+ * @param {string} path to the project
+ * @param {Object} options Parse options from the cli
+ * @returns {Promise<Object>} BOM object
+ */
+export declare function createNimBom(path: string, options: Object): Promise<Object>;
+/**
+ * Function to create bom string for Lua projects using LuaRocks.
+ *
+ * When a `luarocks.lock` is present next to a rockspec it supplies the
+ * resolved versions; otherwise the rockspec's declared dependencies are
+ * inventoried without versions.
+ *
+ * @param {string} path to the project
+ * @param {Object} options Parse options from the cli
+ * @returns {Promise<Object>} BOM object
+ */
+export declare function createLuaBom(path: string, options: Object): Promise<Object>;
+/**
+ * Function to create bom string for Spack environments.
+ *
+ * @param {string} path to the project
+ * @param {Object} options Parse options from the cli
+ * @returns {Promise<Object>} BOM object
+ */
+export declare function createSpackBom(path: string, options: Object): Promise<Object>;
 //# sourceMappingURL=nativeBom.d.ts.map

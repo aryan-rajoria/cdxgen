@@ -76,6 +76,7 @@
 - [Tutorials - Monorepos and large-project scanning](LESSON30.md)
 - [Tutorials - DevOps BOMs: Helm, Jenkins, and GitHub Actions](LESSON31.md)
 - [Tutorials - Build introspection: grading your SBOM](LESSON32.md)
+- [Tutorials - Beyond the mainstream ecosystems](LESSON33.md)
 - [Tutorials - Generating OBOM](OBOM_LESSONS.md)
 - [Trust enrichment BOM diff examples](TRUST_ENRICHMENT_DIFF.md)
 - [macOS OBOM troubleshooting](OBOM_MACOS_TROUBLESHOOTING.md)

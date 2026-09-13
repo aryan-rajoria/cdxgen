@@ -1,0 +1,90 @@
+{
+  "_meta": {
+    "file-type": "spack-lockfile",
+    "lockfile-version": 5,
+    "specfile-version": 4
+  },
+  "spack": {
+    "version": "0.22.0",
+    "type": "git",
+    "commit": "5fe93fee1eec46a0750bd340198bffcb92ff9eec"
+  },
+  "roots": [
+    {
+      "hash": "pqxz3jkl7m2n4o5p6q7r8s9t0u1v2w3x",
+      "spec": "zlib"
+    }
+  ],
+  "concrete_specs": {
+    "pqxz3jkl7m2n4o5p6q7r8s9t0u1v2w3x": {
+      "name": "zlib",
+      "version": "1.3.1",
+      "arch": {
+        "platform": "linux",
+        "platform_os": "ubuntu22.04",
+        "target": {
+          "name": "x86_64_v3",
+          "vendor": "GenuineIntel"
+        }
+      },
+      "compiler": {
+        "name": "gcc",
+        "version": "11.4.0"
+      },
+      "namespace": "builtin",
+      "parameters": {
+        "optimize": true,
+        "shared": true
+      },
+      "dependencies": [
+        {
+          "name": "gcc-runtime",
+          "hash": "abcd1234efgh5678ijkl9012mnop3456",
+          "type": ["link"]
+        },
+        {
+          "name": "gmake",
+          "hash": "zyxw9876vuts5432rqpo1098nmlk7654",
+          "type": ["build"]
+        }
+      ],
+      "hash": "pqxz3jkl7m2n4o5p6q7r8s9t0u1v2w3x"
+    },
+    "abcd1234efgh5678ijkl9012mnop3456": {
+      "name": "gcc-runtime",
+      "version": "11.4.0",
+      "arch": {
+        "platform": "linux",
+        "platform_os": "ubuntu22.04",
+        "target": {
+          "name": "x86_64_v3"
+        }
+      },
+      "compiler": {
+        "name": "gcc",
+        "version": "11.4.0"
+      },
+      "namespace": "builtin",
+      "dependencies": [],
+      "hash": "abcd1234efgh5678ijkl9012mnop3456"
+    },
+    "zyxw9876vuts5432rqpo1098nmlk7654": {
+      "name": "gmake",
+      "version": "4.4.1",
+      "arch": {
+        "platform": "linux",
+        "platform_os": "ubuntu22.04",
+        "target": {
+          "name": "x86_64_v3"
+        }
+      },
+      "compiler": {
+        "name": "gcc",
+        "version": "11.4.0"
+      },
+      "namespace": "builtin",
+      "dependencies": [],
+      "hash": "zyxw9876vuts5432rqpo1098nmlk7654"
+    }
+  }
+}

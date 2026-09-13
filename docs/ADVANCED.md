@@ -690,6 +690,25 @@ evinse -i <bom from cache> -o bom.evinse.json <application path>
 
 Evinse would populate `component.evidence` objects with occurrences (default) and call stack (in data-flow mode). Those without evidence are either transitive or unused dependencies.
 
+## Rust crate metadata from the local Cargo registry
+
+crates.io asks automated clients for [at most one request per second, made serially](https://crates.io/policies). cdxgen honours that, which means a `FETCH_LICENSE` run over a few hundred crates would otherwise spend several minutes waiting on the registry.
+
+To avoid the wait, cdxgen reads the local Cargo registry under `CARGO_HOME` (default `~/.cargo`) before it asks crates.io. Two things there answer most of the question:
+
+- `registry/src/<registry>/<name>-<version>/Cargo.toml` — the manifest Cargo normalised at publish time, carrying the license, description, repository, homepage and minimum Rust version.
+- `registry/index/<registry>/.cache/...` — the sparse index, carrying the checksum, feature table, yanked flag and publish time.
+
+A crate answered this way is marked `cdx:cargo:metadataSource=local-registry` and costs no request. Crates the local registry cannot account for — typically ones the lockfile pins but the build never compiled — still go to crates.io, one per second.
+
+```shell
+# Populate the local registry first, and the SBOM run does far less network I/O
+cargo fetch
+FETCH_LICENSE=true cdxgen -t rust -o bom.json .
+```
+
+What the local registry cannot supply is **publisher identity**: the index records when a version was published, but not by whom. The publisher-drift, ownership and release-cadence signals therefore have no local equivalent, so `cdx-audit` deliberately takes the registry path for Rust and pays the rate limit. Set `CARGO_METADATA_SOURCE=registry` to force that behaviour for SBOM generation too.
+
 ## Mixed Java Projects
 
 If a java project uses maven and gradle, maven is selected for SBOM generation under default settings. To force cdxgen to use gradle, use the argument `-t gradle`. Similarly, use `-t scala` for scala SBT.
