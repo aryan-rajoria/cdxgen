@@ -119,7 +119,7 @@ if scan "$output" "test/repotests/introspect-unsupported-markers"; then
     const fs = require("node:fs");
     const r = JSON.parse(fs.readFileSync(process.argv[1], "utf-8"));
     const gaps = (r.coverageGaps || []).map((g) => g.ecosystem).sort();
-    const expected = ["crystal", "elm", "nim", "perl", "r"];
+    const expected = ["elm"];
     if (JSON.stringify(gaps) !== JSON.stringify(expected)) {
       console.error(`coverage gaps ${gaps} != ${expected}`);
       process.exit(1);

@@ -310,7 +310,7 @@ The e2e suite and `ci/introspection-tests.sh` assert three groups:
   is a defect.
 - **Group C — ceiling and unsupported.** pubspec-smoke (dart), the helm and
   clojure fixtures grade at-ceiling with score 100; the unsupported-markers
-  fixture reports exactly crystal, elm, nim, perl and r as coverage gaps with
+  fixture reports exactly elm as a coverage gap with
   no score row.
 - **Group A — transitions.** The maven row (manifest → resolved), the
   manifest-only js row (absent → lockfile), and the gradle row
