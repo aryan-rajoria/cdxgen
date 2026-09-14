@@ -240,6 +240,7 @@ When `CDXGEN_PLUGINS_DIR` points at a packaged plugins directory, cdxgen also lo
 | RUST_CRATES_URL | Override Rust Crates URL. Default: https://crates.io/api/v1/crates/ |
 | CARGO_METADATA_SOURCE | Set to `registry` to always query crates.io for crate metadata. By default cdxgen reads the local Cargo registry under `CARGO_HOME` first and queries crates.io only for crates it cannot account for, because crates.io allows one request per second. |
 | CARGO_HOME | Standard Cargo variable. Also tells cdxgen where to find the local registry (`$CARGO_HOME/registry`) it reads crate metadata from. Default: `~/.cargo` |
+| ELM_HOME | Standard Elm variable. Also tells cdxgen where to find the local package cache (`$ELM_HOME/<version>/packages`) it reads Elm package licenses and summaries from. Default: `~/.elm` (`%APPDATA%\elm` on Windows) |
 
 ### Atom / Evinse
 

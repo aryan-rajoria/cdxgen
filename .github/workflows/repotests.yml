@@ -70,6 +70,11 @@ jobs:
           persist-credentials: false
           repository: 'hoolicorp/java-sec-code'
           path: 'repotests/java-sec-code'
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1  # v7.0.1
+        with:
+          persist-credentials: false
+          repository: 'rtfeldman/elm-spa-example'
+          path: 'repotests/elm-spa-example'
       - name: Trim CI agent
         run: |
           rm -rf /tmp/docker-images-* /tmp/atom-usages-* /tmp/atom-reachables-* /tmp/cdx*
@@ -141,6 +146,14 @@ jobs:
           jq -e 'any(.annotations[]?; (.text // "") | contains("INT-013"))' bomresults/bom-cargo-workspace-fixture.json
           CARGO_CACHE_DIR=test/data/cargo-cache-fixture/registry/cache/index.crates.io-1949cf8c6b5b557f bin/cdxgen.js -t cargo-cache . -o bomresults/bom-cargo-cache-fixture.json --fail-on-error
           jq -e 'any(.components[]; .name == "serde" and any((.properties // [])[]; .name == "cdx:cargo:cacheSource" and .value == "registry-cache"))' bomresults/bom-cargo-cache-fixture.json
+        shell: bash
+      - name: repotests elm-spa-example
+        run: |
+          bin/cdxgen.js -t elm repotests/elm-spa-example -o bomresults/bom-elm-spa-example.json --fail-on-error
+          jq -e '(.components | length) >= 10' bomresults/bom-elm-spa-example.json
+          jq -e 'any(.components[]; .name == "http" and .group == "elm" and (.purl | startswith("pkg:generic/elm/http@")) and any((.properties // [])[]; .name == "cdx:elm:dependency" and .value == "direct") and any((.properties // [])[]; .name == "cdx:purl:proposedType" and .value == "elm"))' bomresults/bom-elm-spa-example.json
+          jq -e 'any(.metadata.component.properties[]?; .name == "cdx:elm:elmVersion")' bomresults/bom-elm-spa-example.json
+          jq -e 'any(.components[]; .scope == "optional" and any((.properties // [])[]; .name == "cdx:elm:dependency" and (.value == "direct-test" or .value == "indirect-test")))' bomresults/bom-elm-spa-example.json
         shell: bash
       - name: repotests source crypto fixture
         run: |
