@@ -745,7 +745,7 @@
         "pkg:generic/elm/url@1.0.0",
         "pkg:generic/rtfeldman/elm-iso8601-date-strings@1.1.0"
       ],
-      "ref": "application:elm-fetch-metadata:"
+      "ref": "application:elm-registry-enrichment:"
     },
     {
       "dependsOn": [
@@ -848,8 +848,8 @@
   "metadata": {
     "authors": [],
     "component": {
-      "bom-ref": "application:elm-fetch-metadata:",
-      "name": "elm-fetch-metadata",
+      "bom-ref": "application:elm-registry-enrichment:",
+      "name": "elm-registry-enrichment",
       "properties": [
         {
           "name": "cdx:elm:elmVersion",
