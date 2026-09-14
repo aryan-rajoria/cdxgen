@@ -2,18 +2,19 @@
  * Per-host rate policy for batched registry fetches.
  *
  * This is the single source of truth for the JS transport's concurrency and
- * minimum-interval decisions. The numbers are shared with the Rust transport
+ * minimum-interval decisions. Most numbers are shared with the Rust transport
  * (`cdxgen-plugins-bin/thirdparty/cdxrs/src/fetch/rate.rs`); a change to one
  * side must be reflected in the other, and `fetchRate.poku.js` pins them so a
- * drift is visible.
+ * drift is visible. crates.io is the exception: its requests never reach the
+ * Rust transport, so this table alone governs them.
  *
  * Why a per-host table rather than a single global interval: a single-registry
  * project — which is to say, almost every npm project — has exactly one host,
  * so a conservative per-host cap *is* the global cap. Applying crates.io's
- * 250 ms to every host caps an npm run at 4 requests per second, which is
- * slower than the serial JS path once connection reuse is taken into account.
- * Hosts that publish a limit get an interval; hosts that do not are bounded by
- * the per-host concurrency cap alone, and by whatever `Retry-After` they send.
+ * one-per-second policy to every host would cap an npm run at one request a
+ * second, orders of magnitude slower than that registry asks for. Hosts that
+ * publish a limit get an interval; hosts that do not are bounded by the
+ * per-host concurrency cap alone, and by whatever `Retry-After` they send.
  */
 export type Credentials = ("anonymous" | "authenticated");
 export type HostPolicy = {

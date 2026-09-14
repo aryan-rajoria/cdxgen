@@ -236,9 +236,23 @@ export declare function getGoPkgVCSUrl(group: string, name: string): Promise<any
 /**
  * Method to retrieve metadata for rust packages by querying crates
  *
+ * The local Cargo registry is consulted first, because crates.io's crawler
+ * policy allows one request per second and a populated `~/.cargo` already
+ * holds the license, description, repository, checksum and yanked flag for
+ * every crate the build compiled.
+ *
+ * What it does not hold is publisher identity, so a caller that needs the
+ * publisher-drift and release-cadence signals — the predictive audit does —
+ * passes `preferLocalCache: false` and takes the slower registry path.
+ *
  * @param {Array} pkgList Package list
+ * @param {Object} [options] Options
+ * @param {boolean} [options.preferLocalCache=true] Answer from the local Cargo
+ *   registry where it can, and query crates.io only for the rest.
  */
-export declare function getCratesMetadata(pkgList: any[]): Promise<any[]>;
+export declare function getCratesMetadata(pkgList: any[], options?: {
+    preferLocalCache?: boolean;
+}): Promise<any[]>;
 /**
  * Method to retrieve metadata for dart packages by querying pub.dev
  *

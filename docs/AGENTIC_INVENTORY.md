@@ -57,18 +57,27 @@ child components or services with dependency edges back to the tool:
 For Codex and Gemini CLI, the scan reads their MCP server declarations
 (`~/.codex/config.toml` and `~/.gemini/settings.json`) to record a server count.
 
+The diagram illustrates the flow for a subset of tools; the table below
+lists every supported home directory.
+
 ## Supported tools
 
-| Tool          | Home directory scanned                                            |
-| ------------- | ----------------------------------------------------------------- |
-| Kiro CLI      | `~/.kiro` and the platform support directory                      |
-| zcode         | `~/.zcode`                                                        |
-| opencode      | `~/.config/opencode`, `~/.opencode`, `~/.local/share/opencode`   |
-| Claude Code   | `~/.claude`                                                       |
-| OpenAI Codex  | `~/.codex`                                                        |
-| Gemini CLI    | `~/.gemini`                                                       |
-| Amazon Q      | `~/.aws/amazonq`                                                  |
-| Aider         | `~/.aider`                                                        |
+| Tool               | Home directory scanned                                            |
+| ------------------ | ------------------------------------------------------------------ |
+| Kiro CLI           | `~/.kiro` and the platform support directory                       |
+| zcode              | `~/.zcode`                                                         |
+| opencode           | `~/.config/opencode`, `~/.opencode`, `~/.local/share/opencode`     |
+| Claude Code        | `~/.claude`                                                        |
+| OpenAI Codex       | `~/.codex`                                                         |
+| Gemini CLI         | `~/.gemini`                                                        |
+| Amazon Q           | `~/.aws/amazonq`                                                   |
+| Aider              | `~/.aider`                                                         |
+| Cursor             | `~/.cursor`                                                        |
+| Windsurf           | `~/.codeium/windsurf`                                              |
+| Goose              | `~/.config/goose`                                                  |
+| Amp                | `~/.config/amp`                                                    |
+| GitHub Copilot CLI | `~/.copilot-cli`, `~/.copilot`                                     |
+| Crush              | `~/.config/crush`                                                  |
 
 ## Safety and privacy
 

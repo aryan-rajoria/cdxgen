@@ -1,0 +1,22 @@
+{
+  "description": "Elm application enriched from a local registry double: licenses, summaries, archive digests and the transitive dependency graph all come from the published manifests rather than a populated ELM_HOME, which no CI machine has.",
+  "scenarios": [
+    {
+      "name": "registry-enrichment",
+      "projectType": [
+        "elm"
+      ],
+      "options": {},
+      "env": {
+        "FETCH_LICENSE": "true",
+        "ELM_HOME": "/nonexistent-elm-home"
+      },
+      "registry": {
+        "fixture": "elm-registry.json",
+        "env": [
+          "ELM_PACKAGE_URL"
+        ]
+      }
+    }
+  ]
+}

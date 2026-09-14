@@ -1,0 +1,15 @@
+name = "JuliaSmoke"
+uuid = "9f4a2b3c-1111-2222-3333-444455556666"
+version = "0.2.0"
+
+[deps]
+JSON = "682c06a0-f37d-4e50-b270-096b1504d0d4"
+
+[compat]
+julia = "1.6"
+
+[extras]
+Test = "8dfed614-e22c-5e08-85e1-65c5234f0b40"
+
+[targets]
+test = ["Test"]

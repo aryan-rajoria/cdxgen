@@ -1,0 +1,28 @@
+{
+  "version": 2,
+  "packages": {
+    "results": {
+      "version": "0.5.1",
+      "vcsRevision": "df8113dda4c2d74d460a8fa98252b0b771bf1f27",
+      "url": "https://github.com/arnetheduck/nim-results",
+      "downloadMethod": "git",
+      "dependencies": [],
+      "checksums": {
+        "sha1": "a9c011f74bc9ed5c91103917b9f382b12e82a9e7"
+      }
+    },
+    "semver": {
+      "version": "1.0.0",
+      "vcsRevision": "5a1ef38c5b0b1e4b1c82d182a2af1cd8c851bf60",
+      "url": "https://github.com/euantorano/semver.nim",
+      "downloadMethod": "git",
+      "dependencies": [
+        "results"
+      ],
+      "checksums": {
+        "sha1": "64f15c85a059c889cb11c5fe72372677c50da621"
+      }
+    }
+  },
+  "tasks": {}
+}

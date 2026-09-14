@@ -1,0 +1,6 @@
+opam-version: "2.0"
+synopsis: "Plain declared manifest without a lock"
+depends: [
+  "dune" {>= "3.0"}
+  "ocaml" {>= "4.14"}
+]

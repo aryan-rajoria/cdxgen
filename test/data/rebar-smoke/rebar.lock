@@ -1,0 +1,19 @@
+{"1.2.0",
+[{<<"cowboy">>,{pkg,<<"cowboy">>,<<"2.10.0">>},0},
+ {<<"cowlib">>,{pkg,<<"cowlib">>,<<"2.13.0">>},1},
+ {<<"mylib">>,
+  {git,"https://github.com/example/mylib.git",
+       {ref,"a1b2c3d4e5f6a1b2c3d4e5f6a1b2c3d4e5f6a1b2"}},
+  0},
+ {<<"ranch">>,{pkg,<<"ranch">>,<<"1.8.0">>},1},
+ {<<"uuid">>,{pkg,<<"uuid_erl">>,<<"2.0.7">>},0}]}.
+[
+{pkg_hash,[
+ {<<"cowboy">>, <<"3AFDCCB7183CC6F143CB14D3CF51FA00E53DB9EC80CDCD525482F5E99BC41D6A">>},
+ {<<"cowlib">>, <<"E1E1284EED8C30F6AF1F51F1E7B2A4D06009AEDD6C121FEBE8F50D0E1E67C1A5">>},
+ {<<"ranch">>, <<"D6C1F3B7F11AE8A9E5B5AE6FD8B75FDBEACD4DFB1BA1A2B9F9E9A0E4D0B4D6A7">>},
+ {<<"uuid">>, <<"1FD9079C544D521063897887A1C5B3302DCA98F9BB06AADCDC6FB0663F256797">>}]},
+{pkg_hash_ext,[
+ {<<"cowboy">>, <<"4643D0C74B6E1E9B2E2C2E4B4EDDD0E70A4A2E0F5C0F6DD9F0B4C2E9E9A6D0B1">>},
+ {<<"cowlib">>, <<"9AAB5E1E3C3B5C5A3F1C8C7E4E5A2C0D8B6F4A2E0C8D6B4A2F0E8C6A4B2D0F8E">>}]}
+].

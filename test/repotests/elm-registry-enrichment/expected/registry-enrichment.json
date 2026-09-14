@@ -1,0 +1,893 @@
+{
+  "bomFormat": "CycloneDX",
+  "components": [
+    {
+      "bom-ref": "pkg:generic/NoRedInk/elm-json-decode-pipeline@1.0.0",
+      "description": "Use pipelines to build JSON Decoders.",
+      "externalReferences": [
+        {
+          "type": "distribution",
+          "url": "https://github.com/NoRedInk/elm-json-decode-pipeline/zipball/1.0.0/"
+        },
+        {
+          "type": "vcs",
+          "url": "https://github.com/NoRedInk/elm-json-decode-pipeline"
+        },
+        {
+          "type": "website",
+          "url": "https://package.elm-lang.org/packages/NoRedInk/elm-json-decode-pipeline/1.0.0/"
+        }
+      ],
+      "group": "NoRedInk",
+      "hashes": [
+        {
+          "alg": "SHA-1",
+          "content": "94163823739afa3c3c53f39996378cb8b9e4cce5"
+        }
+      ],
+      "licenses": [
+        {
+          "license": {
+            "id": "BSD-3-Clause",
+            "url": "https://opensource.org/licenses/BSD-3-Clause"
+          }
+        }
+      ],
+      "name": "elm-json-decode-pipeline",
+      "properties": [
+        {
+          "name": "cdx:elm:dependency",
+          "value": "direct"
+        },
+        {
+          "name": "cdx:purl:proposedType",
+          "value": "elm"
+        },
+        {
+          "name": "internal:SrcFile",
+          "value": "$ROOT/elm.json"
+        }
+      ],
+      "purl": "pkg:generic/NoRedInk/elm-json-decode-pipeline@1.0.0",
+      "scope": "required",
+      "type": "library",
+      "version": "1.0.0"
+    },
+    {
+      "bom-ref": "pkg:generic/elm-explorations/markdown@1.0.0",
+      "description": "Fast markdown parsing and rendering",
+      "externalReferences": [
+        {
+          "type": "distribution",
+          "url": "https://github.com/elm-explorations/markdown/zipball/1.0.0/"
+        },
+        {
+          "type": "vcs",
+          "url": "https://github.com/elm-explorations/markdown"
+        },
+        {
+          "type": "website",
+          "url": "https://package.elm-lang.org/packages/elm-explorations/markdown/1.0.0/"
+        }
+      ],
+      "group": "elm-explorations",
+      "hashes": [
+        {
+          "alg": "SHA-1",
+          "content": "9ae1c29291395d3db4add7205fe1b3584e471c41"
+        }
+      ],
+      "licenses": [
+        {
+          "license": {
+            "id": "BSD-3-Clause",
+            "url": "https://opensource.org/licenses/BSD-3-Clause"
+          }
+        }
+      ],
+      "name": "markdown",
+      "properties": [
+        {
+          "name": "cdx:elm:dependency",
+          "value": "direct"
+        },
+        {
+          "name": "cdx:purl:proposedType",
+          "value": "elm"
+        },
+        {
+          "name": "internal:SrcFile",
+          "value": "$ROOT/elm.json"
+        }
+      ],
+      "purl": "pkg:generic/elm-explorations/markdown@1.0.0",
+      "scope": "required",
+      "type": "library",
+      "version": "1.0.0"
+    },
+    {
+      "bom-ref": "pkg:generic/elm-explorations/test@1.0.0",
+      "description": "Write unit and fuzz tests for Elm code.",
+      "externalReferences": [
+        {
+          "type": "distribution",
+          "url": "https://github.com/elm-explorations/test/zipball/1.0.0/"
+        },
+        {
+          "type": "vcs",
+          "url": "https://github.com/elm-explorations/test"
+        },
+        {
+          "type": "website",
+          "url": "https://package.elm-lang.org/packages/elm-explorations/test/1.0.0/"
+        }
+      ],
+      "group": "elm-explorations",
+      "hashes": [
+        {
+          "alg": "SHA-1",
+          "content": "5774d94ec0c9ab94a988b07412eafc2069cc152c"
+        }
+      ],
+      "licenses": [
+        {
+          "license": {
+            "id": "BSD-3-Clause",
+            "url": "https://opensource.org/licenses/BSD-3-Clause"
+          }
+        }
+      ],
+      "name": "test",
+      "properties": [
+        {
+          "name": "cdx:elm:dependency",
+          "value": "direct-test"
+        },
+        {
+          "name": "cdx:purl:proposedType",
+          "value": "elm"
+        },
+        {
+          "name": "internal:SrcFile",
+          "value": "$ROOT/elm.json"
+        }
+      ],
+      "purl": "pkg:generic/elm-explorations/test@1.0.0",
+      "scope": "optional",
+      "type": "library",
+      "version": "1.0.0"
+    },
+    {
+      "bom-ref": "pkg:generic/elm/browser@1.0.0",
+      "description": "Run Elm in browsers, with access to browser history for single-page apps (SPAs)",
+      "externalReferences": [
+        {
+          "type": "distribution",
+          "url": "https://github.com/elm/browser/zipball/1.0.0/"
+        },
+        {
+          "type": "vcs",
+          "url": "https://github.com/elm/browser"
+        },
+        {
+          "type": "website",
+          "url": "https://package.elm-lang.org/packages/elm/browser/1.0.0/"
+        }
+      ],
+      "group": "elm",
+      "hashes": [
+        {
+          "alg": "SHA-1",
+          "content": "3e08e9eaafdb16688bc1678d0fca82c66ce39c93"
+        }
+      ],
+      "licenses": [
+        {
+          "license": {
+            "id": "BSD-3-Clause",
+            "url": "https://opensource.org/licenses/BSD-3-Clause"
+          }
+        }
+      ],
+      "name": "browser",
+      "properties": [
+        {
+          "name": "cdx:elm:dependency",
+          "value": "direct"
+        },
+        {
+          "name": "cdx:purl:proposedType",
+          "value": "elm"
+        },
+        {
+          "name": "internal:SrcFile",
+          "value": "$ROOT/elm.json"
+        }
+      ],
+      "purl": "pkg:generic/elm/browser@1.0.0",
+      "scope": "required",
+      "type": "library",
+      "version": "1.0.0"
+    },
+    {
+      "bom-ref": "pkg:generic/elm/core@1.0.0",
+      "description": "Elm's standard libraries",
+      "externalReferences": [
+        {
+          "type": "distribution",
+          "url": "https://github.com/elm/core/zipball/1.0.0/"
+        },
+        {
+          "type": "vcs",
+          "url": "https://github.com/elm/core"
+        },
+        {
+          "type": "website",
+          "url": "https://package.elm-lang.org/packages/elm/core/1.0.0/"
+        }
+      ],
+      "group": "elm",
+      "hashes": [
+        {
+          "alg": "SHA-1",
+          "content": "5c776e199e347ab4a22caf3aa3545a69a77ee0c7"
+        }
+      ],
+      "licenses": [
+        {
+          "license": {
+            "id": "BSD-3-Clause",
+            "url": "https://opensource.org/licenses/BSD-3-Clause"
+          }
+        }
+      ],
+      "name": "core",
+      "properties": [
+        {
+          "name": "cdx:elm:dependency",
+          "value": "direct"
+        },
+        {
+          "name": "cdx:purl:proposedType",
+          "value": "elm"
+        },
+        {
+          "name": "internal:SrcFile",
+          "value": "$ROOT/elm.json"
+        }
+      ],
+      "purl": "pkg:generic/elm/core@1.0.0",
+      "scope": "required",
+      "type": "library",
+      "version": "1.0.0"
+    },
+    {
+      "bom-ref": "pkg:generic/elm/html@1.0.0",
+      "description": "Fast HTML, rendered with virtual DOM diffing",
+      "externalReferences": [
+        {
+          "type": "distribution",
+          "url": "https://github.com/elm/html/zipball/1.0.0/"
+        },
+        {
+          "type": "vcs",
+          "url": "https://github.com/elm/html"
+        },
+        {
+          "type": "website",
+          "url": "https://package.elm-lang.org/packages/elm/html/1.0.0/"
+        }
+      ],
+      "group": "elm",
+      "hashes": [
+        {
+          "alg": "SHA-1",
+          "content": "52e43c64aed979dacb444f5147ee475e9610079f"
+        }
+      ],
+      "licenses": [
+        {
+          "license": {
+            "id": "BSD-3-Clause",
+            "url": "https://opensource.org/licenses/BSD-3-Clause"
+          }
+        }
+      ],
+      "name": "html",
+      "properties": [
+        {
+          "name": "cdx:elm:dependency",
+          "value": "direct"
+        },
+        {
+          "name": "cdx:purl:proposedType",
+          "value": "elm"
+        },
+        {
+          "name": "internal:SrcFile",
+          "value": "$ROOT/elm.json"
+        }
+      ],
+      "purl": "pkg:generic/elm/html@1.0.0",
+      "scope": "required",
+      "type": "library",
+      "version": "1.0.0"
+    },
+    {
+      "bom-ref": "pkg:generic/elm/http@1.0.0",
+      "description": "Make HTTP requests",
+      "externalReferences": [
+        {
+          "type": "distribution",
+          "url": "https://github.com/elm/http/zipball/1.0.0/"
+        },
+        {
+          "type": "vcs",
+          "url": "https://github.com/elm/http"
+        },
+        {
+          "type": "website",
+          "url": "https://package.elm-lang.org/packages/elm/http/1.0.0/"
+        }
+      ],
+      "group": "elm",
+      "hashes": [
+        {
+          "alg": "SHA-1",
+          "content": "a0456724577cd0492e178b68417223804c419661"
+        }
+      ],
+      "licenses": [
+        {
+          "license": {
+            "id": "BSD-3-Clause",
+            "url": "https://opensource.org/licenses/BSD-3-Clause"
+          }
+        }
+      ],
+      "name": "http",
+      "properties": [
+        {
+          "name": "cdx:elm:dependency",
+          "value": "direct"
+        },
+        {
+          "name": "cdx:purl:proposedType",
+          "value": "elm"
+        },
+        {
+          "name": "internal:SrcFile",
+          "value": "$ROOT/elm.json"
+        }
+      ],
+      "purl": "pkg:generic/elm/http@1.0.0",
+      "scope": "required",
+      "type": "library",
+      "version": "1.0.0"
+    },
+    {
+      "bom-ref": "pkg:generic/elm/json@1.0.0",
+      "description": "Encode and decode JSON values",
+      "externalReferences": [
+        {
+          "type": "distribution",
+          "url": "https://github.com/elm/json/zipball/1.0.0/"
+        },
+        {
+          "type": "vcs",
+          "url": "https://github.com/elm/json"
+        },
+        {
+          "type": "website",
+          "url": "https://package.elm-lang.org/packages/elm/json/1.0.0/"
+        }
+      ],
+      "group": "elm",
+      "hashes": [
+        {
+          "alg": "SHA-1",
+          "content": "4b54d0f81fc3d472ad586d9cb748548c09d92ba1"
+        }
+      ],
+      "licenses": [
+        {
+          "license": {
+            "id": "BSD-3-Clause",
+            "url": "https://opensource.org/licenses/BSD-3-Clause"
+          }
+        }
+      ],
+      "name": "json",
+      "properties": [
+        {
+          "name": "cdx:elm:dependency",
+          "value": "direct"
+        },
+        {
+          "name": "cdx:purl:proposedType",
+          "value": "elm"
+        },
+        {
+          "name": "internal:SrcFile",
+          "value": "$ROOT/elm.json"
+        }
+      ],
+      "purl": "pkg:generic/elm/json@1.0.0",
+      "scope": "required",
+      "type": "library",
+      "version": "1.0.0"
+    },
+    {
+      "bom-ref": "pkg:generic/elm/parser@1.0.0",
+      "description": "a parsing library, focused on simplicity and great error messages",
+      "externalReferences": [
+        {
+          "type": "distribution",
+          "url": "https://github.com/elm/parser/zipball/1.0.0/"
+        },
+        {
+          "type": "vcs",
+          "url": "https://github.com/elm/parser"
+        },
+        {
+          "type": "website",
+          "url": "https://package.elm-lang.org/packages/elm/parser/1.0.0/"
+        }
+      ],
+      "group": "elm",
+      "hashes": [
+        {
+          "alg": "SHA-1",
+          "content": "c6c681af7e2d8c2dc1ca7f28354c49770bcfad67"
+        }
+      ],
+      "licenses": [
+        {
+          "license": {
+            "id": "BSD-3-Clause",
+            "url": "https://opensource.org/licenses/BSD-3-Clause"
+          }
+        }
+      ],
+      "name": "parser",
+      "properties": [
+        {
+          "name": "cdx:elm:dependency",
+          "value": "indirect"
+        },
+        {
+          "name": "cdx:purl:proposedType",
+          "value": "elm"
+        },
+        {
+          "name": "internal:SrcFile",
+          "value": "$ROOT/elm.json"
+        }
+      ],
+      "purl": "pkg:generic/elm/parser@1.0.0",
+      "scope": "required",
+      "type": "library",
+      "version": "1.0.0"
+    },
+    {
+      "bom-ref": "pkg:generic/elm/random@1.0.0",
+      "description": "Generate random numbers and values (RNG)",
+      "externalReferences": [
+        {
+          "type": "distribution",
+          "url": "https://github.com/elm/random/zipball/1.0.0/"
+        },
+        {
+          "type": "vcs",
+          "url": "https://github.com/elm/random"
+        },
+        {
+          "type": "website",
+          "url": "https://package.elm-lang.org/packages/elm/random/1.0.0/"
+        }
+      ],
+      "group": "elm",
+      "hashes": [
+        {
+          "alg": "SHA-1",
+          "content": "aa2cdd98e008d05ae9ea0dabb44b1caf0da90f09"
+        }
+      ],
+      "licenses": [
+        {
+          "license": {
+            "id": "BSD-3-Clause",
+            "url": "https://opensource.org/licenses/BSD-3-Clause"
+          }
+        }
+      ],
+      "name": "random",
+      "properties": [
+        {
+          "name": "cdx:elm:dependency",
+          "value": "indirect-test"
+        },
+        {
+          "name": "cdx:purl:proposedType",
+          "value": "elm"
+        },
+        {
+          "name": "internal:SrcFile",
+          "value": "$ROOT/elm.json"
+        }
+      ],
+      "purl": "pkg:generic/elm/random@1.0.0",
+      "scope": "optional",
+      "type": "library",
+      "version": "1.0.0"
+    },
+    {
+      "bom-ref": "pkg:generic/elm/time@1.0.0",
+      "description": "Work with POSIX times, time zones, years, months, days, hours, seconds, etc.",
+      "externalReferences": [
+        {
+          "type": "distribution",
+          "url": "https://github.com/elm/time/zipball/1.0.0/"
+        },
+        {
+          "type": "vcs",
+          "url": "https://github.com/elm/time"
+        },
+        {
+          "type": "website",
+          "url": "https://package.elm-lang.org/packages/elm/time/1.0.0/"
+        }
+      ],
+      "group": "elm",
+      "hashes": [
+        {
+          "alg": "SHA-1",
+          "content": "45c179776e7b79601c3f935c751a5fab159d79cf"
+        }
+      ],
+      "licenses": [
+        {
+          "license": {
+            "id": "BSD-3-Clause",
+            "url": "https://opensource.org/licenses/BSD-3-Clause"
+          }
+        }
+      ],
+      "name": "time",
+      "properties": [
+        {
+          "name": "cdx:elm:dependency",
+          "value": "direct"
+        },
+        {
+          "name": "cdx:purl:proposedType",
+          "value": "elm"
+        },
+        {
+          "name": "internal:SrcFile",
+          "value": "$ROOT/elm.json"
+        }
+      ],
+      "purl": "pkg:generic/elm/time@1.0.0",
+      "scope": "required",
+      "type": "library",
+      "version": "1.0.0"
+    },
+    {
+      "bom-ref": "pkg:generic/elm/url@1.0.0",
+      "description": "Create and parse URLs. Use for HTTP and \"routing\" in single-page apps (SPAs)",
+      "externalReferences": [
+        {
+          "type": "distribution",
+          "url": "https://github.com/elm/url/zipball/1.0.0/"
+        },
+        {
+          "type": "vcs",
+          "url": "https://github.com/elm/url"
+        },
+        {
+          "type": "website",
+          "url": "https://package.elm-lang.org/packages/elm/url/1.0.0/"
+        }
+      ],
+      "group": "elm",
+      "hashes": [
+        {
+          "alg": "SHA-1",
+          "content": "314aca93c5f65928ed7e01cdfa90b8f51b860536"
+        }
+      ],
+      "licenses": [
+        {
+          "license": {
+            "id": "BSD-3-Clause",
+            "url": "https://opensource.org/licenses/BSD-3-Clause"
+          }
+        }
+      ],
+      "name": "url",
+      "properties": [
+        {
+          "name": "cdx:elm:dependency",
+          "value": "direct"
+        },
+        {
+          "name": "cdx:purl:proposedType",
+          "value": "elm"
+        },
+        {
+          "name": "internal:SrcFile",
+          "value": "$ROOT/elm.json"
+        }
+      ],
+      "purl": "pkg:generic/elm/url@1.0.0",
+      "scope": "required",
+      "type": "library",
+      "version": "1.0.0"
+    },
+    {
+      "bom-ref": "pkg:generic/elm/virtual-dom@1.0.0",
+      "description": "Core virtual DOM implementation, basis for HTML and SVG libraries",
+      "externalReferences": [
+        {
+          "type": "distribution",
+          "url": "https://github.com/elm/virtual-dom/zipball/1.0.0/"
+        },
+        {
+          "type": "vcs",
+          "url": "https://github.com/elm/virtual-dom"
+        },
+        {
+          "type": "website",
+          "url": "https://package.elm-lang.org/packages/elm/virtual-dom/1.0.0/"
+        }
+      ],
+      "group": "elm",
+      "hashes": [
+        {
+          "alg": "SHA-1",
+          "content": "543f113f394d52a8901474c1568e172a3b525fb0"
+        }
+      ],
+      "licenses": [
+        {
+          "license": {
+            "id": "BSD-3-Clause",
+            "url": "https://opensource.org/licenses/BSD-3-Clause"
+          }
+        }
+      ],
+      "name": "virtual-dom",
+      "properties": [
+        {
+          "name": "cdx:elm:dependency",
+          "value": "indirect"
+        },
+        {
+          "name": "cdx:purl:proposedType",
+          "value": "elm"
+        },
+        {
+          "name": "internal:SrcFile",
+          "value": "$ROOT/elm.json"
+        }
+      ],
+      "purl": "pkg:generic/elm/virtual-dom@1.0.0",
+      "scope": "required",
+      "type": "library",
+      "version": "1.0.0"
+    },
+    {
+      "bom-ref": "pkg:generic/rtfeldman/elm-iso8601-date-strings@1.1.0",
+      "description": "Convert ISO8601 date strings to and from Posix times",
+      "externalReferences": [
+        {
+          "type": "distribution",
+          "url": "https://github.com/rtfeldman/elm-iso8601-date-strings/zipball/1.1.0/"
+        },
+        {
+          "type": "vcs",
+          "url": "https://github.com/rtfeldman/elm-iso8601-date-strings"
+        },
+        {
+          "type": "website",
+          "url": "https://package.elm-lang.org/packages/rtfeldman/elm-iso8601-date-strings/1.1.0/"
+        }
+      ],
+      "group": "rtfeldman",
+      "hashes": [
+        {
+          "alg": "SHA-1",
+          "content": "3b587b107491007dc1ba8f2f63962fb345505fcf"
+        }
+      ],
+      "licenses": [
+        {
+          "license": {
+            "id": "BSD-3-Clause",
+            "url": "https://opensource.org/licenses/BSD-3-Clause"
+          }
+        }
+      ],
+      "name": "elm-iso8601-date-strings",
+      "properties": [
+        {
+          "name": "cdx:elm:dependency",
+          "value": "direct"
+        },
+        {
+          "name": "cdx:purl:proposedType",
+          "value": "elm"
+        },
+        {
+          "name": "internal:SrcFile",
+          "value": "$ROOT/elm.json"
+        }
+      ],
+      "purl": "pkg:generic/rtfeldman/elm-iso8601-date-strings@1.1.0",
+      "scope": "required",
+      "type": "library",
+      "version": "1.1.0"
+    }
+  ],
+  "dependencies": [
+    {
+      "dependsOn": [
+        "pkg:generic/NoRedInk/elm-json-decode-pipeline@1.0.0",
+        "pkg:generic/elm-explorations/markdown@1.0.0",
+        "pkg:generic/elm-explorations/test@1.0.0",
+        "pkg:generic/elm/browser@1.0.0",
+        "pkg:generic/elm/core@1.0.0",
+        "pkg:generic/elm/html@1.0.0",
+        "pkg:generic/elm/http@1.0.0",
+        "pkg:generic/elm/json@1.0.0",
+        "pkg:generic/elm/time@1.0.0",
+        "pkg:generic/elm/url@1.0.0",
+        "pkg:generic/rtfeldman/elm-iso8601-date-strings@1.1.0"
+      ],
+      "ref": "application:elm-registry-enrichment:"
+    },
+    {
+      "dependsOn": [
+        "pkg:generic/elm/core@1.0.0",
+        "pkg:generic/elm/json@1.0.0"
+      ],
+      "ref": "pkg:generic/NoRedInk/elm-json-decode-pipeline@1.0.0"
+    },
+    {
+      "dependsOn": [
+        "pkg:generic/elm/core@1.0.0",
+        "pkg:generic/elm/html@1.0.0"
+      ],
+      "ref": "pkg:generic/elm-explorations/markdown@1.0.0"
+    },
+    {
+      "dependsOn": [
+        "pkg:generic/elm/core@1.0.0",
+        "pkg:generic/elm/random@1.0.0"
+      ],
+      "ref": "pkg:generic/elm-explorations/test@1.0.0"
+    },
+    {
+      "dependsOn": [
+        "pkg:generic/elm/core@1.0.0",
+        "pkg:generic/elm/html@1.0.0",
+        "pkg:generic/elm/json@1.0.0",
+        "pkg:generic/elm/time@1.0.0",
+        "pkg:generic/elm/url@1.0.0"
+      ],
+      "ref": "pkg:generic/elm/browser@1.0.0"
+    },
+    {
+      "dependsOn": [],
+      "ref": "pkg:generic/elm/core@1.0.0"
+    },
+    {
+      "dependsOn": [
+        "pkg:generic/elm/core@1.0.0",
+        "pkg:generic/elm/json@1.0.0",
+        "pkg:generic/elm/virtual-dom@1.0.0"
+      ],
+      "ref": "pkg:generic/elm/html@1.0.0"
+    },
+    {
+      "dependsOn": [
+        "pkg:generic/elm/core@1.0.0",
+        "pkg:generic/elm/json@1.0.0"
+      ],
+      "ref": "pkg:generic/elm/http@1.0.0"
+    },
+    {
+      "dependsOn": [
+        "pkg:generic/elm/core@1.0.0"
+      ],
+      "ref": "pkg:generic/elm/json@1.0.0"
+    },
+    {
+      "dependsOn": [
+        "pkg:generic/elm/core@1.0.0"
+      ],
+      "ref": "pkg:generic/elm/parser@1.0.0"
+    },
+    {
+      "dependsOn": [
+        "pkg:generic/elm/core@1.0.0",
+        "pkg:generic/elm/time@1.0.0"
+      ],
+      "ref": "pkg:generic/elm/random@1.0.0"
+    },
+    {
+      "dependsOn": [
+        "pkg:generic/elm/core@1.0.0"
+      ],
+      "ref": "pkg:generic/elm/time@1.0.0"
+    },
+    {
+      "dependsOn": [
+        "pkg:generic/elm/core@1.0.0"
+      ],
+      "ref": "pkg:generic/elm/url@1.0.0"
+    },
+    {
+      "dependsOn": [
+        "pkg:generic/elm/core@1.0.0",
+        "pkg:generic/elm/json@1.0.0"
+      ],
+      "ref": "pkg:generic/elm/virtual-dom@1.0.0"
+    },
+    {
+      "dependsOn": [
+        "pkg:generic/elm/core@1.0.0",
+        "pkg:generic/elm/json@1.0.0",
+        "pkg:generic/elm/parser@1.0.0",
+        "pkg:generic/elm/time@1.0.0"
+      ],
+      "ref": "pkg:generic/rtfeldman/elm-iso8601-date-strings@1.1.0"
+    }
+  ],
+  "metadata": {
+    "authors": [],
+    "component": {
+      "bom-ref": "application:elm-registry-enrichment:",
+      "name": "elm-registry-enrichment",
+      "properties": [
+        {
+          "name": "cdx:elm:elmVersion",
+          "value": "0.19.1"
+        },
+        {
+          "name": "internal:SrcFile",
+          "value": "$ROOT/elm.json"
+        }
+      ],
+      "type": "application"
+    },
+    "lifecycles": [
+      {
+        "phase": "pre-build"
+      }
+    ],
+    "timestamp": "1970-01-01T00:00:00.000Z",
+    "tools": {
+      "components": [
+        {
+          "authors": [
+            {
+              "name": "OWASP Foundation"
+            }
+          ],
+          "bom-ref": "pkg:npm/%40cdxgen/cdxgen@0.0.0-normalized",
+          "group": "@cdxgen",
+          "name": "cdxgen",
+          "publisher": "OWASP Foundation",
+          "purl": "pkg:npm/%40cdxgen/cdxgen@0.0.0-normalized",
+          "type": "application",
+          "version": "0.0.0-normalized"
+        }
+      ]
+    }
+  },
+  "serialNumber": "urn:uuid:00000000-0000-0000-0000-000000000000",
+  "specVersion": "1.7",
+  "version": 1
+}

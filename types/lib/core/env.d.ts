@@ -119,6 +119,17 @@ export declare const PROJECT_TYPE_ALIASES: {
     dart: string[];
     haskell: string[];
     elixir: string[];
+    erlang: string[];
+    julia: string[];
+    r: string[];
+    ocaml: string[];
+    elm: string[];
+    crystal: string[];
+    nim: string[];
+    lua: string[];
+    perl: string[];
+    spack: string[];
+    terraform: string[];
     c: string[];
     clojure: string[];
     github: string[];

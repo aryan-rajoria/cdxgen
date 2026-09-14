@@ -1,0 +1,22 @@
+# CARTON snapshot format: version 1.0
+DISTRIBUTIONS
+  Plack-1.0051
+    pathname: M/MI/MIYAGAWA/Plack-1.0051.tar.gz
+    provides:
+      Plack 1.0051
+      Plack::Request 1.0051
+    requirements:
+      URI 1.59
+      parent 0.221
+  URI-1.76
+    pathname: E/ET/ETHER/URI-1.76.tar.gz
+    provides:
+      URI 1.76
+    requirements:
+      parent 0.221
+  parent-0.238
+    pathname: C/CO/CORION/parent-0.238.tar.gz
+    provides:
+      parent 0.238
+    requirements:
+      perl 5.006

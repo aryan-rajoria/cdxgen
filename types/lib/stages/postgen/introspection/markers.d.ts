@@ -19,8 +19,9 @@
  * Marker table: ecosystem → manifest and lockfile names that indicate the
  * ecosystem is part of the project. Entries are either exact file names or
  * `{ suffix }` matchers for extension-driven ecosystems. Ecosystems cdxgen
- * cannot parse (elm, crystal, nim, perl, r) are included so the reflection
- * can report them as coverage gaps instead of silently ignoring them.
+ * cannot parse (currently only dub, the D package manager) are included so
+ * the reflection can report them as coverage gaps instead of silently
+ * ignoring them.
  *
  * @type {Readonly<Record<string, {names: string[], suffixes: string[]}>>}
  */

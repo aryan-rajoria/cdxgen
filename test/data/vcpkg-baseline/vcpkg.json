@@ -1,0 +1,15 @@
+{
+  "name": "vcpkg-baseline-smoke",
+  "version": "1.0.0",
+  "description": "Fixture exercising builtin-baseline and feature resolution",
+  "homepage": "https://example.com",
+  "license": "MIT",
+  "builtin-baseline": "abc123def4567890abc123def4567890abc123d4",
+  "dependencies": [
+    "fmt",
+    {
+      "name": "curl",
+      "features": ["ssl", "http2"]
+    }
+  ]
+}

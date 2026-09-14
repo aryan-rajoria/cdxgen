@@ -1,0 +1,7 @@
+return {
+   dependencies = {
+      lua = "5.4-1",
+      ["lua-cjson"] = "2.1.0.10-1",
+      ["net-url"] = "0.9-0"
+   }
+}

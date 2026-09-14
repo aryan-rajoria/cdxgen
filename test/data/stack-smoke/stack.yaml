@@ -1,0 +1,10 @@
+snapshot: lts-22.28
+
+packages:
+- .
+
+extra-deps:
+- acme-missiles-0.3
+- git: https://github.com/thoughtbot/yesod-auth-oauth2.git
+  commit: 4a97f1b0b3e21d9a5ba5f7a1a5e33bb4cd7d5a1e
+  subdir: yesod-auth-oauth2

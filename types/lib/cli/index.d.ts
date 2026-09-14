@@ -2,8 +2,8 @@ export { summarizeAiInventory } from "../inventory/aiInventory.js";
 export { createAndroidBom, createBinaryBom, dedupeBom, listComponents, } from "./bomAssembly.js";
 export { createAsarBom, createCaxaBom, createChromeExtensionBom, createNodejsBom, createVscodeExtensionBom, } from "./jsBom.js";
 export { createJarBom, createJavaBom } from "./jvmBom.js";
-export { createCloudBuildBom, createCryptoCertsBom, createCsharpBom, createGitHubBom, createHelmBom, createJenkinsBom, createPHPBom, createPixiBom, createPythonBom, createRubyBom, } from "./managedBom.js";
-export { createClojureBom, createCocoaBom, createCppBom, createDartBom, createElixirBom, createGleamBom, createGoBom, createHaskellBom, createNixBom, createRustBom, createSwiftBom, createZigBom, } from "./nativeBom.js";
+export { createCloudBuildBom, createCryptoCertsBom, createCsharpBom, createGitHubBom, createHelmBom, createJenkinsBom, createPerlBom, createPHPBom, createPixiBom, createPythonBom, createRBom, createRubyBom, createTerraformBom, } from "./managedBom.js";
+export { createClojureBom, createCocoaBom, createCppBom, createCrystalBom, createDartBom, createElixirBom, createElmBom, createErlangBom, createGleamBom, createGoBom, createHaskellBom, createJuliaBom, createLuaBom, createNimBom, createNixBom, createOCamlBom, createRustBom, createSpackBom, createSwiftBom, createZigBom, } from "./nativeBom.js";
 /**
  * Function to create obom string for the current OS using osquery
  *
