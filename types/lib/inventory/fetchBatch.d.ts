@@ -96,6 +96,13 @@ export declare function prefetchJson(requests: Array<{
     timeoutMs?: number;
 }): Promise<Map<string, BatchEntry>>;
 /**
+ * Whether a hostname belongs to crates.io, including its index and CDN hosts.
+ *
+ * @param {string|null} host Hostname, or null when the URL did not parse.
+ * @returns {boolean}
+ */
+export declare function isCratesHost(host: string | null): boolean;
+/**
  * Record the run-level policy or connectivity condition carried by a caught
  * fetch error, if it names one. Shared by the batch retry loop and by the
  * serial enrichment paths that catch and swallow the same typed errors.
@@ -104,6 +111,25 @@ export declare function prefetchJson(requests: Array<{
  * @returns {void}
  */
 export declare function recordPolicyDegradationFromError(err: Error): void;
+/**
+ * Run a caller's own request under the same per-host gate the batch pool uses.
+ *
+ * Not every registry lookup goes through the pool: a caller that misses the
+ * prefetch, or runs with prefetching disabled, issues `cdxgenAgent.get`
+ * directly. Those requests reach the same host and count against the same
+ * published budget, so they have to queue behind the same limiter rather than
+ * a second one — crates.io's one-request-per-second policy is not honoured by
+ * two independent gates that each allow one per second.
+ *
+ * The per-host semaphore and limiter are module state, so this shares one gate
+ * per host for the life of the process.
+ *
+ * @template T
+ * @param {string} url The URL about to be requested.
+ * @param {() => Promise<T>} issue Issues the request and resolves its result.
+ * @returns {Promise<T>} Whatever `issue` resolves to.
+ */
+export declare function withHostRateLimit<T>(url: string, issue: () => Promise<T>): Promise<T>;
 /**
  * Read a prefetched response, or signal that the caller should fetch it itself.
  *
