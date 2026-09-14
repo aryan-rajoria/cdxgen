@@ -3,7 +3,7 @@ export { createAndroidBom, createBinaryBom, dedupeBom, listComponents, } from ".
 export { createAsarBom, createCaxaBom, createChromeExtensionBom, createNodejsBom, createVscodeExtensionBom, } from "./jsBom.js";
 export { createJarBom, createJavaBom } from "./jvmBom.js";
 export { createCloudBuildBom, createCryptoCertsBom, createCsharpBom, createGitHubBom, createHelmBom, createJenkinsBom, createPerlBom, createPHPBom, createPixiBom, createPythonBom, createRBom, createRubyBom, createTerraformBom, } from "./managedBom.js";
-export { createClojureBom, createCocoaBom, createCppBom, createCrystalBom, createDartBom, createElixirBom, createErlangBom, createGleamBom, createGoBom, createHaskellBom, createJuliaBom, createLuaBom, createNimBom, createNixBom, createOCamlBom, createRustBom, createSpackBom, createSwiftBom, createZigBom, } from "./nativeBom.js";
+export { createClojureBom, createCocoaBom, createCppBom, createCrystalBom, createDartBom, createElixirBom, createElmBom, createErlangBom, createGleamBom, createGoBom, createHaskellBom, createJuliaBom, createLuaBom, createNimBom, createNixBom, createOCamlBom, createRustBom, createSpackBom, createSwiftBom, createZigBom, } from "./nativeBom.js";
 /**
  * Function to create obom string for the current OS using osquery
  *

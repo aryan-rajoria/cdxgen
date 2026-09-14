@@ -123,6 +123,7 @@ export declare const PROJECT_TYPE_ALIASES: {
     julia: string[];
     r: string[];
     ocaml: string[];
+    elm: string[];
     crystal: string[];
     nim: string[];
     lua: string[];

@@ -184,6 +184,14 @@ export declare function createErlangBom(path: string, options: Object): Promise<
  */
 export declare function createOCamlBom(path: string, options: Object): Promise<Object>;
 /**
+ * Function to create bom string for Elm projects.
+ *
+ * @param {string} path to the project
+ * @param {Object} options Parse options from the cli
+ * @returns {Promise<Object>} BOM object
+ */
+export declare function createElmBom(path: string, options: Object): Promise<Object>;
+/**
  * Function to create bom string for Crystal projects using shards.
  *
  * @param {string} path to the project

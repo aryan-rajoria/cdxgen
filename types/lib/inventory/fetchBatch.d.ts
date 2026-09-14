@@ -103,6 +103,14 @@ export declare function prefetchJson(requests: Array<{
  */
 export declare function isCratesHost(host: string | null): boolean;
 /**
+ * Whether a host's rate policy lives in the JS table alone and therefore needs
+ * every request to pass through the one gate the JS pool holds.
+ *
+ * @param {string|null} host Hostname, or null when the URL did not parse.
+ * @returns {boolean}
+ */
+export declare function isSingleGateHost(host: string | null): boolean;
+/**
  * Record the run-level policy or connectivity condition carried by a caught
  * fetch error, if it names one. Shared by the batch retry loop and by the
  * serial enrichment paths that catch and swallow the same typed errors.
