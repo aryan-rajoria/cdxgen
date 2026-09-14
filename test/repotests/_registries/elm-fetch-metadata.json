@@ -1,0 +1,329 @@
+{
+  "/packages/NoRedInk/elm-json-decode-pipeline/1.0.0/elm.json": {
+    "type": "package",
+    "name": "NoRedInk/elm-json-decode-pipeline",
+    "summary": "Use pipelines to build JSON Decoders.",
+    "license": "BSD-3-Clause",
+    "version": "1.0.0",
+    "exposed-modules": [
+      "Json.Decode.Pipeline"
+    ],
+    "elm-version": "0.19.0 <= v < 0.20.0",
+    "dependencies": {
+      "elm/core": "1.0.0 <= v < 2.0.0",
+      "elm/json": "1.0.0 <= v < 2.0.0"
+    },
+    "test-dependencies": {}
+  },
+  "/packages/NoRedInk/elm-json-decode-pipeline/1.0.0/endpoint.json": {
+    "url": "https://github.com/NoRedInk/elm-json-decode-pipeline/zipball/1.0.0/",
+    "hash": "94163823739afa3c3c53f39996378cb8b9e4cce5"
+  },
+  "/packages/elm/browser/1.0.0/elm.json": {
+    "type": "package",
+    "name": "elm/browser",
+    "summary": "Run Elm in browsers, with access to browser history for single-page apps (SPAs)",
+    "license": "BSD-3-Clause",
+    "version": "1.0.0",
+    "exposed-modules": [
+      "Browser",
+      "Browser.Dom",
+      "Browser.Events",
+      "Browser.Navigation"
+    ],
+    "elm-version": "0.19.0 <= v < 0.20.0",
+    "dependencies": {
+      "elm/core": "1.0.0 <= v < 2.0.0",
+      "elm/html": "1.0.0 <= v < 2.0.0",
+      "elm/json": "1.0.0 <= v < 2.0.0",
+      "elm/time": "1.0.0 <= v < 2.0.0",
+      "elm/url": "1.0.0 <= v < 2.0.0"
+    },
+    "test-dependencies": {}
+  },
+  "/packages/elm/browser/1.0.0/endpoint.json": {
+    "url": "https://github.com/elm/browser/zipball/1.0.0/",
+    "hash": "3e08e9eaafdb16688bc1678d0fca82c66ce39c93"
+  },
+  "/packages/elm/core/1.0.0/elm.json": {
+    "type": "package",
+    "name": "elm/core",
+    "summary": "Elm's standard libraries",
+    "license": "BSD-3-Clause",
+    "version": "1.0.0",
+    "exposed-modules": {
+      "Primitives": [
+        "Basics",
+        "String",
+        "Char",
+        "Bitwise",
+        "Tuple"
+      ],
+      "Collections": [
+        "List",
+        "Dict",
+        "Set",
+        "Array"
+      ],
+      "Error Handling": [
+        "Maybe",
+        "Result"
+      ],
+      "Debug": [
+        "Debug"
+      ],
+      "Effects": [
+        "Platform",
+        "Platform.Cmd",
+        "Platform.Sub",
+        "Task",
+        "Process"
+      ]
+    },
+    "elm-version": "0.19.0 <= v < 0.20.0",
+    "dependencies": {},
+    "test-dependencies": {}
+  },
+  "/packages/elm/core/1.0.0/endpoint.json": {
+    "url": "https://github.com/elm/core/zipball/1.0.0/",
+    "hash": "5c776e199e347ab4a22caf3aa3545a69a77ee0c7"
+  },
+  "/packages/elm/html/1.0.0/elm.json": {
+    "type": "package",
+    "name": "elm/html",
+    "summary": "Fast HTML, rendered with virtual DOM diffing",
+    "license": "BSD-3-Clause",
+    "version": "1.0.0",
+    "exposed-modules": {
+      "HTML": [
+        "Html",
+        "Html.Attributes",
+        "Html.Events"
+      ],
+      "Optimize": [
+        "Html.Keyed",
+        "Html.Lazy"
+      ]
+    },
+    "elm-version": "0.19.0 <= v < 0.20.0",
+    "dependencies": {
+      "elm/core": "1.0.0 <= v < 2.0.0",
+      "elm/json": "1.0.0 <= v < 2.0.0",
+      "elm/virtual-dom": "1.0.0 <= v < 2.0.0"
+    },
+    "test-dependencies": {}
+  },
+  "/packages/elm/html/1.0.0/endpoint.json": {
+    "url": "https://github.com/elm/html/zipball/1.0.0/",
+    "hash": "52e43c64aed979dacb444f5147ee475e9610079f"
+  },
+  "/packages/elm/http/1.0.0/elm.json": {
+    "type": "package",
+    "name": "elm/http",
+    "summary": "Make HTTP requests",
+    "license": "BSD-3-Clause",
+    "version": "1.0.0",
+    "exposed-modules": [
+      "Http",
+      "Http.Progress"
+    ],
+    "elm-version": "0.19.0 <= v < 0.20.0",
+    "dependencies": {
+      "elm/core": "1.0.0 <= v < 2.0.0",
+      "elm/json": "1.0.0 <= v < 2.0.0"
+    },
+    "test-dependencies": {}
+  },
+  "/packages/elm/http/1.0.0/endpoint.json": {
+    "url": "https://github.com/elm/http/zipball/1.0.0/",
+    "hash": "a0456724577cd0492e178b68417223804c419661"
+  },
+  "/packages/elm/json/1.0.0/elm.json": {
+    "type": "package",
+    "name": "elm/json",
+    "summary": "Encode and decode JSON values",
+    "license": "BSD-3-Clause",
+    "version": "1.0.0",
+    "exposed-modules": [
+      "Json.Decode",
+      "Json.Encode"
+    ],
+    "elm-version": "0.19.0 <= v < 0.20.0",
+    "dependencies": {
+      "elm/core": "1.0.0 <= v < 2.0.0"
+    },
+    "test-dependencies": {}
+  },
+  "/packages/elm/json/1.0.0/endpoint.json": {
+    "url": "https://github.com/elm/json/zipball/1.0.0/",
+    "hash": "4b54d0f81fc3d472ad586d9cb748548c09d92ba1"
+  },
+  "/packages/elm/time/1.0.0/elm.json": {
+    "type": "package",
+    "name": "elm/time",
+    "summary": "Work with POSIX times, time zones, years, months, days, hours, seconds, etc.",
+    "license": "BSD-3-Clause",
+    "version": "1.0.0",
+    "exposed-modules": [
+      "Time"
+    ],
+    "elm-version": "0.19.0 <= v < 0.20.0",
+    "dependencies": {
+      "elm/core": "1.0.0 <= v < 2.0.0"
+    },
+    "test-dependencies": {}
+  },
+  "/packages/elm/time/1.0.0/endpoint.json": {
+    "url": "https://github.com/elm/time/zipball/1.0.0/",
+    "hash": "45c179776e7b79601c3f935c751a5fab159d79cf"
+  },
+  "/packages/elm/url/1.0.0/elm.json": {
+    "type": "package",
+    "name": "elm/url",
+    "summary": "Create and parse URLs. Use for HTTP and \"routing\" in single-page apps (SPAs)",
+    "license": "BSD-3-Clause",
+    "version": "1.0.0",
+    "exposed-modules": [
+      "Url",
+      "Url.Builder",
+      "Url.Parser",
+      "Url.Parser.Query"
+    ],
+    "elm-version": "0.19.0 <= v < 0.20.0",
+    "dependencies": {
+      "elm/core": "1.0.0 <= v < 2.0.0"
+    },
+    "test-dependencies": {}
+  },
+  "/packages/elm/url/1.0.0/endpoint.json": {
+    "url": "https://github.com/elm/url/zipball/1.0.0/",
+    "hash": "314aca93c5f65928ed7e01cdfa90b8f51b860536"
+  },
+  "/packages/elm-explorations/markdown/1.0.0/elm.json": {
+    "type": "package",
+    "name": "elm-explorations/markdown",
+    "summary": "Fast markdown parsing and rendering",
+    "license": "BSD-3-Clause",
+    "version": "1.0.0",
+    "exposed-modules": [
+      "Markdown"
+    ],
+    "elm-version": "0.19.0 <= v < 0.20.0",
+    "dependencies": {
+      "elm/core": "1.0.0 <= v < 2.0.0",
+      "elm/html": "1.0.0 <= v < 2.0.0"
+    },
+    "test-dependencies": {}
+  },
+  "/packages/elm-explorations/markdown/1.0.0/endpoint.json": {
+    "url": "https://github.com/elm-explorations/markdown/zipball/1.0.0/",
+    "hash": "9ae1c29291395d3db4add7205fe1b3584e471c41"
+  },
+  "/packages/rtfeldman/elm-iso8601-date-strings/1.1.0/elm.json": {
+    "type": "package",
+    "name": "rtfeldman/elm-iso8601-date-strings",
+    "summary": "Convert ISO8601 date strings to and from Posix times",
+    "license": "BSD-3-Clause",
+    "version": "1.1.0",
+    "exposed-modules": [
+      "Iso8601"
+    ],
+    "elm-version": "0.19.0 <= v < 0.20.0",
+    "dependencies": {
+      "elm/core": "1.0.0 <= v < 2.0.0",
+      "elm/json": "1.0.0 <= v < 2.0.0",
+      "elm/parser": "1.0.0 <= v < 2.0.0",
+      "elm/time": "1.0.0 <= v < 2.0.0"
+    },
+    "test-dependencies": {
+      "elm-explorations/test": "1.0.0 <= v < 2.0.0"
+    }
+  },
+  "/packages/rtfeldman/elm-iso8601-date-strings/1.1.0/endpoint.json": {
+    "url": "https://github.com/rtfeldman/elm-iso8601-date-strings/zipball/1.1.0/",
+    "hash": "3b587b107491007dc1ba8f2f63962fb345505fcf"
+  },
+  "/packages/elm/parser/1.0.0/elm.json": {
+    "type": "package",
+    "name": "elm/parser",
+    "version": "1.0.0",
+    "summary": "a parsing library, focused on simplicity and great error messages",
+    "license": "BSD-3-Clause",
+    "exposed-modules": [
+      "Parser"
+    ],
+    "dependencies": {
+      "elm/core": "1.0.0 <= v < 2.0.0"
+    },
+    "test-dependencies": {},
+    "elm-version": "0.19.0 <= v < 0.20.0"
+  },
+  "/packages/elm/parser/1.0.0/endpoint.json": {
+    "url": "https://github.com/elm/parser/zipball/1.0.0/",
+    "hash": "c6c681af7e2d8c2dc1ca7f28354c49770bcfad67"
+  },
+  "/packages/elm/virtual-dom/1.0.0/elm.json": {
+    "type": "package",
+    "name": "elm/virtual-dom",
+    "summary": "Core virtual DOM implementation, basis for HTML and SVG libraries",
+    "license": "BSD-3-Clause",
+    "version": "1.0.0",
+    "exposed-modules": [
+      "VirtualDom"
+    ],
+    "elm-version": "0.19.0 <= v < 0.20.0",
+    "dependencies": {
+      "elm/core": "1.0.0 <= v < 2.0.0",
+      "elm/json": "1.0.0 <= v < 2.0.0"
+    },
+    "test-dependencies": {}
+  },
+  "/packages/elm/virtual-dom/1.0.0/endpoint.json": {
+    "url": "https://github.com/elm/virtual-dom/zipball/1.0.0/",
+    "hash": "543f113f394d52a8901474c1568e172a3b525fb0"
+  },
+  "/packages/elm-explorations/test/1.0.0/elm.json": {
+    "type": "package",
+    "name": "elm-explorations/test",
+    "summary": "Write unit and fuzz tests for Elm code.",
+    "license": "BSD-3-Clause",
+    "version": "1.0.0",
+    "exposed-modules": [
+      "Test",
+      "Test.Runner",
+      "Test.Runner.Failure",
+      "Expect",
+      "Fuzz"
+    ],
+    "elm-version": "0.19.0 <= v < 0.20.0",
+    "dependencies": {
+      "elm/core": "1.0.0 <= v < 2.0.0",
+      "elm/random": "1.0.0 <= v < 2.0.0"
+    },
+    "test-dependencies": {}
+  },
+  "/packages/elm-explorations/test/1.0.0/endpoint.json": {
+    "url": "https://github.com/elm-explorations/test/zipball/1.0.0/",
+    "hash": "5774d94ec0c9ab94a988b07412eafc2069cc152c"
+  },
+  "/packages/elm/random/1.0.0/elm.json": {
+    "type": "package",
+    "name": "elm/random",
+    "summary": "Generate random numbers and values (RNG)",
+    "license": "BSD-3-Clause",
+    "version": "1.0.0",
+    "exposed-modules": [
+      "Random"
+    ],
+    "elm-version": "0.19.0 <= v < 0.20.0",
+    "dependencies": {
+      "elm/core": "1.0.0 <= v < 2.0.0",
+      "elm/time": "1.0.0 <= v < 2.0.0"
+    },
+    "test-dependencies": {}
+  },
+  "/packages/elm/random/1.0.0/endpoint.json": {
+    "url": "https://github.com/elm/random/zipball/1.0.0/",
+    "hash": "aa2cdd98e008d05ae9ea0dabb44b1caf0da90f09"
+  }
+}

@@ -240,6 +240,7 @@ When `CDXGEN_PLUGINS_DIR` points at a packaged plugins directory, cdxgen also lo
 | RUST_CRATES_URL | Override Rust Crates URL. Default: https://crates.io/api/v1/crates/ |
 | CARGO_METADATA_SOURCE | Set to `registry` to always query crates.io for crate metadata. By default cdxgen reads the local Cargo registry under `CARGO_HOME` first and queries crates.io only for crates it cannot account for, because crates.io allows one request per second. |
 | CARGO_HOME | Standard Cargo variable. Also tells cdxgen where to find the local registry (`$CARGO_HOME/registry`) it reads crate metadata from. Default: `~/.cargo` |
+| ELM_PACKAGE_URL | Override the Elm package registry used for license, summary, archive digest and dependency-graph enrichment. Enrichment runs only when `FETCH_LICENSE` or `CDXGEN_FETCH_PKG_METADATA` is set, and never requests the package paths the registry's `robots.txt` disallows. Default: https://package.elm-lang.org |
 | ELM_HOME | Standard Elm variable. Also tells cdxgen where to find the local package cache (`$ELM_HOME/<version>/packages`) it reads Elm package licenses and summaries from. Default: `~/.elm` (`%APPDATA%\elm` on Windows) |
 
 ### Atom / Evinse
@@ -407,6 +408,7 @@ export CDXGEN_USER_AGENT_CRATES="acme-sbom-bot/2.1 (build-team@example.org)"
 | ------------- | ---------------------------------------------------------------------------------------------------------- |
 | `CRATES`      | `crates.io`, `static.crates.io`, `index.crates.io`                                                         |
 | `DOCKER`      | `docker.io`, `docker.com`                                                                                  |
+| `ELM`         | `package.elm-lang.org`                                                                                     |
 | `GITHUB`      | `github.com`, `githubusercontent.com`, `ghcr.io`                                                           |
 | `GITLAB`      | `gitlab.com`                                                                                               |
 | `GOPROXY`     | `proxy.golang.org`, `sum.golang.org`, `pkg.go.dev`                                                         |
