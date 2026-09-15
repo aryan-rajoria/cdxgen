@@ -19,6 +19,9 @@ on:
       - 'test/data/angular-cli-scripts-repotest/**'
       - 'test/data/angular-css-config-repotest/**'
       - 'test/data/angular-template-repotest/**'
+      - 'test/data/svelte-repotest/**'
+      - 'test/data/svelte-legacy-repotest/**'
+      - 'test/data/svelte-precision/**'
       - 'test/data/cargo-cache-fixture/**'
       - 'test/data/cache-disable-repotest/**'
       - 'test/data/cbom-js-repotest/**'
@@ -1651,6 +1654,11 @@ jobs:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1  # v7.0.1
         with:
           persist-credentials: false
+          repository: 'sveltejs/realworld'
+          path: 'repotests/sveltejs-realworld'
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1  # v7.0.1
+        with:
+          persist-credentials: false
           repository: 'kriasoft/react-app'
           path: 'repotests/react-app'
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1  # v7.0.1
@@ -1699,6 +1707,30 @@ jobs:
           CDXGEN_DEBUG_MODE=verbose ASTGEN_IGNORE_DIRS="" FETCH_LICENSE=false bin/cdxgen.js -t js repotests/sveltejs-examples -o bomresults/bom-svelte.json
           CDXGEN_DEBUG_MODE=verbose ASTGEN_IGNORE_DIRS="" node bin/evinse.js -i bomresults/bom-svelte.json -o bomresults/bom-svelte.evinse.json -l js --with-data-flow repotests/sveltejs-examples
           CDXGEN_DEBUG_MODE=verbose ASTGEN_IGNORE_DIRS="" node bin/evinse.js -i bomresults/bom-svelte.json -o bomresults/bom-svelte.evinse.json -l js --with-reachables repotests/sveltejs-examples
+        shell: bash
+      - name: repotests svelte analyzer fixtures
+        run: |
+          bin/cdxgen.js -t js test/data/svelte-repotest -o bomresults/bom-svelte-kit-fixture.json --deep --evidence --fail-on-error
+          bin/cdxgen.js -t svelte test/data/svelte-legacy-repotest -o bomresults/bom-svelte-legacy-fixture.json --deep --evidence --fail-on-error
+          bin/cdxgen.js -t js test/data/svelte-precision -o bomresults/bom-svelte-precision-fixture.json --deep --evidence --fail-on-error
+          FETCH_LICENSE=false bin/cdxgen.js -t js repotests/sveltejs-realworld -o bomresults/bom-svelte-realworld.json --fail-on-error
+          jq -e 'any(.components[]; .group == "@sveltejs" and .name == "kit" and .scope == "required")' bomresults/bom-svelte-kit-fixture.json
+          jq -e 'any(.components[]; .group == "@sveltejs" and .name == "adapter-node" and .scope == "required")' bomresults/bom-svelte-kit-fixture.json
+          jq -e 'any(.components[]; .name == "svelte" and .scope == "required")' bomresults/bom-svelte-kit-fixture.json
+          jq -e 'any(.components[]; .name == "chart.js" and .scope == "required")' bomresults/bom-svelte-kit-fixture.json
+          jq -e 'any(.components[]; .name == "dayjs" and .scope == "required")' bomresults/bom-svelte-kit-fixture.json
+          jq -e 'any(.components[]; .name == "bulma" and .scope == "required")' bomresults/bom-svelte-kit-fixture.json
+          jq -e 'any(.components[]; .name == "sass" and .scope == "required")' bomresults/bom-svelte-kit-fixture.json
+          jq -e 'any(.components[]; .name == "left-pad" and .scope == "optional")' bomresults/bom-svelte-kit-fixture.json
+          jq -e 'any(.components[]; .name == "svelte" and .scope == "required")' bomresults/bom-svelte-legacy-fixture.json
+          jq -e 'any(.components[]; .name == "date-fns" and .scope == "required")' bomresults/bom-svelte-legacy-fixture.json
+          jq -e 'any(.components[]; .name == "left-pad" and .scope == "optional")' bomresults/bom-svelte-legacy-fixture.json
+          jq -e 'any(.components[]; .name == "svelte" and .scope == "required")' bomresults/bom-svelte-precision-fixture.json
+          jq -e 'any(.components[]; .name == "dayjs" and .scope == "required")' bomresults/bom-svelte-precision-fixture.json
+          jq -e 'any(.components[]; .name == "left-pad" and .scope == "optional")' bomresults/bom-svelte-precision-fixture.json
+          jq -e 'any(.components[]; .name == "svelte" and .scope == "required")' bomresults/bom-svelte-realworld.json
+          jq -e 'any(.components[]; .group == "@sveltejs" and .name == "kit" and .scope == "required")' bomresults/bom-svelte-realworld.json
+          jq -e 'any(.components[]; .group == "@sveltejs" and .name == "adapter-vercel" and .scope == "required")' bomresults/bom-svelte-realworld.json
         shell: bash
       - name: Install php for the evinse PHP frontend
         if: runner.os == 'macOS'

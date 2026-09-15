@@ -1,0 +1,23 @@
+[
+  {
+    "name": "svelte-repotest",
+    "local": true,
+    "description": "SvelteKit 2 + Svelte 5 app fixture with runes, SvelteKit virtual modules, a scss style block with a package @use, hooks.server.ts, and svelte.config.js with adapter-node."
+  },
+  {
+    "name": "svelte-legacy-repotest",
+    "local": true,
+    "description": "Svelte 4 non-runes app fixture: export let props, $: reactive statements, on:click, let: directives, svelte/store, script context=module."
+  },
+  {
+    "name": "svelte-precision",
+    "local": true,
+    "description": "Hard parser cases ported from atom-parsetools svelte-precision: runes, snippets, svelte:* special elements, {#await}, void elements, and an intentionally broken template."
+  },
+  {
+    "name": "realworld",
+    "repoUrl": "https://github.com/sveltejs/realworld.git",
+    "description": "SvelteKit implementation of the RealWorld example app (conduit) maintained by the Svelte team.",
+    "notes": "Stable public SvelteKit repository. Run with --clone-samples."
+  }
+]
