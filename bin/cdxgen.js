@@ -19,6 +19,7 @@ import { parse as _load } from "yaml";
 import yargs from "yargs";
 import { hideBin } from "yargs/helpers";
 
+import { getExactAiInventoryType } from "../lib/cli/bomAssembly.js";
 import {
   applyAdvancedOptions as applyAdvancedOptionsImpl,
   buildOptionsFromArgs,
@@ -1601,7 +1602,14 @@ const writeCycloneDxOutput = (jsonFile, bomJson, options) => {
   }
   let sourcePath = filePath;
   let purlResolution;
-  const directHuggingFaceSource = normalizeHuggingFaceReference(sourcePath);
+  // Direct HuggingFace interpretation of the source path is opt-in: bare
+  // `owner/repo`-shaped values are ordinary relative paths (eg: repotests/
+  // sveltejs-realworld) unless an AI inventory type such as `-t ai` is
+  // explicitly selected. Unambiguous purls and huggingface.co URLs always
+  // resolve.
+  const directHuggingFaceSource = normalizeHuggingFaceReference(sourcePath, {
+    explicitOnly: getExactAiInventoryType(options) !== "ai",
+  });
   if (isDryRun && directHuggingFaceSource) {
     recordActivity({
       kind: "read",

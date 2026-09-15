@@ -1704,16 +1704,16 @@ jobs:
         shell: bash
       - name: repotests sveltejs-examples
         run: |
-          CDXGEN_DEBUG_MODE=verbose ASTGEN_IGNORE_DIRS="" FETCH_LICENSE=false bin/cdxgen.js -t js repotests/sveltejs-examples -o bomresults/bom-svelte.json
+          CDXGEN_DEBUG_MODE=verbose ASTGEN_IGNORE_DIRS="" FETCH_LICENSE=false bin/cdxgen.js -t svelte repotests/sveltejs-examples -o bomresults/bom-svelte.json
           CDXGEN_DEBUG_MODE=verbose ASTGEN_IGNORE_DIRS="" node bin/evinse.js -i bomresults/bom-svelte.json -o bomresults/bom-svelte.evinse.json -l js --with-data-flow repotests/sveltejs-examples
           CDXGEN_DEBUG_MODE=verbose ASTGEN_IGNORE_DIRS="" node bin/evinse.js -i bomresults/bom-svelte.json -o bomresults/bom-svelte.evinse.json -l js --with-reachables repotests/sveltejs-examples
         shell: bash
       - name: repotests svelte analyzer fixtures
         run: |
-          bin/cdxgen.js -t js test/data/svelte-repotest -o bomresults/bom-svelte-kit-fixture.json --deep --evidence --fail-on-error
+          bin/cdxgen.js -t svelte test/data/svelte-repotest -o bomresults/bom-svelte-kit-fixture.json --deep --evidence --fail-on-error
           bin/cdxgen.js -t svelte test/data/svelte-legacy-repotest -o bomresults/bom-svelte-legacy-fixture.json --deep --evidence --fail-on-error
-          bin/cdxgen.js -t js test/data/svelte-precision -o bomresults/bom-svelte-precision-fixture.json --deep --evidence --fail-on-error
-          FETCH_LICENSE=false bin/cdxgen.js -t js repotests/sveltejs-realworld -o bomresults/bom-svelte-realworld.json --fail-on-error
+          bin/cdxgen.js -t svelte test/data/svelte-precision -o bomresults/bom-svelte-precision-fixture.json --deep --evidence --fail-on-error
+          FETCH_LICENSE=false bin/cdxgen.js -t svelte repotests/sveltejs-realworld -o bomresults/bom-svelte-realworld.json --fail-on-error
           jq -e 'any(.components[]; .group == "@sveltejs" and .name == "kit" and .scope == "required")' bomresults/bom-svelte-kit-fixture.json
           jq -e 'any(.components[]; .group == "@sveltejs" and .name == "adapter-node" and .scope == "required")' bomresults/bom-svelte-kit-fixture.json
           jq -e 'any(.components[]; .name == "svelte" and .scope == "required")' bomresults/bom-svelte-kit-fixture.json
