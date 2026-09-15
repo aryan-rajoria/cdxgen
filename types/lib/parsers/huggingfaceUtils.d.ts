@@ -84,9 +84,16 @@ export declare function toHuggingFacePurl(repoId: string, version?: string, repo
  * Normalize a direct Hugging Face URL or purl into a repo reference.
  *
  * @param {string} value direct URL, API URL, or purl
+ * @param {object} [parseOptions] parsing options
+ * @param {boolean} [parseOptions.explicitOnly=false] resolve only unambiguous
+ *   references (`pkg:huggingface/...` purls and huggingface.co URLs) so that
+ *   ambiguous `owner/repo`-shaped values keep their filesystem-path meaning
+ *   until an AI inventory type is explicitly selected
  * @returns {{ assetType: string, repoId: string, version?: string }|undefined} normalized reference
  */
-export declare function normalizeHuggingFaceReference(value: string): {
+export declare function normalizeHuggingFaceReference(value: string, parseOptions?: {
+    explicitOnly?: boolean;
+}): {
     assetType: string;
     repoId: string;
     version?: string;
