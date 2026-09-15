@@ -3,6 +3,13 @@
  * local Modelfile/`.gguf` file input. Returns the explicit selection from
  * `getExactAiInventoryType` when one is present.
  *
+ * Direct HuggingFace interpretation of the source path is opt-in: only
+ * unambiguous references (`pkg:huggingface/...` purls and huggingface.co
+ * URLs) are recognized on their own. Bare `owner/repo`-shaped values are
+ * ordinary relative paths (eg: `repotests/sveltejs-realworld`) unless an AI
+ * inventory type such as `-t ai` is explicitly selected, in which case
+ * `getExactAiInventoryType` already returned it above.
+ *
  * @param {string} path Project or file path
  * @param {object} options CLI options
  * @returns {string|undefined} The detected AI inventory type (`"ai"`) or undefined
