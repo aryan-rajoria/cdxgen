@@ -1,0 +1,13 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <OutputType>Library</OutputType>
+    <TargetFramework>net48</TargetFramework>
+    <AssemblyName>Lib</AssemblyName>
+  </PropertyGroup>
+  <ItemGroup>
+    <!-- Resolves to the centrally pinned 12.0.3, unlike the sibling Reference -->
+    <PackageReference Include="Newtonsoft.Json" />
+    <!-- A range is a constraint, not an installed version -->
+    <PackageReference Include="NUnit" Version="[3.13.3,4.0)" />
+  </ItemGroup>
+</Project>

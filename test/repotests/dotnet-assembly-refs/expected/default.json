@@ -1,0 +1,281 @@
+{
+  "bomFormat": "CycloneDX",
+  "components": [
+    {
+      "bom-ref": "pkg:nuget/FSharp.Core",
+      "evidence": {
+        "identity": [
+          {
+            "concludedValue": "$ROOT/src/App/App.csproj",
+            "confidence": 0.3,
+            "field": "purl",
+            "methods": [
+              {
+                "confidence": 0.3,
+                "technique": "manifest-analysis",
+                "value": "$ROOT/src/App/App.csproj"
+              }
+            ]
+          }
+        ]
+      },
+      "group": "",
+      "name": "FSharp.Core",
+      "properties": [
+        {
+          "name": "cdx:nuget:declared_version_range",
+          "value": "$(TargetFSharpCoreVersion)"
+        },
+        {
+          "name": "internal:SrcFile",
+          "value": "$ROOT/src/App/App.csproj"
+        }
+      ],
+      "purl": "pkg:nuget/FSharp.Core",
+      "type": "library"
+    },
+    {
+      "bom-ref": "pkg:nuget/NUnit",
+      "evidence": {
+        "identity": [
+          {
+            "concludedValue": "$ROOT/src/Lib/Lib.csproj",
+            "confidence": 0.7,
+            "field": "purl",
+            "methods": [
+              {
+                "confidence": 0.7,
+                "technique": "manifest-analysis",
+                "value": "$ROOT/src/Lib/Lib.csproj"
+              }
+            ]
+          }
+        ]
+      },
+      "group": "",
+      "name": "NUnit",
+      "properties": [
+        {
+          "name": "cdx:nuget:declared_version_range",
+          "value": "[3.13.3,4.0)"
+        },
+        {
+          "name": "internal:SrcFile",
+          "value": "$ROOT/src/Lib/Lib.csproj"
+        }
+      ],
+      "purl": "pkg:nuget/NUnit",
+      "type": "library"
+    },
+    {
+      "bom-ref": "pkg:nuget/Newtonsoft.Json",
+      "evidence": {
+        "identity": [
+          {
+            "concludedValue": "$ROOT/src/App/App.csproj",
+            "confidence": 0.3,
+            "field": "purl",
+            "methods": [
+              {
+                "confidence": 0.3,
+                "technique": "manifest-analysis",
+                "value": "$ROOT/src/App/App.csproj"
+              }
+            ]
+          }
+        ]
+      },
+      "group": "",
+      "name": "Newtonsoft.Json",
+      "properties": [
+        {
+          "name": "internal:SrcFile",
+          "value": "$ROOT/src/App/App.csproj"
+        }
+      ],
+      "purl": "pkg:nuget/Newtonsoft.Json",
+      "type": "library"
+    },
+    {
+      "bom-ref": "pkg:nuget/Newtonsoft.Json@12.0.3",
+      "evidence": {
+        "identity": [
+          {
+            "concludedValue": "$ROOT/src/Lib/Lib.csproj",
+            "confidence": 0.7,
+            "field": "purl",
+            "methods": [
+              {
+                "confidence": 0.7,
+                "technique": "manifest-analysis",
+                "value": "$ROOT/src/Lib/Lib.csproj"
+              }
+            ]
+          }
+        ]
+      },
+      "group": "",
+      "name": "Newtonsoft.Json",
+      "properties": [
+        {
+          "name": "internal:SrcFile",
+          "value": "$ROOT/src/Lib/Lib.csproj"
+        }
+      ],
+      "purl": "pkg:nuget/Newtonsoft.Json@12.0.3",
+      "type": "library",
+      "version": "12.0.3"
+    },
+    {
+      "bom-ref": "pkg:nuget/System.Net.Http",
+      "evidence": {
+        "identity": [
+          {
+            "concludedValue": "$ROOT/src/App/App.csproj",
+            "confidence": 0.3,
+            "field": "purl",
+            "methods": [
+              {
+                "confidence": 0.3,
+                "technique": "manifest-analysis",
+                "value": "$ROOT/src/App/App.csproj"
+              }
+            ]
+          }
+        ]
+      },
+      "group": "",
+      "name": "System.Net.Http",
+      "properties": [
+        {
+          "name": "cdx:dotnet:target_framework",
+          "value": "net48"
+        },
+        {
+          "name": "internal:SrcFile",
+          "value": "$ROOT/src/App/App.csproj"
+        }
+      ],
+      "purl": "pkg:nuget/System.Net.Http",
+      "type": "library"
+    },
+    {
+      "bom-ref": "pkg:nuget/log4net@2.0.15.0",
+      "evidence": {
+        "identity": [
+          {
+            "concludedValue": "$ROOT/src/App/App.csproj",
+            "confidence": 0.3,
+            "field": "purl",
+            "methods": [
+              {
+                "confidence": 0.3,
+                "technique": "manifest-analysis",
+                "value": "$ROOT/src/App/App.csproj"
+              }
+            ]
+          }
+        ]
+      },
+      "group": "",
+      "name": "log4net",
+      "properties": [
+        {
+          "name": "internal:SrcFile",
+          "value": "$ROOT/src/App/App.csproj"
+        }
+      ],
+      "purl": "pkg:nuget/log4net@2.0.15.0",
+      "type": "library",
+      "version": "2.0.15.0"
+    }
+  ],
+  "dependencies": [
+    {
+      "dependsOn": [
+        "pkg:nuget/FSharp.Core",
+        "pkg:nuget/Newtonsoft.Json",
+        "pkg:nuget/System.Net.Http",
+        "pkg:nuget/log4net@2.0.15.0"
+      ],
+      "ref": "pkg:nuget/App@latest"
+    },
+    {
+      "dependsOn": [
+        "pkg:nuget/NUnit",
+        "pkg:nuget/Newtonsoft.Json@12.0.3"
+      ],
+      "ref": "pkg:nuget/Lib@latest"
+    }
+  ],
+  "metadata": {
+    "authors": [],
+    "component": {
+      "bom-ref": "pkg:nuget/dotnet-assembly-refs@latest",
+      "components": [
+        {
+          "bom-ref": "pkg:nuget/App@latest",
+          "group": "",
+          "name": "App",
+          "properties": [
+            {
+              "name": "cdx:dotnet:output_type",
+              "value": "Exe"
+            },
+            {
+              "name": "cdx:dotnet:target_framework",
+              "value": "net48"
+            }
+          ],
+          "purl": "pkg:nuget/App@latest",
+          "type": "application"
+        },
+        {
+          "bom-ref": "pkg:nuget/Lib@latest",
+          "group": "",
+          "name": "Lib",
+          "properties": [
+            {
+              "name": "cdx:dotnet:target_framework",
+              "value": "net48"
+            }
+          ],
+          "purl": "pkg:nuget/Lib@latest",
+          "type": "library"
+        }
+      ],
+      "group": "",
+      "name": "dotnet-assembly-refs",
+      "purl": "pkg:nuget/dotnet-assembly-refs@latest",
+      "type": "application",
+      "version": "latest"
+    },
+    "lifecycles": [
+      {
+        "phase": "pre-build"
+      }
+    ],
+    "timestamp": "1970-01-01T00:00:00.000Z",
+    "tools": {
+      "components": [
+        {
+          "authors": [
+            {
+              "name": "OWASP Foundation"
+            }
+          ],
+          "bom-ref": "pkg:npm/%40cdxgen/cdxgen@0.0.0-normalized",
+          "group": "@cdxgen",
+          "name": "cdxgen",
+          "publisher": "OWASP Foundation",
+          "purl": "pkg:npm/%40cdxgen/cdxgen@0.0.0-normalized",
+          "type": "application",
+          "version": "0.0.0-normalized"
+        }
+      ]
+    }
+  },
+  "serialNumber": "urn:uuid:00000000-0000-0000-0000-000000000000",
+  "specVersion": "1.7",
+  "version": 1
+}
