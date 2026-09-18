@@ -124,7 +124,10 @@ import {
 } from "../lib/inventory/source.js";
 import { executeOsQuery } from "../lib/managers/binary.js";
 import { getBomWithOras } from "../lib/managers/oci.js";
-import { postProcess } from "../lib/stages/postgen/postgen.js";
+import {
+  applyEvidenceBasedFilter,
+  postProcess,
+} from "../lib/stages/postgen/postgen.js";
 import { convertCycloneDxToSpdx } from "../lib/stages/postgen/spdxConverter.js";
 import { auditEnvironment } from "../lib/stages/pregen/envAudit.js";
 import { prepareEnv } from "../lib/stages/pregen/pregen.js";
@@ -2083,7 +2086,9 @@ const writeCycloneDxOutput = (jsonFile, bomJson, options) => {
           sliceArtefacts,
           evinseOptions,
         );
-        bomNSData.bomJson = evinseJson;
+        // The scope filter is deferred until here so the analyzers get to
+        // prove that an optional dependency is actually used.
+        bomNSData.bomJson = applyEvidenceBasedFilter(evinseJson, options);
         if (options.print && evinseJson) {
           printOccurrences(evinseJson);
           printCallStack(evinseJson);
