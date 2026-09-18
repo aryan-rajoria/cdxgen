@@ -1,0 +1,15 @@
+{
+  "description": ".NET assembly references (#4359). A `<Reference>` names an assembly, so the project states no package version: the component must state none either, and its purl must agree. Also covers a sibling PackageReference that does resolve through central package management, and a version range that is a constraint rather than an installed version.",
+  "fixture": ".",
+  "scenarios": [
+    {
+      "name": "default",
+      "projectType": [
+        "dotnet"
+      ],
+      "options": {
+        "multiProject": true
+      }
+    }
+  ]
+}

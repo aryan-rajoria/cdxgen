@@ -32,8 +32,7 @@
         "ollama",
         "modelfile"
       ],
-      "type": "file",
-      "version": ""
+      "type": "file"
     },
     {
       "bom-ref": "pkg:generic/ollama/llama3.2:1b",
@@ -94,8 +93,7 @@
         "ollama",
         "modelfile"
       ],
-      "type": "machine-learning-model",
-      "version": ""
+      "type": "machine-learning-model"
     }
   ],
   "dependencies": [

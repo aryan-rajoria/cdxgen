@@ -90,8 +90,7 @@
       ],
       "purl": "pkg:generic/my_local_helper",
       "scope": "required",
-      "type": "library",
-      "version": ""
+      "type": "library"
     },
     {
       "bom-ref": "pkg:generic/zig_clap@0.10.0_download_url_https:%2F%2Fgithub.com%2FHejsil%2Fzig-clap%2Farchive%2Fabc1234.tar.gz",
