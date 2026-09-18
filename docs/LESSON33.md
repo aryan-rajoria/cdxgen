@@ -117,7 +117,7 @@ xmake follow it now as well.
 The digests are worth a closer look, because the two schemes in that list do
 not mean the same thing. A `zh:` entry is a SHA-256 of a published provider
 zip, so it is a checksum a consumer can actually verify an artifact against,
-and it goes into `hashes[]`. An `h1:` entry hashes the *contents* of the
+and it goes into `hashes[]`. An `h1:` entry hashes the _contents_ of the
 package rather than the archive, which is what lets Terraform verify an
 unpacked directory — and what makes it useless as an artifact checksum. Decode
 it and label it SHA-256 and you have handed the consumer a digest that will

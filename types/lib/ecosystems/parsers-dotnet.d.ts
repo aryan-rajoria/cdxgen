@@ -1,4 +1,23 @@
 /**
+ * Apply a version to a NuGet component so that the `version` field and the purl
+ * always agree.
+ *
+ * A .NET manifest can state a version that is not a version: an MSBuild property
+ * such as `$(JsonVersion)`, a range such as `[3.13.3,4.0)`, a wildcard such as
+ * `2.0.*`, or nothing at all. Such a declaration cannot go into a purl, so a
+ * component that kept it in `version` while its purl carried none described one
+ * package two ways. A scanner range matching on the versionless purl then reports
+ * every advisory published against the package name.
+ *
+ * The declaration is not lost: callers record it as `cdx:nuget:declared_version_range`.
+ *
+ * @param {Object} pkg Component to update in place. `name` must already be set.
+ * @param {String} [version] Version as stated or resolved, concrete or not
+ *
+ * @returns {Object} The same component
+ */
+export declare function applyNugetVersion(pkg: Object, version?: string): Object;
+/**
  * Method to parse .nupkg files
  *
  * @param {String} nupkgFile .nupkg file
