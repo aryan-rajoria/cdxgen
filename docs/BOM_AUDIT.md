@@ -78,6 +78,9 @@ The categories that work best in dry-run mode are the formulation-centric ones:
 - `ai-inventory` (alias for `ai-agent,mcp-server`)
 - `ai-oversight`
 - `ai-provenance` (alias for `ai-provenance,ai-oversight`)
+- `cargo` (alias for `cargo-security,cargo-compliance`), also available as `rust`
+- `cargo-security`
+- `cargo-compliance`
 - `cbom` (alias for `cbom-security,cbom-compliance`)
 - `cbom-compliance`
 - `cbom-security`
@@ -95,6 +98,8 @@ The categories that work best in dry-run mode are the formulation-centric ones:
 - `mcp-server`
 - `obom-runtime`
 - `vscode-extension`
+
+The `cargo` rules read the `cdx:cargo:*` properties cdxgen emits for Rust projects. The native-library rules - `CARGO-SEC-001`, `CARGO-SEC-002`, `CARGO-SEC-003` and `CARGO-COMP-001` - depend on the `links` and resolved-feature evidence that only `cargo metadata` provides, so generate the BOM with `--deep` before auditing it, otherwise those rules have nothing to assert on. `CARGO-SEC-004` and `CARGO-SEC-005` also look at `formulation.components`, because a build dependency and a proc-macro crate are moved there rather than staying in the assembly.
 
 `package-integrity` is only partially covered in dry-run mode. Rules that can be evaluated from the current BOM still run, but predictive upstream analysis is intentionally skipped. `asar-archive` rules are mostly dry-run friendly because cdxgen can still read ASAR headers and file contents natively, recurse into nested archives, and evaluate Electron header-signing metadata in memory, but embedded npm install-script findings remain partial because temp extraction is still blocked.
 

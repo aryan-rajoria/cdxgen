@@ -1,0 +1,132 @@
+# Cargo and Rust Rules
+# Categories: cargo-security, cargo-compliance
+# Evaluates the cdx:cargo:* properties cdxgen emits for Rust projects, with the
+# native-library rules keyed on the `links` evidence that only `--deep` can
+# produce.
+
+- id: CARGO-SEC-001
+  name: "Statically linked native library has no resolvable version"
+  description: "A -sys crate compiles a C library into the artifact, but nothing in the build states which version, so no advisory can be matched against it"
+  severity: medium
+  category: cargo-security
+  dry-run-support: full
+  condition: |
+    components[
+      $prop($, 'cdx:cargo:linkage') = 'static'
+      and ($not($exists(version)) or version = '')
+    ]
+  location: |
+    { "bomRef": $."bom-ref", "purl": purl }
+  message: "Native library '{{ name }}' is compiled into the artifact by '{{ $prop($, 'cdx:cargo:providedBy') }}' with no resolvable version"
+  mitigation: "Pin the library version explicitly, or build against a crate release whose version encodes the upstream version as build metadata. Until the version is known, the bundled library has to be reviewed by hand: a vulnerability scanner matching on purl cannot see it"
+  evidence: |
+    {
+      "nativeLibrary": $prop($, 'cdx:cargo:nativeLibrary'),
+      "providedBy": $prop($, 'cdx:cargo:providedBy'),
+      "linkageEvidence": $prop($, 'cdx:cargo:linkageEvidence'),
+      "versionCandidates": $prop($, 'cdx:cargo:upstreamVersionCandidates')
+    }
+
+- id: CARGO-SEC-002
+  name: "Native C library is vendored into the Rust artifact"
+  description: "The resolver enabled a vendoring feature, so the library's own advisories and license obligations travel with the binary rather than with the host"
+  severity: low
+  category: cargo-security
+  dry-run-support: full
+  condition: |
+    components[
+      $prop($, 'cdx:cargo:linkage') = 'static'
+      and $exists(version)
+      and version != ''
+    ]
+  location: |
+    { "bomRef": $."bom-ref", "purl": purl }
+  message: "Native library '{{ name }}' version '{{ version }}' is compiled into the artifact by '{{ $prop($, 'cdx:cargo:providedBy') }}'"
+  mitigation: "Track this library's advisories directly; the cargo dependency graph will not report them. Confirm that updating the -sys crate is enough to pick up a library fix, and that the vendored build is rebuilt when the library is patched"
+  evidence: |
+    {
+      "nativeLibrary": $prop($, 'cdx:cargo:nativeLibrary'),
+      "providedBy": $prop($, 'cdx:cargo:providedBy'),
+      "linkageEvidence": $prop($, 'cdx:cargo:linkageEvidence'),
+      "upstreamVersionSource": $prop($, 'cdx:cargo:upstreamVersionSource')
+    }
+
+- id: CARGO-SEC-003
+  name: "Rust artifact links a native library the environment must provide"
+  description: "A -sys crate links a C library dynamically, so the deployed artifact depends on a library version this BOM cannot state"
+  severity: low
+  category: cargo-security
+  dry-run-support: full
+  condition: |
+    components[$prop($, 'cdx:cargo:linkage') = 'dynamic']
+  location: |
+    { "bomRef": $."bom-ref", "purl": purl }
+  message: "Native library '{{ name }}' is linked dynamically by '{{ $prop($, 'cdx:cargo:providedBy') }}' and has to be present and patched on the deployment host"
+  mitigation: "Record the library version the deployment environment provides, through a container or host inventory. Where the artifact must be self-contained, enable the crate's vendoring feature so the version becomes part of this BOM"
+  evidence: |
+    {
+      "nativeLibrary": $prop($, 'cdx:cargo:nativeLibrary'),
+      "providedBy": $prop($, 'cdx:cargo:providedBy')
+    }
+
+- id: CARGO-COMP-001
+  name: "Vendored library version is ambiguous between shipped variants"
+  description: "The crate ships several variants of the library and the enabled features do not say which one is compiled, so the version was left unstated"
+  severity: medium
+  category: cargo-compliance
+  dry-run-support: full
+  condition: |
+    components[
+      $prop($, 'cdx:cargo:upstreamVersionCandidates') != null
+    ]
+  location: |
+    { "bomRef": $."bom-ref", "purl": purl }
+  message: "Native library '{{ name }}' could be any of '{{ $prop($, 'cdx:cargo:upstreamVersionCandidates') }}' depending on which variant '{{ $prop($, 'cdx:cargo:providedBy') }}' compiles"
+  mitigation: "Read the crate's build script to see which variant the enabled features select, then record the version. The variants can carry different licenses, so a license review cannot be completed from this BOM alone"
+  evidence: |
+    {
+      "versionCandidates": $prop($, 'cdx:cargo:upstreamVersionCandidates'),
+      "providedBy": $prop($, 'cdx:cargo:providedBy'),
+      "resolvedFeatures": $prop($, 'cdx:cargo:resolvedFeatures')
+    }
+
+- id: CARGO-SEC-004
+  name: "Crate resolved from a registry other than crates.io"
+  description: "A crate came from an alternative or private registry, which can publish any name and version, including ones that also exist on crates.io"
+  severity: medium
+  category: cargo-security
+  dry-run-support: full
+  condition: |
+    $append(components, formulation.components)[
+      $prop($, 'cdx:cargo:alternateRegistry') = 'true'
+    ]
+  location: |
+    { "bomRef": $."bom-ref", "purl": purl }
+  message: "Crate '{{ name }}' was resolved from '{{ $prop($, 'cdx:cargo:sourceUrl') }}' rather than crates.io"
+  mitigation: "Confirm the registry is one your organisation operates and that the crate name is not also claimed on crates.io, which would let a resolver change pull a different crate. Verify the registry authenticates publishers and serves checksums"
+  evidence: |
+    {
+      "sourceKind": $prop($, 'cdx:cargo:sourceKind'),
+      "sourceUrl": $prop($, 'cdx:cargo:sourceUrl')
+    }
+
+- id: CARGO-SEC-005
+  name: "Procedural macro crate executes during compilation"
+  description: "A proc-macro crate runs arbitrary code in the compiler on the build host, before any of the project's own code runs"
+  severity: low
+  category: cargo-security
+  dry-run-support: full
+  condition: |
+    $append(components, formulation.components)[
+      $prop($, 'cdx:cargo:procMacro') = 'true'
+    ]
+  location: |
+    { "bomRef": $."bom-ref", "purl": purl }
+  message: "Crate '{{ name }}' is a procedural macro and runs in the compiler on every build"
+  mitigation: "Treat this crate's compromise as equivalent to build-host compromise. Review its publisher and release history, pin it, and confirm the build host has no credentials a compile-time macro should not reach"
+  evidence: |
+    {
+      "dependencyKind": $prop($, 'cdx:cargo:dependencyKind'),
+      "publisher": $prop($, 'cdx:cargo:publisher'),
+      "resolvedFeatures": $prop($, 'cdx:cargo:resolvedFeatures')
+    }
