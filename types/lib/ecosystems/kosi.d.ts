@@ -21,6 +21,18 @@ export declare function analyzeKosiProject(src: string, options?: Object): Objec
 /**
  * Merges the reachable pass's evidence into the all pass's maps, mutating
  * the first argument.
+ *
+ * The reachable pass's slices are the all pass's INTERSECTED with call-graph
+ * reachability from the roots, so every key it produces is a key the all pass
+ * already has, and the unions below cannot add one. That made the second full
+ * `--backend resolved --deps` analysis — the most expensive thing this arm
+ * runs, and it runs it twice — contribute exactly nothing: the one fact it
+ * computes, reachability, was discarded at the merge (the P23 review's R144).
+ * It is recorded now, on the components whose evidence survived the
+ * intersection, which is the signal an SBOM consumer prioritises with. kosi's
+ * own schema deliberately stopped carrying `reachableFromRoots` per slice in
+ * P22 because there it was a mode-level fact wearing a per-slice field's
+ * clothes; here it is neither, it is the measured difference between two runs.
  */
 export declare function mergeKosiEvidence(all: any, reachable: any): any;
 /**
