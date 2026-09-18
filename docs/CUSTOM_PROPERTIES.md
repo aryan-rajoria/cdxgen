@@ -814,47 +814,47 @@ These properties are counts, categories, symbol names, and media types. They do 
 
 ##### Kosi metadata-level inventory
 
-| Property                               | Meaning                                                                            |
-| -------------------------------------- | ---------------------------------------------------------------------------------- |
-| `cdx:kosi:schemaVersion`               | Kosi report schema version.                                                        |
-| `cdx:kosi:toolVersion`                 | Kosi helper version.                                                               |
-| `cdx:kosi:kotlinVersion`               | Kotlin version the analysis ran against.                                           |
-| `cdx:kosi:sliceCount`                  | Total data-flow slices in the report.                                              |
-| `cdx:kosi:crossDependencySliceCount`   | Slices whose flow crosses a dependency boundary.                                   |
-| `cdx:kosi:bytecodeSummariesApplied`    | Dependency-tier bytecode summaries applied during taint propagation.               |
+| Property                             | Meaning                                                              |
+| ------------------------------------ | -------------------------------------------------------------------- |
+| `cdx:kosi:schemaVersion`             | Kosi report schema version.                                          |
+| `cdx:kosi:toolVersion`               | Kosi helper version.                                                 |
+| `cdx:kosi:kotlinVersion`             | Kotlin version the analysis ran against.                             |
+| `cdx:kosi:sliceCount`                | Total data-flow slices in the report.                                |
+| `cdx:kosi:crossDependencySliceCount` | Slices whose flow crosses a dependency boundary.                     |
+| `cdx:kosi:bytecodeSummariesApplied`  | Dependency-tier bytecode summaries applied during taint propagation. |
 
 ##### Kosi component-level inventory
 
-| Property                        | Meaning                                                                                                                                  |
-| ------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------- |
-| `cdx:kosi:dataFlowCategories`   | Source/sink categories of the slices attached to this component.                                                                         |
-| `cdx:kosi:dataFlowRuleName`     | Name of the rule that produced the slice.                                                                                                |
-| `cdx:kosi:dataFlowSliceCount`   | Slices attached to this component.                                                                                                       |
-| `cdx:kosi:crossesDependency`    | `true` when at least one slice crosses a dependency boundary.                                                                            |
-| `cdx:kosi:pathKind`             | How complete the recorded trace is: `complete`, `partial`, or `symbol-only`.                                                             |
-| `cdx:kosi:reachableFromRoots`   | `true` when the component's evidence survived intersection with call-graph reachability from the declared roots; absent means not measured. |
-| `cdx:kosi:cryptoFlow`           | `sourceCategory->sinkCategory` of a crypto-relevant flow attached to this component.                                                      |
+| Property                      | Meaning                                                                                                                                     |
+| ----------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------- |
+| `cdx:kosi:dataFlowCategories` | Source/sink categories of the slices attached to this component.                                                                            |
+| `cdx:kosi:dataFlowRuleName`   | Name of the rule that produced the slice.                                                                                                   |
+| `cdx:kosi:dataFlowSliceCount` | Slices attached to this component.                                                                                                          |
+| `cdx:kosi:crossesDependency`  | `true` when at least one slice crosses a dependency boundary.                                                                               |
+| `cdx:kosi:pathKind`           | How complete the recorded trace is: `complete`, `partial`, or `symbol-only`.                                                                |
+| `cdx:kosi:reachableFromRoots` | `true` when the component's evidence survived intersection with call-graph reachability from the declared roots; absent means not measured. |
+| `cdx:kosi:cryptoFlow`         | `sourceCategory->sinkCategory` of a crypto-relevant flow attached to this component.                                                        |
 
 ##### Kosi crypto-asset inventory
 
-| Property                      | Meaning                                                                    |
-| ----------------------------- | --------------------------------------------------------------------------- |
-| `cdx:kosi:crypto:form`        | How the algorithm was expressed at the call site, such as a literal.        |
-| `cdx:kosi:crypto:resolution`  | How the algorithm name was resolved (constant fold, literal, unresolved).   |
-| `cdx:kosi:crypto:function`    | Function name associated with related cryptographic material.               |
+| Property                     | Meaning                                                                   |
+| ---------------------------- | ------------------------------------------------------------------------- |
+| `cdx:kosi:crypto:form`       | How the algorithm was expressed at the call site, such as a literal.      |
+| `cdx:kosi:crypto:resolution` | How the algorithm name was resolved (constant fold, literal, unresolved). |
+| `cdx:kosi:crypto:function`   | Function name associated with related cryptographic material.             |
 
 ##### Kosi service and endpoint inventory
 
-| Property                            | Meaning                                                            |
-| ----------------------------------- | ------------------------------------------------------------------- |
-| `cdx:kosi:service:protocol`         | Protocol of an outbound service call.                              |
-| `cdx:kosi:service:resolution`       | How the service target was resolved (literal, config, unresolved). |
-| `cdx:kosi:service:clientLibrary`    | Client library the outbound call uses.                             |
-| `cdx:kosi:endpoint:framework`       | Framework that declares the inbound endpoint.                      |
-| `cdx:kosi:endpoint:handler`         | Handler symbol or canonical name serving the endpoint.             |
-| `cdx:kosi:endpoint:authentication`  | Authentication scheme required by the endpoint.                    |
-| `cdx:kosi:endpoint:consumes`        | Media types the endpoint accepts.                                  |
-| `cdx:kosi:endpoint:produces`        | Media types the endpoint returns.                                  |
+| Property                           | Meaning                                                            |
+| ---------------------------------- | ------------------------------------------------------------------ |
+| `cdx:kosi:service:protocol`        | Protocol of an outbound service call.                              |
+| `cdx:kosi:service:resolution`      | How the service target was resolved (literal, config, unresolved). |
+| `cdx:kosi:service:clientLibrary`   | Client library the outbound call uses.                             |
+| `cdx:kosi:endpoint:framework`      | Framework that declares the inbound endpoint.                      |
+| `cdx:kosi:endpoint:handler`        | Handler symbol or canonical name serving the endpoint.             |
+| `cdx:kosi:endpoint:authentication` | Authentication scheme required by the endpoint.                    |
+| `cdx:kosi:endpoint:consumes`       | Media types the endpoint accepts.                                  |
+| `cdx:kosi:endpoint:produces`       | Media types the endpoint returns.                                  |
 
 #### Example payload fragments
 
