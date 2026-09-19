@@ -179,9 +179,9 @@
   "optionalDependencies": {
     "@appthreat/atom": "3.1.1",
     "@appthreat/atom-parsetools": "1.6.0",
-    "@bufbuild/protobuf": "2.14.1",
+    "@bufbuild/protobuf": "2.15.0",
     "@cdxgen/cdx-hbom": "0.5.1",
-    "@cdxgen/cdx-proto": "2.2.0",
+    "@cdxgen/cdx-proto": "2.3.0",
     "@cdxgen/cdxgen-plugins-bin": "3.1.0",
     "@cdxgen/cdxgen-plugins-bin-darwin-amd64": "3.1.0",
     "@cdxgen/cdxgen-plugins-bin-darwin-arm64": "3.1.0",
