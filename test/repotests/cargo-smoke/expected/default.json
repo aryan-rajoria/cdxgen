@@ -593,6 +593,10 @@
       "name": "base64_vuln",
       "properties": [
         {
+          "name": "cdx:cargo:sourceKind",
+          "value": "local"
+        },
+        {
           "name": "internal:SrcFile",
           "value": "$ROOT/Cargo.lock"
         }
@@ -904,6 +908,10 @@
       "group": "",
       "name": "cargo-audit",
       "properties": [
+        {
+          "name": "cdx:cargo:sourceKind",
+          "value": "local"
+        },
         {
           "name": "internal:SrcFile",
           "value": "$ROOT/Cargo.lock"
@@ -8529,7 +8537,7 @@
       "dependsOn": [
         "pkg:cargo/cfg-if@0.1.10",
         "pkg:cargo/libc@0.2.66",
-        "pkg:cargo/wasi@0.9.0+wasi-snapshot-preview1"
+        "pkg:cargo/wasi@0.9.0%2Bwasi-snapshot-preview1"
       ],
       "ref": "pkg:cargo/getrandom@0.1.14"
     },
@@ -8863,14 +8871,14 @@
       "dependsOn": [
         "pkg:cargo/cc@1.0.50"
       ],
-      "ref": "pkg:cargo/openssl-src@111.6.1+1.1.1d"
+      "ref": "pkg:cargo/openssl-src@111.6.1%2B1.1.1d"
     },
     {
       "dependsOn": [
         "pkg:cargo/autocfg@0.1.7",
         "pkg:cargo/cc@1.0.50",
         "pkg:cargo/libc@0.2.66",
-        "pkg:cargo/openssl-src@111.6.1+1.1.1d",
+        "pkg:cargo/openssl-src@111.6.1%2B1.1.1d",
         "pkg:cargo/pkg-config@0.3.17",
         "pkg:cargo/vcpkg@0.2.8"
       ],
@@ -9498,7 +9506,7 @@
     },
     {
       "dependsOn": [],
-      "ref": "pkg:cargo/wasi@0.9.0+wasi-snapshot-preview1"
+      "ref": "pkg:cargo/wasi@0.9.0%2Bwasi-snapshot-preview1"
     },
     {
       "dependsOn": [
