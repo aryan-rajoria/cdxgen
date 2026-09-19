@@ -40,11 +40,11 @@
     "description": "Korean SEED algorithm, CBC mode"
   },
   "seedOFB": {
-    "oid": "1.2.410.200004.1.5",
+    "oid": "1.2.410.200004.1.6",
     "description": "Korean SEED algorithm, OFB mode"
   },
   "seedCFB": {
-    "oid": "1.2.410.200004.1.6",
+    "oid": "1.2.410.200004.1.5",
     "description": "Korean SEED algorithm, CFB mode"
   },
   "seedMAC": {
@@ -233,11 +233,11 @@
   },
   "cryptoProECDH256": {
     "oid": "1.2.643.7.1.1.6.1",
-    "description": "CryptoPro ECC DH algorithm for GOST R 34.10-2012 256 bit key"
+    "description": "TC26 GOST R 34.10-2012 256-bit key agreement"
   },
   "cryptoProECDH512": {
     "oid": "1.2.643.7.1.1.6.2",
-    "description": "CryptoPro ECC DH algorithm for GOST R 34.10-2012 512 bit key"
+    "description": "TC26 GOST R 34.10-2012 512-bit key agreement"
   },
   "dsa": {
     "oid": "1.2.840.10040.4.1",
@@ -932,8 +932,8 @@
     "description": "Teletrust algorithm"
   },
   "rsaSignature": {
-    "oid": "1.3.36.3.3.1",
-    "description": "Teletrust signature algorithm"
+    "oid": "1.3.14.3.2.11",
+    "description": "RSA signature (RSADSI)"
   },
   "rsaSignatureWithsha1": {
     "oid": "1.3.36.3.3.1.1",
@@ -1412,8 +1412,8 @@
     "description": "Novell encryption algorithm"
   },
   "sha-1": {
-    "oid": "2.16.840.1.113719.1.2.8.82",
-    "description": "Novell digest algorithm"
+    "oid": "1.3.14.3.2.26",
+    "description": "SHA-1 secure hash standard (OIW)"
   },
   "rc2BSafe1Cbc": {
     "oid": "2.16.840.1.113719.1.2.8.92",
@@ -1959,10 +1959,6 @@
     "oid": "1.2.156.10197.1.301.3",
     "description": "Chinese Cryptography Standardization Technology Committee (CCSTC)"
   },
-  "sm2sign_with_": {
-    "oid": "1.2.156.10197.1.501",
-    "description": "Chinese Cryptography Standardization Technology Committee (CCSTC)"
-  },
   "PBKDF2": {
     "oid": "1.2.840.113549.1.5.12",
     "description": "PBKDF2 key derivation algorithm"
@@ -1995,25 +1991,17 @@
     "oid": "1.2.840.113549.1.5.11",
     "description": "Password Based Encryption Algorithm. Uses RC2 in Cipher Block Chaining Mode (RC2-CBC)."
   },
-  "ml-dsa": {
-    "oid": "2.16.840.1.101.3.4.19",
-    "description": "ML-DSA post-quantum signature algorithm (FIPS 204)"
-  },
   "ml-dsa-44": {
-    "oid": "2.16.840.1.101.3.4.19.1",
+    "oid": "2.16.840.1.101.3.4.3.17",
     "description": "ML-DSA-44 post-quantum signature (FIPS 204)"
   },
   "ml-dsa-65": {
-    "oid": "2.16.840.1.101.3.4.19.2",
+    "oid": "2.16.840.1.101.3.4.3.18",
     "description": "ML-DSA-65 post-quantum signature (FIPS 204)"
   },
   "ml-dsa-87": {
-    "oid": "2.16.840.1.101.3.4.19.3",
+    "oid": "2.16.840.1.101.3.4.3.19",
     "description": "ML-DSA-87 post-quantum signature (FIPS 204)"
-  },
-  "ml-kem": {
-    "oid": "2.16.840.1.101.3.4.4",
-    "description": "ML-KEM post-quantum key encapsulation mechanism (FIPS 203)"
   },
   "ml-kem-512": {
     "oid": "2.16.840.1.101.3.4.4.1",
@@ -2027,16 +2015,60 @@
     "oid": "2.16.840.1.101.3.4.4.3",
     "description": "ML-KEM-1024 post-quantum key encapsulation (FIPS 203)"
   },
-  "slh-dsa": {
-    "oid": "2.16.840.1.101.3.4.20",
-    "description": "SLH-DSA stateless hash-based signature algorithm (FIPS 205)"
-  },
   "x25519": {
     "oid": "1.3.101.110",
     "description": "X25519 Diffie-Hellman key agreement (RFC 7748)"
   },
-  "aes-key-wrap": {
-    "oid": "2.16.840.1.101.3.4.1.5",
-    "description": "AES Key Wrap (RFC 3394)"
+  "slh-dsa-sha2-128s": {
+    "oid": "2.16.840.1.101.3.4.3.20",
+    "description": "SLH-DSA-SHA2-128s hash-based signature (FIPS 205)"
+  },
+  "slh-dsa-sha2-128f": {
+    "oid": "2.16.840.1.101.3.4.3.21",
+    "description": "SLH-DSA-SHA2-128f hash-based signature (FIPS 205)"
+  },
+  "slh-dsa-sha2-192s": {
+    "oid": "2.16.840.1.101.3.4.3.22",
+    "description": "SLH-DSA-SHA2-192s hash-based signature (FIPS 205)"
+  },
+  "slh-dsa-sha2-192f": {
+    "oid": "2.16.840.1.101.3.4.3.23",
+    "description": "SLH-DSA-SHA2-192f hash-based signature (FIPS 205)"
+  },
+  "slh-dsa-sha2-256s": {
+    "oid": "2.16.840.1.101.3.4.3.24",
+    "description": "SLH-DSA-SHA2-256s hash-based signature (FIPS 205)"
+  },
+  "slh-dsa-sha2-256f": {
+    "oid": "2.16.840.1.101.3.4.3.25",
+    "description": "SLH-DSA-SHA2-256f hash-based signature (FIPS 205)"
+  },
+  "slh-dsa-shake-128s": {
+    "oid": "2.16.840.1.101.3.4.3.26",
+    "description": "SLH-DSA-SHAKE-128s hash-based signature (FIPS 205)"
+  },
+  "slh-dsa-shake-128f": {
+    "oid": "2.16.840.1.101.3.4.3.27",
+    "description": "SLH-DSA-SHAKE-128f hash-based signature (FIPS 205)"
+  },
+  "slh-dsa-shake-192s": {
+    "oid": "2.16.840.1.101.3.4.3.28",
+    "description": "SLH-DSA-SHAKE-192s hash-based signature (FIPS 205)"
+  },
+  "slh-dsa-shake-192f": {
+    "oid": "2.16.840.1.101.3.4.3.29",
+    "description": "SLH-DSA-SHAKE-192f hash-based signature (FIPS 205)"
+  },
+  "slh-dsa-shake-256s": {
+    "oid": "2.16.840.1.101.3.4.3.30",
+    "description": "SLH-DSA-SHAKE-256s hash-based signature (FIPS 205)"
+  },
+  "slh-dsa-shake-256f": {
+    "oid": "2.16.840.1.101.3.4.3.31",
+    "description": "SLH-DSA-SHAKE-256f hash-based signature (FIPS 205)"
+  },
+  "sm2sign_with_sm3": {
+    "oid": "1.2.156.10197.1.501",
+    "description": "Chinese Cryptography Standardization Technology Committee (CCSTC)"
   }
 }
