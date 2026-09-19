@@ -85,6 +85,15 @@ export declare let RUSTC_CMD: string;
 export declare let GO_CMD: string;
 /** Resolved Cargo executable command (CARGO_CMD env var, or "cargo"). */
 export declare let CARGO_CMD: string;
+/**
+ * Target triple the cargo resolve graph is filtered to, so that a
+ * cross-compiled project can be described for the triple it ships on rather
+ * than for the union of every triple its lock file covers.
+ *
+ * `CDXGEN_CARGO_TARGET` is cdxgen's own name for it; `CARGO_BUILD_TARGET` is
+ * cargo's standard variable, which a cross-compiling build already sets.
+ */
+export declare const CARGO_TARGET: string | undefined;
 /** Resolved Clojure CLI executable command (CLJ_CMD env var, or "clj"). */
 export declare let CLJ_CMD: string;
 /** Resolved Leiningen executable command (LEIN_CMD env var, or "lein"). */

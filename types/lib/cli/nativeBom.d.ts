@@ -13,14 +13,7 @@ export declare function getCargoCacheDir(): string | undefined;
  * @returns {Promise<Object | undefined>} Promise resolving to a BOM object or `undefined`
  */
 export declare function createGoBom(path: string, options: Object): Promise<Object | undefined>;
-/**
- * Function to create bom string for Rust projects
- *
- * @param {string} path to the project
- * @param {Object} options Parse options from the cli
- * @returns {Promise<Object|undefined>} Promise resolving to a BOM object or undefined
- */
-export declare function createRustBom(path: string, options: Object): Promise<Object | undefined>;
+export declare function createRustBom(path: any, options: any): Promise<Object | undefined>;
 /**
  * Parses a `.crate` file name into a CycloneDX component (name, version, purl,
  * bom-ref, and source/cache properties). Returns undefined when the file name

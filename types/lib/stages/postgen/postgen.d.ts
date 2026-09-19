@@ -27,6 +27,39 @@ export declare function applyMetadata(bomJson: Object, options: Object): Object;
  */
 export declare function applyStandards(bomJson: Object, options: Object): Object;
 /**
+ * Move the build-time-only components out of `components[]`, which describes
+ * the delivered assembly, and hand them to the formulation section, which is
+ * where CycloneDX describes how the assembly was produced.
+ *
+ * Their bom-refs stay valid because the formulation components live in the same
+ * document, so the dependency graph is left intact. `formulation` exists from
+ * CycloneDX 1.5, so an older document keeps them in `components[]` with their
+ * `cdx:cargo:hostOnly` marker rather than losing them.
+ *
+ * @param {Object} bomJson BOM JSON object
+ * @param {Object} options CLI options
+ *
+ * @returns {Object[]} The components removed from `components[]`
+ */
+export declare function extractBuildOnlyComponents(bomJson: Object, options: Object): Object[];
+/**
+ * Re-apply the `--required-only` filter once the evidence stage has attached
+ * occurrence and callstack data.
+ *
+ * A manifest can only say that a dependency is optional; the evidence says
+ * whether it is reached. A component the analyzers observed in the sources is
+ * promoted to `required` so it survives the filter, while an optional component
+ * with no observed usage is dropped as before. A component scoped `excluded` -
+ * a dev or test dependency - keeps that scope: an occurrence inside the test
+ * sources is not evidence that it ships.
+ *
+ * @param {Object} bomJson BOM JSON object carrying evidence
+ * @param {Object} options CLI options
+ *
+ * @returns {Object} Filtered BOM JSON
+ */
+export declare function applyEvidenceBasedFilter(bomJson: Object, options: Object): Object;
+/**
  * Filter BOM based on options
  *
  * @param {Object} bomJson BOM JSON Object

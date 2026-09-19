@@ -905,6 +905,29 @@
     },
     "docs": "https://cyclonedx.github.io/cdxgen/#/PROJECT_TYPES?id=rust"
   },
+  "rust.cargo-metadata-unavailable": {
+    "ecosystem": "rust",
+    "kind": "command.failed",
+    "impact": "components",
+    "title": "cargo metadata could not be executed, so dependency kinds and platform gates were recovered from the manifests alone",
+    "targetTier": "lockfile",
+    "actions": [
+      {
+        "kind": "build",
+        "command": "{{cargo}} metadata --format-version 1 --locked"
+      },
+      {
+        "kind": "rerun"
+      }
+    ],
+    "verify": {
+      "rules": [
+        "BF-RS-001"
+      ],
+      "expectTier": "lockfile"
+    },
+    "docs": "https://cyclonedx.github.io/cdxgen/#/PROJECT_TYPES?id=rust"
+  },
   "php.composer.missing": {
     "ecosystem": "php",
     "kind": "evidence.degraded",
