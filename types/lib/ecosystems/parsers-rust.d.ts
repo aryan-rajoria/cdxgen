@@ -182,6 +182,68 @@ export declare function applyCargoDependencyKindMetadata(pkgList: object[], roll
     resolveIsComplete?: boolean;
 }): object[];
 /**
+ * Recover the upstream version of a native library from the version of the
+ * crate that ships it.
+ *
+ * The `-sys` and `-src` crates carry the upstream version as semver build
+ * metadata, because the crate's own version tracks the binding's releases
+ * rather than the library's: `openssl-src@300.6.1+3.6.3` ships OpenSSL 3.6.3
+ * and `curl-sys@0.4.74+curl-8.9.0` ships curl 8.9.0.
+ *
+ * @param {string} crateVersion Version of the providing crate
+ * @returns {string} Upstream version, or an empty string when it is not encoded
+ */
+export declare function cargoUpstreamVersionFromCrateVersion(crateVersion: string): string;
+/**
+ * Recover the version of a vendored native library from the C source the crate
+ * ships.
+ *
+ * A `-sys` crate that bundles its library carries the upstream version in a
+ * header define - `ZLIB_VERSION`, `SQLITE_VERSION`, `OPENSSL_VERSION_TEXT` -
+ * which is the only statement of the version for the crates that do not encode
+ * it in their own version. A crate often ships more than one variant, so a
+ * candidate sitting in a directory named after a feature this build did not
+ * enable is dropped: `libz-sys` ships both `src/zlib` and `src/zlib-ng`, and
+ * only one of them is compiled.
+ *
+ * @param {object} args Resolution inputs
+ * @param {string} args.crateDir Directory holding the crate's unpacked source
+ * @param {string} args.links The crate's `links` value
+ * @param {string} args.libraryName Normalized library name
+ * @param {string[]} [args.declaredFeatures] Features the crate declares
+ * @param {Set<string>} [args.resolvedFeatures] Features the resolver enabled
+ * @returns {{version: string, evidence: string, candidates: string[]}} Version and where it came from
+ */
+export declare function resolveCargoVendoredLibraryVersion({ crateDir, links, libraryName, declaredFeatures, resolvedFeatures, }: {
+    crateDir: string;
+    links: string;
+    libraryName: string;
+    declaredFeatures?: string[];
+    resolvedFeatures?: Set<string>;
+}): {
+    version: string;
+    evidence: string;
+    candidates: string[];
+};
+/**
+ * Build components for the native libraries that `-sys` crates link.
+ *
+ * A crate declaring `links = "openssl"` puts a C library into the artifact that
+ * the cargo dependency graph cannot describe: its advisories and its license
+ * obligations belong to OpenSSL, not to the Rust binding. When the resolver
+ * enabled a vendoring feature, that library is compiled into the binary, which
+ * makes it a component of the delivered assembly.
+ *
+ * @param {Map<string, object>} packageInfo Per-package facts from {@link parseCargoMetadataResolve}
+ * @param {Map<string, Array<object>>} edges Dependency edges keyed by component key
+ * @param {Map<string, object>} rollup Effective kinds, used to skip crates no build reaches
+ * @returns {{components: object[], dependencies: object[]}} Native library components and their edges
+ */
+export declare function buildCargoNativeLibraryComponents(packageInfo: Map<string, object>, edges: Map<string, Array<object>>, rollup: Map<string, object>): {
+    components: object[];
+    dependencies: object[];
+};
+/**
  * Parses tab-separated cargo-auditable binary metadata output and returns a list
  * of Rust package components. Optionally fetches crates.io metadata when
  * FETCH_LICENSE is enabled.

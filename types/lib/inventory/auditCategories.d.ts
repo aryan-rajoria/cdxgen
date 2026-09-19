@@ -6,6 +6,8 @@ export declare const CBOM_AUDIT_CATEGORIES: readonly string[];
 export declare const HOST_TOPOLOGY_AUDIT_CATEGORIES: readonly string[];
 /** Frozen list of Golem (Go Evinse) audit categories. */
 export declare const GOLEM_AUDIT_CATEGORIES: readonly string[];
+/** Frozen list of Cargo (Rust) audit categories. */
+export declare const CARGO_AUDIT_CATEGORIES: readonly string[];
 /**
  * Frozen list of audit categories that never activate on their own. These
  * rule packs serve a specific feature (`--introspect` for build-fidelity) and
@@ -28,10 +30,12 @@ export declare const BOM_AUDIT_CATEGORY_ALIASES: Readonly<{
     "ai-bom": string[];
     "ai-provenance": string[];
     "ai-oversight": string[];
+    cargo: string[];
     cbom: string[];
     "crypto-bom": string[];
     golem: string[];
     hbom: string[];
+    rust: string[];
     host: string[];
 }>;
 /**
