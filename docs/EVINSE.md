@@ -135,6 +135,14 @@ For .NET projects, `evinse` uses the bundled `dosai` helper from `@cdxgen/cdxgen
 - `dosai ApiEndpoints` are converted into CycloneDX `services` for SaaSBOM views.
 - `dosai dataflows` adds call-stack evidence when `--with-data-flow` is used.
 - `--profile research` enables both data-flow and crypto analysis for .NET projects.
+- dosai schema 5.0.0 (.NET 11 / C# 15) outputs are consumed as-is: the schema
+  change over 4.x is additive, so occurrence, call-stack, service, and crypto
+  evidence keeps working. Post-quantum algorithms (`ML-DSA`, `ML-KEM`,
+  `SLH-DSA`) map to CBOM components with their NIST parameter-set OIDs when
+  the call-site context names one (e.g. `MLDsaAlgorithm.MLDsa65`); `X25519`
+  maps always. Families without a single OID, such as generic AES key wrap,
+  stay out of the BOM rather than carrying a wrong OID. Set `DOSAI_CMD` to
+  point at a newer dosai build than the bundled one.
 
 ```shell
 cdxgen -t dotnet --deep --evidence -o bom.json .

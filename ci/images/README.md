@@ -83,6 +83,7 @@ Below table summarizes all available container image versions. These images incl
 | Dotnet     | .Net 8                       | ghcr.io/cdxgen/cdxgen-debian-dotnet8:v13, ghcr.io/cdxgen/cdxgen-dotnet8:v13 (amd64 only)                                                                                                                            | .Net 8 version. Debian and SLE-based variants.                                                         |
 | Dotnet     | .Net 9                       | ghcr.io/cdxgen/cdxgen-debian-dotnet9:v13, ghcr.io/cdxgen/cdxgen-alpine-dotnet9:v13, ghcr.io/cdxgen/cdxgen-dotnet9:v13 (amd64 only)                                                                               | .Net 9 version. Debian, Alpine, and SLE-based variants.                                                |
 | Dotnet     | .Net 10                      | ghcr.io/cdxgen/cdxgen-ubuntu-dotnet10:v13, ghcr.io/cdxgen/cdxgen-alpine-dotnet10:v13                                                                                                                                | .Net 10 version. Ubuntu and Alpine-based variants.                                                     |
+| Dotnet     | .Net 11                      | ghcr.io/cdxgen/cdxgen-ubuntu-dotnet11:v13, ghcr.io/cdxgen/cdxgen-alpine-dotnet11:v13                                                                                                                                | .Net 11 version. Ubuntu (resolute) and Alpine-based variants.                                           |
 | php        | 8.3                          | ghcr.io/cdxgen/cdxgen-debian-php83:v13, ghcr.io/cdxgen/cdxgen-alpine-php83:v13                                                                                                                                      | php 8.3 version. Debian and Alpine-based variants.                                                     |
 | php        | 8.4                          | ghcr.io/cdxgen/cdxgen-debian-php84:v13, ghcr.io/cdxgen/cdxgen-alpine-php84:v13                                                                                                                                      | php 8.4 version. Debian and Alpine-based variants.                                                     |
 | php        | 8.5                          | ghcr.io/cdxgen/cdxgen-debian-php85:v13, ghcr.io/cdxgen/cdxgen-alpine-php85:v13                                                                                                                                      | php 8.5 version. Debian and Alpine-based variants.                                                     |
@@ -121,7 +122,7 @@ but a few combinations do not exist upstream or are intentionally left out:
 
 | Combination                   | Reason                                                                                                                                                                                                  |
 | ----------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| Debian .NET 10                | Microsoft publishes no `dotnet/sdk:10.0` debian image (only alpine, azurelinux, noble/resolute). Use the Ubuntu or Alpine .NET 10 images.                                                                |
+| Debian .NET 10 / 11          | Microsoft publishes no `dotnet/sdk:10.0` or `11.0` debian image (only alpine, azurelinux, noble/resolute — for 11 the plain tag is Ubuntu resolute). Use the Ubuntu or Alpine .NET 10/11 images.        |
 | Alpine Swift                  | The official Swift images have no Alpine tags. Use `cdxgen-debian-swift`.                                                                                                                               |
 | Alpine Dart                   | The official Dart images are Debian-based only. Use `cdxgen-debian-dart3`.                                                                                                                              |
 | Ruby 3.5                      | Upstream Ruby moved from 3.4 directly to 4.0, so there is no 3.5 base image.                                                                                                                            |
@@ -237,6 +238,18 @@ Dotnet 9.0 (SLE)
 
 ```shell
 docker run --rm --platform=linux/amd64 -e CDXGEN_DEBUG_MODE=verbose -v /tmp:/tmp -v $(pwd):/app:rw -t ghcr.io/cdxgen/cdxgen-dotnet9:v13 -r /app -o /app/bom.json -t dotnet
+```
+
+Dotnet 11.0 (Ubuntu resolute)
+
+```shell
+docker run --rm -e CDXGEN_DEBUG_MODE=verbose -v /tmp:/tmp -v $(pwd):/app:rw -t ghcr.io/cdxgen/cdxgen-ubuntu-dotnet11:v13 -r /app -o /app/bom.json -t dotnet11
+```
+
+Dotnet 11.0 (Alpine version)
+
+```shell
+docker run --rm -e CDXGEN_DEBUG_MODE=verbose -v /tmp:/tmp -v $(pwd):/app:rw -t ghcr.io/cdxgen/cdxgen-alpine-dotnet11:v13 -r /app -o /app/bom.json -t dotnet11
 ```
 
 NOTE: SLE dotnet images are only available for the `amd64` architecture. See this [discussion](https://github.com/SUSE/bci/discussions/41). Use `--platform=linux/amd64` as shown when using the SLE images. We highly recommend the debian images for dotnet.
