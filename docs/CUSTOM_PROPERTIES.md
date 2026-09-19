@@ -853,6 +853,7 @@ These properties are counts, categories, symbol names, and media types. They do 
 | `cdx:kosi:dataFlowSliceCount` | Slices attached to this component.                                                                                                          |
 | `cdx:kosi:crossesDependency`  | `true` when at least one slice crosses a dependency boundary.                                                                               |
 | `cdx:kosi:pathKind`           | How complete the recorded trace is: `complete`, `partial`, or `symbol-only`.                                                                |
+| `cdx:kosi:callstack` (evidence) | P24: the slice's named hops as callstack evidence — every frame carries its `(function, file, line)` and its `role` in the frame's `module` field (`source`, `move`, `call`, `return`, `dispatch`, `summary`, `sanitizer-not-applied`, `sink`), with the callee-internal hops spliced in at every summary boundary. Preferred over the pre-P24 node-derived callstack whenever kosi publishes `frames[]` |
 | `cdx:kosi:reachableFromRoots` | `true` when the component's evidence survived intersection with call-graph reachability from the declared roots; absent means not measured. |
 | `cdx:kosi:cryptoFlow`         | `sourceCategory->sinkCategory` of a crypto-relevant flow attached to this component.                                                        |
 
