@@ -79,12 +79,18 @@ jobs:
             distro: alpine
           - lang: dotnet10
             distro: alpine
+          - lang: dotnet11
+            distro: alpine
 
           - lang: dotnet9
             distro: debian
             runner: ubuntu-latest
 
           - lang: dotnet10
+            distro: ubuntu
+            runner: ubuntu-latest
+
+          - lang: dotnet11
             distro: ubuntu
             runner: ubuntu-latest
 
