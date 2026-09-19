@@ -833,6 +833,8 @@ Use component-level values to judge dependency posture: data-flow categories and
 Use crypto-asset and service values to judge CBOM and API pivots: asset form and resolution, related-material function, crypto flow shape, service protocol/resolution/client library, and endpoint framework/handler/authentication/media types.
 These properties are counts, categories, symbol names, and media types. They do not copy key material, plaintext, ciphertext, request values, or source contents into the BOM. Handler names and internal package paths can still reveal internal structure, so review an enriched BOM before sharing it outside the organization.
 
+Data-flow findings also arrive as CycloneDX **callstack evidence**, not as a property: from kosi's per-slice `frames[]` when the report carries them (each frame naming its function, file and line, with its role — `source`, `move`, `call`, `return`, `dispatch`, `summary`, `sanitizer-not-applied`, `sink` — in the frame's `module` field, the same convention the older node-derived walk used for its node kind), and from the node walk for reports that predate them.
+
 ##### Kosi metadata-level inventory
 
 | Property                             | Meaning                                                              |
