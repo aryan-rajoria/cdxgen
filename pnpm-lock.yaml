@@ -244,15 +244,15 @@ importers:
         specifier: 4.0.0
         version: 4.0.0
       yaml:
-        specifier: 2.9.0
-        version: 2.9.0
+        specifier: 2.9.1
+        version: 2.9.1
       yargs:
         specifier: 18.1.0
         version: 18.1.0
     devDependencies:
       '@biomejs/biome':
-        specifier: 2.5.13
-        version: 2.5.13
+        specifier: 2.5.14
+        version: 2.5.14
       esmock:
         specifier: 2.7.6
         version: 2.7.6
@@ -270,17 +270,17 @@ importers:
         specifier: 3.1.1
         version: 3.1.1
       '@appthreat/atom-parsetools':
-        specifier: 1.6.0
-        version: 1.6.0
+        specifier: 1.7.0
+        version: 1.7.0
       '@bufbuild/protobuf':
-        specifier: 2.14.1
-        version: 2.14.1
+        specifier: 2.15.0
+        version: 2.15.0
       '@cdxgen/cdx-hbom':
         specifier: 0.5.1
         version: 0.5.1
       '@cdxgen/cdx-proto':
-        specifier: 2.2.0
-        version: 2.2.0
+        specifier: 2.3.0
+        version: 2.3.0
       '@cdxgen/cdxgen-plugins-bin':
         specifier: 3.1.0
         version: 3.1.0
@@ -315,14 +315,14 @@ importers:
         specifier: 3.1.0
         version: 3.1.0
       '@cdxgen/safer-exec':
-        specifier: 0.15.0
-        version: 0.15.0
+        specifier: 0.16.0
+        version: 0.16.0
       body-parser:
         specifier: 2.3.0
         version: 2.3.0
       compression:
-        specifier: 1.8.1
-        version: 1.8.1
+        specifier: 1.8.2
+        version: 1.8.2
       connect:
         specifier: 3.7.0
         version: 3.7.0
@@ -372,8 +372,8 @@ packages:
     os: [linux]
     libc: [glibc]
 
-  '@appthreat/atom-parsetools@1.6.0':
-    resolution: {integrity: sha512-LWevs80nuvI4dfS0Y5Rq8tuM81fUudT6CTDjHhEwjwZttLaVPuQrsHnp7+3YSRWFKqNTv8ZaQs4Y57MVQ1Ygxg==, tarball: https://registry.npmjs.org/@appthreat/atom-parsetools/-/atom-parsetools-1.6.0.tgz}
+  '@appthreat/atom-parsetools@1.7.0':
+    resolution: {integrity: sha512-PT51auS7P0CErUNV95TQ3Y/y/rAQtGeRmCGoGw3iYWIsPFro+dd4D1TSJN02H7FMtiEgy5dqbFAMK0raBR3bKw==, tarball: https://registry.npmjs.org/@appthreat/atom-parsetools/-/atom-parsetools-1.7.0.tgz}
     engines: {node: '>=22.0.0'}
     hasBin: true
 
@@ -429,77 +429,74 @@ packages:
     resolution: {integrity: sha512-eVdMqi3ej5aHhyQ2Si6yD2cAWeV8FJK9UrhK5aL0Sd8hu5GhT+YswhVNbVheOGVYMg8kuGuMaUpkB3stjj4z8A==, tarball: https://registry.npmjs.org/@babel/types/-/types-8.0.5.tgz}
     engines: {node: ^22.18.0 || >=24.11.0}
 
-  '@biomejs/biome@2.5.13':
-    resolution: {integrity: sha512-+SEC/mFk1a+5mvUANZgbZTaiZXs1nj4iMhL/PHiqDT5TPUEPFIlliEtkKKZB4N862yylHC3UI+/Sj2I0HJEqhA==, tarball: https://registry.npmjs.org/@biomejs/biome/-/biome-2.5.13.tgz}
+  '@biomejs/biome@2.5.14':
+    resolution: {integrity: sha512-0FabLIjd4M/dm8VFI86RMaLLdgepzbdfiAL2R8cr7V81OYYrP1w7Z73KfAwPK5h9SrEBXTzNG2y+mBwPo9xRnw==, tarball: https://registry.npmjs.org/@biomejs/biome/-/biome-2.5.14.tgz}
     engines: {node: '>=14.21.3'}
     hasBin: true
 
-  '@biomejs/cli-darwin-arm64@2.5.13':
-    resolution: {integrity: sha512-nYSuDJ6zgVqZUkAkJkvhXxsF2PYIrUk/g638K4voCXz7foI9f7b6C2/7+oAihsHQlivZNMUrm/y8ywlcHQtZOw==, tarball: https://registry.npmjs.org/@biomejs/cli-darwin-arm64/-/cli-darwin-arm64-2.5.13.tgz}
+  '@biomejs/cli-darwin-arm64@2.5.14':
+    resolution: {integrity: sha512-UnzaXO65L4tsZimFITFP2M121GyhDcWFrT3pL5ZJ5U4XcS/0L5VHYytVohdCf/gnDUFHgl2I9xnt5bV/J1kxHQ==, tarball: https://registry.npmjs.org/@biomejs/cli-darwin-arm64/-/cli-darwin-arm64-2.5.14.tgz}
     engines: {node: '>=14.21.3'}
     cpu: [arm64]
     os: [darwin]
 
-  '@biomejs/cli-darwin-x64@2.5.13':
-    resolution: {integrity: sha512-KVy1ceEDuJ3AzFxjT9kkxbVy+UANw1pjEMUS6lvKfxjJ+fmkRvc7sQn1Xo6ETgseEI7wUQoV03KSga3XfE8YRQ==, tarball: https://registry.npmjs.org/@biomejs/cli-darwin-x64/-/cli-darwin-x64-2.5.13.tgz}
+  '@biomejs/cli-darwin-x64@2.5.14':
+    resolution: {integrity: sha512-kiy8qA16K93J7uvFfWi4LgjqDpnRKyePAna6A0Y4jxyUga35SYpIZ2cNWlhy0lsfgqRenCpfymnJWEZ6mgpRgA==, tarball: https://registry.npmjs.org/@biomejs/cli-darwin-x64/-/cli-darwin-x64-2.5.14.tgz}
     engines: {node: '>=14.21.3'}
     cpu: [x64]
     os: [darwin]
 
-  '@biomejs/cli-linux-arm64-musl@2.5.13':
-    resolution: {integrity: sha512-CH32xpep3dNS5EVJpAHlYchkBYznxyVZQrx0b6YYYlPL9u9ZeD2NtqiK/6s64+HFS2a7hGnryLlqqZAOh8ax5g==, tarball: https://registry.npmjs.org/@biomejs/cli-linux-arm64-musl/-/cli-linux-arm64-musl-2.5.13.tgz}
+  '@biomejs/cli-linux-arm64-musl@2.5.14':
+    resolution: {integrity: sha512-SJ9PrZkBnnH9dHJDnxk34vKs0GB2dbsioaft6/hPhWJ7AHpwYH83Isnhj0FSRpFkGgpVfJ1lds23ApB2czUDLQ==, tarball: https://registry.npmjs.org/@biomejs/cli-linux-arm64-musl/-/cli-linux-arm64-musl-2.5.14.tgz}
     engines: {node: '>=14.21.3'}
     cpu: [arm64]
     os: [linux]
     libc: [musl]
 
-  '@biomejs/cli-linux-arm64@2.5.13':
-    resolution: {integrity: sha512-VlNMtoxOqs0dUR6drxxHr18SNUvI7xxAuHZlH4s/dstYSf3g6RaqVgo8JRnhcOhKz9afWrvtJTboNG1JuYlIDQ==, tarball: https://registry.npmjs.org/@biomejs/cli-linux-arm64/-/cli-linux-arm64-2.5.13.tgz}
+  '@biomejs/cli-linux-arm64@2.5.14':
+    resolution: {integrity: sha512-vO/9BaU1n30CiFNLx49gMTMtbCAAqlo/EqFoG0BU3deQInTbJrmXSmTQ9e3FoDZIKQnvSLDVNL4lx1ci7y1T1Q==, tarball: https://registry.npmjs.org/@biomejs/cli-linux-arm64/-/cli-linux-arm64-2.5.14.tgz}
     engines: {node: '>=14.21.3'}
     cpu: [arm64]
     os: [linux]
     libc: [glibc]
 
-  '@biomejs/cli-linux-x64-musl@2.5.13':
-    resolution: {integrity: sha512-F3pmwl+VHoUuVJN/tbNLKeLt0SVK3EIyN1jXlMcNyQGYRQQTVqXF+GgkP0/CjGXFN87e/mv0sBfUnWqWza5PKQ==, tarball: https://registry.npmjs.org/@biomejs/cli-linux-x64-musl/-/cli-linux-x64-musl-2.5.13.tgz}
+  '@biomejs/cli-linux-x64-musl@2.5.14':
+    resolution: {integrity: sha512-2kI5PrMgW5dcEZYrstLPmUmCwkUwZY39rP4BN93Vxbwcs2O57LDQOktUZZYPvvspN5i0mhGr3TJtF5sU26NUWg==, tarball: https://registry.npmjs.org/@biomejs/cli-linux-x64-musl/-/cli-linux-x64-musl-2.5.14.tgz}
     engines: {node: '>=14.21.3'}
     cpu: [x64]
     os: [linux]
     libc: [musl]
 
-  '@biomejs/cli-linux-x64@2.5.13':
-    resolution: {integrity: sha512-Fi6gIxbUaJ3ZCIXeG3ggIBPF76O2DjDN67WrPX/ODRv54GeXPm2gbEPC96Yb0yrJoiH0Eax1JLx1Pi0XbsNFZQ==, tarball: https://registry.npmjs.org/@biomejs/cli-linux-x64/-/cli-linux-x64-2.5.13.tgz}
+  '@biomejs/cli-linux-x64@2.5.14':
+    resolution: {integrity: sha512-VHZRa7CCQBUWKxNwUvHJeuW03WFRgN5NWO//SDGOitc9QIeNyfA42V9zlKm+x82xFSG9Bzi5fi+hbhm9anO8yA==, tarball: https://registry.npmjs.org/@biomejs/cli-linux-x64/-/cli-linux-x64-2.5.14.tgz}
     engines: {node: '>=14.21.3'}
     cpu: [x64]
     os: [linux]
     libc: [glibc]
 
-  '@biomejs/cli-win32-arm64@2.5.13':
-    resolution: {integrity: sha512-+WD13qshXrr0Icv4BfsAdzm8Fs3TL+nZ59zEQxsYNd8lcgZJ0A5+OrlwsL1PipVCmWeRpxgIPD6DAcEd7smkCQ==, tarball: https://registry.npmjs.org/@biomejs/cli-win32-arm64/-/cli-win32-arm64-2.5.13.tgz}
+  '@biomejs/cli-win32-arm64@2.5.14':
+    resolution: {integrity: sha512-pHgAFffmZtaYoxavEsWEYNvcA7NwOIjLyqw2HXyLbt16xYryX0L4fMV2u0G9ag6LNYPIoqWaWqzUcnc6rLGGXg==, tarball: https://registry.npmjs.org/@biomejs/cli-win32-arm64/-/cli-win32-arm64-2.5.14.tgz}
     engines: {node: '>=14.21.3'}
     cpu: [arm64]
     os: [win32]
 
-  '@biomejs/cli-win32-x64@2.5.13':
-    resolution: {integrity: sha512-VOofU/nW761XWzUeUNE8zzYNyPrxuMuNFMizL0qz7J75yeV8N7WFheUlk1/K6dOkaFpH9wJ+lDKlwjAbw0346w==, tarball: https://registry.npmjs.org/@biomejs/cli-win32-x64/-/cli-win32-x64-2.5.13.tgz}
+  '@biomejs/cli-win32-x64@2.5.14':
+    resolution: {integrity: sha512-oJWmBhoHsnhUKIke+0gXDX0mltJrWHA1UyHsrTlXwX0TL64ilVZAo+TYZm97baecV0esBdpzy3k96q+09JaZUQ==, tarball: https://registry.npmjs.org/@biomejs/cli-win32-x64/-/cli-win32-x64-2.5.14.tgz}
     engines: {node: '>=14.21.3'}
     cpu: [x64]
     os: [win32]
 
-  '@bufbuild/protobuf@2.13.0':
-    resolution: {integrity: sha512-acq7c49vxfm1ggJ95P70TX7ABDM0vxr1SYD3BB0o0jnBLB4OAqeHyKuN+cD3w80gXEDQ2zxHpR6CUeA+O/aU9g==, tarball: https://registry.npmjs.org/@bufbuild/protobuf/-/protobuf-2.13.0.tgz}
-
-  '@bufbuild/protobuf@2.14.1':
-    resolution: {integrity: sha512-agRJn3+EJDUe8AvxTx/LnHA/GErvLE62pSaSk7+MwFOtOv8eWBu/qCq2qoZjBjVZ3C2aiFJCveuSs17KMkYGOw==, tarball: https://registry.npmjs.org/@bufbuild/protobuf/-/protobuf-2.14.1.tgz}
+  '@bufbuild/protobuf@2.15.0':
+    resolution: {integrity: sha512-DAheWUkVr/SJTWCc+lg9dhY0eN4SaWlf4+bG1KzHeXbnqt0AfB/NX0Z+VunGlM1ki1B4zVvye27MpKh/svySUA==, tarball: https://registry.npmjs.org/@bufbuild/protobuf/-/protobuf-2.15.0.tgz}
 
   '@cdxgen/cdx-hbom@0.5.1':
     resolution: {integrity: sha512-mGXOwVZhApxRUo8g+fwGQHe/rNVlidpltfy5wcchhN/46yLokJcA4EkwA6mv3T6fh8IpQ5xd1xhYmvo5/ILEVw==, tarball: https://registry.npmjs.org/@cdxgen/cdx-hbom/-/cdx-hbom-0.5.1.tgz}
     engines: {node: '>=20'}
     hasBin: true
 
-  '@cdxgen/cdx-proto@2.2.0':
-    resolution: {integrity: sha512-gLYOq0YJiJKrozIBjRu7DAfisJNXp2uoH15W9yZEAl2OPRhUoePh4N8AdGLW1ap8oYw3RpXD4R5AJe1A7z0/sg==, tarball: https://registry.npmjs.org/@cdxgen/cdx-proto/-/cdx-proto-2.2.0.tgz}
-    engines: {node: '>=20'}
+  '@cdxgen/cdx-proto@2.3.0':
+    resolution: {integrity: sha512-e5DVeME/XgBdBv/SRf8VYrCSkRV2GGxnZ9hESAGpZ01QxFYd3JR19SVH2NzAcJ+lkFJtbsy8fm/YUAs3ztGhAw==, tarball: https://registry.npmjs.org/@cdxgen/cdx-proto/-/cdx-proto-2.3.0.tgz}
+    engines: {node: '>=22'}
     hasBin: true
 
   '@cdxgen/cdx-purl@0.0.5':
@@ -565,28 +562,28 @@ packages:
   '@cdxgen/cdxgen-plugins-bin@3.1.0':
     resolution: {integrity: sha512-z3ZL5zY9ris2Qc1bWgVRJpQ5fbp2qFi2R8IcEPZUFU31Kn3b9jeU4aIoTNja24bJW7Nyaon4LFssglQijhUpBg==, tarball: https://registry.npmjs.org/@cdxgen/cdxgen-plugins-bin/-/cdxgen-plugins-bin-3.1.0.tgz}
 
-  '@cdxgen/safer-exec-darwin-amd64@0.15.0':
-    resolution: {integrity: sha512-xCl/eenMrnk/76GQyHGVUE9DclkkC+idplBBYznLkVqyJSdBoRSkk6mxfUPQeCihnH2eSf6X7pykNGWqLzWQGQ==, tarball: https://registry.npmjs.org/@cdxgen/safer-exec-darwin-amd64/-/safer-exec-darwin-amd64-0.15.0.tgz}
+  '@cdxgen/safer-exec-darwin-amd64@0.16.0':
+    resolution: {integrity: sha512-dJ8MCuSGFU78qbqHyonam2okZN4Tg3+OGmRMOjNOkp7e86W/Iv1xW0kLqb4RhHwag43wSvTqSOOCnkRD4qWPEw==, tarball: https://registry.npmjs.org/@cdxgen/safer-exec-darwin-amd64/-/safer-exec-darwin-amd64-0.16.0.tgz}
     cpu: [x64]
     os: [darwin]
 
-  '@cdxgen/safer-exec-darwin-arm64@0.15.0':
-    resolution: {integrity: sha512-BZZ7BX7RWa3XDxZr4JaSy3pPaLhHF5h6uhQiNlTOXLuijUrhEUiVADCJeChOyMXiTr/YY6GfE7+CE72eGq2MPg==, tarball: https://registry.npmjs.org/@cdxgen/safer-exec-darwin-arm64/-/safer-exec-darwin-arm64-0.15.0.tgz}
+  '@cdxgen/safer-exec-darwin-arm64@0.16.0':
+    resolution: {integrity: sha512-5l8cCjvf8tJVw6v8S1ABPeqAiSR1YGpY8DPtFYFBYMEOcg/YrSez0hFSdJMWTsrfbpxVfbAXto/61V2F3FDdyQ==, tarball: https://registry.npmjs.org/@cdxgen/safer-exec-darwin-arm64/-/safer-exec-darwin-arm64-0.16.0.tgz}
     cpu: [arm64]
     os: [darwin]
 
-  '@cdxgen/safer-exec-linux-amd64@0.15.0':
-    resolution: {integrity: sha512-Q6HbKjKpcUgcEnzzMXaROVI55gisU1TaAKb77APraZEj9ZxSTBh4NoC+aouPKCs+0kkcVwD08loQplJ3I1aPzw==, tarball: https://registry.npmjs.org/@cdxgen/safer-exec-linux-amd64/-/safer-exec-linux-amd64-0.15.0.tgz}
+  '@cdxgen/safer-exec-linux-amd64@0.16.0':
+    resolution: {integrity: sha512-8ErnSFmNOBDJsXWkFiKHBewSaBIlRit+U0x0W+IFmVTqq4UZOW25K3EkFtG3SxktW6KZiE0qmd1BFaGWW08eeA==, tarball: https://registry.npmjs.org/@cdxgen/safer-exec-linux-amd64/-/safer-exec-linux-amd64-0.16.0.tgz}
     cpu: [x64]
     os: [linux]
 
-  '@cdxgen/safer-exec-linux-arm64@0.15.0':
-    resolution: {integrity: sha512-NRfsNnFcl3qUbxWTNNJltrFAagJcYumTGhK9Ad9BxzFu6l2FS2wozr4pr9KRzSrEXFCiEqm2unAtDgyAGx/nbw==, tarball: https://registry.npmjs.org/@cdxgen/safer-exec-linux-arm64/-/safer-exec-linux-arm64-0.15.0.tgz}
+  '@cdxgen/safer-exec-linux-arm64@0.16.0':
+    resolution: {integrity: sha512-AZMbDVvwhAsGZ4KnzODdhkesuO/Qv40cRrtmHVe6/Q/lk0ycMmRo00tH3qv27KoaM6d5Lz4Qr04e/DuC+nByeQ==, tarball: https://registry.npmjs.org/@cdxgen/safer-exec-linux-arm64/-/safer-exec-linux-arm64-0.16.0.tgz}
     cpu: [arm64]
     os: [linux]
 
-  '@cdxgen/safer-exec@0.15.0':
-    resolution: {integrity: sha512-f0/NDt07AgfvK5uOcU7XFw7g8VirQdCVs8/01bZ0juTGujx7ByPxWBlpDRqt/cuxn//Hcn7pgsUDqzTZq54UcQ==, tarball: https://registry.npmjs.org/@cdxgen/safer-exec/-/safer-exec-0.15.0.tgz}
+  '@cdxgen/safer-exec@0.16.0':
+    resolution: {integrity: sha512-hqwxjxdJfNTYY0txZM5/hXIKuhk49Mn3eLs4wL5g87IXBqPI6svDrZ3LwEff5IZUdVyTsWZ9bKLI4blSKCgGZA==, tarball: https://registry.npmjs.org/@cdxgen/safer-exec/-/safer-exec-0.16.0.tgz}
     engines: {node: '>=20.0.0'}
     hasBin: true
 
@@ -864,8 +861,8 @@ packages:
     resolution: {integrity: sha512-AF3r7P5dWxL8MxyITRMlORQNaOA2IkAFaTr4k7BUumjPtRpGDTZpl0Pb1XCO6JeDCBdp126Cgs9sMxqSjgYyRg==, tarball: https://registry.npmjs.org/compressible/-/compressible-2.0.18.tgz}
     engines: {node: '>= 0.6'}
 
-  compression@1.8.1:
-    resolution: {integrity: sha512-9mAqGPHLakhCLeNyxPkK4xVo746zQ/czLH1Ky+vkitMnWfWZps8r0qXuwhwizagCRttsL4lfG4pIOvaWLpAP0w==, tarball: https://registry.npmjs.org/compression/-/compression-1.8.1.tgz}
+  compression@1.8.2:
+    resolution: {integrity: sha512-o8vI5RE5A6EVVOd9o41jKp41aJom+QTEO/Bx8MYNjexMo/Bv2WOjUfZr+aL0WnYSgymUy6zeguqLTsIhV0gMvQ==, tarball: https://registry.npmjs.org/compression/-/compression-1.8.2.tgz}
     engines: {node: '>= 0.8.0'}
 
   connect@3.7.0:
@@ -896,6 +893,10 @@ packages:
   depd@2.0.0:
     resolution: {integrity: sha512-g7nH6P6dyDioJogAAGprGpCtVImJhpPk/roCzdb3fIh61/s/nPsfR6onyMwkCAR/OlC3yBC0lESvUoQEAssIrw==, tarball: https://registry.npmjs.org/depd/-/depd-2.0.0.tgz}
     engines: {node: '>= 0.8'}
+
+  destroy@1.2.0:
+    resolution: {integrity: sha512-2sJGJTaXIIaR1w4iJSNoN0hnMY7Gpc/n8D4qSCJw8QqFWXf7cuAgnEHxBpweaVcPevC2l3KpjYCx3NypQQgaJg==, tarball: https://registry.npmjs.org/destroy/-/destroy-1.2.0.tgz}
+    engines: {node: '>= 0.8', npm: 1.2.8000 || >= 1.4.16}
 
   devalue@5.9.2:
     resolution: {integrity: sha512-po4PAY5c53tw5XMocSnf8A/5OHhbbUftpr93aEN6BBoAdntUmK7vu7wOATqvt7cXO7m1Cl4gMVn6p7n6n4mj0w==, tarball: https://registry.npmjs.org/devalue/-/devalue-5.9.2.tgz}
@@ -1320,8 +1321,8 @@ packages:
     resolution: {integrity: sha512-YgvUTfwqyc7UXVMrB+SImsVYSmTS8X/tSrtdNZMImM+n7+QTriRXyXim0mBrTXNeqzVF0KWGgHPeiyViFFrNDw==, tarball: https://registry.npmjs.org/yallist/-/yallist-5.0.0.tgz}
     engines: {node: '>=18'}
 
-  yaml@2.9.0:
-    resolution: {integrity: sha512-2AvhNX3mb8zd6Zy7INTtSpl1F15HW6Wnqj0srWlkKLcpYl/gMIMJiyuGq2KeI2YFxUPjdlB+3Lc10seMLtL4cA==, tarball: https://registry.npmjs.org/yaml/-/yaml-2.9.0.tgz}
+  yaml@2.9.1:
+    resolution: {integrity: sha512-3NxN8+78OdzbT7C/WjGsyfPAtJaN3FNDsWxv7Y7mcDsT/oOmgW8BpyQQFFBnvZE3j9Y2Sdz1ULFLezL7Eb2yFw==, tarball: https://registry.npmjs.org/yaml/-/yaml-2.9.1.tgz}
     engines: {node: '>= 14.6'}
     hasBin: true
 
@@ -1362,7 +1363,7 @@ snapshots:
   '@appthreat/atom-linux-arm64@3.1.1':
     optional: true
 
-  '@appthreat/atom-parsetools@1.6.0':
+  '@appthreat/atom-parsetools@1.7.0':
     dependencies:
       '@appthreat/atom-common': 1.1.0
       '@babel/parser': 8.0.5
@@ -1437,53 +1438,50 @@ snapshots:
       '@babel/helper-string-parser': 8.0.0
       '@babel/helper-validator-identifier': 8.0.4
 
-  '@biomejs/biome@2.5.13':
+  '@biomejs/biome@2.5.14':
     optionalDependencies:
-      '@biomejs/cli-darwin-arm64': 2.5.13
-      '@biomejs/cli-darwin-x64': 2.5.13
-      '@biomejs/cli-linux-arm64': 2.5.13
-      '@biomejs/cli-linux-arm64-musl': 2.5.13
-      '@biomejs/cli-linux-x64': 2.5.13
-      '@biomejs/cli-linux-x64-musl': 2.5.13
-      '@biomejs/cli-win32-arm64': 2.5.13
-      '@biomejs/cli-win32-x64': 2.5.13
+      '@biomejs/cli-darwin-arm64': 2.5.14
+      '@biomejs/cli-darwin-x64': 2.5.14
+      '@biomejs/cli-linux-arm64': 2.5.14
+      '@biomejs/cli-linux-arm64-musl': 2.5.14
+      '@biomejs/cli-linux-x64': 2.5.14
+      '@biomejs/cli-linux-x64-musl': 2.5.14
+      '@biomejs/cli-win32-arm64': 2.5.14
+      '@biomejs/cli-win32-x64': 2.5.14
 
-  '@biomejs/cli-darwin-arm64@2.5.13':
+  '@biomejs/cli-darwin-arm64@2.5.14':
     optional: true
 
-  '@biomejs/cli-darwin-x64@2.5.13':
+  '@biomejs/cli-darwin-x64@2.5.14':
     optional: true
 
-  '@biomejs/cli-linux-arm64-musl@2.5.13':
+  '@biomejs/cli-linux-arm64-musl@2.5.14':
     optional: true
 
-  '@biomejs/cli-linux-arm64@2.5.13':
+  '@biomejs/cli-linux-arm64@2.5.14':
     optional: true
 
-  '@biomejs/cli-linux-x64-musl@2.5.13':
+  '@biomejs/cli-linux-x64-musl@2.5.14':
     optional: true
 
-  '@biomejs/cli-linux-x64@2.5.13':
+  '@biomejs/cli-linux-x64@2.5.14':
     optional: true
 
-  '@biomejs/cli-win32-arm64@2.5.13':
+  '@biomejs/cli-win32-arm64@2.5.14':
     optional: true
 
-  '@biomejs/cli-win32-x64@2.5.13':
+  '@biomejs/cli-win32-x64@2.5.14':
     optional: true
 
-  '@bufbuild/protobuf@2.13.0':
-    optional: true
-
-  '@bufbuild/protobuf@2.14.1':
+  '@bufbuild/protobuf@2.15.0':
     optional: true
 
   '@cdxgen/cdx-hbom@0.5.1':
     optional: true
 
-  '@cdxgen/cdx-proto@2.2.0':
+  '@cdxgen/cdx-proto@2.3.0':
     dependencies:
-      '@bufbuild/protobuf': 2.13.0
+      '@bufbuild/protobuf': 2.15.0
     optional: true
 
   '@cdxgen/cdx-purl@0.0.5': {}
@@ -1521,24 +1519,24 @@ snapshots:
   '@cdxgen/cdxgen-plugins-bin@3.1.0':
     optional: true
 
-  '@cdxgen/safer-exec-darwin-amd64@0.15.0':
+  '@cdxgen/safer-exec-darwin-amd64@0.16.0':
     optional: true
 
-  '@cdxgen/safer-exec-darwin-arm64@0.15.0':
+  '@cdxgen/safer-exec-darwin-arm64@0.16.0':
     optional: true
 
-  '@cdxgen/safer-exec-linux-amd64@0.15.0':
+  '@cdxgen/safer-exec-linux-amd64@0.16.0':
     optional: true
 
-  '@cdxgen/safer-exec-linux-arm64@0.15.0':
+  '@cdxgen/safer-exec-linux-arm64@0.16.0':
     optional: true
 
-  '@cdxgen/safer-exec@0.15.0':
+  '@cdxgen/safer-exec@0.16.0':
     optionalDependencies:
-      '@cdxgen/safer-exec-darwin-amd64': 0.15.0
-      '@cdxgen/safer-exec-darwin-arm64': 0.15.0
-      '@cdxgen/safer-exec-linux-amd64': 0.15.0
-      '@cdxgen/safer-exec-linux-arm64': 0.15.0
+      '@cdxgen/safer-exec-darwin-amd64': 0.16.0
+      '@cdxgen/safer-exec-darwin-arm64': 0.16.0
+      '@cdxgen/safer-exec-linux-amd64': 0.16.0
+      '@cdxgen/safer-exec-linux-arm64': 0.16.0
     optional: true
 
   '@gar/promise-retry@1.0.3': {}
@@ -1779,11 +1777,12 @@ snapshots:
       mime-db: 1.54.0
     optional: true
 
-  compression@1.8.1:
+  compression@1.8.2:
     dependencies:
       bytes: 3.1.2
       compressible: 2.0.18
       debug: 2.6.9
+      destroy: 1.2.0
       negotiator: 0.6.4
       on-headers: 1.1.0
       safe-buffer: 5.2.1
@@ -1816,6 +1815,9 @@ snapshots:
     optional: true
 
   depd@2.0.0:
+    optional: true
+
+  destroy@1.2.0:
     optional: true
 
   devalue@5.9.2:
@@ -2276,7 +2278,7 @@ snapshots:
 
   yallist@5.0.0: {}
 
-  yaml@2.9.0: {}
+  yaml@2.9.1: {}
 
   yargs-parser@22.0.0: {}
 
