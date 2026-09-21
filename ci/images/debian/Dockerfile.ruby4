@@ -4,7 +4,7 @@ FROM ruby:4.0.7-slim-trixie@sha256:d10bdb076bb10d2261773ea20eadf4cdbde3346fc8f8d
 ARG DEBIAN_REPO
 ARG GITHUB_RAW_URL=https://raw.githubusercontent.com
 ARG GITHUB_URL=https://github.com
-ARG JAVA_VERSION=21.0.12+1.1-tem
+ARG JAVA_VERSION=21.0.12-tem
 ARG NODE_24
 ARG NODE_VERSION=${NODE_24}
 ARG NODEJS_DIST_URL
