@@ -879,6 +879,22 @@ Data-flow findings also arrive as CycloneDX **callstack evidence**, not as a pro
 | `cdx:kosi:endpoint:consumes`       | Media types the endpoint accepts.                                  |
 | `cdx:kosi:endpoint:produces`       | Media types the endpoint returns.                                  |
 
+<a id="dosai-dotnet-reachability-confidence"></a>
+
+#### Dosai .NET reachability confidence
+
+`cdx:dosai:reachability:*` properties are emitted by `evinse -l dotnet` from dosai's `PackageReachability`. They qualify the occurrence and callstack evidence on the same component: how the package was found to be reachable, and how much the finding is worth.
+This matters most for a tree that was never built. Dosai binds .NET source against the assemblies it can find, so an unbuilt checkout can leave call sites unresolved and fall back to dependency-only reachability. Without these properties that outcome looks identical to a package that really is only imported and never called.
+Read `confidence` together with `evidence`: `SourceRoslynDirect` or `AssemblyIlDirect` at `High` is a bound call, while `SourceUnresolved` at `Low` means the call site was seen in source but its target assembly was missing, and `reasons` says so in words. Restoring or building the project before the scan is what raises it.
+These properties are enum values and short explanatory sentences produced by dosai. They do not copy source contents into the BOM.
+
+| Property                            | Meaning                                                                                                            |
+| ----------------------------------- | ------------------------------------------------------------------------------------------------------------------ |
+| `cdx:dosai:reachability:kind`       | How the package was reached (for example `ExternalCallGraphNode`, `Dependency`).                                   |
+| `cdx:dosai:reachability:confidence` | Dosai's confidence in the finding (`High`, `Medium`, `Low`).                                                       |
+| `cdx:dosai:reachability:evidence`   | Comma-separated evidence kinds behind it (for example `SourceRoslynDirect`, `ExternalSummary`, `SourceUnresolved`). |
+| `cdx:dosai:reachability:reasons`    | Pipe-separated explanations of why the confidence is what it is.                                                   |
+
 #### Example payload fragments
 
 **npm / pnpm execution risk**
