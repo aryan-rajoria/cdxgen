@@ -1,5 +1,5 @@
 # Base-image
-FROM php:8.5.7-trixie@sha256:1a5fd40baaeb88045a5cdfcec6b26bafcf40e3c2867f525b91cb746eb26d8fd9 AS base
+FROM php:8.5.10-trixie@sha256:df50257c90ad9a53052fb4e9c6fdba8262cf72ca9e9a048b7c89f74c8d23fc0d AS base
 
 ARG COMPOSER_URL=https://getcomposer.org
 ARG DEBIAN_REPO
@@ -11,7 +11,7 @@ ARG NODE_VERSION=${NODE_24}
 ARG NODEJS_DIST_URL
 ARG NPM_REPO
 ARG NVM
-ARG NVM_VERSION=${NVM:-v0.40.7}
+ARG NVM_VERSION=${NVM:-v0.40.8}
 ARG PIP_CONFIG
 ARG SDKMAN_URL=https://api.sdkman.io/2
 

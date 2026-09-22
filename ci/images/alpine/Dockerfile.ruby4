@@ -1,5 +1,5 @@
 # Base-image
-FROM ruby:4.0.5-alpine3.22@sha256:fae3127404cb61d6897d7eed08e65ec7ccc96ba0542dc7c44712efa9b2ef78f0 AS base
+FROM ruby:4.0.7-alpine3.24@sha256:79bf10b28c9d98b7b3cffda01aba8190aa1c1c48513d205ec93372a0e2f010e3 AS base
 
 ARG ALPINE_REPO
 ARG NODEJS_DIST_URL

@@ -1,5 +1,5 @@
 # Base-image
-FROM elixir:1.20.4-otp-29-slim@sha256:c7af3280a23beafb9c9113b676466c7bb3b7d9671c8af96889a0eaad0b424bec AS base
+FROM elixir:1.20.4-otp-29-slim@sha256:276e3770d931349e0da426f2aff14bf66589a5a81d551d89c78862fabc81c537 AS base
 
 ARG DEBIAN_REPO
 ARG GITHUB_RAW_URL=https://raw.githubusercontent.com
@@ -9,7 +9,7 @@ ARG NODE_VERSION=${NODE_26}
 ARG NODEJS_DIST_URL
 ARG NPM_REPO
 ARG NVM
-ARG NVM_VERSION=${NVM:-v0.40.7}
+ARG NVM_VERSION=${NVM:-v0.40.8}
 ARG PIP_CONFIG
 
 ENV NVM_DIR="/root/.nvm" \

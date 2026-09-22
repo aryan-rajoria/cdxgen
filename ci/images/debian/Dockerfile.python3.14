@@ -1,5 +1,5 @@
 # Base-image
-FROM python:3.14.7-bookworm@sha256:ecac9e212daacda8a702eae372fceebc0ee36f5805abe087880367e8d061fa5b AS base
+FROM python:3.14.7-bookworm@sha256:bfb689a7986adc6d5f16722e06c78e755efe4062e56276715fef450cbad09436 AS base
 
 ARG DEBIAN_REPO
 ARG GITHUB_RAW_URL=https://raw.githubusercontent.com
@@ -9,7 +9,7 @@ ARG NODE_VERSION=${NODE_26}
 ARG NODEJS_DIST_URL
 ARG NPM_REPO
 ARG NVM
-ARG NVM_VERSION=${NVM:-v0.40.7}
+ARG NVM_VERSION=${NVM:-v0.40.8}
 ARG PIP_CONFIG
 
 ENV CFLAGS="-fcommon" \
