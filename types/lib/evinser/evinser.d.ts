@@ -155,13 +155,7 @@ export declare function analyzeProject(dbObjMap: Object, options: Object): Promi
     cryptoGeneratePurls: {};
     servicesMap: {};
     userDefinedTypesMap: {};
-    workspaceComponent: {
-        type: string;
-        name: any;
-        version: any;
-        purl: any;
-        "bom-ref": any;
-    } | undefined;
+    workspaceComponent: Object | undefined;
     atomFile?: undefined;
     usagesSlicesFile?: undefined;
     dataFlowSlicesFile?: undefined;

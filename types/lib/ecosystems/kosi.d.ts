@@ -1,3 +1,16 @@
+/**
+ * Builds the workspace component candidate for one kosi module.
+ *
+ * kosi derives module names from Gradle settings files, so a quoted literal
+ * (rootProject.name = 'KotlinGoat') rides into the reported purl. A purl
+ * cdx-purl rejects anchors nothing and must not reach the BOM: keep the
+ * reported purl when it parses, rebuild one from the cleaned coordinates
+ * when it does not, and return undefined when neither works.
+ *
+ * @param {Object|undefined} workspaceModule One entry of kosi's modules[].
+ * @returns {Object|undefined} Component candidate with a valid purl, or undefined.
+ */
+export declare function kosiWorkspaceComponent(workspaceModule: Object | undefined): Object | undefined;
 export declare function isKosiKotlinLanguage(language: any): boolean;
 /**
  * True when kosi is disabled by CDXGEN_KOSI_DISABLE (1/all/true) or --no-kosi.
