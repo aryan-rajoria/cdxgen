@@ -862,6 +862,8 @@ decides whether an empty result is a measurement or a silence.
 | `cdx:kosi:sourceCoverageRatio`         | `discovered / present` — what is on disk.                                                                                                                            |
 | `cdx:kosi:sourceCoverageNonTestRatio`  | `discovered` against the non-test files only. This is the ratio that measures DISCOVERY, and the one kosi's `source-coverage-gap` diagnostic fires on.                |
 | `cdx:kosi:diagnostic:<code>`           | One per kosi diagnostic code, valued with the summed population it affected (per-file entries aggregate). The vocabulary is kosi's `JSON_ATTRIBUTE_REFERENCE.md`.     |
+| `cdx:kosi:securitySignalCount`         | Non-flow findings in the report. Counted here as well as attached per component, because a cinterop `.def` file carries no purl — it is not a module source — and would otherwise vanish between the report and the BOM. |
+| `cdx:kosi:securitySignal`              | One per distinct signal code present in the report.                                                                                                                  |
 | `cdx:kosi:diagnosticErrors`            | Comma-separated codes whose severity was `error` — a piece of the analysis is ABSENT from the report (the call graph crashed, a file could not be read), not merely imperfect. Absent when every diagnostic was a warning. |
 
 ##### Kosi component-level inventory
@@ -875,6 +877,9 @@ decides whether an empty result is a measurement or a silence.
 | `cdx:kosi:pathKind`           | How complete the recorded trace is: `complete`, `partial`, or `symbol-only`.                                                                |
 | `cdx:kosi:reachableFromRoots` | `true` when the component's evidence survived intersection with call-graph reachability from the declared roots; absent means not measured. |
 | `cdx:kosi:cryptoFlow`         | `sourceCategory->sinkCategory` of a crypto-relevant flow attached to this component.                                                        |
+| `cdx:kosi:securitySignalCode` | A non-flow finding kosi attaches to this component. The vocabulary is closed; `native-interop` (a JNI seam, a resolved `loadLibrary` binding site, or a cinterop `.def` file) emits today. |
+| `cdx:kosi:securitySignalSeverity` | Severity of that code, from kosi's closed vocabulary. Absent for a code this cdxgen release does not know, which is published with its code rather than dropped. |
+| `cdx:kosi:securitySignalSymbol` | The symbol the signal attaches to — the `external fun`, or the function containing the `loadLibrary` call. |
 
 ##### Kosi crypto-asset inventory
 
@@ -891,6 +896,9 @@ decides whether an empty result is a measurement or a silence.
 | `cdx:kosi:service:protocol`        | Protocol of an outbound service call.                              |
 | `cdx:kosi:service:resolution`      | How the service target was resolved (literal, config, unresolved). |
 | `cdx:kosi:service:clientLibrary`   | Client library the outbound call uses.                             |
+| `cdx:kosi:service:location`        | `path:line:column` of a call site for this service, one property per site. The same locations are also published as `services[].evidence.occurrences[]`, which spec-version compatibility strips below CycloneDX 2.0 — this property is where they survive at 1.6 and 1.7. |
+| `cdx:kosi:service:enclosingSymbol` | The function each call site sits in, from kosi's `urls[]`. A service reached from three places carries three of these. |
+| `cdx:kosi:service:urlResolution`   | How the URL at a call site was resolved (`literal`, `folded`, `config`, `env`, `unresolved`). Distinct from `cdx:kosi:service:resolution`, which is the service target's resolution as a whole. |
 | `cdx:kosi:endpoint:framework`      | Framework that declares the inbound endpoint.                      |
 | `cdx:kosi:endpoint:handler`        | Handler symbol or canonical name serving the endpoint.             |
 | `cdx:kosi:endpoint:authentication` | Authentication scheme required by the endpoint.                    |
