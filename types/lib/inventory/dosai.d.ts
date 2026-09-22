@@ -87,6 +87,29 @@ export declare function buildPurlAliasMap(components?: Object[]): Map<string, st
  */
 export declare function resolveComponentPurl(purl: string, purlAliasMap: Map<string, string>): string | undefined;
 /**
+ * Copy one dosai PackageReachability fact onto a component as properties.
+ *
+ * The occurrence/location consumers of PackageReachability read SourceLocations, EdgeIds,
+ * and NodeIds only, so dosai's Confidence, EvidenceKinds, ReachabilityKind, and
+ * ConfidenceReasons never reached the BOM: an unbuilt tree (Low confidence, unresolved
+ * evidence) was indistinguishable from a package that really is only imported. These
+ * properties carry that distinction to BOM consumers. They use the consumer-facing
+ * `cdx:dosai:reachability:*` namespace - not `internal:`, which is cdxgen's private
+ * bookkeeping namespace stripped or ignored by downstream tooling.
+ *
+ * @param {Object} component BOM component object (mutated; properties created on demand)
+ * @param {Object} reachability dosai PackageReachability entry
+ */
+export declare function addDosaiReachabilityProperties(component: Object, reachability: Object): void;
+/**
+ * Attach dosai PackageReachability confidence facts to matching BOM components.
+ *
+ * @param {Object} methodsSlice Parsed dosai methods slice JSON
+ * @param {Object[]} [components] BOM components used to resolve purl aliases and mutate
+ * @returns {number} Number of distinct components enriched
+ */
+export declare function applyDosaiReachabilityEvidence(methodsSlice: Object, components?: Object[]): number;
+/**
  * Map a dosai methods slice to per-purl occurrence evidence.
  *
  * Extracts source locations, imported modules, and called methods from the

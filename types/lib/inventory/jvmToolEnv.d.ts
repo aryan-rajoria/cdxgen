@@ -8,10 +8,11 @@ import { compareVersions, extractJavaMajor, isPrereleaseVersion } from "./toolRe
 export { compareVersions as compareSdkmanVersions, extractJavaMajor, isPrereleaseVersion, };
 /**
  * Anchored validator for sdkman version identifiers such as `3.9.9`,
- * `4.0.0-rc-5`, `8.14`, or `21.0.7-tem`. Versions are interpolated into a
- * shell command by the sdkman installer, so every identifier must be a single
- * safe token: it must start with a digit and may only contain digits, ascii
- * letters, dots, and hyphens.
+ * `4.0.0-rc-5`, `8.14`, `21.0.7-tem`, or `26.0.2+1.1-tem`. Versions are
+ * interpolated into a shell command by the sdkman installer, so every
+ * identifier must be a single safe token: it must start with a digit and may
+ * only contain digits, ascii letters, dots, hyphens, and plus signs (`+` has
+ * no shell meaning and sdkman uses it in Temurin respin identifiers).
  *
  * Every separator must be followed by at least one alphanumeric character, and
  * a single repeated group covers both the dotted numeric part and the vendor

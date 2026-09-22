@@ -2,11 +2,13 @@
  * Per-host rate policy for batched registry fetches.
  *
  * This is the single source of truth for the JS transport's concurrency and
- * minimum-interval decisions. Most numbers are shared with the Rust transport
+ * minimum-interval decisions. Every number is shared with the Rust transport
  * (`cdxgen-plugins-bin/thirdparty/cdxrs/src/fetch/rate.rs`); a change to one
  * side must be reflected in the other, and `fetchRate.poku.js` pins them so a
- * drift is visible. crates.io is the exception: its requests never reach the
- * Rust transport, so this table alone governs them.
+ * drift is visible. crates.io and package.elm-lang.org are routed so that their
+ * requests never reach the Rust transport, which makes this table the one that
+ * governs them in practice — their rows are mirrored there regardless, because
+ * two tables that disagree are a bug waiting for the routing to change.
  *
  * Why a per-host table rather than a single global interval: a single-registry
  * project — which is to say, almost every npm project — has exactly one host,

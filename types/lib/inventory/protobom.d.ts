@@ -1,5 +1,11 @@
+import { isProtoBomFile } from "@cdxgen/cdx-proto/node";
+export { isProtoBomFile };
 /**
  * Determine whether a spec version is supported for protobuf serialization.
+ *
+ * Delegates to cdx-proto's `isSupportedSpecVersion`, which accepts the
+ * spellings seen in the wild (`v1.6`, `1.6`, `1.6.0`) in addition to the
+ * canonical strings.
  *
  * @param {string|undefined} specVersion CycloneDX spec version string
  * @returns {boolean} `true` when supported by `@cdxgen/cdx-proto`, or when no spec version is provided
@@ -16,13 +22,6 @@ export declare const isProtoSupportedSpecVersion: (specVersion: string | undefin
  * @param {string} [operation="protobuf operations"] Operation label used in the error message
  */
 export declare const assertProtoSupportedSpecVersion: (specVersion: string | undefined, operation?: string) => void;
-/**
- * Determine whether a path looks like a CycloneDX protobuf file.
- *
- * @param {string} filePath File path
- * @returns {boolean} true when the path looks like a protobuf BOM file
- */
-export declare const isProtoBomFile: (filePath: string) => boolean;
 /**
  * Method to convert the given bom json to proto binary
  *
@@ -51,13 +50,19 @@ export declare const getBomStats: (bomJson: string | Object, specVersion?: strin
  * Method to cross-convert a BOM between CycloneDX specification versions using
  * the protobuf schemas.
  *
- * Downgrades are lossy: fields that the target version does not define are
- * dropped and reported in `warnings` as field paths.
+ * cdx-proto's conversion is cardinality-safe: fields that change shape between
+ * versions (`metadata.licenses` and `evidence.identity`, singular in 1.5 and an
+ * array since 1.6) are reshaped automatically — wrapped on upgrade, collapsed
+ * to their first entry on downgrade — including `evidence.identity` on nested
+ * components, `metadata.component`, `metadata.tools.components[]`, and
+ * `formulation[].components[]`. Downgrades are otherwise lossy: fields the
+ * target version does not define are dropped and reported in `warnings` as
+ * field paths, alongside collapsed list siblings.
  *
- * This is the raw `@cdxgen/cdx-proto` conversion. It reshapes nothing that the
- * two schemas model with different cardinality, so a BOM crossing the 1.5/1.6
- * `evidence.identity` boundary must be normalized first. Prefer
- * `applySpecVersionCompatibility` from the postgen stage for that.
+ * Only the protobuf-supported versions (1.5–1.7) can be targeted here. For the
+ * full JSON-level normalization across every version cdxgen emits (component
+ * types, license attributes, 1.4/2.0 reshaping), prefer
+ * `applySpecVersionCompatibility` from the postgen stage.
  *
  * @param {string | Object} bomJson BOM Json, BOM Json string, or proto message
  * @param {string | number} targetSpecVersion Target CycloneDX spec version
