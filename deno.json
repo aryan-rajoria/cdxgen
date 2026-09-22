@@ -1,6 +1,6 @@
 {
   "name": "@cdxgen/cdxgen",
-  "version": "13.2.0",
+  "version": "13.2.1",
   "exports": "./lib/cli/index.js",
   "compilerOptions": {
     "lib": ["deno.window"],
@@ -22,7 +22,12 @@
     "biome.json",
     "plugins",
     "tsconfig.json",
-    "index.cjs"
+    "index.cjs",
+    "claude-plugin/",
+    "uv.lock",
+    "**/*.poku.js",
+    "**/*.d.ts.map",
+    "lib/third-party/arborist/CHANGELOG.md"
   ],
   "compile": {
     "include": ["data", "package.json"]
