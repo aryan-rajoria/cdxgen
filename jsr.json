@@ -18,6 +18,11 @@
     "biome.json",
     "plugins",
     "tsconfig.json",
-    "index.cjs"
+    "index.cjs",
+    "claude-plugin/",
+    "uv.lock",
+    "**/*.poku.js",
+    "**/*.d.ts.map",
+    "lib/third-party/arborist/CHANGELOG.md"
   ]
 }
