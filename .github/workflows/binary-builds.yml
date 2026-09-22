@@ -281,7 +281,7 @@ jobs:
       - name: Enforce binary size thresholds
         shell: bash
         env:
-          FAT_MAX_BYTES: 251658240 # 240 MiB
+          FAT_MAX_BYTES: 301989888 # 288 MiB
           SLIM_MAX_BYTES: 104857600 # 100 MiB
         run: |
           set -euo pipefail

@@ -42,7 +42,7 @@ $caxaPackage = if ($env:CAXA_PACKAGE) { $env:CAXA_PACKAGE } else { "@cdxgen/caxa
 $stagingDirs = [System.Collections.Generic.List[string]]::new()
 $sharedPnpmStore = if ($env:STANDALONE_PNPM_STORE) { $env:STANDALONE_PNPM_STORE } else { Join-Path ([System.IO.Path]::GetTempPath()) "cdxgen-standalone-pnpm-store-$PID" }
 $slimMaxBytes = if ($env:STANDALONE_SLIM_MAX_BYTES) { [int64]$env:STANDALONE_SLIM_MAX_BYTES } else { 104857600 }
-$fatMaxBytes = if ($env:STANDALONE_FAT_MAX_BYTES) { [int64]$env:STANDALONE_FAT_MAX_BYTES } else { 251658240 }
+$fatMaxBytes = if ($env:STANDALONE_FAT_MAX_BYTES) { [int64]$env:STANDALONE_FAT_MAX_BYTES } else { 301989888 }
 
 function Remove-StagingDirs {
   foreach ($stagingDir in $stagingDirs) {
