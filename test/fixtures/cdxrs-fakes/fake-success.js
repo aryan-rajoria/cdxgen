@@ -1,11 +1,11 @@
 #!/usr/bin/env node
-// Fake cdxrs binary that reports version 3.x.x and succeeds on info.
+// Fake cdxrs binary that reports version 4.x.x and succeeds on info.
 import process from "node:process";
 
 const args = process.argv.slice(2);
 
 if (args.includes("--version")) {
-  process.stdout.write("cdxrs 3.0.0\n");
+  process.stdout.write("cdxrs 4.0.0\n");
   process.exit(0);
 }
 
