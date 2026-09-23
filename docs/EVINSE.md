@@ -143,6 +143,16 @@ For .NET projects, `evinse` uses the bundled `dosai` helper from `@cdxgen/cdxgen
   maps always. Families without a single OID, such as generic AES key wrap,
   stay out of the BOM rather than carrying a wrong OID. Set `DOSAI_CMD` to
   point at a newer dosai build than the bundled one.
+- `--exclude` globs are passed to dosai so excluded directories, such as
+  vendored build output, are not analysed. They are read the way the atom
+  evidence filter reads them: a relative pattern like `BuildOutput/**` or
+  `*.Designer.cs` matches at any depth, an absolute path under the scanned
+  directory is anchored to it, and excluding a directory excludes everything
+  beneath it. Brace groups, numeric ranges, and comma separated lists are
+  expanded. Character classes, extglobs, escapes, and negated patterns cannot
+  be expressed in dosai and are skipped with a warning. Dosai matches
+  case-sensitively on Linux. A dosai build without `--exclude` support runs
+  without the patterns.
 
 ```shell
 cdxgen -t dotnet --deep --evidence -o bom.json .
