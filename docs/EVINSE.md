@@ -149,9 +149,9 @@ For .NET projects, `evinse` uses the bundled `dosai` helper from `@cdxgen/cdxgen
   `*.Designer.cs` matches at any depth, an absolute path under the scanned
   directory is anchored to it, and excluding a directory excludes everything
   beneath it. Brace groups, numeric ranges, and comma separated lists are
-  expanded. Character classes, extglobs, escapes, and negated patterns cannot
-  be expressed in dosai and are skipped with a warning. Dosai matches
-  case-sensitively on Linux. A dosai build without `--exclude` support runs
+  expanded. Character classes, extglobs, escapes, negated patterns, and
+  patterns with shell metacharacters cannot be expressed in dosai and are
+  skipped with a warning. Dosai matches case-sensitively on Linux. A dosai build without `--exclude` support runs
   without the patterns.
 
 ```shell
