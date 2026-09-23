@@ -1,4 +1,16 @@
 /**
+ * Merges one analyzer run's metadata properties into the BOM's metadata
+ * component. Analyzer metadata describes a single run, so when the input BOM
+ * already carries facts from an earlier run (cdxgen --profile research, then
+ * evinse), everything under the analyzer's own `cdx:<analyzer>:` prefix is
+ * replaced. Replacing by exact name would keep facts the new run no longer
+ * emits, such as a cdx:rusi:requestedBackend left from a fallback run.
+ *
+ * @param {Object} component Metadata component to update in place
+ * @param {Object[]} metadataProperties Properties from the analyzer run
+ */
+export declare function mergeAnalyzerMetadataProperties(component: Object, metadataProperties?: Object[]): void;
+/**
  * Function to create the db for the libraries referred in the sbom.
  *
  * @param {Object} options Command line options

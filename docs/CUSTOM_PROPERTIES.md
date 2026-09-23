@@ -792,7 +792,9 @@ These properties are safe for policy because they are small values, counts, cate
 | `cdx:rusi:schemaVersion`                                                                                                  | Rusi report schema version.                |
 | `cdx:rusi:toolVersion`                                                                                                    | Rusi helper version.                       |
 | `cdx:rusi:rustcVersion`, `cdx:rusi:cargoVersion`, `cdx:rusi:host`                                                         | Rust toolchain and host environment facts. |
-| `cdx:rusi:backend`, `cdx:rusi:analysisScope`                                                                              | Analysis configuration facts.              |
+| `cdx:rusi:backend`                                                                                                        | Backend that produced the evidence. `compiler` only when compiler evidence was collected, otherwise `stable`. |
+| `cdx:rusi:requestedBackend`                                                                                               | Backend that was requested, present only when rusi fell back to a different one. |
+| `cdx:rusi:analysisScope`                                                                                                  | Analysis configuration facts.              |
 | `cdx:rusi:callGraphMode`, `cdx:rusi:dataFlowMode`                                                                         | Call graph and data-flow modes used.       |
 | `cdx:rusi:packageCount`, `cdx:rusi:fileCount`, `cdx:rusi:importCount`, `cdx:rusi:declarationCount`, `cdx:rusi:usageCount` | Project size and usage counters.           |
 | `cdx:rusi:securitySignalCount`                                                                                            | Security-sensitive API signal summary.     |

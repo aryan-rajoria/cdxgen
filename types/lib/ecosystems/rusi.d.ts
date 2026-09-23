@@ -1,4 +1,17 @@
 /**
+ * Returns the backend rusi actually used. `options.backend` is only the
+ * requested backend: when the compiler backend cannot run (missing
+ * components, wrapper build failure), rusi still echoes "compiler" but falls
+ * back to the stable source analysis. Compiler evidence was collected only
+ * when rusi emits its compiler-source-evidence diagnostic; a backend-error
+ * alone is not conclusive because native interop scanning reports failures
+ * under that kind too.
+ *
+ * @param {Object} rusiReport Parsed rusi report
+ * @returns {string|undefined} Effective backend name
+ */
+export declare function effectiveRusiBackend(rusiReport?: Object): string | undefined;
+/**
  * Checks if the provided language is a Rust language alias.
  *
  * @param {string} language The language to check.
