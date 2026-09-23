@@ -1,4 +1,33 @@
 /**
+ * Translate cdxgen --exclude globs into dosai --exclude globs.
+ *
+ * Dosai is an evidence analyzer, so the translation follows the exclude
+ * filter cdxgen already applies to atom evidence slices
+ * (`globPatternsToAtomIgnoreRegex`): a relative pattern matches at any depth,
+ * and an absolute pattern is anchored to the scanned directory. Dosai itself
+ * uses gitignore conventions, where a pattern with a slash is anchored, so
+ * relative patterns get a leading "**\/". Like the atom filter, and unlike
+ * cdxgen's file discovery, excluding a directory also excludes everything
+ * beneath it.
+ *
+ * Brace groups and numeric ranges are expanded, and comma separated lists are
+ * split, since dosai reads both as literal text. Character classes, extglobs,
+ * escapes, negation, and patterns that step outside the scanned directory
+ * have no dosai equivalent; they are reported as skipped rather than passed
+ * on as literals that match nothing. So is any pattern that still carries a
+ * character outside a small allowlist, such as a literal brace group or a
+ * shell metacharacter. Dosai matches case-sensitively on Linux.
+ *
+ * @param {string[]} excludes cdxgen exclude globs
+ * @param {string} srcPath Absolute directory dosai scans
+ * @returns {{patterns: string[], skipped: string[], truncated: number}} Translated patterns, dropped patterns, and how many were left out by the cap
+ */
+export declare function toDosaiExcludePatterns(excludes: string[], srcPath: string): {
+    patterns: string[];
+    skipped: string[];
+    truncated: number;
+};
+/**
  * Check whether a language is a .NET language supported by dosai analysis.
  *
  * @param {string} language Project type or language name
@@ -19,7 +48,7 @@ export declare function readDosaiJsonFile(jsonFile: string): Object | undefined;
  * @param {string} command Dosai subcommand to execute
  * @param {string} src Source directory to analyze
  * @param {string} outputFile Path where the dosai JSON output is written
- * @param {Object} [options] Options carrying dosaiCommand, dataFlowPatterns, or patternPacks overrides
+ * @param {Object} [options] Options carrying dosaiCommand, dataFlowPatterns, patternPacks, or exclude globs
  * @returns {boolean} True when the command succeeded and produced the output file, false otherwise
  */
 export declare function runDosaiCommand(command: string, src: string, outputFile: string, options?: Object): boolean;
