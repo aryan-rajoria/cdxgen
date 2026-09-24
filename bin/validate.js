@@ -242,6 +242,10 @@ try {
 
 writeOrPrint(output, args.reportFile);
 
+for (const e of report.validationErrors || []) {
+  console.error(`cdx-validate: ${e.stage} validation threw: ${e.message}`);
+}
+
 const { shouldFail: fail, reason } = shouldFail(report, {
   failSeverity: args.failSeverity,
   strict: args.strict,
