@@ -125,3 +125,5 @@ The sandbox blocks network access by default, restricts write paths to the OS te
 - Windows has no safer-exec binary; `tracebom` falls back gracefully with an empty component list
 - The traced command runs in an isolated sandbox — some programs may behave differently under sandbox restrictions
 - HTTP URL tracing (`--trace-http-urls`) requires Linux kernel >= 5.8 with eBPF support and CAP_BPF / CAP_PERFMON capabilities (effectively root)
+- `--trace-http-urls` captures HTTPS requests (TLS library uprobes). Plain-HTTP requests are not captured; use `--proxy-egress`, which records every host the command connects to over HTTP or HTTPS
+- Without those capabilities tracebom prints why URL tracing is unavailable and still writes the library BOM; a traced command that exits non-zero is reported as a warning because the trace may be partial
