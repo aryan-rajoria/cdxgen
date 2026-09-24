@@ -159,8 +159,7 @@ For .NET projects, `evinse` uses the bundled `dosai` helper from `@cdxgen/cdxgen
   as-is, including one created with different `--exclude` patterns or an older
   cdxgen release, so a stale cache can ignore your current excludes; delete
   the file to force a fresh analysis. Pass `--usages-slices-file` to prefer
-  your own slice, and `--include-crypto` to reuse the crypto components the
-  BOM phase already collected instead of rerunning `dosai crypto`.
+  your own slice.
 
 ```shell
 cdxgen -t dotnet --deep --evidence -o bom.json .
