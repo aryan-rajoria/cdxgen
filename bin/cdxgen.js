@@ -81,7 +81,6 @@ import {
   DEFAULT_CDX_SPEC_VERSION,
   getSupportedCycloneDxComponentTypes,
   isCycloneDxBom,
-  isCycloneDxComponentTypeEnabled,
   normalizeCycloneDxComponentTypeFilter,
   toCycloneDxSpecVersionString,
 } from "../lib/inventory/bomUtils.js";
@@ -2055,27 +2054,11 @@ const writeCycloneDxOutput = (jsonFile, bomJson, options) => {
       });
       const evinserModule = await import("../lib/evinser/evinser.js");
       options.projectType = options.projectType || ["java"];
-      const evinseOptions = {
-        _: args._,
-        input: internalCycloneDxInputPath || options.output,
-        output: options.evinseOutput,
-        language: options.projectType,
-        skipMavenCollector: false,
-        force: false,
-        withReachables: options.deep,
-        usagesSlicesFile: options.usagesSlicesFile,
-        dataFlowSlicesFile: options.dataFlowSlicesFile,
-        reachablesSlicesFile: options.reachablesSlicesFile,
-        semanticsSlicesFile: options.semanticsSlicesFile,
-        openapiSpecFile: options.openapiSpecFile,
-        componentType: options.componentType,
-        includeCrypto:
-          options.includeCrypto &&
-          isCycloneDxComponentTypeEnabled("cryptographic-asset", options),
-        specVersion: options.specVersion,
-        profile: options.profile,
-        jsonPretty: options.jsonPretty,
-      };
+      const evinseOptions = evinserModule.buildEvinseOptions(
+        options,
+        args,
+        internalCycloneDxInputPath || options.output,
+      );
       const dbObjMap = await evinserModule.prepareDB(evinseOptions);
       if (dbObjMap) {
         const sliceArtefacts = await evinserModule.analyzeProject(

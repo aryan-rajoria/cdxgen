@@ -153,6 +153,13 @@ For .NET projects, `evinse` uses the bundled `dosai` helper from `@cdxgen/cdxgen
   patterns with shell metacharacters cannot be expressed in dosai and are
   skipped with a warning. Dosai matches case-sensitively on Linux. A dosai build without `--exclude` support runs
   without the patterns.
+- When the input BOM was created with `--deep` in the same run, cdxgen reuses
+  the dosai methods slice from `deps.slices.json` as the usages slice instead
+  of running dosai a second time. An existing `deps.slices.json` is reused
+  as-is, including one created with different `--exclude` patterns or an older
+  cdxgen release, so a stale cache can ignore your current excludes; delete
+  the file to force a fresh analysis. Pass `--usages-slices-file` to prefer
+  your own slice.
 
 ```shell
 cdxgen -t dotnet --deep --evidence -o bom.json .

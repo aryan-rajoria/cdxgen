@@ -11,6 +11,21 @@
  */
 export declare function mergeAnalyzerMetadataProperties(component: Object, metadataProperties?: Object[]): void;
 /**
+ * Build the options for the evinse phase (prepareDB, analyzeProject, and
+ * createEvinseFile) from the cdxgen CLI options.
+ *
+ * This object used to be assembled inline in bin/cdxgen.js, which dropped
+ * fields the analyzers read - most notably `exclude`, so every dosai and atom
+ * run triggered by `--evidence` ignored the user's `--exclude` patterns. Keep
+ * the wiring in one place so the forwarded fields stay testable.
+ *
+ * @param {Object} options CLI options
+ * @param {Object} args Parsed CLI arguments; `args._[0]` is the source directory
+ * @param {string} input Path of the BOM file the evinse phase enriches
+ * @returns {Object} Options for prepareDB, analyzeProject, and createEvinseFile
+ */
+export declare function buildEvinseOptions(options: Object, args: Object, input: string): Object;
+/**
  * Function to create the db for the libraries referred in the sbom.
  *
  * @param {Object} options Command line options
