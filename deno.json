@@ -103,7 +103,7 @@
     "connect": "npm:connect@3.7.0",
     "jsonata": "npm:jsonata@2.2.2",
     "@iarna/toml": "npm:@iarna/toml@2.2.5",
-    "@cdxgen/safer-exec": "npm:@cdxgen/safer-exec@0.16.0",
+    "@cdxgen/safer-exec": "npm:@cdxgen/safer-exec@1.0.1",
     "@cdxgen/cdxgen-plugins-bin": "npm:@cdxgen/cdxgen-plugins-bin@4.0.0",
     "undici": "npm:undici@8.10.0",
     "@appthreat/atom-parsetools": "npm:@appthreat/atom-parsetools@1.7.0"

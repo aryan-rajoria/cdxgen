@@ -34,7 +34,9 @@ describe("tracebom CLI", () => {
     assert.ok(existsSync(tmpFile));
     const bom = JSON.parse(readFileSync(tmpFile, "utf-8"));
     assert.strictEqual(bom.bomFormat, "CycloneDX");
-    // Components may be empty when SaferExec is unavailable — graceful fallback
+    // Components may be empty when the platform runtime binary cannot run
+    // (e.g. unsupported platforms), but a missing @cdxgen/safer-exec module
+    // must exit non-zero rather than write an empty BOM — see traceRunner tests
     unlinkSync(tmpFile);
   });
 

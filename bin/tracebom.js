@@ -79,7 +79,7 @@ const args = _yargs
   })
   .option("disable-network", {
     description:
-      "Disable network inside sandbox. Automatically disabled when --trace-http-urls is set.",
+      "Disable network inside sandbox. Automatically disabled when --trace-http-urls or --proxy-egress is set.",
     default: true,
     type: "boolean",
   })
@@ -170,6 +170,56 @@ const args = _yargs
     default: true,
     type: "boolean",
   })
+  .option("proxy-egress", {
+    description:
+      "Route all outbound traffic through safer-exec's hostname-pinning egress proxy. Only --allow-host (and --allow-url) hosts are reachable; allowed and denied targets are recorded as services. Enables the network.",
+    default: false,
+    type: "boolean",
+  })
+  .option("allow-loopback", {
+    description: "Allow the traced process to connect to loopback addresses.",
+    default: false,
+    type: "boolean",
+  })
+  .option("sandbox-dry-run", {
+    description:
+      "Deny every filesystem write and network connection and record the attempted operations as counts in the BOM metadata.",
+    default: false,
+    type: "boolean",
+  })
+  .option("policy", {
+    description:
+      "Apply a named safer-exec ecosystem policy (for example npm, pnpm, pypi, uv, maven, cargo, gomod, nuget) before the other sandbox options.",
+    type: "string",
+  })
+  .option("policy-file", {
+    description: "Apply a safer-exec JSON policy file.",
+    type: "string",
+  })
+  .option("block-interpreters", {
+    description:
+      "Block interpreters that carry sandbox or task-port exemptions (macOS only).",
+    default: false,
+    type: "boolean",
+  })
+  .option("deny-persistence-writes", {
+    description:
+      "Deny writes to auto-execution and persistence locations such as LaunchAgents, shell rc files and cron directories. Paths in --write-paths stay writable.",
+    default: false,
+    type: "boolean",
+  })
+  .option("private-tmp", {
+    description:
+      "Give the traced process private /tmp and /var/tmp mounts (Linux only).",
+    default: false,
+    type: "boolean",
+  })
+  .option("protect-home", {
+    description: "Isolate $HOME inside the sandbox (Linux only).",
+    choices: ["off", "read-only", "tmpfs"],
+    default: "off",
+    type: "string",
+  })
   .option("print", {
     description: "Print BOM to stdout.",
     default: false,
@@ -230,9 +280,10 @@ const options = {
   traceMaxMemoryMB: args.maxMemory,
   traceMaxProcesses: args.maxProcesses,
   traceTimeoutMs: args.timeout,
-  traceDisableNetwork: args.traceHttpUrls
-    ? false
-    : (args.disableNetwork ?? true),
+  traceDisableNetwork:
+    args.traceHttpUrls || args.proxyEgress
+      ? false
+      : (args.disableNetwork ?? true),
   traceHTTPURLs: args.traceHttpUrls ?? false,
   tracePeriod: args.tracePeriod,
   traceMaxCPUCores: args.maxCpu,
@@ -265,6 +316,15 @@ const options = {
     ? args.blockExec.split(",").filter(Boolean)
     : [],
   traceCrypto: args.traceCrypto ?? true,
+  traceProxyEgress: args.proxyEgress ?? false,
+  traceAllowLoopback: args.allowLoopback ?? false,
+  traceDryRun: args.sandboxDryRun ?? false,
+  tracePolicy: args.policy,
+  tracePolicyFile: args.policyFile ? resolve(args.policyFile) : undefined,
+  traceBlockInterpreters: args.blockInterpreters ?? false,
+  traceDenyPersistenceWrites: args.denyPersistenceWrites ?? false,
+  tracePrivateTmp: args.privateTmp ?? false,
+  traceProtectHome: args.protectHome,
   cbom: undefined,
   projectType: ["dynamic"],
   output: resolve(args.output),

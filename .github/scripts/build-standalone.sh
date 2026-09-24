@@ -102,6 +102,9 @@ run_binary_build() {
   if [[ "$output" == "cbom" || "$output" == "saasbom" ]]; then
     run_atom_smoke_test "$output"
   fi
+  if [[ "$output" == "aibom" ]]; then
+    run_aibom_smoke_test "$output"
+  fi
   assert_binary_size_limit "$output"
 }
 
@@ -129,6 +132,21 @@ count_bom_components() {
     } else {
       const bom = JSON.parse(readFileSync(file, "utf8"));
       console.log(`${(bom.components || []).length}`);
+    }
+NODE
+}
+
+count_bom_components_of_type() {
+  node --input-type=module - "$1" "$2" <<'NODE'
+    import { existsSync, readFileSync } from "node:fs";
+    const [, , file, type] = process.argv;
+    if (!existsSync(file)) {
+      console.log("0");
+    } else {
+      const bom = JSON.parse(readFileSync(file, "utf8"));
+      console.log(
+        `${(bom.components || []).filter((c) => c.type === type).length}`,
+      );
     }
 NODE
 }
@@ -168,6 +186,35 @@ run_atom_smoke_test() {
     exit 1
   fi
   echo "atom smoke test: $smoke_count component(s) from atom, 0 from the disabled-atom control."
+}
+
+# The fixture is a Hugging Face model repository. The aibom alias must apply
+# the -t ai defaults on its own (applyCommandNameDefaults keyed off the invoked
+# command name), and exactly that produces machine-learning-model components:
+# the same fixture scanned without the AI defaults yields none. So a model
+# count of zero means the alias entry point regressed to plain cdxgen (#4379)
+# rather than the scan merely coming up empty.
+AIBOM_SMOKE_FIXTURE="test/data/ai-huggingface/repos"
+
+run_aibom_smoke_test() {
+  local output="$1"
+  local smoke_out=".${output}-ai-smoke.json"
+  local model_count
+  echo "aibom smoke test: ./$output against $AIBOM_SMOKE_FIXTURE"
+
+  rm -f "$smoke_out"
+  if ! "./$output" "$AIBOM_SMOKE_FIXTURE" -o "$smoke_out" --no-install-deps --fail-on-error >/dev/null 2>&1; then
+    echo "aibom smoke test FAILED: ./$output exited non-zero." >&2
+    rm -f "$smoke_out"
+    exit 1
+  fi
+  model_count="$(count_bom_components_of_type "$smoke_out" machine-learning-model)"
+  rm -f "$smoke_out"
+  if [[ "$model_count" == "0" ]]; then
+    echo "aibom smoke test FAILED: no machine-learning-model components; the AI-BOM defaults were not applied." >&2
+    exit 1
+  fi
+  echo "aibom smoke test: $model_count machine-learning-model component(s)."
 }
 
 promote_optional_dependencies() {
@@ -368,6 +415,31 @@ assert_atom_payload_present() {
   echo "Standalone atom payload present: $payload_path (kind=$kind)."
 }
 
+# Assert that the safer-exec platform sub-package and its Go runtime binary
+# actually exist in the staging tree, and make the binary executable.
+# assert_package_present alone accepts a payload-less dispatcher, which only
+# fails later at runtime when every trace silently yields an empty BOM (#4378).
+ensure_safer_exec_payload_present() {
+  local staging_dir="$1"
+  local package_name="$2"
+  local payload_path="$staging_dir/node_modules/${package_name}/bin/safer-exec-rt"
+
+  assert_package_present "$staging_dir" "$package_name"
+  if [[ ! -e "$payload_path" ]]; then
+    echo "Standalone safer-exec payload missing: $payload_path. The dispatcher would be payload-less." >&2
+    exit 1
+  fi
+  # The platform package declares no bin entry, so the install leaves the Go
+  # runtime without the executable bit. The library chmods it on resolve at
+  # runtime, but set it here so the shipped payload works regardless.
+  chmod +x "$payload_path"
+  if [[ ! -x "$payload_path" ]]; then
+    echo "Standalone safer-exec binary is not executable: $payload_path" >&2
+    exit 1
+  fi
+  echo "Standalone safer-exec payload present: $payload_path."
+}
+
 normalized_target_os() {
   if [[ -n "${TARGET_OS:-}" ]]; then
     echo "$TARGET_OS"
@@ -533,11 +605,38 @@ assert_package_absent() {
   fi
 }
 
-remove_platform_plugins() {
+remove_cdxgen_plugins_bin() {
   local staging_dir="$1"
 
   rm -rf "$staging_dir/node_modules/@cdxgen"/cdxgen-plugins-bin*
+}
+
+remove_safer_exec() {
+  local staging_dir="$1"
+
   rm -rf "$staging_dir/node_modules/@cdxgen"/safer-exec*
+}
+
+# promote_optional_dependencies installs every safer-exec platform package so
+# the lockfile resolves; only the build target's runtime can ever execute.
+remove_non_target_safer_exec_platforms() {
+  local staging_dir="$1"
+  local keep_package="$2"
+  local entry
+
+  for entry in "$staging_dir/node_modules/@cdxgen"/safer-exec-*; do
+    [[ -e "$entry" ]] || continue
+    if [[ "@cdxgen/$(basename "$entry")" != "$keep_package" ]]; then
+      rm -rf "$entry"
+    fi
+  done
+}
+
+remove_platform_plugins() {
+  local staging_dir="$1"
+
+  remove_cdxgen_plugins_bin "$staging_dir"
+  remove_safer_exec "$staging_dir"
 }
 
 prune_plugins_to_allowlist() {
@@ -688,10 +787,21 @@ apply_profile_pruning_and_preflight() {
     trace-runtime)
       assert_package_present "$staging_dir" @cdxgen/safer-exec
       assert_package_present "$staging_dir" @cdxgen/cdx-proto
-      remove_platform_plugins "$staging_dir"
+      # tracebom's native helper is safer-exec itself, so prune only the
+      # plugins-bin payloads here. remove_platform_plugins would also delete
+      # @cdxgen/safer-exec* after the preflight above passed, shipping a
+      # binary that never runs the traced command yet still exits 0 with an
+      # empty BOM (#4378).
+      remove_cdxgen_plugins_bin "$staging_dir"
+      remove_non_target_safer_exec_platforms "$staging_dir" "$(resolve_safer_exec_package_name)"
       assert_package_absent "$staging_dir" @appthreat/atom
       assert_package_absent "$staging_dir" @cdxgen/cdx-hbom
       assert_package_absent "$staging_dir" jsonata
+      # The presence checks above ran before pruning, so they cannot catch a
+      # pruning step deleting the tracer again. Re-assert the dispatcher, the
+      # platform sub-package, and its payload binary after pruning.
+      assert_package_present "$staging_dir" @cdxgen/safer-exec
+      ensure_safer_exec_payload_present "$staging_dir" "$(resolve_safer_exec_package_name)"
       ;;
     no-optional|json-signature)
       remove_platform_plugins "$staging_dir"
@@ -710,8 +820,13 @@ apply_profile_pruning_and_preflight() {
 
 target_entry_point() {
   case "$1" in
-    aibom|cdxgen|cdxgen-slim) echo "bin/cdxgen.js" ;;
-    cbom|obom|saasbom) echo "bin/$1.js" ;;
+    cdxgen|cdxgen-slim) echo "bin/cdxgen.js" ;;
+    # The alias commands must launch through their alias entry point, not
+    # bin/cdxgen.js: the alias rewrites process.argv[1] so cdxgen derives the
+    # invoked command name and applies the per-command defaults (e.g. -t ai
+    # for aibom). Pointing aibom at bin/cdxgen.js makes it behave like plain
+    # cdxgen (#4379).
+    aibom|cbom|obom|saasbom) echo "bin/$1.js" ;;
     cdx-audit) echo "bin/audit.js" ;;
     cdx-verify) echo "bin/verify.js" ;;
     cdx-sign) echo "bin/sign.js" ;;
