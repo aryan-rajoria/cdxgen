@@ -1428,8 +1428,12 @@ property is emitted that appears nowhere in this file.
 
 **`cdx:dynamic:*`**
 
+- `cdx:dynamic:dryRun`
+- `cdx:dynamic:dryRun:captured`
+- `cdx:dynamic:dryRun:<metric>` (`totalEvents`, `fileReads`, `fileWrites`, `fileMetadata`, `networkOutbound`, `networkBind`, `execAttempts`, `forkAttempts`)
+- `cdx:dynamic:egressDecision`
 - `cdx:dynamic:filePath`
-- `cdx:dynamic:httpQuery`
+- `cdx:dynamic:httpQueryParams`
 
 **`cdx:embeddedSbom:*`**
 

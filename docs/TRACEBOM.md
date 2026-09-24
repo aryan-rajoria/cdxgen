@@ -24,7 +24,7 @@ tracebom --cmd <command> [options]
 | `--max-cpu`           | number  | —          | Max CPU cores as fractional number (e.g. `0.5` for half a core).                                                 |
 | `--max-processes`     | number  | `64`       | Max process count for sandbox.                                                                                   |
 | `--timeout`           | number  | `60000`    | Trace timeout in milliseconds.                                                                                   |
-| `--disable-network`   | boolean | `true`     | Disable network inside sandbox. Automatically disabled when `--trace-http-urls` is set.                          |
+| `--disable-network`   | boolean | `true`     | Disable network inside sandbox. Automatically disabled when `--trace-http-urls` or `--proxy-egress` is set.      |
 | `--trace-http-urls`   | boolean | `false`    | Enable eBPF-based HTTP URL tracing (Linux only, kernel >= 5.8). Requires CAP_BPF.                                |
 | `--trace-crypto`      | boolean | `true`     | Enable eBPF-based cryptographic library and cipher suite tracing (Linux only, kernel >= 5.8).                    |
 | `--crypto-probe-mode` | string  | `tls-only` | Crypto probe mode controlling tracing depth: `tls-only` (default) or `operations` (digest, encrypt, sign).       |
@@ -41,6 +41,15 @@ tracebom --cmd <command> [options]
 | `--trace-exec`        | boolean | `false`    | Log every child process spawned by the traced command.                                                           |
 | `--allow-exec`        | string  | —          | Comma-separated list of executables the traced command is allowed to run.                                        |
 | `--block-exec`        | string  | —          | Comma-separated list of executables to block from running.                                                       |
+| `--proxy-egress`      | boolean | `false`    | Route all egress through safer-exec's hostname-pinning proxy. Only `--allow-host`/`--allow-url` hosts are reachable. Enables the network. |
+| `--allow-loopback`    | boolean | `false`    | Allow connections to loopback addresses.                                                                         |
+| `--sandbox-dry-run`   | boolean | `false`    | Deny every filesystem write and network connection; record attempted-operation counts in the BOM metadata.      |
+| `--policy`            | string  | —          | Named safer-exec ecosystem policy (`npm`, `pnpm`, `pypi`, `uv`, `maven`, `cargo`, `gomod`, `nuget`, …), applied before the other options. |
+| `--policy-file`       | string  | —          | safer-exec JSON policy file, applied before the other options.                                                  |
+| `--block-interpreters` | boolean | `false`   | Block interpreters with sandbox or task-port exemptions (macOS only).                                            |
+| `--deny-persistence-writes` | boolean | `false` | Deny writes to LaunchAgents, shell rc files, cron and other persistence locations. `--write-paths` stay writable. |
+| `--private-tmp`       | boolean | `false`    | Private `/tmp` and `/var/tmp` mounts (Linux only).                                                               |
+| `--protect-home`      | string  | `off`      | Isolate `$HOME`: `off`, `read-only` or `tmpfs` (Linux only).                                                     |
 | `--print`             | boolean | `false`    | Print BOM to stdout.                                                                                             |
 
 ### Library-only options
@@ -77,6 +86,16 @@ tracebom --cmd "npm install" --strict --diff --write-paths /tmp/npm-cache -o bom
 # Trace with network allow-lists and fork protection
 tracebom --cmd "node server.js" --allow-host registry.npmjs.org,api.github.com --block-fork -o bom.json
 
+# Allow egress only to the npm registry through the hostname-pinning proxy;
+# every allowed and denied host becomes a service (works on macOS and Linux)
+tracebom --cmd "npm view left-pad version" --proxy-egress --allow-host registry.npmjs.org -o bom.json
+
+# Record what an install script tries to do without letting it do anything
+tracebom --cmd "node postinstall.js" --sandbox-dry-run -o bom.json
+
+# Apply the safer-exec npm policy and block persistence writes
+tracebom --cmd "npm ci" --policy npm --deny-persistence-writes -o bom.json
+
 # Trace with exec restrictions
 tracebom --cmd "npm install" --allow-exec node,npm --block-exec sh,bash -o bom.json
 ```
@@ -86,7 +105,9 @@ tracebom --cmd "npm install" --allow-exec node,npm --block-exec sh,bash -o bom.j
 The generated CycloneDX BOM includes:
 
 - **Components:** Shared libraries loaded by the traced process at runtime, with SHA-256 hashes and OS package resolution.
-- **Services:** Enumerated HTTP endpoints accessed by the process, grouped by host. Each service includes full request URLs as `endpoints` and metadata such as `cdx:service:httpMethod` properties.
+- **Services:** Enumerated HTTP endpoints accessed by the process, grouped by host. Each service includes request URLs as `endpoints` and metadata such as `cdx:service:httpMethod` and `cdx:dynamic:httpQueryParams` (parameter names only; query values are never recorded).
+- **Egress services (`--proxy-egress`):** Every host the command connected to or tried to reach through the proxy, as a service whose endpoint is the scheme and authority only, with `cdx:dynamic:egressDecision` set to `allowed` or `denied`.
+- **Dry-run metadata (`--sandbox-dry-run`):** `cdx:dynamic:dryRun=true` plus attempted-operation counts such as `cdx:dynamic:dryRun:fileWrites` and `cdx:dynamic:dryRun:networkOutbound` in `metadata.properties`. Paths and targets are not recorded. On Linux the counts need `strace`; without it the side effects are still denied, `cdx:dynamic:dryRun:captured` is `false` and no counts are recorded.
 
 ## Sandbox model
 
