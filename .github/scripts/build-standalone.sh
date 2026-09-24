@@ -617,6 +617,21 @@ remove_safer_exec() {
   rm -rf "$staging_dir/node_modules/@cdxgen"/safer-exec*
 }
 
+# promote_optional_dependencies installs every safer-exec platform package so
+# the lockfile resolves; only the build target's runtime can ever execute.
+remove_non_target_safer_exec_platforms() {
+  local staging_dir="$1"
+  local keep_package="$2"
+  local entry
+
+  for entry in "$staging_dir/node_modules/@cdxgen"/safer-exec-*; do
+    [[ -e "$entry" ]] || continue
+    if [[ "@cdxgen/$(basename "$entry")" != "$keep_package" ]]; then
+      rm -rf "$entry"
+    fi
+  done
+}
+
 remove_platform_plugins() {
   local staging_dir="$1"
 
@@ -778,6 +793,7 @@ apply_profile_pruning_and_preflight() {
       # binary that never runs the traced command yet still exits 0 with an
       # empty BOM (#4378).
       remove_cdxgen_plugins_bin "$staging_dir"
+      remove_non_target_safer_exec_platforms "$staging_dir" "$(resolve_safer_exec_package_name)"
       assert_package_absent "$staging_dir" @appthreat/atom
       assert_package_absent "$staging_dir" @cdxgen/cdx-hbom
       assert_package_absent "$staging_dir" jsonata
