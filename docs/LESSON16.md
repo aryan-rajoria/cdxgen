@@ -116,9 +116,12 @@ When `--trace-crypto` is enabled (default), tracebom intercepts cryptographic op
 This generates **CycloneDX 1.7** compliant `cryptographic-asset` components in the SBOM representing the cryptographic libraries and algorithms (and protocols such as `TLS` with active `cipherSuites`) detected during runtime:
 
 ```bash
-# Trace app.js, capture cryptographic assets, and output standalone CBOM file
-tracebom --cmd "node app.js" --trace-crypto --cbom-output cbom.json -o bom.json
+# Trace app.js and capture cryptographic assets into the same BOM output
+tracebom --cmd "node app.js" --trace-crypto -o bom.json
 ```
+
+The cryptographic assets are written into the same output file as the library
+components; there is no separate CBOM output flag.
 
 Traced assets use the same 1.7 shape as statically detected ones: an
 `assetType`, an `oid` where one is known, and an `algorithmProperties` block
@@ -130,11 +133,11 @@ repeated `cdx:crypto:primitive` properties rather than the single structured
 
 ### Additional sandbox controls
 
-tracebom exposes many of `@cdxgen/safer-exec`'s sandbox controls as CLI flags for advanced use cases:
+tracebom exposes many of `@cdxgen/safer-exec`'s sandbox controls as CLI flags for advanced use cases. The egress proxy, sandbox dry-run, and ecosystem policies added in safer-exec 1.0 have their own walkthrough in [Lesson 34](LESSON34.md).
 
 ```bash
-# Restrict CPU usage and strip sensitive env vars
-tracebom --cmd "npm install" --max-cpu 0.5 --sanitize-env -o bom.json
+# Restrict CPU usage and pass only specific host variables to the sandbox
+tracebom --cmd "npm install" --max-cpu 0.5 --allow-envs PATH,NPM_CONFIG_CACHE -o bom.json
 
 # Strict mode + filesystem diffing (useful in CI/CD)
 tracebom --cmd "npm install" --strict --diff --write-paths /tmp/cache -o bom.json
