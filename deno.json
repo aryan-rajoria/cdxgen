@@ -1,6 +1,6 @@
 {
   "name": "@cdxgen/cdxgen",
-  "version": "13.2.1",
+  "version": "13.3.0",
   "exports": "./lib/cli/index.js",
   "compilerOptions": {
     "lib": ["deno.window"],
