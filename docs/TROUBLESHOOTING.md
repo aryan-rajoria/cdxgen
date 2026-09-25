@@ -204,6 +204,26 @@ This usually means post-processing changed the output after generation succeeded
 
 Run the same command without filters. If the components come back, the generator is fine and the post-processing configuration is the real issue.
 
+## Symptom: NuGet packages appear without licenses or descriptions
+
+.NET enrichment fetches package metadata from `api.nuget.org`. On a restricted
+network the service index at `api.nuget.org/v3/index.json` may time out.
+
+### What happens now
+
+cdxgen falls back to the registration base URL and keeps going. Packages whose
+metadata could not be fetched are still present as components, only unenriched:
+no license, description, or supplier fields. Per-package lookup failures have
+always degraded this way, and the service index now does too instead of
+aborting the whole BOM.
+
+### What to check
+
+If you need full enrichment on an air-gapped runner, allow
+`api.nuget.org` (both the index and `registrations.nuget.org` it points to), or
+generate the BOM where the registry is reachable. A BOM that is complete but
+unenriched is a network symptom, not a parser failure.
+
 ## Symptom: configuration files appear ignored
 
 cdxgen loads configuration from `.cdxgenrc`, `.cdxgen.json`, `.cdxgen.yml`, or `.cdxgen.yaml` in the current working directory.

@@ -10,47 +10,47 @@ tracebom --cmd <command> [options]
 
 ## Flags
 
-| Flag                  | Type    | Default    | Description                                                                                                      |
-| --------------------- | ------- | ---------- | ---------------------------------------------------------------------------------------------------------------- |
-| `--cmd`               | string  | —          | **Required.** Command to execute and trace.                                                                      |
-| `-d, --working-dir`   | string  | `cwd()`    | Working directory for the traced process.                                                                        |
-| `-o, --output`        | string  | `bom.json` | Output SBOM file path.                                                                                           |
-| `--spec-version`      | number  | `1.7`      | CycloneDX spec version.                                                                                          |
-| `--project-name`      | string  | —          | Override component name.                                                                                         |
-| `--project-version`   | string  | —          | Override component version.                                                                                      |
-| `--read-paths`        | string  | —          | Comma-separated extra filesystem read paths for the sandbox.                                                     |
-| `--write-paths`       | string  | —          | Comma-separated sandbox write paths (overrides default of OS tmpdir).                                            |
-| `--max-memory`        | number  | `512`      | Max memory MB for sandbox.                                                                                       |
-| `--max-cpu`           | number  | —          | Max CPU cores as fractional number (e.g. `0.5` for half a core).                                                 |
-| `--max-processes`     | number  | `64`       | Max process count for sandbox.                                                                                   |
-| `--timeout`           | number  | `60000`    | Trace timeout in milliseconds.                                                                                   |
-| `--disable-network`   | boolean | `true`     | Disable network inside sandbox. Automatically disabled when `--trace-http-urls` or `--proxy-egress` is set.      |
-| `--trace-http-urls`   | boolean | `false`    | Enable eBPF-based HTTP URL tracing (Linux only, kernel >= 5.8). Requires CAP_BPF.                                |
-| `--trace-crypto`      | boolean | `true`     | Enable eBPF-based cryptographic library and cipher suite tracing (Linux only, kernel >= 5.8).                    |
-| `--crypto-probe-mode` | string  | `tls-only` | Crypto probe mode controlling tracing depth: `tls-only` (default) or `operations` (digest, encrypt, sign).       |
-| `--trace-period`      | number  | —          | Stop tracing after N seconds. Useful for tracing long-running or persistent commands.                            |
-| `--diff`              | boolean | `false`    | Enable filesystem mutation diffing. Tracks which files are created, modified, or deleted.                        |
-| `--strict`            | boolean | `false`    | Treat sandbox setup warnings as hard errors. Useful for CI/CD pipelines.                                         |
-| `--allow-host`        | string  | —          | Comma-separated hostnames to allow network access to (when network is enabled).                                  |
-| `--allow-port`        | string  | —          | Comma-separated TCP ports to allow network access to.                                                            |
-| `--allow-url`         | string  | —          | Comma-separated URL allow rules for fine-grained HTTP access control (Linux only, requires `--trace-http-urls`). |
-| `--allow-envs`        | string  | -          | Comma-separated host environment variables allowed to pass through the sandbox.                                  |
-| `--allow-hidden`      | boolean | `true`     | Allow reading and writing to hidden files and directories.                                                       |
-| `--allow-listen`      | string  | -          | Comma-separated IP addresses or ip:port strings to allow the sandboxed process to bind/listen to.                |
-| `--block-fork`        | boolean | `false`    | Prevent the traced process from forking new processes.                                                           |
-| `--trace-exec`        | boolean | `false`    | Log every child process spawned by the traced command.                                                           |
-| `--allow-exec`        | string  | —          | Comma-separated list of executables the traced command is allowed to run.                                        |
-| `--block-exec`        | string  | —          | Comma-separated list of executables to block from running.                                                       |
-| `--proxy-egress`      | boolean | `false`    | Route all egress through safer-exec's hostname-pinning proxy. Only `--allow-host`/`--allow-url` hosts are reachable. Enables the network. |
-| `--allow-loopback`    | boolean | `false`    | Allow connections to loopback addresses.                                                                         |
-| `--sandbox-dry-run`   | boolean | `false`    | Deny every filesystem write and network connection; record attempted-operation counts in the BOM metadata.      |
-| `--policy`            | string  | —          | Named safer-exec ecosystem policy (`npm`, `pnpm`, `pypi`, `uv`, `maven`, `cargo`, `gomod`, `nuget`, …), applied before the other options. |
-| `--policy-file`       | string  | —          | safer-exec JSON policy file, applied before the other options.                                                  |
-| `--block-interpreters` | boolean | `false`   | Block interpreters with sandbox or task-port exemptions (macOS only).                                            |
-| `--deny-persistence-writes` | boolean | `false` | Deny writes to LaunchAgents, shell rc files, cron and other persistence locations. `--write-paths` stay writable. |
-| `--private-tmp`       | boolean | `false`    | Private `/tmp` and `/var/tmp` mounts (Linux only).                                                               |
-| `--protect-home`      | string  | `off`      | Isolate `$HOME`: `off`, `read-only` or `tmpfs` (Linux only).                                                     |
-| `--print`             | boolean | `false`    | Print BOM to stdout.                                                                                             |
+| Flag                        | Type    | Default    | Description                                                                                                                               |
+| --------------------------- | ------- | ---------- | ----------------------------------------------------------------------------------------------------------------------------------------- |
+| `--cmd`                     | string  | —          | **Required.** Command to execute and trace.                                                                                               |
+| `-d, --working-dir`         | string  | `cwd()`    | Working directory for the traced process.                                                                                                 |
+| `-o, --output`              | string  | `bom.json` | Output SBOM file path.                                                                                                                    |
+| `--spec-version`            | number  | `1.7`      | CycloneDX spec version.                                                                                                                   |
+| `--project-name`            | string  | —          | Override component name.                                                                                                                  |
+| `--project-version`         | string  | —          | Override component version.                                                                                                               |
+| `--read-paths`              | string  | —          | Comma-separated extra filesystem read paths for the sandbox.                                                                              |
+| `--write-paths`             | string  | —          | Comma-separated sandbox write paths (overrides default of OS tmpdir).                                                                     |
+| `--max-memory`              | number  | `512`      | Max memory MB for sandbox.                                                                                                                |
+| `--max-cpu`                 | number  | —          | Max CPU cores as fractional number (e.g. `0.5` for half a core).                                                                          |
+| `--max-processes`           | number  | `64`       | Max process count for sandbox.                                                                                                            |
+| `--timeout`                 | number  | `60000`    | Trace timeout in milliseconds.                                                                                                            |
+| `--disable-network`         | boolean | `true`     | Disable network inside sandbox. Automatically disabled when `--trace-http-urls` or `--proxy-egress` is set.                               |
+| `--trace-http-urls`         | boolean | `false`    | Enable eBPF-based HTTP URL tracing (Linux only, kernel >= 5.8). Requires CAP_BPF.                                                         |
+| `--trace-crypto`            | boolean | `true`     | Enable eBPF-based cryptographic library and cipher suite tracing (Linux only, kernel >= 5.8).                                             |
+| `--crypto-probe-mode`       | string  | `tls-only` | Crypto probe mode controlling tracing depth: `tls-only` (default) or `operations` (digest, encrypt, sign).                                |
+| `--trace-period`            | number  | —          | Stop tracing after N seconds. Useful for tracing long-running or persistent commands.                                                     |
+| `--diff`                    | boolean | `false`    | Enable filesystem mutation diffing. Tracks which files are created, modified, or deleted.                                                 |
+| `--strict`                  | boolean | `false`    | Treat sandbox setup warnings as hard errors. Useful for CI/CD pipelines.                                                                  |
+| `--allow-host`              | string  | —          | Comma-separated hostnames to allow network access to (when network is enabled).                                                           |
+| `--allow-port`              | string  | —          | Comma-separated TCP ports to allow network access to.                                                                                     |
+| `--allow-url`               | string  | —          | Comma-separated URL allow rules for fine-grained HTTP access control (Linux only, requires `--trace-http-urls`).                          |
+| `--allow-envs`              | string  | -          | Comma-separated host environment variables allowed to pass through the sandbox.                                                           |
+| `--allow-hidden`            | boolean | `true`     | Allow reading and writing to hidden files and directories.                                                                                |
+| `--allow-listen`            | string  | -          | Comma-separated IP addresses or ip:port strings to allow the sandboxed process to bind/listen to.                                         |
+| `--block-fork`              | boolean | `false`    | Prevent the traced process from forking new processes.                                                                                    |
+| `--trace-exec`              | boolean | `false`    | Log every child process spawned by the traced command.                                                                                    |
+| `--allow-exec`              | string  | —          | Comma-separated list of executables the traced command is allowed to run.                                                                 |
+| `--block-exec`              | string  | —          | Comma-separated list of executables to block from running.                                                                                |
+| `--proxy-egress`            | boolean | `false`    | Route all egress through safer-exec's hostname-pinning proxy. Only `--allow-host`/`--allow-url` hosts are reachable. Enables the network. |
+| `--allow-loopback`          | boolean | `false`    | Allow connections to loopback addresses.                                                                                                  |
+| `--sandbox-dry-run`         | boolean | `false`    | Deny every filesystem write and network connection; record attempted-operation counts in the BOM metadata.                                |
+| `--policy`                  | string  | —          | Named safer-exec ecosystem policy (`npm`, `pnpm`, `pypi`, `uv`, `maven`, `cargo`, `gomod`, `nuget`, …), applied before the other options. |
+| `--policy-file`             | string  | —          | safer-exec JSON policy file, applied before the other options.                                                                            |
+| `--block-interpreters`      | boolean | `false`    | Block interpreters with sandbox or task-port exemptions (macOS only).                                                                     |
+| `--deny-persistence-writes` | boolean | `false`    | Deny writes to LaunchAgents, shell rc files, cron and other persistence locations. `--write-paths` stay writable.                         |
+| `--private-tmp`             | boolean | `false`    | Private `/tmp` and `/var/tmp` mounts (Linux only).                                                                                        |
+| `--protect-home`            | string  | `off`      | Isolate `$HOME`: `off`, `read-only` or `tmpfs` (Linux only).                                                                              |
+| `--print`                   | boolean | `false`    | Print BOM to stdout.                                                                                                                      |
 
 ### Library-only options
 
@@ -127,3 +127,9 @@ The sandbox blocks network access by default, restricts write paths to the OS te
 - HTTP URL tracing (`--trace-http-urls`) requires Linux kernel >= 5.8 with eBPF support and CAP_BPF / CAP_PERFMON capabilities (effectively root)
 - `--trace-http-urls` captures HTTPS requests (TLS library uprobes). Plain-HTTP requests are not captured; use `--proxy-egress`, which records every host the command connects to over HTTP or HTTPS
 - Without those capabilities tracebom prints why URL tracing is unavailable and still writes the library BOM; a traced command that exits non-zero is reported as a warning because the trace may be partial
+
+## See also
+
+- [Lesson 16](LESSON16.md) - a first walkthrough of dynamic SBOM generation with tracebom
+- [Lesson 34](LESSON34.md) - choosing between the network visibility modes, egress decision services, sandbox dry-run, and policies
+- [Custom properties](CUSTOM_PROPERTIES.md) - the `cdx:dynamic:*` namespace reference

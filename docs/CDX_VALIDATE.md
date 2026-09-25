@@ -98,6 +98,7 @@ A stable, documented JSON schema:
   "schemaValid": true,
   "deepValid": true,
   "signatureVerified": null,
+  "validationErrors": [],
   "summary": { "total": 95, "pass": 28, "fail": 2, "manual": 65, "errors": 1 },
   "benchmarks": [ { "id": "scvs-l2", "name": "OWASP SCVS Level 2", "pass": 15, "fail": 1, "manual": 46, "scorePct": 94, "controls": [ … ] } ],
   "findings": [
@@ -128,6 +129,28 @@ finding. Properties follow the `cdx:validate:*` namespace (e.g.
 `cdx:validate:ruleId`, `cdx:validate:standardRefs`,
 `cdx:validate:mitigation`). This is the same shape the `bom-audit` engine
 emits, making the two streams directly mergeable.
+
+---
+
+## Validator errors are not findings
+
+A validator that throws has not produced a verdict on the BOM, so an
+exception is never folded into `schemaValid`/`deepValid` or counted as a
+failing control. When the schema or deep stage throws (for example on an
+unexpected input shape), `validateBomAdvanced()` records it in
+`validationErrors: [{ "stage": "schema" | "deep", "message": "…" }]`, and
+`summary.errors` counts how many occurred.
+
+Each reporter surfaces the list differently:
+
+- the **console** reporter prints `Validator error during <stage> validation: <message>` lines after the summary
+- the **json** reporter includes the `validationErrors` array verbatim
+- the **sarif** reporter emits each entry as a `toolExecutionNotifications` error on the invocation, so code-scanning UIs show the tool itself had a problem
+- **cdx-validate** additionally prints every entry to stderr as `<stage> validation threw: <message>`
+
+If a run reports `errors > 0`, treat the corresponding stage's verdict as
+unknown rather than failed, fix or report the validator fault, and re-run.
+A finding, by contrast, is always a statement about the BOM.
 
 ---
 

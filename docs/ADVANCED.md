@@ -923,6 +923,8 @@ The resulting protobuf BOM can be consumed directly by companion commands such a
 
 `hbom` can also emit a protobuf sidecar with `--export-proto --proto-bin-file hbom.cdx`.
 
+> **Empty dependsOn note:** protobuf omits empty repeated fields, so a dependency entry with no dependents is serialized without a `dependsOn` key at all. When cdxgen reads a `.cdx` file back (`readBinary` with `asJson=true`), it restores `dependsOn: []` on every such entry, so a JSON BOM and its protobuf round-trip produce identical dependency lists. If you parse `.cdx` files with your own tooling, treat a missing `dependsOn` as empty rather than as a malformed entry; a validator that reads `dependsOn.length` directly will otherwise report false schema failures on valid protobuf input.
+
 > **Signature note:** keep the original JSON BOM when you need JSF signature verification. Local protobuf BOM input is supported for decode and structural processing, but `cdx-proto` does not currently preserve JSF signature blocks, so `cdx-verify` and `cdx-validate --public-key ...` require the source JSON BOM.
 
 ## Include formulation
