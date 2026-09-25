@@ -164,7 +164,7 @@ settings:
 
 overrides:
   iconv-lite: 0.7.2
-  yargs: 18.1.0
+  yargs: 18.2.0
   type-detect: 4.1.0
   on-finished: 2.4.1
 
@@ -226,7 +226,7 @@ importers:
         specifier: 7.8.5
         version: 7.8.5
       smol-toml:
-        specifier: ^1.8.0
+        specifier: 1.8.0
         version: 1.8.0
       ssri:
         specifier: 14.0.0
@@ -247,8 +247,8 @@ importers:
         specifier: 2.9.1
         version: 2.9.1
       yargs:
-        specifier: 18.1.0
-        version: 18.1.0
+        specifier: 18.2.0
+        version: 18.2.0
     devDependencies:
       '@biomejs/biome':
         specifier: 2.5.14
@@ -423,11 +423,6 @@ packages:
   '@babel/helper-validator-identifier@8.0.6':
     resolution: {integrity: sha512-HYx0YmuchRxRSpnjvcNffnPS8DCauKNmnumIuHG3jnQAVewRA7kfJGwF13ayEpSZs7s4R/oBH4eppuXcAQd5JQ==, tarball: https://registry.npmjs.org/@babel/helper-validator-identifier/-/helper-validator-identifier-8.0.6.tgz}
     engines: {node: ^22.18.0 || >=24.11.0}
-
-  '@babel/parser@8.0.5':
-    resolution: {integrity: sha512-51RXvQNFakaS0bTpYiGkxNbUVwkPO4kONv6EVLorZABxsx+KZ6Z7uSYvi/wmKS/+X+rfj9RvOw0/ZNh+cmI0Rw==, tarball: https://registry.npmjs.org/@babel/parser/-/parser-8.0.5.tgz}
-    engines: {node: ^22.18.0 || >=24.11.0}
-    hasBin: true
 
   '@babel/parser@8.0.6':
     resolution: {integrity: sha512-LpGDIYJAzc3Y3PT9x+FxBrGYu2PlWxLmyN7SwPTzaX0LSwEmFJBsRnPBqmaXF2r1v+Zhz6lNiEJ+7yKtM5+Ugg==, tarball: https://registry.npmjs.org/@babel/parser/-/parser-8.0.6.tgz}
@@ -1351,8 +1346,8 @@ packages:
     resolution: {integrity: sha512-rwu/ClNdSMpkSrUb+d6BRsSkLUq1fmfsY6TOpYzTwvwkg1/NRG85KBy3kq++A8LKQwX6lsu+aWad+2khvuXrqw==, tarball: https://registry.npmjs.org/yargs-parser/-/yargs-parser-22.0.0.tgz}
     engines: {node: ^20.19.0 || ^22.12.0 || >=23}
 
-  yargs@18.1.0:
-    resolution: {integrity: sha512-2rAgRKu54VsHkqI0/tYkmluGXHD4KW7yZoycuqDQ15QOTnc2VVfy0nN/1eMhnQLO00A+dwtK20xuCnc1YGeUyg==, tarball: https://registry.npmjs.org/yargs/-/yargs-18.1.0.tgz}
+  yargs@18.2.0:
+    resolution: {integrity: sha512-9OpKOLeaoNFecEp7P6iYbzze/5CqWoH7N3SMs/6y1XF4nMvFMspEGZzJ6uFi9MmQwXhyzqYoSEKO3tvA3Z/o2w==, tarball: https://registry.npmjs.org/yargs/-/yargs-18.2.0.tgz}
     engines: {node: ^20.19.0 || ^22.12.0 || >=23}
 
   zimmerframe@1.1.5:
@@ -1443,10 +1438,6 @@ snapshots:
 
   '@babel/helper-validator-identifier@8.0.6': {}
 
-  '@babel/parser@8.0.5':
-    dependencies:
-      '@babel/types': 8.0.5
-
   '@babel/parser@8.0.6':
     dependencies:
       '@babel/types': 8.0.6
@@ -1454,7 +1445,7 @@ snapshots:
   '@babel/template@8.0.0':
     dependencies:
       '@babel/code-frame': 8.0.0
-      '@babel/parser': 8.0.5
+      '@babel/parser': 8.0.6
       '@babel/types': 8.0.5
 
   '@babel/traverse@8.0.6':
@@ -2321,7 +2312,7 @@ snapshots:
 
   yargs-parser@22.0.0: {}
 
-  yargs@18.1.0:
+  yargs@18.2.0:
     dependencies:
       cliui: 9.0.1
       escalade: 3.2.0

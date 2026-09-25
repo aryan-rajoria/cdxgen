@@ -102,7 +102,7 @@
     "compression": "npm:compression@1.8.2",
     "connect": "npm:connect@3.7.0",
     "jsonata": "npm:jsonata@2.2.2",
-    "@iarna/toml": "npm:@iarna/toml@2.2.5",
+    "smol-toml": "npm:smol-toml@1.8.0",
     "@cdxgen/safer-exec": "npm:@cdxgen/safer-exec@1.0.1",
     "@cdxgen/cdxgen-plugins-bin": "npm:@cdxgen/cdxgen-plugins-bin@4.0.2",
     "undici": "npm:undici@8.11.0",
