@@ -86,8 +86,8 @@
     "@cdxgen/cdx-hbom": "npm:@cdxgen/cdx-hbom@0.5.1",
     "@cdxgen/cdx-proto": "npm:@cdxgen/cdx-proto@2.3.0",
     "@bufbuild/protobuf": "npm:@bufbuild/protobuf@2.15.0",
-    "@babel/parser": "npm:@babel/parser@8.0.4",
-    "@babel/traverse": "npm:@babel/traverse@8.0.4",
+    "@babel/parser": "npm:@babel/parser@8.0.6",
+    "@babel/traverse": "npm:@babel/traverse@8.0.6",
     "ajv": "npm:ajv@8.20.0",
     "ajv-formats": "npm:ajv-formats@3.0.1",
     "edn-data": "npm:edn-data@1.2.2",
@@ -97,7 +97,7 @@
     "semver": "npm:semver@7.8.5",
     "ssri": "npm:ssri@14.0.0",
     "tar": "npm:tar@7.5.22",
-    "yargs": "npm:yargs@18.1.0",
+    "yargs": "npm:yargs@18.2.0",
     "body-parser": "npm:body-parser@2.3.0",
     "compression": "npm:compression@1.8.2",
     "connect": "npm:connect@3.7.0",
@@ -105,7 +105,7 @@
     "@iarna/toml": "npm:@iarna/toml@2.2.5",
     "@cdxgen/safer-exec": "npm:@cdxgen/safer-exec@1.0.1",
     "@cdxgen/cdxgen-plugins-bin": "npm:@cdxgen/cdxgen-plugins-bin@4.0.2",
-    "undici": "npm:undici@8.10.0",
+    "undici": "npm:undici@8.11.0",
     "@appthreat/atom-parsetools": "npm:@appthreat/atom-parsetools@1.7.0"
   }
 }
