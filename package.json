@@ -1,6 +1,6 @@
 {
   "name": "@cdxgen/cdxgen",
-  "version": "13.2.1",
+  "version": "13.3.0",
   "description": "Creates CycloneDX Software Bill of Materials (SBOM) from source or container image",
   "keywords": [
     "sbom",
@@ -143,8 +143,8 @@
     "watch": "poku --watch"
   },
   "dependencies": {
-    "@babel/parser": "8.0.5",
-    "@babel/traverse": "8.0.5",
+    "@babel/parser": "8.0.6",
+    "@babel/traverse": "8.0.6",
     "@cdxgen/cdx-purl": "0.0.5",
     "@isaacs/string-locale-compare": "1.1.0",
     "@npmcli/fs": "6.0.0",
@@ -160,14 +160,14 @@
     "npm-package-arg": "14.0.0",
     "parse-conflict-json": "6.0.0",
     "semver": "7.8.5",
-    "smol-toml": "^1.8.0",
+    "smol-toml": "1.8.0",
     "ssri": "14.0.0",
     "tar": "7.5.22",
     "treeverse": "3.0.0",
-    "undici": "8.10.2",
+    "undici": "8.11.0",
     "walk-up-path": "4.0.0",
     "yaml": "2.9.1",
-    "yargs": "18.1.0"
+    "yargs": "18.2.0"
   },
   "devDependencies": {
     "@biomejs/biome": "2.5.14",
@@ -182,24 +182,24 @@
     "@bufbuild/protobuf": "2.15.0",
     "@cdxgen/cdx-hbom": "0.5.1",
     "@cdxgen/cdx-proto": "2.3.0",
-    "@cdxgen/cdxgen-plugins-bin": "4.0.0",
-    "@cdxgen/cdxgen-plugins-bin-darwin-amd64": "4.0.0",
-    "@cdxgen/cdxgen-plugins-bin-darwin-arm64": "4.0.0",
-    "@cdxgen/cdxgen-plugins-bin-linux-amd64": "4.0.0",
-    "@cdxgen/cdxgen-plugins-bin-linux-arm": "4.0.0",
-    "@cdxgen/cdxgen-plugins-bin-linux-arm64": "4.0.0",
-    "@cdxgen/cdxgen-plugins-bin-linux-ppc64": "4.0.0",
-    "@cdxgen/cdxgen-plugins-bin-linuxmusl-amd64": "4.0.0",
-    "@cdxgen/cdxgen-plugins-bin-linuxmusl-arm64": "4.0.0",
-    "@cdxgen/cdxgen-plugins-bin-windows-amd64": "4.0.0",
-    "@cdxgen/cdxgen-plugins-bin-windows-arm64": "4.0.0",
+    "@cdxgen/cdxgen-plugins-bin": "4.0.2",
+    "@cdxgen/cdxgen-plugins-bin-darwin-amd64": "4.0.2",
+    "@cdxgen/cdxgen-plugins-bin-darwin-arm64": "4.0.2",
+    "@cdxgen/cdxgen-plugins-bin-linux-amd64": "4.0.2",
+    "@cdxgen/cdxgen-plugins-bin-linux-arm": "4.0.2",
+    "@cdxgen/cdxgen-plugins-bin-linux-arm64": "4.0.2",
+    "@cdxgen/cdxgen-plugins-bin-linux-ppc64": "4.0.2",
+    "@cdxgen/cdxgen-plugins-bin-linuxmusl-amd64": "4.0.2",
+    "@cdxgen/cdxgen-plugins-bin-linuxmusl-arm64": "4.0.2",
+    "@cdxgen/cdxgen-plugins-bin-windows-amd64": "4.0.2",
+    "@cdxgen/cdxgen-plugins-bin-windows-arm64": "4.0.2",
     "@cdxgen/safer-exec": "1.0.1",
     "body-parser": "2.3.0",
     "compression": "1.8.2",
     "connect": "3.7.0",
     "jsonata": "2.2.2"
   },
-  "packageManager": "pnpm@12.5.1+sha512.e3f305bc784a2bc89f5ad3b6138889470fae8d2af5f36b61216ec91c2c3d64089775f9de38aac331044ea40f245cb0d5666392dfdf65824e1907ef6a2c62de5f",
+  "packageManager": "pnpm@12.6.0+sha512.PvaPlRyxEawgS0paFvCy3fDaVqluBBPoHYVdnwtV75JnFHCQKOHNAMQFwsX7e56OxNxGd3yAXQNzwvL/AP0g7A==",
   "engines": {
     "node": ">=24",
     "pnpm": ">=12"
