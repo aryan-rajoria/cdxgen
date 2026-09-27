@@ -1,0 +1,11 @@
+{
+  "name": "unused-runtime-dep-repotest",
+  "version": "1.0.0",
+  "private": true,
+  "dependencies": {
+    "left-pad": "1.3.0"
+  },
+  "devDependencies": {
+    "ms": "2.1.3"
+  }
+}
