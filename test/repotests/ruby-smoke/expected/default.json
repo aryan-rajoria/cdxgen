@@ -2552,36 +2552,6 @@
       "version": "3.28.0"
     },
     {
-      "bom-ref": "pkg:gem/ruby-smoke@1.0.0",
-      "evidence": {
-        "identity": [
-          {
-            "concludedValue": "$ROOT/ruby-smoke.gemspec",
-            "confidence": 0.5,
-            "field": "purl",
-            "methods": [
-              {
-                "confidence": 0.5,
-                "technique": "manifest-analysis",
-                "value": "$ROOT/ruby-smoke.gemspec"
-              }
-            ]
-          }
-        ]
-      },
-      "group": "",
-      "name": "ruby-smoke",
-      "properties": [
-        {
-          "name": "internal:SrcFile",
-          "value": "$ROOT/ruby-smoke.gemspec"
-        }
-      ],
-      "purl": "pkg:gem/ruby-smoke@1.0.0",
-      "type": "library",
-      "version": "1.0.0"
-    },
-    {
       "bom-ref": "pkg:gem/ruby2_keywords@0.0.5",
       "evidence": {
         "identity": [
@@ -3735,8 +3705,16 @@
   "metadata": {
     "authors": [],
     "component": {
-      "bom-ref": "pkg:gem/ruby-smoke@1.0.0#1",
+      "bom-ref": "pkg:gem/ruby-smoke@1.0.0",
+      "description": "Smoke test fixture for cdxgen golden tests",
       "group": "",
+      "licenses": [
+        {
+          "license": {
+            "name": "MIT"
+          }
+        }
+      ],
       "name": "ruby-smoke",
       "purl": "pkg:gem/ruby-smoke@1.0.0",
       "type": "application",
