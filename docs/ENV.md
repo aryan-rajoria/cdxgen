@@ -142,11 +142,11 @@ When `CDXGEN_PLUGINS_DIR` points at a packaged plugins directory, cdxgen also lo
 
 ### Go
 
-| Variable     | Description                                                                                                                 |
-| ------------ | --------------------------------------------------------------------------------------------------------------------------- |
-| GO_FETCH_VCS | Set this variable to `true` or `1` to fetch vcs url from pkg.go.dev. For golang                                             |
-| GO_PKG_URL   | Override Go pkg URL. Default: https://pkg.go.dev/                                                                           |
-| USE_GOSUM    | Set to `true` or `1` to generate BOMs for golang projects using go.sum as the dependency source of truth, instead of go.mod |
+| Variable     | Description                                                                                                                                                                                            |
+| ------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| GO_FETCH_VCS | Set this variable to `true` or `1` to fetch vcs url from pkg.go.dev. For golang                                                                                                                        |
+| GO_PKG_URL   | Override Go pkg URL. Default: https://pkg.go.dev/                                                                                                                                                      |
+| USE_GOSUM    | Set to `true` or `1` to generate BOMs for golang projects using go.sum as the dependency source of truth, instead of go.mod. `go mod why` then decides whether each module is `required` or `optional` |
 
 ### Gradle
 

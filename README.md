@@ -793,7 +793,7 @@ This attribute can be later used for various purposes. For example, [dep-scan][d
 
 With the argument `--required-only`, you can limit the SBOM only to include packages with the scope "required", commonly called production or non-dev dependencies. Combine with `--no-babel` to limit this list to only non-dev dependencies based on the `dev` attribute being false in the lock files.
 
-For go, `go mod why` command is used to identify required packages. For php, composer lock file is parsed to distinguish required (packages) from optional (packages-dev).
+For go, `go list -deps` lists the modules the project's packages import, and a module is scoped `required` when go.mod requires it directly and `optional` when the requirement is `// indirect`. With `USE_GOSUM=true`, `go mod why` scopes each go.sum module instead: `required` when the main module needs it, and `optional` when go reports that it does not. If `go mod why` fails, no module is scoped `optional`. For php, composer lock file is parsed to distinguish required (packages) from optional (packages-dev).
 
 ## Automatic services detection
 
