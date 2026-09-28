@@ -308,14 +308,21 @@ sentinel (`{ ok: false, reason: "..." }`). The caller takes the JS path.
 | Binary not found       | `binary-not-found`     |
 | Non-zero exit          | `non-zero-exit:<code>` |
 | Timeout                | `timeout`              |
+| Oversized stdout       | `stdout-too-large`     |
 | Malformed stdout       | `malformed-stdout`     |
+| Stdout not collectable | `stdout-collect-failed` |
 | Version-major mismatch | `version-mismatch`     |
 | CDXGEN_RS_DISABLE      | `disabled`             |
 | Spawn error            | `spawn-error`          |
 | Unknown subcommand     | `unknown-subcommand`   |
 
 The bridge kills the **process group** on timeout (`process.kill(-pid,
-"SIGKILL")`) so a hung child cannot outlive the parent.
+"SIGKILL")`) so a hung child cannot outlive the parent. It also kills the
+group once collected stdout passes `CDXGEN_RS_MAX_STDOUT_BYTES` (default:
+V8's maximum string length, 0x1fffffe8): stdout must become a single JS
+string, so an oversized payload can never be delivered — waiting for the
+child to finish would only end in `ERR_STRING_TOO_LONG` crashing the process
+(issue 4393). The ceiling exists precisely so that failover happens instead.
 
 ## BOM model and round-trip fidelity
 
