@@ -1863,6 +1863,12 @@
         }
       ],
       "name": "opentelemetry-instrumentation-action_mailer",
+      "properties": [
+        {
+          "name": "cdx:gem:rubyVersionSpecifiers",
+          "value": ">= 3.3"
+        }
+      ],
       "purl": "pkg:gem/opentelemetry-instrumentation-action_mailer@0.8.1",
       "type": "application",
       "version": "0.8.1"
