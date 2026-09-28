@@ -281,6 +281,22 @@ describe("JSF signing and verification commands", () => {
     assert.match(validated.stderr, /requires a shared secret/);
   });
 
+  it("cdx-verify prints a non-string keyId without failing", async () => {
+    const odd = structuredClone(bom);
+    odd.signature = { algorithm: "RS256", keyId: { toString: "x" } };
+    odd.signature.value = crypto
+      .sign("sha256", Buffer.from(jcs(odd)), rsa.privateKey)
+      .toString("base64url");
+    writeFileSync(file("odd-keyid.json"), JSON.stringify(odd));
+    const { status, stdout } = await verify(
+      "odd-keyid.json",
+      "--public-key",
+      file("rsa-public.pem"),
+    );
+    assert.strictEqual(status, 0, stdout);
+    assert.match(stdout, /Matched KeyId: '\{"toString":"x"\}'/);
+  });
+
   it("cdx-sign refuses an algorithm that does not match the key", async () => {
     const { status, stderr } = await sign(
       "mislabelled.json",
@@ -507,6 +523,15 @@ describe("JSF signing and verification commands", () => {
     assert.notStrictEqual(wrongValue.status, 0);
     assert.match(wrongValue.stderr, /does not verify with this key/);
 
+    writeFileSync(
+      file("broken-history.json"),
+      JSON.stringify({ ...bom, signature: { chain: "abc" } }),
+    );
+    const broken = await appendChain("broken-history.json");
+    assert.notStrictEqual(broken.status, 0);
+    assert.match(broken.stderr, /entry 0: The chain array must contain/);
+    assert.doesNotMatch(broken.stderr, /undefined/);
+
     const allowed = await appendChain(
       "fabricated.json",
       "--allow-unverified-history",
@@ -641,6 +666,46 @@ describe("JSF signing and verification commands", () => {
         readFileSync(file("cdxgen-mismatch.json"), "utf-8"),
       );
       assert.strictEqual(written.signature, undefined);
+    });
+
+    it("exits non-zero when the configured key file is missing", async () => {
+      const { status, stderr } = await cdxgen(
+        { ...rsaSigning, SBOM_SIGN_PRIVATE_KEY: file("typo-private.pem") },
+        "-o",
+        file("cdxgen-missing-key.json"),
+      );
+      assert.strictEqual(status, 1);
+      assert.match(
+        stderr,
+        /SBOM_SIGN_PRIVATE_KEY file '.*typo-private\.pem' was not found/,
+      );
+      const written = JSON.parse(
+        readFileSync(file("cdxgen-missing-key.json"), "utf-8"),
+      );
+      assert.strictEqual(written.signature, undefined);
+    });
+
+    it("warns when a key is set without an algorithm", async () => {
+      const { status, stderr } = await cdxgen(
+        { SBOM_SIGN_PRIVATE_KEY: file("rsa-private.pem") },
+        "-o",
+        file("cdxgen-no-algorithm.json"),
+      );
+      assert.strictEqual(status, 0, stderr);
+      assert.match(
+        stderr,
+        /SBOM_SIGN_PRIVATE_KEY is set without SBOM_SIGN_ALGORITHM/,
+      );
+      const optedOut = await cdxgen(
+        {
+          SBOM_SIGN_PRIVATE_KEY: file("rsa-private.pem"),
+          SBOM_SIGN_ALGORITHM: "none",
+        },
+        "-o",
+        file("cdxgen-opted-out.json"),
+      );
+      assert.strictEqual(optedOut.status, 0, optedOut.stderr);
+      assert.doesNotMatch(optedOut.stderr, /without SBOM_SIGN_ALGORITHM/);
     });
 
     it("signs file and stdout output", async () => {

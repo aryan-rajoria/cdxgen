@@ -438,7 +438,7 @@ Trust boundary 5: cdxgen container ←→ container host
 
 - Secure mode enforces HTTPS-only for all connections including SBOM upload
 - cdxgen supports SBOM signing via `SBOM_SIGN_PRIVATE_KEY`; the signed BOM is the one written, printed, and submitted to Dependency-Track
-- When signing is configured but fails, cdxgen exits with status 1 instead of publishing an unsigned BOM
+- When signing is configured but fails, including a missing key file, cdxgen exits with status 1 instead of publishing an unsigned BOM; a private key set without `SBOM_SIGN_ALGORITHM` produces a warning
 
 **Residual risk:** Low when secure mode and SBOM signing are enabled.
 

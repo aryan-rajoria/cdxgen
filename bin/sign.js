@@ -11,7 +11,11 @@ import {
   retrieveCdxgenVersion,
   safeExistsSync,
 } from "../lib/ecosystems/utils.js";
-import { checkSignatureEntries, signBom } from "../lib/helpers/bomSigner.js";
+import {
+  checkSignatureEntries,
+  displayValue,
+  signBom,
+} from "../lib/helpers/bomSigner.js";
 import {
   getNonCycloneDxErrorMessage,
   isCycloneDxBom,
@@ -157,11 +161,16 @@ function hasAnySignature(bomJson) {
 }
 
 function describeEntry(result) {
-  const parts = [String(result.algorithm)];
-  if (result.keyId !== undefined) {
-    parts.push(`keyId '${result.keyId}'`);
+  const parts = [];
+  if (result.algorithm !== undefined) {
+    parts.push(displayValue(result.algorithm));
   }
-  return `entry ${result.index} (${parts.join(", ")})`;
+  if (result.keyId !== undefined) {
+    parts.push(`keyId '${displayValue(result.keyId)}'`);
+  }
+  return parts.length
+    ? `entry ${result.index} (${parts.join(", ")})`
+    : `entry ${result.index}`;
 }
 
 // A new chain entry covers every earlier entry, so the signer vouches for

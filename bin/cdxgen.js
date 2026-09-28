@@ -1413,6 +1413,8 @@ const checkPermissions = (filePath, options) => {
   return true;
 };
 
+let warnedAboutSigningAlgorithm = false;
+
 const needsBomSigning = ({ generateKeyAndSign }) =>
   generateKeyAndSign ||
   (() => {
@@ -1430,11 +1432,19 @@ const needsBomSigning = ({ generateKeyAndSign }) =>
         sensitive: true,
       },
     );
-    return (
-      sbomSignAlgorithm &&
-      sbomSignAlgorithm !== "none" &&
-      ((sbomSignPrivateKey && safeExistsSync(sbomSignPrivateKey)) ||
-        sbomSignPrivateKeyBase64)
+    const keyConfigured = Boolean(
+      sbomSignPrivateKey || sbomSignPrivateKeyBase64,
+    );
+    if (keyConfigured && !sbomSignAlgorithm && !warnedAboutSigningAlgorithm) {
+      warnedAboutSigningAlgorithm = true;
+      console.warn(
+        "SBOM_SIGN_PRIVATE_KEY is set without SBOM_SIGN_ALGORITHM, so the BOM is not signed. Set SBOM_SIGN_ALGORITHM (for example RS512) to sign it, or SBOM_SIGN_ALGORITHM=none to silence this warning.",
+      );
+    }
+    // A configured key file that is missing counts as a signing request, so
+    // that signing fails loudly instead of being skipped.
+    return Boolean(
+      sbomSignAlgorithm && sbomSignAlgorithm !== "none" && keyConfigured,
     );
   })();
 
@@ -1501,6 +1511,11 @@ const signCycloneDxPayload = (jsonPayload, keyDir, target, options) => {
     jwkPublicKey = crypto.createPublicKey(publicKey).export({ format: "jwk" });
   } else {
     if (sbomSignPrivateKey) {
+      if (!safeExistsSync(sbomSignPrivateKey)) {
+        throw new Error(
+          `The SBOM_SIGN_PRIVATE_KEY file '${sbomSignPrivateKey}' was not found.`,
+        );
+      }
       recordSensitiveFileRead(sbomSignPrivateKey, {
         label: "SBOM signing private key",
       });

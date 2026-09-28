@@ -14,6 +14,7 @@ import {
   safeExistsSync,
 } from "../lib/ecosystems/utils.js";
 import {
+  displayValue,
   loadSharedSecret,
   loadVerificationKey,
   verifyNode,
@@ -184,7 +185,9 @@ if (verifyNested) {
         checkedNested++;
         const result = verify(node);
         if (!result.match) {
-          console.log(`${label} '${nameOf(node)}' signature is invalid!`);
+          console.log(
+            `${label} '${displayValue(nameOf(node))}' signature is invalid!`,
+          );
           printReasons(result.reasons);
           hasInvalidNested = true;
         }
@@ -207,7 +210,7 @@ if (bomJson.signature) {
   const rootMatch = rootResult?.match;
   if (rootMatch) {
     const identifier = rootMatch.keyId
-      ? `KeyId: '${rootMatch.keyId}'`
+      ? `KeyId: '${displayValue(rootMatch.keyId)}'`
       : `Algorithm: '${rootMatch.algorithm}'`;
     console.log(`✓ Signature is valid! (Matched ${identifier})`);
   } else {

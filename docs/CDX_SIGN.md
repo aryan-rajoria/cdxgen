@@ -97,7 +97,7 @@ Because a new chain entry vouches for every entry before it, `cdx-sign --mode ch
 
 Removing the last entries of a chain leaves the earlier entries valid, so a chain proves who signed up to a point, not that nobody signed later or that an approval was not stripped. To confirm an approval, verify with that approver's public key; `cdx-verify` reports the entry that key matched, wherever it is in the chain.
 
-When a `signers` or `chain` entry is appended to a BOM that has a single `replace` signature, that signature becomes the first entry of the new array and still verifies there. To keep a document strictly JSF-conformant from the start, use the same `--mode` for the first signature too.
+When a `signers` or `chain` entry is appended to a BOM that has a single `replace` signature, that signature becomes the first entry of the new array. It keeps verifying at any position of a `signers` list, and at the first position of a `chain`. To keep a document strictly JSF-conformant from the start, use the same `--mode` for the first signature too.
 
 ## Operational guidance
 
