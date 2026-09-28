@@ -11,7 +11,7 @@ cdxgen generates CycloneDX Bill-of-Materials (BOM) documents — including SBOM,
 3. **HTTP Server** (`lib/server/server.js`) — REST API accepting scan requests, optionally with Git clone
 4. **REPL** (`bin/repl.js`) — Interactive shell for ad-hoc BOM operations
 5. **Evinse** (`bin/evinse.js`) — Evidence generation for SBOM verification (analyzes call stacks, data flows, and usages)
-6. **Verify** (`bin/verify.js`) — BOM signature verification using JWS
+6. **Verify** (`bin/verify.js`) — BOM signature verification using the JSON Signature Format (JSF)
 
 ## Trust Boundaries
 
@@ -441,6 +441,20 @@ Trust boundary 5: cdxgen container ←→ container host
 
 **Residual risk:** Low when secure mode and SBOM signing are enabled.
 
+#### T6.3 — Forged or altered signatures accepted by `cdx-verify`
+
+**Threat:** An attacker who can modify a signed BOM (for example in a registry or in transit) crafts a signature that `cdx-verify`, `cdx-validate --require-signature`, or `verifyBom()` accepts without the signer's private key, or rewrites signature metadata so that the BOM appears to come from another key, algorithm, or approval order. The attacker controls every field of the signature block, including `algorithm`, `keyId`, `publicKey`, and the order of `signers` and `chain` entries.
+
+**Mitigations:**
+
+- The declared `algorithm` is only honoured when the verification key has exactly the matching type (RSA for `RS*`, RSA or RSA-PSS for `PS*`, the named curve for `ES*`, Ed25519/Ed448 for `Ed*`); unknown identifiers are rejected
+- HMAC (`HS*`) verification only accepts a secret supplied through `--secret-key` (a secret `KeyObject` in the library). Keys given as strings or Buffers are always parsed as public keys, and key material is refused as a shared secret, so a verifier's public key can never become an HMAC secret
+- Following JSF, each signature covers the signature metadata as well as the content; only `value` is excluded, and it must be canonical base64url. A `chain` entry also covers every earlier entry
+- An embedded `publicKey` must match the verification key, and `excludes` is rejected, so no part of a signed object can be left unsigned
+- Malformed signature blocks and entries with other key types are reported as non-matching instead of throwing, so a hostile entry cannot stop later entries from being checked
+
+**Residual risk:** Low. Verification is only as trustworthy as the public key or shared secret the verifier supplies; distribute it out of band.
+
 ### 7. Dynamic Process Tracing (`tracebom`, `lib/inventory/traceRunner.js`)
 
 #### T7.1 — Sandbox bypass or escape during command execution
@@ -514,6 +528,7 @@ _TB = Trust Boundary (see Trust Boundaries section above)_
 | BOM metadata sanitization          | URL scrubbing, inline secret redaction, command summarization, structured-key filtering                                                                     | T6.1, T2.3                   |
 | Helper binary pinning and metadata | Optional helper package version pinning, companion binary SBOM/metadata generation, CI parity checks, and tool identity evidence                            | T1.8, T4.3                   |
 | Trust-material modeling            | Repository-source `data` components, trusted-key `cryptographic-asset` components, file hashes, and repo-to-key dependency edges                            | T1.9, T6.1                   |
+| JSF signature verification         | Algorithm-to-key binding, HMAC only with an explicit shared secret, signed metadata and chain order, embedded key checks                                    | T6.2, T6.3                   |
 | Structured logging                 | `thoughtLog`, `traceLog`, `commandsExecuted`, `remoteHostsAccessed`                                                                                         | Auditability for all threats |
 | Dependency pinning                 | `pnpm-lock.yaml`, SHA-pinned Actions, SHA-pinned base images                                                                                                | T3.1, T3.2, T4.1             |
 | Provenance attestation             | `NPM_CONFIG_PROVENANCE=true`                                                                                                                                | T4.3                         |

@@ -62,7 +62,8 @@ cdx-validate -i bom.json -r json --fail-severity medium
 | `--include-manual` / `--no-include-manual` | on         | Show non-automatable manual-review findings.                                                                                  |
 | `--include-pass`                           | off        | Include passing findings (useful for audits).                                                                                 |
 | `--public-key`                             | —          | PEM file. When set, verify the BOM signature for JSON or OCI BOM input. Local protobuf input is not signature-verifiable yet. |
-| `--require-signature`                      | off        | Exit 4 if `--public-key` is supplied but verification fails.                                                                  |
+| `--secret-key`                             | —          | Shared secret file for `HS256`, `HS384`, and `HS512` signatures. HMAC signatures are only accepted with this option.          |
+| `--require-signature`                      | off        | Exit 4 if `--public-key` or `--secret-key` is supplied but verification fails.                                                |
 | `--strict`                                 | off        | Exit 2 when schema / deep validation fails.                                                                                   |
 
 ### Exit codes

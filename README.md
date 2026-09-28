@@ -732,12 +732,14 @@ cdxgen features a best-in-class, native **JSON Signature Format (JSF)** implemen
 
 To enable automatic signing during BOM generation, set the following environment variables:
 
-- `SBOM_SIGN_ALGORITHM`: JSF Algorithm. Examples: `RS512`, `ES256`, `Ed25519`, `HS256`
-- `SBOM_SIGN_PRIVATE_KEY`: Location of the private key (PEM format)
-- `SBOM_SIGN_PUBLIC_KEY`: Optional. Location of the public key
+- `SBOM_SIGN_ALGORITHM`: JSF Algorithm. Examples: `RS512`, `ES256`, `Ed25519`, `HS256`. It must match the key type.
+- `SBOM_SIGN_PRIVATE_KEY`: Location of the private key (PEM format), or of the shared secret for `HS256`, `HS384`, and `HS512`
+- `SBOM_SIGN_PUBLIC_KEY`: Optional. Location of the public key to embed. It must belong to the private key.
 - `SBOM_SIGN_MODE`: Optional. Signature mode (`replace`, `signers`, `chain`). Default is `replace`.
 
-To quickly generate test public/private key pairs and sign your first BOM, you can run cdxgen with the `--generate-key-and-sign` argument.
+To quickly generate a test key pair for `SBOM_SIGN_ALGORITHM` and sign your first BOM, you can run cdxgen with the `--generate-key-and-sign` argument.
+
+BOMs signed with cdxgen 13.2.0 or earlier must be re-signed with the current `cdx-sign` before they verify. See [cdx-sign](docs/CDX_SIGN.md#re-signing-boms-from-earlier-releases).
 
 ### Advanced Signing with `cdx-sign`
 
