@@ -1,6 +1,7 @@
 import { strict as assert } from "node:assert";
 import { execFileSync, spawn } from "node:child_process";
-import { mkdtempSync, readFileSync, rmSync } from "node:fs";
+import crypto from "node:crypto";
+import { mkdtempSync, readFileSync, rmSync, writeFileSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
 import process from "node:process";
@@ -185,5 +186,266 @@ describe("bin commands over a CycloneDX document", () => {
       join(workDir, "unsigned.json"),
     ]);
     assert.notStrictEqual(status, 0);
+  });
+});
+
+// Independent RFC 8785 canonicalizer, used to build documents the way a third
+// party would rather than through cdxgen's own signer.
+function jcs(value) {
+  if (value === null || typeof value !== "object") {
+    return JSON.stringify(value);
+  }
+  if (Array.isArray(value)) {
+    return `[${value.map(jcs).join(",")}]`;
+  }
+  return `{${Object.keys(value)
+    .sort()
+    .map((key) => `${JSON.stringify(key)}:${jcs(value[key])}`)
+    .join(",")}}`;
+}
+
+describe("JSF signing and verification commands", () => {
+  const signingDir = mkdtempSync(join(tmpdir(), "cdxgen-jsf-"));
+  process.on("exit", () =>
+    rmSync(signingDir, { recursive: true, force: true }),
+  );
+  const file = (name) => join(signingDir, name);
+  const writeKeyPair = (name, type, options = {}) => {
+    const { publicKey, privateKey } = crypto.generateKeyPairSync(type, {
+      ...options,
+      publicKeyEncoding: { type: "spki", format: "pem" },
+      privateKeyEncoding: { type: "pkcs8", format: "pem" },
+    });
+    writeFileSync(file(`${name}-public.pem`), publicKey);
+    writeFileSync(file(`${name}-private.pem`), privateKey);
+    return { publicKey, privateKey };
+  };
+  const rsa = writeKeyPair("rsa", "rsa", { modulusLength: 2048 });
+  writeKeyPair("ed25519", "ed25519");
+  writeFileSync(file("hmac.secret"), crypto.randomBytes(48));
+  const bom = {
+    bomFormat: "CycloneDX",
+    specVersion: "1.6",
+    version: 1,
+    components: [
+      {
+        type: "library",
+        name: "left-pad",
+        version: "1.3.0",
+        purl: "pkg:npm/left-pad@1.3.0",
+      },
+    ],
+  };
+  writeFileSync(file("bom.json"), JSON.stringify(bom));
+  const sign = (output, ...args) =>
+    run([binFor("sign"), "-i", file("bom.json"), "-o", file(output), ...args]);
+  const verify = (input, ...args) =>
+    run([binFor("verify"), "-i", file(input), ...args]);
+
+  it("cdx-verify rejects an HS256 signature keyed with the public key", async () => {
+    const forged = structuredClone(bom);
+    forged.components.push({ type: "library", name: "backdoor" });
+    forged.signature = { algorithm: "HS256", keyId: "release" };
+    forged.signature.value = crypto
+      .createHmac("sha256", rsa.publicKey)
+      .update(jcs(forged))
+      .digest("base64url");
+    writeFileSync(file("forged.json"), JSON.stringify(forged));
+    const { status, stdout } = await verify(
+      "forged.json",
+      "--public-key",
+      file("rsa-public.pem"),
+    );
+    assert.strictEqual(status, 1);
+    assert.match(stdout, /BOM signature is invalid!/);
+    assert.match(stdout, /Algorithm HS256 requires a shared secret/);
+
+    const validated = await run([
+      binFor("validate"),
+      "-i",
+      file("forged.json"),
+      "--public-key",
+      file("rsa-public.pem"),
+      "--require-signature",
+      "--benchmark",
+      "none",
+    ]);
+    assert.strictEqual(validated.status, 4);
+    assert.match(validated.stderr, /requires a shared secret/);
+  });
+
+  it("cdx-sign refuses an algorithm that does not match the key", async () => {
+    const { status, stderr } = await sign(
+      "mislabelled.json",
+      "-k",
+      file("rsa-private.pem"),
+      "-a",
+      "Ed25519",
+    );
+    assert.notStrictEqual(status, 0);
+    assert.match(
+      stderr,
+      /Algorithm Ed25519 requires an ed25519 key, but the key is rsa/,
+    );
+  });
+
+  it("verifies HMAC signatures only through --secret-key", async () => {
+    const signed = await sign(
+      "hmac.json",
+      "-k",
+      file("hmac.secret"),
+      "-a",
+      "HS384",
+    );
+    assert.strictEqual(signed.status, 0, signed.stderr);
+    const withSecret = await verify(
+      "hmac.json",
+      "--secret-key",
+      file("hmac.secret"),
+    );
+    assert.strictEqual(withSecret.status, 0, withSecret.stdout);
+    assert.match(withSecret.stdout, /Signature is valid!/);
+
+    const asPublicKey = await verify(
+      "hmac.json",
+      "--public-key",
+      file("hmac.secret"),
+    );
+    assert.strictEqual(asPublicKey.status, 1);
+    assert.match(asPublicKey.stdout, /Unable to use/);
+
+    const both = await verify(
+      "hmac.json",
+      "--public-key",
+      file("rsa-public.pem"),
+      "--secret-key",
+      file("hmac.secret"),
+    );
+    assert.strictEqual(both.status, 1);
+    assert.match(both.stdout, /either --public-key or --secret-key/);
+
+    const publicKeyAsSecret = await verify(
+      "hmac.json",
+      "--secret-key",
+      file("rsa-public.pem"),
+    );
+    assert.strictEqual(publicKeyAsSecret.status, 1);
+    assert.match(
+      publicKeyAsSecret.stdout,
+      /looks like a public or private key/,
+    );
+
+    const validated = await run([
+      binFor("validate"),
+      "-i",
+      file("hmac.json"),
+      "--secret-key",
+      file("hmac.secret"),
+      "--require-signature",
+      "--benchmark",
+      "none",
+    ]);
+    assert.notStrictEqual(validated.status, 4, validated.stderr);
+  });
+
+  it("appends a chain entry without breaking the builder signature", async () => {
+    const built = await sign(
+      "chain.json",
+      "-k",
+      file("rsa-private.pem"),
+      "-a",
+      "RS512",
+      "--key-id",
+      "builder",
+    );
+    assert.strictEqual(built.status, 0, built.stderr);
+    const approved = await run([
+      binFor("sign"),
+      "-i",
+      file("chain.json"),
+      "-k",
+      file("ed25519-private.pem"),
+      "-a",
+      "Ed25519",
+      "--key-id",
+      "approver",
+      "--mode",
+      "chain",
+    ]);
+    assert.strictEqual(approved.status, 0, approved.stderr);
+    const chained = JSON.parse(readFileSync(file("chain.json"), "utf-8"));
+    assert.deepStrictEqual(
+      chained.signature.chain.map((entry) => entry.keyId),
+      ["builder", "approver"],
+    );
+
+    const builder = await verify(
+      "chain.json",
+      "--public-key",
+      file("rsa-public.pem"),
+    );
+    assert.strictEqual(builder.status, 0, builder.stdout);
+    assert.match(builder.stdout, /Matched KeyId: 'builder'/);
+    const approver = await verify(
+      "chain.json",
+      "--public-key",
+      file("ed25519-public.pem"),
+      "--no-deep",
+    );
+    assert.strictEqual(approver.status, 0, approver.stdout);
+    assert.match(approver.stdout, /Matched KeyId: 'approver'/);
+
+    chained.signature.chain.reverse();
+    writeFileSync(file("reordered.json"), JSON.stringify(chained));
+    const reordered = await verify(
+      "reordered.json",
+      "--public-key",
+      file("ed25519-public.pem"),
+      "--no-deep",
+    );
+    assert.strictEqual(reordered.status, 1);
+  });
+
+  it("cdx-sign refuses to re-sign nested elements while appending", async () => {
+    const built = await sign("nested.json", "-k", file("rsa-private.pem"));
+    assert.strictEqual(built.status, 0, built.stderr);
+    const before = readFileSync(file("nested.json"), "utf-8");
+    const { status, stderr } = await run([
+      binFor("sign"),
+      "-i",
+      file("nested.json"),
+      "-k",
+      file("ed25519-private.pem"),
+      "-a",
+      "Ed25519",
+      "--mode",
+      "signers",
+      "--sign-components",
+    ]);
+    assert.notStrictEqual(status, 0);
+    assert.match(
+      stderr,
+      /changes content covered by the existing root signature/,
+    );
+    assert.strictEqual(readFileSync(file("nested.json"), "utf-8"), before);
+  });
+
+  it("cdx-verify asks for BOMs signed by earlier releases to be re-signed", async () => {
+    // Earlier releases signed the content without the signature metadata.
+    const old = structuredClone(bom);
+    old.signature = {
+      algorithm: "RS512",
+      value: crypto
+        .sign("sha512", Buffer.from(jcs(bom)), rsa.privateKey)
+        .toString("base64url"),
+    };
+    writeFileSync(file("old.json"), JSON.stringify(old));
+    const { status, stdout } = await verify(
+      "old.json",
+      "--public-key",
+      file("rsa-public.pem"),
+    );
+    assert.strictEqual(status, 1);
+    assert.match(stdout, /re-sign it with this version of cdx-sign/);
   });
 });

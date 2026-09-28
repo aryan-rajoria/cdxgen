@@ -72,7 +72,11 @@ import {
   setDryRunMode,
   shouldRunPredictiveBomAudit,
 } from "../lib/ecosystems/utils.js";
-import { signBom, verifyBom } from "../lib/helpers/bomSigner.js";
+import {
+  generateSigningKeyPair,
+  signBom,
+  verifyBom,
+} from "../lib/helpers/bomSigner.js";
 import {
   createOutputPlan,
   getOutputDirectory,
@@ -398,7 +402,7 @@ const args = _yargs
   .option("generate-key-and-sign", {
     type: "boolean",
     description:
-      "Generate an RSA public/private key pair and then sign the generated SBOM using JSON Web Signatures.",
+      "Generate a public/private key pair for SBOM_SIGN_ALGORITHM (RS512 by default) and then sign the generated SBOM using the JSON Signature Format (JSF).",
   })
   .option("server", {
     type: "boolean",
@@ -1482,59 +1486,48 @@ const writeCycloneDxOutput = (jsonFile, bomJson, options) => {
   let privateKeyToUse;
   let jwkPublicKey;
   let publicKeyFile;
-  if (options.generateKeyAndSign) {
-    const jdirName = dirname(jsonFile);
-    publicKeyFile = join(jdirName, "public.key");
-    const privateKeyFile = join(jdirName, "private.key");
-    const privateKeyB64File = join(jdirName, "private.key.base64");
-    const { privateKey, publicKey } = crypto.generateKeyPairSync("rsa", {
-      modulusLength: 4096,
-      publicKeyEncoding: {
-        type: "spki",
-        format: "pem",
-      },
-      privateKeyEncoding: {
-        type: "pkcs8",
-        format: "pem",
-      },
-    });
-    safeWriteSync(publicKeyFile, publicKey);
-    safeWriteSync(privateKeyFile, privateKey);
-    safeWriteSync(
-      privateKeyB64File,
-      Buffer.from(privateKey, "utf8").toString("base64"),
-    );
-    console.log(
-      "Created public/private key pairs for testing purposes",
-      publicKeyFile,
-      privateKeyFile,
-      privateKeyB64File,
-    );
-    privateKeyToUse = privateKey;
-    jwkPublicKey = crypto.createPublicKey(publicKey).export({ format: "jwk" });
-  } else {
-    if (sbomSignPrivateKey) {
-      recordSensitiveFileRead(sbomSignPrivateKey, {
-        label: "SBOM signing private key",
-      });
-      privateKeyToUse = fs.readFileSync(sbomSignPrivateKey, "utf8");
-    } else if (sbomSignPrivateKeyBase64) {
-      privateKeyToUse = Buffer.from(
-        sbomSignPrivateKeyBase64,
-        "base64",
-      ).toString("utf8");
-    }
-    if (sbomSignPublicKey && safeExistsSync(sbomSignPublicKey)) {
-      jwkPublicKey = crypto
-        .createPublicKey(fs.readFileSync(sbomSignPublicKey, "utf8"))
-        .export({ format: "jwk" });
-    } else if (sbomSignPublicKeyBase64) {
-      jwkPublicKey = Buffer.from(sbomSignPublicKeyBase64, "base64").toString(
-        "utf8",
-      );
-    }
-  }
   try {
+    if (options.generateKeyAndSign) {
+      const jdirName = dirname(jsonFile);
+      publicKeyFile = join(jdirName, "public.key");
+      const privateKeyFile = join(jdirName, "private.key");
+      const privateKeyB64File = join(jdirName, "private.key.base64");
+      const { privateKey, publicKey } = generateSigningKeyPair(alg);
+      safeWriteSync(publicKeyFile, publicKey);
+      safeWriteSync(privateKeyFile, privateKey);
+      safeWriteSync(
+        privateKeyB64File,
+        Buffer.from(privateKey, "utf8").toString("base64"),
+      );
+      console.log(
+        "Created public/private key pairs for testing purposes",
+        publicKeyFile,
+        privateKeyFile,
+        privateKeyB64File,
+      );
+      privateKeyToUse = privateKey;
+      jwkPublicKey = crypto
+        .createPublicKey(publicKey)
+        .export({ format: "jwk" });
+    } else {
+      if (sbomSignPrivateKey) {
+        recordSensitiveFileRead(sbomSignPrivateKey, {
+          label: "SBOM signing private key",
+        });
+        privateKeyToUse = fs.readFileSync(sbomSignPrivateKey);
+      } else if (sbomSignPrivateKeyBase64) {
+        privateKeyToUse = Buffer.from(sbomSignPrivateKeyBase64, "base64");
+      }
+      if (sbomSignPublicKey && safeExistsSync(sbomSignPublicKey)) {
+        jwkPublicKey = crypto
+          .createPublicKey(fs.readFileSync(sbomSignPublicKey, "utf8"))
+          .export({ format: "jwk" });
+      } else if (sbomSignPublicKeyBase64) {
+        jwkPublicKey = crypto
+          .createPublicKey(Buffer.from(sbomSignPublicKeyBase64, "base64"))
+          .export({ format: "jwk" });
+      }
+    }
     const bomJsonUnsignedObj = JSON.parse(jsonPayload);
     const signOptions = {
       privateKey: privateKeyToUse,
@@ -1573,7 +1566,7 @@ const writeCycloneDxOutput = (jsonFile, bomJson, options) => {
   } catch (ex) {
     console.log("SBOM signing was unsuccessful:", ex.message);
     console.log(
-      "Check if the private key was exported in PEM format and the algorithm is JSF-compliant.",
+      "Check that the private key is in PEM format and that SBOM_SIGN_ALGORITHM matches its key type.",
     );
   }
   return jsonPayload;

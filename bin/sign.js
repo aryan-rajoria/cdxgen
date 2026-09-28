@@ -31,12 +31,14 @@ const args = _yargs
   })
   .option("private-key", {
     alias: "k",
-    description: "Private key in PEM format.",
+    description:
+      "Private key in PEM format, or the shared secret file for HS256, HS384, and HS512.",
   })
   .option("algorithm", {
     alias: "a",
     default: readEnvironmentVariable("SBOM_SIGN_ALGORITHM") || "RS512",
-    description: "JSF Signature Algorithm (e.g., RS512, ES256, Ed25519).",
+    description:
+      "JSF Signature Algorithm (e.g., RS512, ES256, Ed25519). It must match the key type.",
   })
   .option("mode", {
     alias: "m",
@@ -51,21 +53,18 @@ const args = _yargs
   })
   .option("sign-components", {
     type: "boolean",
-    default: true,
     description:
-      "Sign granular components. Disable (--no-sign-components) when appending multi-signatures.",
+      "Sign granular components. Defaults to true, or false when appending a signers or chain signature to a signed BOM.",
   })
   .option("sign-services", {
     type: "boolean",
-    default: true,
     description:
-      "Sign granular services. Disable (--no-sign-services) when appending multi-signatures.",
+      "Sign granular services. Defaults to true, or false when appending a signers or chain signature to a signed BOM.",
   })
   .option("sign-annotations", {
     type: "boolean",
-    default: true,
     description:
-      "Sign granular annotations. Disable (--no-sign-annotations) when appending multi-signatures.",
+      "Sign granular annotations. Defaults to true, or false when appending a signers or chain signature to a signed BOM.",
   })
   .option("attach", {
     type: "string",
@@ -97,7 +96,7 @@ const envPrivateKeyBase64 = readEnvironmentVariable(
 
 if (args.privateKey) {
   if (safeExistsSync(args.privateKey)) {
-    privateKeyContent = fs.readFileSync(args.privateKey, "utf8");
+    privateKeyContent = fs.readFileSync(args.privateKey);
     hasPrivateKey = true;
   } else {
     console.error(`Private key file '${args.privateKey}' not found.`);
@@ -105,7 +104,7 @@ if (args.privateKey) {
   }
 } else if (envPrivateKeyFile) {
   if (safeExistsSync(envPrivateKeyFile)) {
-    privateKeyContent = fs.readFileSync(envPrivateKeyFile, "utf8");
+    privateKeyContent = fs.readFileSync(envPrivateKeyFile);
     hasPrivateKey = true;
   } else {
     console.error(
@@ -115,9 +114,7 @@ if (args.privateKey) {
   }
 } else if (envPrivateKeyBase64) {
   try {
-    privateKeyContent = Buffer.from(envPrivateKeyBase64, "base64").toString(
-      "utf8",
-    );
+    privateKeyContent = Buffer.from(envPrivateKeyBase64, "base64");
     hasPrivateKey = true;
   } catch {
     console.error(
