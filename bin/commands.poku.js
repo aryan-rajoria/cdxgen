@@ -1,7 +1,14 @@
 import { strict as assert } from "node:assert";
 import { execFileSync, spawn } from "node:child_process";
 import crypto from "node:crypto";
-import { mkdtempSync, readFileSync, rmSync, writeFileSync } from "node:fs";
+import {
+  mkdirSync,
+  mkdtempSync,
+  readFileSync,
+  rmSync,
+  writeFileSync,
+} from "node:fs";
+import http from "node:http";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
 import process from "node:process";
@@ -371,6 +378,8 @@ describe("JSF signing and verification commands", () => {
       "approver",
       "--mode",
       "chain",
+      "--verify-existing-with",
+      file("rsa-public.pem"),
     ]);
     assert.strictEqual(approved.status, 0, approved.stderr);
     const chained = JSON.parse(readFileSync(file("chain.json"), "utf-8"));
@@ -447,5 +456,252 @@ describe("JSF signing and verification commands", () => {
     );
     assert.strictEqual(status, 1);
     assert.match(stdout, /re-sign it with this version of cdx-sign/);
+  });
+  const appendChain = (input, ...args) =>
+    run([
+      binFor("sign"),
+      "-i",
+      file(input),
+      "-k",
+      file("ed25519-private.pem"),
+      "-a",
+      "Ed25519",
+      "--key-id",
+      "auditor",
+      "--mode",
+      "chain",
+      ...args,
+    ]);
+
+  it("cdx-sign refuses to append to chain history it cannot verify", async () => {
+    const fabricated = structuredClone(bom);
+    fabricated.signature = {
+      chain: [
+        {
+          algorithm: "RS256",
+          keyId: "secure-builder-ci",
+          value: crypto.randomBytes(256).toString("base64url"),
+        },
+      ],
+    };
+    const fabricatedText = JSON.stringify(fabricated);
+    writeFileSync(file("fabricated.json"), fabricatedText);
+
+    const unverified = await appendChain("fabricated.json");
+    assert.notStrictEqual(unverified.status, 0);
+    assert.match(unverified.stderr, /could not be verified/);
+    assert.match(
+      unverified.stderr,
+      /entry 0 \(RS256, keyId 'secure-builder-ci'\): no --verify-existing-with key was given/,
+    );
+    assert.strictEqual(
+      readFileSync(file("fabricated.json"), "utf-8"),
+      fabricatedText,
+    );
+
+    const wrongValue = await appendChain(
+      "fabricated.json",
+      "--verify-existing-with",
+      file("rsa-public.pem"),
+    );
+    assert.notStrictEqual(wrongValue.status, 0);
+    assert.match(wrongValue.stderr, /does not verify with this key/);
+
+    const allowed = await appendChain(
+      "fabricated.json",
+      "--allow-unverified-history",
+    );
+    assert.strictEqual(allowed.status, 0, allowed.stderr);
+    assert.match(
+      allowed.stderr,
+      /Warning: appending to a chain with 1 unverified/,
+    );
+  });
+
+  it("cdx-sign checks a single signature before chaining onto it", async () => {
+    const built = await sign("single.json", "-k", file("rsa-private.pem"));
+    assert.strictEqual(built.status, 0, built.stderr);
+    const refused = await appendChain(
+      "single.json",
+      "--verify-existing-with",
+      file("ed25519-public.pem"),
+    );
+    assert.notStrictEqual(refused.status, 0);
+    assert.match(refused.stderr, /requires an rsa key, but the key is ed25519/);
+    const appended = await appendChain(
+      "single.json",
+      "--verify-existing-with",
+      file("rsa-public.pem"),
+    );
+    assert.strictEqual(appended.status, 0, appended.stderr);
+    const signers = await run([
+      binFor("sign"),
+      "-i",
+      file("single.json"),
+      "-k",
+      file("ed25519-private.pem"),
+      "-a",
+      "Ed25519",
+      "--mode",
+      "chain",
+      "--verify-existing-with",
+      file("rsa-public.pem"),
+      "--verify-existing-with",
+      file("ed25519-public.pem"),
+    ]);
+    assert.strictEqual(signers.status, 0, signers.stderr);
+  });
+
+  it("cdx-verify and cdx-validate explain nested signatures made by another signer", async () => {
+    const built = await sign(
+      "cosigned.json",
+      "-k",
+      file("rsa-private.pem"),
+      "-a",
+      "RS512",
+    );
+    assert.strictEqual(built.status, 0, built.stderr);
+    const cosigned = await run([
+      binFor("sign"),
+      "-i",
+      file("cosigned.json"),
+      "-k",
+      file("ed25519-private.pem"),
+      "-a",
+      "Ed25519",
+      "--mode",
+      "signers",
+    ]);
+    assert.strictEqual(cosigned.status, 0, cosigned.stderr);
+
+    const deep = await verify(
+      "cosigned.json",
+      "--public-key",
+      file("ed25519-public.pem"),
+    );
+    assert.strictEqual(deep.status, 1);
+    assert.match(deep.stdout, /requires an rsa key, but the key is ed25519/);
+    assert.match(deep.stdout, /pass --no-deep to verify only the root/);
+    const rootOnly = await verify(
+      "cosigned.json",
+      "--public-key",
+      file("ed25519-public.pem"),
+      "--no-deep",
+    );
+    assert.strictEqual(rootOnly.status, 0, rootOnly.stdout);
+
+    const validate = (...args) =>
+      run([
+        binFor("validate"),
+        "-i",
+        file("cosigned.json"),
+        "--public-key",
+        file("ed25519-public.pem"),
+        "--require-signature",
+        "--benchmark",
+        "none",
+        ...args,
+      ]);
+    const validatedDeep = await validate();
+    assert.strictEqual(validatedDeep.status, 4);
+    assert.match(validatedDeep.stderr, /components\[0\]/);
+    const validatedRoot = await validate("--no-nested-signatures");
+    assert.notStrictEqual(validatedRoot.status, 4, validatedRoot.stderr);
+  });
+
+  describe("cdxgen signing", () => {
+    const project = file("project");
+    mkdirSync(project, { recursive: true });
+    writeFileSync(
+      join(project, "package.json"),
+      JSON.stringify({ name: "demo", version: "1.0.0", dependencies: {} }),
+    );
+    const cdxgen = (env, ...args) =>
+      run([binFor("cdxgen"), "-t", "js", project, "--no-banner", ...args], {
+        env: { ...process.env, FETCH_LICENSE: "false", ...env },
+      });
+    const rsaSigning = {
+      SBOM_SIGN_ALGORITHM: "RS256",
+      SBOM_SIGN_PRIVATE_KEY: file("rsa-private.pem"),
+    };
+
+    it("exits non-zero when the configured key cannot sign", async () => {
+      const { status, stderr } = await cdxgen(
+        { ...rsaSigning, SBOM_SIGN_ALGORITHM: "Ed25519" },
+        "-o",
+        file("cdxgen-mismatch.json"),
+      );
+      assert.strictEqual(status, 1);
+      assert.match(
+        stderr,
+        /SBOM signing was unsuccessful: Algorithm Ed25519 requires an ed25519 key/,
+      );
+      assert.match(stderr, /was written without a signature/);
+      const written = JSON.parse(
+        readFileSync(file("cdxgen-mismatch.json"), "utf-8"),
+      );
+      assert.strictEqual(written.signature, undefined);
+    });
+
+    it("signs file and stdout output", async () => {
+      const toFile = await cdxgen(rsaSigning, "-o", file("cdxgen-signed.json"));
+      assert.strictEqual(toFile.status, 0, toFile.stderr);
+      const signed = file("cdxgen-signed.json");
+      const verified = await run([
+        binFor("verify"),
+        "-i",
+        signed,
+        "--public-key",
+        file("rsa-public.pem"),
+      ]);
+      assert.strictEqual(verified.status, 0, verified.stdout);
+
+      const toStdout = await cdxgen(rsaSigning, "-o", "-");
+      assert.strictEqual(toStdout.status, 0, toStdout.stderr);
+      assert.strictEqual(
+        JSON.parse(toStdout.stdout).signature.algorithm,
+        "RS256",
+      );
+
+      const generated = await cdxgen({}, "-o", "-", "--generate-key-and-sign");
+      assert.strictEqual(generated.status, 1);
+      assert.match(generated.stderr, /needs a file output/);
+      assert.strictEqual(generated.stdout, "");
+    });
+
+    it("uploads the signed BOM to Dependency-Track", async () => {
+      let uploaded = "";
+      const server = http.createServer((req, res) => {
+        const chunks = [];
+        req.on("data", (chunk) => chunks.push(chunk));
+        req.on("end", () => {
+          uploaded = Buffer.concat(chunks).toString("utf-8");
+          res.writeHead(200, { "content-type": "application/json" });
+          res.end(JSON.stringify({ token: "test" }));
+        });
+      });
+      await new Promise((resolve) => server.listen(0, "127.0.0.1", resolve));
+      try {
+        const { status, stderr } = await cdxgen(
+          rsaSigning,
+          "-o",
+          file("cdxgen-uploaded.json"),
+          "--server-url",
+          `http://127.0.0.1:${server.address().port}`,
+          "--api-key",
+          "test",
+          "--project-name",
+          "demo",
+        );
+        assert.strictEqual(status, 0, stderr);
+      } finally {
+        server.close();
+      }
+      const start = uploaded.indexOf('{"bomFormat"');
+      assert.ok(start >= 0, "The upload carries the BOM");
+      const end = uploaded.lastIndexOf("}");
+      const sent = JSON.parse(uploaded.slice(start, end + 1));
+      assert.strictEqual(sent.signature.algorithm, "RS256");
+    });
   });
 });

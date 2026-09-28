@@ -127,6 +127,11 @@ if (args.publicKey && args.secretKey) {
   process.exit(1);
 }
 const keyFile = args.secretKey || args.publicKey || "public.key";
+if (!args.secretKey && !args.publicKey) {
+  console.log(
+    `No --public-key given; using '${keyFile}' from the current directory. Pass --public-key to name the trusted key explicitly.`,
+  );
+}
 if (!safeExistsSync(keyFile)) {
   console.log(
     args.secretKey
@@ -190,6 +195,11 @@ if (verifyNested) {
 
 if (hasInvalidNested) {
   console.log("One or more nested signatures are invalid!");
+  if (rootResult?.match) {
+    console.log(
+      "The root signature verifies with this key. Nested signatures belong to the party that created them, so pass --no-deep to verify only the root signature with this key.",
+    );
+  }
   process.exit(1);
 }
 

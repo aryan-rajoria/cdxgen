@@ -11,7 +11,7 @@ import {
   retrieveCdxgenVersion,
   safeExistsSync,
 } from "../lib/ecosystems/utils.js";
-import { signBom } from "../lib/helpers/bomSigner.js";
+import { checkSignatureEntries, signBom } from "../lib/helpers/bomSigner.js";
 import {
   getNonCycloneDxErrorMessage,
   isCycloneDxBom,
@@ -46,6 +46,18 @@ const args = _yargs
     choices: ["replace", "signers", "chain"],
     description:
       "Signature mode. Use 'signers' for multi-signing, 'chain' for sequential chaining.",
+  })
+  .option("verify-existing-with", {
+    type: "array",
+    string: true,
+    description:
+      "Public key (PEM) of an earlier signer. With --mode chain, every existing chain entry must verify with one of these keys before a new entry is appended.",
+  })
+  .option("allow-unverified-history", {
+    type: "boolean",
+    default: false,
+    description:
+      "With --mode chain, append even when existing chain entries cannot be verified with --verify-existing-with.",
   })
   .option("key-id", {
     description:
@@ -144,6 +156,61 @@ function hasAnySignature(bomJson) {
   return false;
 }
 
+function describeEntry(result) {
+  const parts = [String(result.algorithm)];
+  if (result.keyId !== undefined) {
+    parts.push(`keyId '${result.keyId}'`);
+  }
+  return `entry ${result.index} (${parts.join(", ")})`;
+}
+
+// A new chain entry covers every earlier entry, so the signer vouches for
+// that history. Check it with the earlier signers' keys before appending.
+function checkChainHistory(bomJson) {
+  const existing = bomJson.signature;
+  if (
+    args.mode !== "chain" ||
+    existing === undefined ||
+    (existing !== null &&
+      typeof existing === "object" &&
+      Object.hasOwn(existing, "signers"))
+  ) {
+    return;
+  }
+  const keys = (args.verifyExistingWith || []).map((keyFile) => {
+    if (!safeExistsSync(keyFile)) {
+      throw new Error(`Public key file '${keyFile}' not found.`);
+    }
+    return fs.readFileSync(keyFile, "utf8");
+  });
+  const unverified = checkSignatureEntries(bomJson, keys).filter(
+    (result) => !result.verified,
+  );
+  if (!unverified.length) {
+    return;
+  }
+  const details = unverified.map(
+    (result) =>
+      `  - ${describeEntry(result)}: ${result.reasons[0] || "no --verify-existing-with key was given"}`,
+  );
+  if (args.allowUnverifiedHistory) {
+    console.warn(
+      [
+        `Warning: appending to a chain with ${unverified.length} unverified entry(s):`,
+        ...details,
+      ].join("\n"),
+    );
+    return;
+  }
+  throw new Error(
+    [
+      `the new chain entry would vouch for ${unverified.length} existing entry(s) that could not be verified:`,
+      ...details,
+      "Pass --verify-existing-with <public key> for each earlier signer, or --allow-unverified-history to sign anyway.",
+    ].join("\n"),
+  );
+}
+
 try {
   const bomJson = JSON.parse(fs.readFileSync(args.input, "utf8"));
   if (!isCycloneDxBom(bomJson)) {
@@ -153,6 +220,7 @@ try {
 
   let signedBom = bomJson;
   if (hasPrivateKey && privateKeyContent) {
+    checkChainHistory(bomJson);
     signedBom = signBom(bomJson, {
       privateKey: privateKeyContent,
       algorithm: args.algorithm,

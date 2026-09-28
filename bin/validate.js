@@ -118,6 +118,12 @@ const args = _yargs
     description:
       "Path to the shared secret for HMAC (HS256, HS384, HS512) signatures. HMAC signatures are only accepted with this option.",
   })
+  .option("nested-signatures", {
+    type: "boolean",
+    default: true,
+    description:
+      "Also verify component, service, and annotation signatures, as cdx-verify does. Pass --no-nested-signatures to verify only the root signature.",
+  })
   .option("require-signature", {
     type: "boolean",
     default: false,
@@ -233,6 +239,7 @@ const report = await validateBomAdvanced(bomJson, {
   includePass: args.includePass,
   publicKey: publicKeyStr || undefined,
   secretKey: secretKey || undefined,
+  nestedSignatures: args.nestedSignatures,
 });
 
 let output;
