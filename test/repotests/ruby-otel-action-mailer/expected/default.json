@@ -1,0 +1,1904 @@
+{
+  "bomFormat": "CycloneDX",
+  "components": [
+    {
+      "bom-ref": "pkg:gem/addressable@2.9.0",
+      "evidence": {
+        "identity": [
+          {
+            "concludedValue": "$ROOT/Gemfile.lock",
+            "confidence": 0.8,
+            "field": "purl",
+            "methods": [
+              {
+                "confidence": 0.8,
+                "technique": "manifest-analysis",
+                "value": "$ROOT/Gemfile.lock"
+              }
+            ]
+          }
+        ]
+      },
+      "group": "",
+      "hashes": [
+        {
+          "alg": "SHA-256",
+          "content": "7fdf6ac3660f7f4e867a0838be3f6cf722ace541dd97767fa42bc6cfa980c7af"
+        }
+      ],
+      "name": "addressable",
+      "properties": [
+        {
+          "name": "cdx:gem:remote",
+          "value": "https://rubygems.org/"
+        },
+        {
+          "name": "internal:SrcFile",
+          "value": "$ROOT/Gemfile.lock"
+        }
+      ],
+      "purl": "pkg:gem/addressable@2.9.0",
+      "type": "library",
+      "version": "2.9.0"
+    },
+    {
+      "bom-ref": "pkg:gem/appraisal@2.5.0",
+      "evidence": {
+        "identity": [
+          {
+            "concludedValue": "$ROOT/Gemfile.lock",
+            "confidence": 0.8,
+            "field": "purl",
+            "methods": [
+              {
+                "confidence": 0.8,
+                "technique": "manifest-analysis",
+                "value": "$ROOT/Gemfile.lock"
+              }
+            ]
+          }
+        ]
+      },
+      "group": "",
+      "hashes": [
+        {
+          "alg": "SHA-256",
+          "content": "36989221be127913b0dba8d114da2001e6b2dceea7bd4951200eaba764eed3ce"
+        }
+      ],
+      "name": "appraisal",
+      "properties": [
+        {
+          "name": "cdx:gem:remote",
+          "value": "https://rubygems.org/"
+        },
+        {
+          "name": "internal:SrcFile",
+          "value": "$ROOT/Gemfile.lock"
+        }
+      ],
+      "purl": "pkg:gem/appraisal@2.5.0",
+      "type": "library",
+      "version": "2.5.0"
+    },
+    {
+      "bom-ref": "pkg:gem/ast@2.4.3",
+      "evidence": {
+        "identity": [
+          {
+            "concludedValue": "$ROOT/Gemfile.lock",
+            "confidence": 0.8,
+            "field": "purl",
+            "methods": [
+              {
+                "confidence": 0.8,
+                "technique": "manifest-analysis",
+                "value": "$ROOT/Gemfile.lock"
+              }
+            ]
+          }
+        ]
+      },
+      "group": "",
+      "hashes": [
+        {
+          "alg": "SHA-256",
+          "content": "954615157c1d6a382bc27d690d973195e79db7f55e9765ac7c481c60bdb4d383"
+        }
+      ],
+      "name": "ast",
+      "properties": [
+        {
+          "name": "cdx:gem:remote",
+          "value": "https://rubygems.org/"
+        },
+        {
+          "name": "internal:SrcFile",
+          "value": "$ROOT/Gemfile.lock"
+        }
+      ],
+      "purl": "pkg:gem/ast@2.4.3",
+      "type": "library",
+      "version": "2.4.3"
+    },
+    {
+      "bom-ref": "pkg:gem/bigdecimal@4.1.2",
+      "evidence": {
+        "identity": [
+          {
+            "concludedValue": "$ROOT/Gemfile.lock",
+            "confidence": 0.8,
+            "field": "purl",
+            "methods": [
+              {
+                "confidence": 0.8,
+                "technique": "manifest-analysis",
+                "value": "$ROOT/Gemfile.lock"
+              }
+            ]
+          }
+        ]
+      },
+      "group": "",
+      "hashes": [
+        {
+          "alg": "SHA-256",
+          "content": "53d217666027eab4280346fba98e7d5b66baaae1b9c3c1c0ffe89d48188a3fbd"
+        }
+      ],
+      "name": "bigdecimal",
+      "properties": [
+        {
+          "name": "cdx:gem:remote",
+          "value": "https://rubygems.org/"
+        },
+        {
+          "name": "internal:SrcFile",
+          "value": "$ROOT/Gemfile.lock"
+        }
+      ],
+      "purl": "pkg:gem/bigdecimal@4.1.2",
+      "type": "library",
+      "version": "4.1.2"
+    },
+    {
+      "bom-ref": "pkg:gem/crack@1.0.1",
+      "evidence": {
+        "identity": [
+          {
+            "concludedValue": "$ROOT/Gemfile.lock",
+            "confidence": 0.8,
+            "field": "purl",
+            "methods": [
+              {
+                "confidence": 0.8,
+                "technique": "manifest-analysis",
+                "value": "$ROOT/Gemfile.lock"
+              }
+            ]
+          }
+        ]
+      },
+      "group": "",
+      "hashes": [
+        {
+          "alg": "SHA-256",
+          "content": "ff4a10390cd31d66440b7524eb1841874db86201d5b70032028553130b6d4c7e"
+        }
+      ],
+      "name": "crack",
+      "properties": [
+        {
+          "name": "cdx:gem:remote",
+          "value": "https://rubygems.org/"
+        },
+        {
+          "name": "internal:SrcFile",
+          "value": "$ROOT/Gemfile.lock"
+        }
+      ],
+      "purl": "pkg:gem/crack@1.0.1",
+      "type": "library",
+      "version": "1.0.1"
+    },
+    {
+      "bom-ref": "pkg:gem/drb@2.2.3",
+      "evidence": {
+        "identity": [
+          {
+            "concludedValue": "$ROOT/Gemfile.lock",
+            "confidence": 0.8,
+            "field": "purl",
+            "methods": [
+              {
+                "confidence": 0.8,
+                "technique": "manifest-analysis",
+                "value": "$ROOT/Gemfile.lock"
+              }
+            ]
+          }
+        ]
+      },
+      "group": "",
+      "hashes": [
+        {
+          "alg": "SHA-256",
+          "content": "0b00d6fdb50995fe4a45dea13663493c841112e4068656854646f418fda13373"
+        }
+      ],
+      "name": "drb",
+      "properties": [
+        {
+          "name": "cdx:gem:remote",
+          "value": "https://rubygems.org/"
+        },
+        {
+          "name": "internal:SrcFile",
+          "value": "$ROOT/Gemfile.lock"
+        }
+      ],
+      "purl": "pkg:gem/drb@2.2.3",
+      "type": "library",
+      "version": "2.2.3"
+    },
+    {
+      "bom-ref": "pkg:gem/hashdiff@1.2.1",
+      "evidence": {
+        "identity": [
+          {
+            "concludedValue": "$ROOT/Gemfile.lock",
+            "confidence": 0.8,
+            "field": "purl",
+            "methods": [
+              {
+                "confidence": 0.8,
+                "technique": "manifest-analysis",
+                "value": "$ROOT/Gemfile.lock"
+              }
+            ]
+          }
+        ]
+      },
+      "group": "",
+      "hashes": [
+        {
+          "alg": "SHA-256",
+          "content": "9c079dbc513dfc8833ab59c0c2d8f230fa28499cc5efb4b8dd276cf931457cd1"
+        }
+      ],
+      "name": "hashdiff",
+      "properties": [
+        {
+          "name": "cdx:gem:remote",
+          "value": "https://rubygems.org/"
+        },
+        {
+          "name": "internal:SrcFile",
+          "value": "$ROOT/Gemfile.lock"
+        }
+      ],
+      "purl": "pkg:gem/hashdiff@1.2.1",
+      "type": "library",
+      "version": "1.2.1"
+    },
+    {
+      "bom-ref": "pkg:gem/jar-dependencies",
+      "evidence": {
+        "identity": [
+          {
+            "concludedValue": "$ROOT/Gemfile.lock",
+            "confidence": 0.3,
+            "field": "purl",
+            "methods": [
+              {
+                "confidence": 0.3,
+                "technique": "manifest-analysis",
+                "value": "$ROOT/Gemfile.lock"
+              }
+            ]
+          }
+        ]
+      },
+      "group": "",
+      "name": "jar-dependencies",
+      "properties": [
+        {
+          "name": "cdx:gem:versionSpecifiers",
+          "value": "= 0.5.7"
+        },
+        {
+          "name": "internal:SrcFile",
+          "value": "$ROOT/Gemfile.lock"
+        }
+      ],
+      "purl": "pkg:gem/jar-dependencies",
+      "type": "library"
+    },
+    {
+      "bom-ref": "pkg:gem/json@2.21.2",
+      "evidence": {
+        "identity": [
+          {
+            "concludedValue": "$ROOT/Gemfile.lock",
+            "confidence": 0.8,
+            "field": "purl",
+            "methods": [
+              {
+                "confidence": 0.8,
+                "technique": "manifest-analysis",
+                "value": "$ROOT/Gemfile.lock"
+              }
+            ]
+          }
+        ]
+      },
+      "group": "",
+      "hashes": [
+        {
+          "alg": "SHA-256",
+          "content": "1f1d3b7cf2b3ba1a69beca0bb6db13d5438b80bff3cd54cdaaa620b9b07c1c6a"
+        }
+      ],
+      "name": "json",
+      "properties": [
+        {
+          "name": "cdx:gem:remote",
+          "value": "https://rubygems.org/"
+        },
+        {
+          "name": "internal:SrcFile",
+          "value": "$ROOT/Gemfile.lock"
+        }
+      ],
+      "purl": "pkg:gem/json@2.21.2",
+      "type": "library",
+      "version": "2.21.2"
+    },
+    {
+      "bom-ref": "pkg:gem/language_server-protocol@3.17.0.6",
+      "evidence": {
+        "identity": [
+          {
+            "concludedValue": "$ROOT/Gemfile.lock",
+            "confidence": 0.8,
+            "field": "purl",
+            "methods": [
+              {
+                "confidence": 0.8,
+                "technique": "manifest-analysis",
+                "value": "$ROOT/Gemfile.lock"
+              }
+            ]
+          }
+        ]
+      },
+      "group": "",
+      "hashes": [
+        {
+          "alg": "SHA-256",
+          "content": "5ef2c0c138f8267e1bc631d3328347d354f96724b0af22f2c79516120443b7f0"
+        }
+      ],
+      "name": "language_server-protocol",
+      "properties": [
+        {
+          "name": "cdx:gem:remote",
+          "value": "https://rubygems.org/"
+        },
+        {
+          "name": "internal:SrcFile",
+          "value": "$ROOT/Gemfile.lock"
+        }
+      ],
+      "purl": "pkg:gem/language_server-protocol@3.17.0.6",
+      "type": "library",
+      "version": "3.17.0.6"
+    },
+    {
+      "bom-ref": "pkg:gem/lint_roller@1.1.0",
+      "evidence": {
+        "identity": [
+          {
+            "concludedValue": "$ROOT/Gemfile.lock",
+            "confidence": 0.8,
+            "field": "purl",
+            "methods": [
+              {
+                "confidence": 0.8,
+                "technique": "manifest-analysis",
+                "value": "$ROOT/Gemfile.lock"
+              }
+            ]
+          }
+        ]
+      },
+      "group": "",
+      "hashes": [
+        {
+          "alg": "SHA-256",
+          "content": "2c0c845b632a7d172cb849cc90c1bce937a28c5c8ccccb50dfd46a485003cc87"
+        }
+      ],
+      "name": "lint_roller",
+      "properties": [
+        {
+          "name": "cdx:gem:remote",
+          "value": "https://rubygems.org/"
+        },
+        {
+          "name": "internal:SrcFile",
+          "value": "$ROOT/Gemfile.lock"
+        }
+      ],
+      "purl": "pkg:gem/lint_roller@1.1.0",
+      "type": "library",
+      "version": "1.1.0"
+    },
+    {
+      "bom-ref": "pkg:gem/logger@1.7.0",
+      "evidence": {
+        "identity": [
+          {
+            "concludedValue": "$ROOT/Gemfile.lock",
+            "confidence": 0.8,
+            "field": "purl",
+            "methods": [
+              {
+                "confidence": 0.8,
+                "technique": "manifest-analysis",
+                "value": "$ROOT/Gemfile.lock"
+              }
+            ]
+          }
+        ]
+      },
+      "group": "",
+      "hashes": [
+        {
+          "alg": "SHA-256",
+          "content": "196edec7cc44b66cfb40f9755ce11b392f21f7967696af15d274dde7edff0203"
+        }
+      ],
+      "name": "logger",
+      "properties": [
+        {
+          "name": "cdx:gem:remote",
+          "value": "https://rubygems.org/"
+        },
+        {
+          "name": "internal:SrcFile",
+          "value": "$ROOT/Gemfile.lock"
+        }
+      ],
+      "purl": "pkg:gem/logger@1.7.0",
+      "type": "library",
+      "version": "1.7.0"
+    },
+    {
+      "bom-ref": "pkg:gem/minitest@6.0.6",
+      "evidence": {
+        "identity": [
+          {
+            "concludedValue": "$ROOT/Gemfile.lock",
+            "confidence": 0.8,
+            "field": "purl",
+            "methods": [
+              {
+                "confidence": 0.8,
+                "technique": "manifest-analysis",
+                "value": "$ROOT/Gemfile.lock"
+              }
+            ]
+          }
+        ]
+      },
+      "group": "",
+      "hashes": [
+        {
+          "alg": "SHA-256",
+          "content": "153ea36d1d987a62942382b61075745042a2b3123b1cd48f4c3675af9cc7d6f1"
+        }
+      ],
+      "name": "minitest",
+      "properties": [
+        {
+          "name": "cdx:gem:remote",
+          "value": "https://rubygems.org/"
+        },
+        {
+          "name": "internal:SrcFile",
+          "value": "$ROOT/Gemfile.lock"
+        }
+      ],
+      "purl": "pkg:gem/minitest@6.0.6",
+      "type": "library",
+      "version": "6.0.6"
+    },
+    {
+      "bom-ref": "pkg:gem/opentelemetry-api@1.11.0",
+      "evidence": {
+        "identity": [
+          {
+            "concludedValue": "$ROOT/Gemfile.lock",
+            "confidence": 0.8,
+            "field": "purl",
+            "methods": [
+              {
+                "confidence": 0.8,
+                "technique": "manifest-analysis",
+                "value": "$ROOT/Gemfile.lock"
+              }
+            ]
+          }
+        ]
+      },
+      "group": "",
+      "hashes": [
+        {
+          "alg": "SHA-256",
+          "content": "218c840170fa473974756668b32b6989570de07c7d3864627960209f189247e2"
+        }
+      ],
+      "name": "opentelemetry-api",
+      "properties": [
+        {
+          "name": "cdx:gem:remote",
+          "value": "../base"
+        },
+        {
+          "name": "internal:SrcFile",
+          "value": "$ROOT/Gemfile.lock"
+        }
+      ],
+      "purl": "pkg:gem/opentelemetry-api@1.11.0",
+      "type": "library",
+      "version": "1.11.0"
+    },
+    {
+      "bom-ref": "pkg:gem/opentelemetry-common@0.25.1",
+      "evidence": {
+        "identity": [
+          {
+            "concludedValue": "$ROOT/Gemfile.lock",
+            "confidence": 0.8,
+            "field": "purl",
+            "methods": [
+              {
+                "confidence": 0.8,
+                "technique": "manifest-analysis",
+                "value": "$ROOT/Gemfile.lock"
+              }
+            ]
+          }
+        ]
+      },
+      "group": "",
+      "hashes": [
+        {
+          "alg": "SHA-256",
+          "content": "38fe87c751e4e13fcd47a8290b4ad67bbedf76c4ed89aeced5ea5c620e66bfb1"
+        }
+      ],
+      "name": "opentelemetry-common",
+      "properties": [
+        {
+          "name": "cdx:gem:remote",
+          "value": "../base"
+        },
+        {
+          "name": "internal:SrcFile",
+          "value": "$ROOT/Gemfile.lock"
+        }
+      ],
+      "purl": "pkg:gem/opentelemetry-common@0.25.1",
+      "type": "library",
+      "version": "0.25.1"
+    },
+    {
+      "bom-ref": "pkg:gem/opentelemetry-instrumentation-active_support@0.12.1",
+      "evidence": {
+        "identity": [
+          {
+            "concludedValue": "$ROOT/Gemfile.lock",
+            "confidence": 0.8,
+            "field": "purl",
+            "methods": [
+              {
+                "confidence": 0.8,
+                "technique": "manifest-analysis",
+                "value": "$ROOT/Gemfile.lock"
+              }
+            ]
+          }
+        ]
+      },
+      "group": "",
+      "name": "opentelemetry-instrumentation-active_support",
+      "properties": [
+        {
+          "name": "internal:SrcFile",
+          "value": "$ROOT/Gemfile.lock"
+        }
+      ],
+      "purl": "pkg:gem/opentelemetry-instrumentation-active_support@0.12.1",
+      "type": "library",
+      "version": "0.12.1"
+    },
+    {
+      "bom-ref": "pkg:gem/opentelemetry-instrumentation-base@0.26.1",
+      "evidence": {
+        "identity": [
+          {
+            "concludedValue": "$ROOT/Gemfile.lock",
+            "confidence": 0.8,
+            "field": "purl",
+            "methods": [
+              {
+                "confidence": 0.8,
+                "technique": "manifest-analysis",
+                "value": "$ROOT/Gemfile.lock"
+              }
+            ]
+          }
+        ]
+      },
+      "group": "",
+      "name": "opentelemetry-instrumentation-base",
+      "properties": [
+        {
+          "name": "cdx:gem:remote",
+          "value": "../active_support"
+        },
+        {
+          "name": "internal:SrcFile",
+          "value": "$ROOT/Gemfile.lock"
+        }
+      ],
+      "purl": "pkg:gem/opentelemetry-instrumentation-base@0.26.1",
+      "type": "library",
+      "version": "0.26.1"
+    },
+    {
+      "bom-ref": "pkg:gem/opentelemetry-registry@0.6.3",
+      "evidence": {
+        "identity": [
+          {
+            "concludedValue": "$ROOT/Gemfile.lock",
+            "confidence": 0.8,
+            "field": "purl",
+            "methods": [
+              {
+                "confidence": 0.8,
+                "technique": "manifest-analysis",
+                "value": "$ROOT/Gemfile.lock"
+              }
+            ]
+          }
+        ]
+      },
+      "group": "",
+      "hashes": [
+        {
+          "alg": "SHA-256",
+          "content": "568fa8eaea94394f29f4fce3f0339ab10c3bf6d6c8beed6b3cfee6fd37fcc608"
+        }
+      ],
+      "name": "opentelemetry-registry",
+      "properties": [
+        {
+          "name": "cdx:gem:remote",
+          "value": "../base"
+        },
+        {
+          "name": "internal:SrcFile",
+          "value": "$ROOT/Gemfile.lock"
+        }
+      ],
+      "purl": "pkg:gem/opentelemetry-registry@0.6.3",
+      "type": "library",
+      "version": "0.6.3"
+    },
+    {
+      "bom-ref": "pkg:gem/opentelemetry-sdk@1.13.0",
+      "evidence": {
+        "identity": [
+          {
+            "concludedValue": "$ROOT/Gemfile.lock",
+            "confidence": 0.8,
+            "field": "purl",
+            "methods": [
+              {
+                "confidence": 0.8,
+                "technique": "manifest-analysis",
+                "value": "$ROOT/Gemfile.lock"
+              }
+            ]
+          }
+        ]
+      },
+      "group": "",
+      "hashes": [
+        {
+          "alg": "SHA-256",
+          "content": "eea4ab625eb901ecfe1083049862d4853fd16d94029f3cdd16526c81332f0fff"
+        }
+      ],
+      "name": "opentelemetry-sdk",
+      "properties": [
+        {
+          "name": "cdx:gem:remote",
+          "value": "https://rubygems.org/"
+        },
+        {
+          "name": "internal:SrcFile",
+          "value": "$ROOT/Gemfile.lock"
+        }
+      ],
+      "purl": "pkg:gem/opentelemetry-sdk@1.13.0",
+      "type": "library",
+      "version": "1.13.0"
+    },
+    {
+      "bom-ref": "pkg:gem/opentelemetry-semantic_conventions@1.44.0",
+      "evidence": {
+        "identity": [
+          {
+            "concludedValue": "$ROOT/Gemfile.lock",
+            "confidence": 0.8,
+            "field": "purl",
+            "methods": [
+              {
+                "confidence": 0.8,
+                "technique": "manifest-analysis",
+                "value": "$ROOT/Gemfile.lock"
+              }
+            ]
+          }
+        ]
+      },
+      "group": "",
+      "hashes": [
+        {
+          "alg": "SHA-256",
+          "content": "b09b8793422f13b01c08f7a6f29b5f511f47f37bcdb57c0513465a0464168513"
+        }
+      ],
+      "name": "opentelemetry-semantic_conventions",
+      "properties": [
+        {
+          "name": "cdx:gem:remote",
+          "value": "https://rubygems.org/"
+        },
+        {
+          "name": "internal:SrcFile",
+          "value": "$ROOT/Gemfile.lock"
+        }
+      ],
+      "purl": "pkg:gem/opentelemetry-semantic_conventions@1.44.0",
+      "type": "library",
+      "version": "1.44.0"
+    },
+    {
+      "bom-ref": "pkg:gem/opentelemetry-test-helpers@0.9.1",
+      "evidence": {
+        "identity": [
+          {
+            "concludedValue": "$ROOT/Gemfile.lock",
+            "confidence": 0.8,
+            "field": "purl",
+            "methods": [
+              {
+                "confidence": 0.8,
+                "technique": "manifest-analysis",
+                "value": "$ROOT/Gemfile.lock"
+              }
+            ]
+          }
+        ]
+      },
+      "group": "",
+      "hashes": [
+        {
+          "alg": "SHA-256",
+          "content": "d912b1dab2cdf8d149e76b74f04ea6af176f01f13aa21325e4d401c2c3fc0678"
+        }
+      ],
+      "name": "opentelemetry-test-helpers",
+      "properties": [
+        {
+          "name": "cdx:gem:remote",
+          "value": "https://rubygems.org/"
+        },
+        {
+          "name": "internal:SrcFile",
+          "value": "$ROOT/Gemfile.lock"
+        }
+      ],
+      "purl": "pkg:gem/opentelemetry-test-helpers@0.9.1",
+      "type": "library",
+      "version": "0.9.1"
+    },
+    {
+      "bom-ref": "pkg:gem/parallel@2.1.0",
+      "evidence": {
+        "identity": [
+          {
+            "concludedValue": "$ROOT/Gemfile.lock",
+            "confidence": 0.8,
+            "field": "purl",
+            "methods": [
+              {
+                "confidence": 0.8,
+                "technique": "manifest-analysis",
+                "value": "$ROOT/Gemfile.lock"
+              }
+            ]
+          }
+        ]
+      },
+      "group": "",
+      "hashes": [
+        {
+          "alg": "SHA-256",
+          "content": "b35258865c2e31134c5ecb708beaaf6772adf9d5efae28e93e99260877b09356"
+        }
+      ],
+      "name": "parallel",
+      "properties": [
+        {
+          "name": "cdx:gem:remote",
+          "value": "https://rubygems.org/"
+        },
+        {
+          "name": "internal:SrcFile",
+          "value": "$ROOT/Gemfile.lock"
+        }
+      ],
+      "purl": "pkg:gem/parallel@2.1.0",
+      "type": "library",
+      "version": "2.1.0"
+    },
+    {
+      "bom-ref": "pkg:gem/parser@3.3.12.0",
+      "evidence": {
+        "identity": [
+          {
+            "concludedValue": "$ROOT/Gemfile.lock",
+            "confidence": 0.8,
+            "field": "purl",
+            "methods": [
+              {
+                "confidence": 0.8,
+                "technique": "manifest-analysis",
+                "value": "$ROOT/Gemfile.lock"
+              }
+            ]
+          }
+        ]
+      },
+      "group": "",
+      "hashes": [
+        {
+          "alg": "SHA-256",
+          "content": "21a6d7f755d5a24dfbdc6e6b772e4e879a52e7631a88bc5a3a134606052c9828"
+        }
+      ],
+      "name": "parser",
+      "properties": [
+        {
+          "name": "cdx:gem:remote",
+          "value": "https://rubygems.org/"
+        },
+        {
+          "name": "internal:SrcFile",
+          "value": "$ROOT/Gemfile.lock"
+        }
+      ],
+      "purl": "pkg:gem/parser@3.3.12.0",
+      "type": "library",
+      "version": "3.3.12.0"
+    },
+    {
+      "bom-ref": "pkg:gem/prism@1.9.0",
+      "evidence": {
+        "identity": [
+          {
+            "concludedValue": "$ROOT/Gemfile.lock",
+            "confidence": 0.8,
+            "field": "purl",
+            "methods": [
+              {
+                "confidence": 0.8,
+                "technique": "manifest-analysis",
+                "value": "$ROOT/Gemfile.lock"
+              }
+            ]
+          }
+        ]
+      },
+      "group": "",
+      "hashes": [
+        {
+          "alg": "SHA-256",
+          "content": "7b530c6a9f92c24300014919c9dcbc055bf4cdf51ec30aed099b06cd6674ef85"
+        }
+      ],
+      "name": "prism",
+      "properties": [
+        {
+          "name": "cdx:gem:remote",
+          "value": "https://rubygems.org/"
+        },
+        {
+          "name": "internal:SrcFile",
+          "value": "$ROOT/Gemfile.lock"
+        }
+      ],
+      "purl": "pkg:gem/prism@1.9.0",
+      "type": "library",
+      "version": "1.9.0"
+    },
+    {
+      "bom-ref": "pkg:gem/public_suffix@7.0.5",
+      "evidence": {
+        "identity": [
+          {
+            "concludedValue": "$ROOT/Gemfile.lock",
+            "confidence": 0.8,
+            "field": "purl",
+            "methods": [
+              {
+                "confidence": 0.8,
+                "technique": "manifest-analysis",
+                "value": "$ROOT/Gemfile.lock"
+              }
+            ]
+          }
+        ]
+      },
+      "group": "",
+      "hashes": [
+        {
+          "alg": "SHA-256",
+          "content": "1a8bb08f1bbea19228d3bed6e5ed908d1cb4f7c2726d18bd9cadf60bc676f623"
+        }
+      ],
+      "name": "public_suffix",
+      "properties": [
+        {
+          "name": "cdx:gem:remote",
+          "value": "https://rubygems.org/"
+        },
+        {
+          "name": "internal:SrcFile",
+          "value": "$ROOT/Gemfile.lock"
+        }
+      ],
+      "purl": "pkg:gem/public_suffix@7.0.5",
+      "type": "library",
+      "version": "7.0.5"
+    },
+    {
+      "bom-ref": "pkg:gem/racc@1.8.1",
+      "evidence": {
+        "identity": [
+          {
+            "concludedValue": "$ROOT/Gemfile.lock",
+            "confidence": 0.8,
+            "field": "purl",
+            "methods": [
+              {
+                "confidence": 0.8,
+                "technique": "manifest-analysis",
+                "value": "$ROOT/Gemfile.lock"
+              }
+            ]
+          }
+        ]
+      },
+      "group": "",
+      "hashes": [
+        {
+          "alg": "SHA-256",
+          "content": "4a7f6929691dbec8b5209a0b373bc2614882b55fc5d2e447a21aaa691303d62f"
+        }
+      ],
+      "name": "racc",
+      "properties": [
+        {
+          "name": "cdx:gem:remote",
+          "value": "https://rubygems.org/"
+        },
+        {
+          "name": "internal:SrcFile",
+          "value": "$ROOT/Gemfile.lock"
+        }
+      ],
+      "purl": "pkg:gem/racc@1.8.1",
+      "type": "library",
+      "version": "1.8.1"
+    },
+    {
+      "bom-ref": "pkg:gem/rainbow@3.1.1",
+      "evidence": {
+        "identity": [
+          {
+            "concludedValue": "$ROOT/Gemfile.lock",
+            "confidence": 0.8,
+            "field": "purl",
+            "methods": [
+              {
+                "confidence": 0.8,
+                "technique": "manifest-analysis",
+                "value": "$ROOT/Gemfile.lock"
+              }
+            ]
+          }
+        ]
+      },
+      "group": "",
+      "hashes": [
+        {
+          "alg": "SHA-256",
+          "content": "039491aa3a89f42efa1d6dec2fc4e62ede96eb6acd95e52f1ad581182b79bc6a"
+        }
+      ],
+      "name": "rainbow",
+      "properties": [
+        {
+          "name": "cdx:gem:remote",
+          "value": "https://rubygems.org/"
+        },
+        {
+          "name": "internal:SrcFile",
+          "value": "$ROOT/Gemfile.lock"
+        }
+      ],
+      "purl": "pkg:gem/rainbow@3.1.1",
+      "type": "library",
+      "version": "3.1.1"
+    },
+    {
+      "bom-ref": "pkg:gem/rake@13.4.2",
+      "evidence": {
+        "identity": [
+          {
+            "concludedValue": "$ROOT/Gemfile.lock",
+            "confidence": 0.8,
+            "field": "purl",
+            "methods": [
+              {
+                "confidence": 0.8,
+                "technique": "manifest-analysis",
+                "value": "$ROOT/Gemfile.lock"
+              }
+            ]
+          }
+        ]
+      },
+      "group": "",
+      "hashes": [
+        {
+          "alg": "SHA-256",
+          "content": "cb825b2bd5f1f8e91ca37bddb4b9aaf345551b4731da62949be002fa89283701"
+        }
+      ],
+      "name": "rake",
+      "properties": [
+        {
+          "name": "cdx:gem:remote",
+          "value": "https://rubygems.org/"
+        },
+        {
+          "name": "internal:SrcFile",
+          "value": "$ROOT/Gemfile.lock"
+        }
+      ],
+      "purl": "pkg:gem/rake@13.4.2",
+      "type": "library",
+      "version": "13.4.2"
+    },
+    {
+      "bom-ref": "pkg:gem/regexp_parser@2.12.0",
+      "evidence": {
+        "identity": [
+          {
+            "concludedValue": "$ROOT/Gemfile.lock",
+            "confidence": 0.8,
+            "field": "purl",
+            "methods": [
+              {
+                "confidence": 0.8,
+                "technique": "manifest-analysis",
+                "value": "$ROOT/Gemfile.lock"
+              }
+            ]
+          }
+        ]
+      },
+      "group": "",
+      "hashes": [
+        {
+          "alg": "SHA-256",
+          "content": "35a916a1d63190ab5c9009457136ae5f3c0c7512d60291d0d1378ba18ce08ebb"
+        }
+      ],
+      "name": "regexp_parser",
+      "properties": [
+        {
+          "name": "cdx:gem:remote",
+          "value": "https://rubygems.org/"
+        },
+        {
+          "name": "internal:SrcFile",
+          "value": "$ROOT/Gemfile.lock"
+        }
+      ],
+      "purl": "pkg:gem/regexp_parser@2.12.0",
+      "type": "library",
+      "version": "2.12.0"
+    },
+    {
+      "bom-ref": "pkg:gem/rexml@3.4.4",
+      "evidence": {
+        "identity": [
+          {
+            "concludedValue": "$ROOT/Gemfile.lock",
+            "confidence": 0.8,
+            "field": "purl",
+            "methods": [
+              {
+                "confidence": 0.8,
+                "technique": "manifest-analysis",
+                "value": "$ROOT/Gemfile.lock"
+              }
+            ]
+          }
+        ]
+      },
+      "group": "",
+      "hashes": [
+        {
+          "alg": "SHA-256",
+          "content": "19e0a2c3425dfbf2d4fc1189747bdb2f849b6c5e74180401b15734bc97b5d142"
+        }
+      ],
+      "name": "rexml",
+      "properties": [
+        {
+          "name": "cdx:gem:remote",
+          "value": "https://rubygems.org/"
+        },
+        {
+          "name": "internal:SrcFile",
+          "value": "$ROOT/Gemfile.lock"
+        }
+      ],
+      "purl": "pkg:gem/rexml@3.4.4",
+      "type": "library",
+      "version": "3.4.4"
+    },
+    {
+      "bom-ref": "pkg:gem/rubocop-ast@1.50.0",
+      "evidence": {
+        "identity": [
+          {
+            "concludedValue": "$ROOT/Gemfile.lock",
+            "confidence": 0.8,
+            "field": "purl",
+            "methods": [
+              {
+                "confidence": 0.8,
+                "technique": "manifest-analysis",
+                "value": "$ROOT/Gemfile.lock"
+              }
+            ]
+          }
+        ]
+      },
+      "group": "",
+      "hashes": [
+        {
+          "alg": "SHA-256",
+          "content": "b9ca88300da0803ee222ad20cdb30494c0a784eed06fdc35d254b06d662788db"
+        }
+      ],
+      "name": "rubocop-ast",
+      "properties": [
+        {
+          "name": "cdx:gem:remote",
+          "value": "https://rubygems.org/"
+        },
+        {
+          "name": "internal:SrcFile",
+          "value": "$ROOT/Gemfile.lock"
+        }
+      ],
+      "purl": "pkg:gem/rubocop-ast@1.50.0",
+      "type": "library",
+      "version": "1.50.0"
+    },
+    {
+      "bom-ref": "pkg:gem/rubocop-performance@1.27.0",
+      "evidence": {
+        "identity": [
+          {
+            "concludedValue": "$ROOT/Gemfile.lock",
+            "confidence": 0.8,
+            "field": "purl",
+            "methods": [
+              {
+                "confidence": 0.8,
+                "technique": "manifest-analysis",
+                "value": "$ROOT/Gemfile.lock"
+              }
+            ]
+          }
+        ]
+      },
+      "group": "",
+      "hashes": [
+        {
+          "alg": "SHA-256",
+          "content": "eeeb1374d062a368ee1c787b70eb0b0cc4b184cb1f8565f424760946146d61ce"
+        }
+      ],
+      "name": "rubocop-performance",
+      "properties": [
+        {
+          "name": "cdx:gem:remote",
+          "value": "https://rubygems.org/"
+        },
+        {
+          "name": "internal:SrcFile",
+          "value": "$ROOT/Gemfile.lock"
+        }
+      ],
+      "purl": "pkg:gem/rubocop-performance@1.27.0",
+      "type": "library",
+      "version": "1.27.0"
+    },
+    {
+      "bom-ref": "pkg:gem/rubocop@1.90.0",
+      "evidence": {
+        "identity": [
+          {
+            "concludedValue": "$ROOT/Gemfile.lock",
+            "confidence": 0.8,
+            "field": "purl",
+            "methods": [
+              {
+                "confidence": 0.8,
+                "technique": "manifest-analysis",
+                "value": "$ROOT/Gemfile.lock"
+              }
+            ]
+          }
+        ]
+      },
+      "group": "",
+      "hashes": [
+        {
+          "alg": "SHA-256",
+          "content": "9eb4c065b5c5154e4ef554c547972f3905a9eb6b53e657e580b6796b54bf8242"
+        }
+      ],
+      "name": "rubocop",
+      "properties": [
+        {
+          "name": "cdx:gem:remote",
+          "value": "https://rubygems.org/"
+        },
+        {
+          "name": "internal:SrcFile",
+          "value": "$ROOT/Gemfile.lock"
+        }
+      ],
+      "purl": "pkg:gem/rubocop@1.90.0",
+      "type": "library",
+      "version": "1.90.0"
+    },
+    {
+      "bom-ref": "pkg:gem/ruby-progressbar@1.13.0",
+      "evidence": {
+        "identity": [
+          {
+            "concludedValue": "$ROOT/Gemfile.lock",
+            "confidence": 0.8,
+            "field": "purl",
+            "methods": [
+              {
+                "confidence": 0.8,
+                "technique": "manifest-analysis",
+                "value": "$ROOT/Gemfile.lock"
+              }
+            ]
+          }
+        ]
+      },
+      "group": "",
+      "hashes": [
+        {
+          "alg": "SHA-256",
+          "content": "80fc9c47a9b640d6834e0dc7b3c94c9df37f08cb072b7761e4a71e22cff29b33"
+        }
+      ],
+      "name": "ruby-progressbar",
+      "properties": [
+        {
+          "name": "cdx:gem:remote",
+          "value": "https://rubygems.org/"
+        },
+        {
+          "name": "internal:SrcFile",
+          "value": "$ROOT/Gemfile.lock"
+        }
+      ],
+      "purl": "pkg:gem/ruby-progressbar@1.13.0",
+      "type": "library",
+      "version": "1.13.0"
+    },
+    {
+      "bom-ref": "pkg:gem/simplecov@1.1.1",
+      "evidence": {
+        "identity": [
+          {
+            "concludedValue": "$ROOT/Gemfile.lock",
+            "confidence": 0.8,
+            "field": "purl",
+            "methods": [
+              {
+                "confidence": 0.8,
+                "technique": "manifest-analysis",
+                "value": "$ROOT/Gemfile.lock"
+              }
+            ]
+          }
+        ]
+      },
+      "group": "",
+      "hashes": [
+        {
+          "alg": "SHA-256",
+          "content": "25825ef13f0b2e74694d769817dad6ab8e90131dabdaa666e522fea105521e78"
+        }
+      ],
+      "name": "simplecov",
+      "properties": [
+        {
+          "name": "cdx:gem:remote",
+          "value": "https://rubygems.org/"
+        },
+        {
+          "name": "internal:SrcFile",
+          "value": "$ROOT/Gemfile.lock"
+        }
+      ],
+      "purl": "pkg:gem/simplecov@1.1.1",
+      "type": "library",
+      "version": "1.1.1"
+    },
+    {
+      "bom-ref": "pkg:gem/thor@1.5.0",
+      "evidence": {
+        "identity": [
+          {
+            "concludedValue": "$ROOT/Gemfile.lock",
+            "confidence": 0.8,
+            "field": "purl",
+            "methods": [
+              {
+                "confidence": 0.8,
+                "technique": "manifest-analysis",
+                "value": "$ROOT/Gemfile.lock"
+              }
+            ]
+          }
+        ]
+      },
+      "group": "",
+      "hashes": [
+        {
+          "alg": "SHA-256",
+          "content": "e3a9e55fe857e44859ce104a84675ab6e8cd59c650a49106a05f55f136425e73"
+        }
+      ],
+      "name": "thor",
+      "properties": [
+        {
+          "name": "cdx:gem:remote",
+          "value": "https://rubygems.org/"
+        },
+        {
+          "name": "internal:SrcFile",
+          "value": "$ROOT/Gemfile.lock"
+        }
+      ],
+      "purl": "pkg:gem/thor@1.5.0",
+      "type": "library",
+      "version": "1.5.0"
+    },
+    {
+      "bom-ref": "pkg:gem/unicode-display_width@3.2.0",
+      "evidence": {
+        "identity": [
+          {
+            "concludedValue": "$ROOT/Gemfile.lock",
+            "confidence": 0.8,
+            "field": "purl",
+            "methods": [
+              {
+                "confidence": 0.8,
+                "technique": "manifest-analysis",
+                "value": "$ROOT/Gemfile.lock"
+              }
+            ]
+          }
+        ]
+      },
+      "group": "",
+      "hashes": [
+        {
+          "alg": "SHA-256",
+          "content": "0cdd96b5681a5949cdbc2c55e7b420facae74c4aaf9a9815eee1087cb1853c42"
+        }
+      ],
+      "name": "unicode-display_width",
+      "properties": [
+        {
+          "name": "cdx:gem:remote",
+          "value": "https://rubygems.org/"
+        },
+        {
+          "name": "internal:SrcFile",
+          "value": "$ROOT/Gemfile.lock"
+        }
+      ],
+      "purl": "pkg:gem/unicode-display_width@3.2.0",
+      "type": "library",
+      "version": "3.2.0"
+    },
+    {
+      "bom-ref": "pkg:gem/unicode-emoji@4.2.0",
+      "evidence": {
+        "identity": [
+          {
+            "concludedValue": "$ROOT/Gemfile.lock",
+            "confidence": 0.8,
+            "field": "purl",
+            "methods": [
+              {
+                "confidence": 0.8,
+                "technique": "manifest-analysis",
+                "value": "$ROOT/Gemfile.lock"
+              }
+            ]
+          }
+        ]
+      },
+      "group": "",
+      "hashes": [
+        {
+          "alg": "SHA-256",
+          "content": "519e69150f75652e40bf736106cfbc8f0f73aa3fb6a65afe62fefa7f80b0f80f"
+        }
+      ],
+      "name": "unicode-emoji",
+      "properties": [
+        {
+          "name": "cdx:gem:remote",
+          "value": "https://rubygems.org/"
+        },
+        {
+          "name": "internal:SrcFile",
+          "value": "$ROOT/Gemfile.lock"
+        }
+      ],
+      "purl": "pkg:gem/unicode-emoji@4.2.0",
+      "type": "library",
+      "version": "4.2.0"
+    },
+    {
+      "bom-ref": "pkg:gem/webmock@3.26.4",
+      "evidence": {
+        "identity": [
+          {
+            "concludedValue": "$ROOT/Gemfile.lock",
+            "confidence": 0.8,
+            "field": "purl",
+            "methods": [
+              {
+                "confidence": 0.8,
+                "technique": "manifest-analysis",
+                "value": "$ROOT/Gemfile.lock"
+              }
+            ]
+          }
+        ]
+      },
+      "group": "",
+      "hashes": [
+        {
+          "alg": "SHA-256",
+          "content": "8d8da206d217ebe6968cfb09c77f4533c23074e1432bad865f3994eacbaad50d"
+        }
+      ],
+      "name": "webmock",
+      "properties": [
+        {
+          "name": "cdx:gem:remote",
+          "value": "https://rubygems.org/"
+        },
+        {
+          "name": "internal:SrcFile",
+          "value": "$ROOT/Gemfile.lock"
+        }
+      ],
+      "purl": "pkg:gem/webmock@3.26.4",
+      "type": "library",
+      "version": "3.26.4"
+    },
+    {
+      "bom-ref": "pkg:gem/yard@0.9.45",
+      "evidence": {
+        "identity": [
+          {
+            "concludedValue": "$ROOT/Gemfile.lock",
+            "confidence": 0.8,
+            "field": "purl",
+            "methods": [
+              {
+                "confidence": 0.8,
+                "technique": "manifest-analysis",
+                "value": "$ROOT/Gemfile.lock"
+              }
+            ]
+          }
+        ]
+      },
+      "group": "",
+      "hashes": [
+        {
+          "alg": "SHA-256",
+          "content": "52e211493f7cb8a3ebf7e104a25a1e73937a3103092545d34cb88fafebb3dc51"
+        }
+      ],
+      "name": "yard",
+      "properties": [
+        {
+          "name": "cdx:gem:remote",
+          "value": "https://rubygems.org/"
+        },
+        {
+          "name": "internal:SrcFile",
+          "value": "$ROOT/Gemfile.lock"
+        }
+      ],
+      "purl": "pkg:gem/yard@0.9.45",
+      "type": "library",
+      "version": "0.9.45"
+    }
+  ],
+  "dependencies": [
+    {
+      "dependsOn": [
+        "pkg:gem/public_suffix@7.0.5"
+      ],
+      "ref": "pkg:gem/addressable@2.9.0"
+    },
+    {
+      "dependsOn": [
+        "pkg:gem/rake@13.4.2",
+        "pkg:gem/thor@1.5.0"
+      ],
+      "ref": "pkg:gem/appraisal@2.5.0"
+    },
+    {
+      "dependsOn": [],
+      "ref": "pkg:gem/ast@2.4.3"
+    },
+    {
+      "dependsOn": [],
+      "ref": "pkg:gem/bigdecimal@4.1.2"
+    },
+    {
+      "dependsOn": [
+        "pkg:gem/bigdecimal@4.1.2",
+        "pkg:gem/rexml@3.4.4"
+      ],
+      "ref": "pkg:gem/crack@1.0.1"
+    },
+    {
+      "dependsOn": [],
+      "ref": "pkg:gem/drb@2.2.3"
+    },
+    {
+      "dependsOn": [],
+      "ref": "pkg:gem/hashdiff@1.2.1"
+    },
+    {
+      "dependsOn": [],
+      "ref": "pkg:gem/jar-dependencies"
+    },
+    {
+      "dependsOn": [],
+      "ref": "pkg:gem/json@2.21.2"
+    },
+    {
+      "dependsOn": [],
+      "ref": "pkg:gem/language_server-protocol@3.17.0.6"
+    },
+    {
+      "dependsOn": [],
+      "ref": "pkg:gem/lint_roller@1.1.0"
+    },
+    {
+      "dependsOn": [],
+      "ref": "pkg:gem/logger@1.7.0"
+    },
+    {
+      "dependsOn": [
+        "pkg:gem/drb@2.2.3",
+        "pkg:gem/prism@1.9.0"
+      ],
+      "ref": "pkg:gem/minitest@6.0.6"
+    },
+    {
+      "dependsOn": [
+        "pkg:gem/logger@1.7.0"
+      ],
+      "ref": "pkg:gem/opentelemetry-api@1.11.0"
+    },
+    {
+      "dependsOn": [
+        "pkg:gem/opentelemetry-api@1.11.0"
+      ],
+      "ref": "pkg:gem/opentelemetry-common@0.25.1"
+    },
+    {
+      "dependsOn": [
+        "pkg:gem/appraisal@2.5.0",
+        "pkg:gem/jar-dependencies",
+        "pkg:gem/minitest@6.0.6",
+        "pkg:gem/opentelemetry-instrumentation-active_support@0.12.1",
+        "pkg:gem/opentelemetry-instrumentation-base@0.26.1",
+        "pkg:gem/opentelemetry-sdk@1.13.0",
+        "pkg:gem/opentelemetry-test-helpers@0.9.1",
+        "pkg:gem/rake@13.4.2",
+        "pkg:gem/rubocop-performance@1.27.0",
+        "pkg:gem/rubocop@1.90.0",
+        "pkg:gem/simplecov@1.1.1",
+        "pkg:gem/webmock@3.26.4",
+        "pkg:gem/yard@0.9.45"
+      ],
+      "ref": "pkg:gem/opentelemetry-instrumentation-action_mailer@0.8.1"
+    },
+    {
+      "dependsOn": [
+        "pkg:gem/opentelemetry-instrumentation-base@0.26.1"
+      ],
+      "ref": "pkg:gem/opentelemetry-instrumentation-active_support@0.12.1"
+    },
+    {
+      "dependsOn": [
+        "pkg:gem/opentelemetry-api@1.11.0",
+        "pkg:gem/opentelemetry-common@0.25.1",
+        "pkg:gem/opentelemetry-registry@0.6.3"
+      ],
+      "ref": "pkg:gem/opentelemetry-instrumentation-base@0.26.1"
+    },
+    {
+      "dependsOn": [
+        "pkg:gem/opentelemetry-api@1.11.0"
+      ],
+      "ref": "pkg:gem/opentelemetry-registry@0.6.3"
+    },
+    {
+      "dependsOn": [
+        "pkg:gem/logger@1.7.0",
+        "pkg:gem/opentelemetry-api@1.11.0",
+        "pkg:gem/opentelemetry-common@0.25.1",
+        "pkg:gem/opentelemetry-registry@0.6.3",
+        "pkg:gem/opentelemetry-semantic_conventions@1.44.0"
+      ],
+      "ref": "pkg:gem/opentelemetry-sdk@1.13.0"
+    },
+    {
+      "dependsOn": [
+        "pkg:gem/opentelemetry-api@1.11.0"
+      ],
+      "ref": "pkg:gem/opentelemetry-semantic_conventions@1.44.0"
+    },
+    {
+      "dependsOn": [],
+      "ref": "pkg:gem/opentelemetry-test-helpers@0.9.1"
+    },
+    {
+      "dependsOn": [],
+      "ref": "pkg:gem/parallel@2.1.0"
+    },
+    {
+      "dependsOn": [
+        "pkg:gem/ast@2.4.3",
+        "pkg:gem/racc@1.8.1"
+      ],
+      "ref": "pkg:gem/parser@3.3.12.0"
+    },
+    {
+      "dependsOn": [],
+      "ref": "pkg:gem/prism@1.9.0"
+    },
+    {
+      "dependsOn": [],
+      "ref": "pkg:gem/public_suffix@7.0.5"
+    },
+    {
+      "dependsOn": [],
+      "ref": "pkg:gem/racc@1.8.1"
+    },
+    {
+      "dependsOn": [],
+      "ref": "pkg:gem/rainbow@3.1.1"
+    },
+    {
+      "dependsOn": [],
+      "ref": "pkg:gem/rake@13.4.2"
+    },
+    {
+      "dependsOn": [],
+      "ref": "pkg:gem/regexp_parser@2.12.0"
+    },
+    {
+      "dependsOn": [],
+      "ref": "pkg:gem/rexml@3.4.4"
+    },
+    {
+      "dependsOn": [
+        "pkg:gem/parser@3.3.12.0",
+        "pkg:gem/prism@1.9.0"
+      ],
+      "ref": "pkg:gem/rubocop-ast@1.50.0"
+    },
+    {
+      "dependsOn": [
+        "pkg:gem/lint_roller@1.1.0",
+        "pkg:gem/rubocop-ast@1.50.0",
+        "pkg:gem/rubocop@1.90.0"
+      ],
+      "ref": "pkg:gem/rubocop-performance@1.27.0"
+    },
+    {
+      "dependsOn": [
+        "pkg:gem/json@2.21.2",
+        "pkg:gem/language_server-protocol@3.17.0.6",
+        "pkg:gem/lint_roller@1.1.0",
+        "pkg:gem/parallel@2.1.0",
+        "pkg:gem/parser@3.3.12.0",
+        "pkg:gem/rainbow@3.1.1",
+        "pkg:gem/regexp_parser@2.12.0",
+        "pkg:gem/rubocop-ast@1.50.0",
+        "pkg:gem/ruby-progressbar@1.13.0",
+        "pkg:gem/unicode-display_width@3.2.0"
+      ],
+      "ref": "pkg:gem/rubocop@1.90.0"
+    },
+    {
+      "dependsOn": [],
+      "ref": "pkg:gem/ruby-progressbar@1.13.0"
+    },
+    {
+      "dependsOn": [],
+      "ref": "pkg:gem/simplecov@1.1.1"
+    },
+    {
+      "dependsOn": [],
+      "ref": "pkg:gem/thor@1.5.0"
+    },
+    {
+      "dependsOn": [
+        "pkg:gem/unicode-emoji@4.2.0"
+      ],
+      "ref": "pkg:gem/unicode-display_width@3.2.0"
+    },
+    {
+      "dependsOn": [],
+      "ref": "pkg:gem/unicode-emoji@4.2.0"
+    },
+    {
+      "dependsOn": [
+        "pkg:gem/addressable@2.9.0",
+        "pkg:gem/crack@1.0.1",
+        "pkg:gem/hashdiff@1.2.1"
+      ],
+      "ref": "pkg:gem/webmock@3.26.4"
+    },
+    {
+      "dependsOn": [],
+      "ref": "pkg:gem/yard@0.9.45"
+    }
+  ],
+  "metadata": {
+    "authors": [],
+    "component": {
+      "authors": [
+        {
+          "email": "cncf-opentelemetry-contributors@lists.cncf.io",
+          "name": "OpenTelemetry Authors"
+        }
+      ],
+      "bom-ref": "pkg:gem/opentelemetry-instrumentation-action_mailer@0.8.1",
+      "description": "ActionMailer instrumentation for the OpenTelemetry framework",
+      "externalReferences": [
+        {
+          "comment": "bug_tracker_uri",
+          "type": "issue-tracker",
+          "url": "https://github.com/open-telemetry/opentelemetry-ruby-contrib/issues"
+        },
+        {
+          "comment": "source_code_uri",
+          "type": "vcs",
+          "url": "https://github.com/open-telemetry/opentelemetry-ruby-contrib/tree/opentelemetry-instrumentation-action_mailer/v0.8.1/instrumentation/action_mailer"
+        },
+        {
+          "type": "website",
+          "url": "https://github.com/open-telemetry/opentelemetry-ruby-contrib"
+        },
+        {
+          "comment": "changelog_uri",
+          "type": "release-notes",
+          "url": "https://rubydoc.info/gems/opentelemetry-instrumentation-action_mailer/0.8.1/file/CHANGELOG.md"
+        },
+        {
+          "comment": "documentation_uri",
+          "type": "documentation",
+          "url": "https://rubydoc.info/gems/opentelemetry-instrumentation-action_mailer/0.8.1"
+        }
+      ],
+      "group": "",
+      "licenses": [
+        {
+          "license": {
+            "name": "Apache-2.0"
+          }
+        }
+      ],
+      "name": "opentelemetry-instrumentation-action_mailer",
+      "properties": [
+        {
+          "name": "cdx:gem:rubyVersionSpecifiers",
+          "value": ">= 3.3"
+        }
+      ],
+      "purl": "pkg:gem/opentelemetry-instrumentation-action_mailer@0.8.1",
+      "type": "application",
+      "version": "0.8.1"
+    },
+    "lifecycles": [
+      {
+        "phase": "pre-build"
+      }
+    ],
+    "timestamp": "1970-01-01T00:00:00.000Z",
+    "tools": {
+      "components": [
+        {
+          "authors": [
+            {
+              "name": "OWASP Foundation"
+            }
+          ],
+          "bom-ref": "pkg:npm/%40cdxgen/cdxgen@0.0.0-normalized",
+          "group": "@cdxgen",
+          "name": "cdxgen",
+          "publisher": "OWASP Foundation",
+          "purl": "pkg:npm/%40cdxgen/cdxgen@0.0.0-normalized",
+          "type": "application",
+          "version": "0.0.0-normalized"
+        }
+      ]
+    }
+  },
+  "serialNumber": "urn:uuid:00000000-0000-0000-0000-000000000000",
+  "specVersion": "1.7",
+  "version": 1
+}

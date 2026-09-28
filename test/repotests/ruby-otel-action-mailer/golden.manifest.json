@@ -1,0 +1,11 @@
+{
+  "description": "Ruby gemspec with a constant version, singular license/email, and interpolated metadata URIs. Covers metadata.component derivation from the root gemspec, version resolution from lib/**/version.rb, and lockfile reconciliation (discussions 4388/4389/4390).",
+  "fixture": "../../data/otel-action-mailer",
+  "scenarios": [
+    {
+      "name": "default",
+      "projectType": ["ruby"],
+      "options": {}
+    }
+  ]
+}
