@@ -377,6 +377,8 @@ cdxgen can sign the generated BOM json file to increase authenticity and non-rep
 
 To generate a test key pair for `SBOM_SIGN_ALGORITHM`, you can run cdxgen by passing the argument `--generate-key-and-sign`. The generated json file would have an attribute called `signature`, a JSON Signature Format (JSF) signature that `cdx-verify` validates. JSF is not JWS, so JWT tools cannot verify it.
 
+When signing is configured, cdxgen signs the BOM it writes, prints, or submits to Dependency-Track, and exits with status 1 if it cannot sign it.
+
 ![SBOM signing](_media/sbom-sign.jpg)
 
 ### Verifying the signature

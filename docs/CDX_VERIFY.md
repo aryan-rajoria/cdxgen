@@ -38,7 +38,7 @@ cdx-verify -i bom.json --secret-key shared.secret
 | ---------------------- | ------------ | ------------------------------------------------------------------------------------------------------- |
 | `-i, --input`          | `bom.json`   | Local BOM path or OCI reference                                                                         |
 | `--platform`           | —            | OCI platform override when verifying an attached BOM                                                    |
-| `--public-key`         | `public.key` | PEM-encoded public key (a private key is reduced to its public key)                                     |
+| `--public-key`         | `public.key` | PEM-encoded public key. The default file is read from the current directory                             |
 | `--secret-key`         | —            | Shared secret file for `HS256`, `HS384`, and `HS512` signatures. Cannot be combined with `--public-key` |
 | `--deep` / `--no-deep` | on           | Verify nested component, service, and annotation signatures too                                         |
 | `-h, --help`           | off          | Show help                                                                                               |
@@ -49,7 +49,9 @@ cdx-verify -i bom.json --secret-key shared.secret
 - If the BOM contains a root `signature`, `cdx-verify` validates it first.
 - A signature only verifies when its declared `algorithm` matches the key type (see [Algorithms and keys](CDX_SIGN.md#algorithms-and-keys)). A key given with `--public-key` is always treated as a public key, so HMAC signatures are only accepted with `--secret-key`.
 - The signature metadata (`algorithm`, `keyId`, `publicKey`) is part of the signed data, so changing it invalidates the signature. An embedded `publicKey` must be the verification key.
-- For `signers`, each entry verifies on its own. For `chain`, each entry also covers the entries before it, so a reordered or truncated chain fails.
+- For `signers`, each entry verifies on its own. For `chain`, each entry also covers the entries before it, so reordering the chain or removing an earlier entry is detected. Removing the last entries is not: verify an approval with the approver's own key.
+- Nested signatures belong to the party that created them, usually the first signer. When verifying a co-signer's or approver's key, pass `--no-deep`; `cdx-verify` suggests this when the root signature matches but nested ones do not.
+- Without `--public-key` or `--secret-key`, `cdx-verify` uses `public.key` from the current directory and says so. Name the trusted key explicitly when the directory holds files you did not produce.
 - When a signature fails, `cdx-verify` prints the reason for each signature entry it tried.
 - BOMs signed with cdxgen 13.2.0 or earlier do not verify and must be [re-signed](CDX_SIGN.md#re-signing-boms-from-earlier-releases).
 - With `--deep` enabled, nested signatures are also verified.

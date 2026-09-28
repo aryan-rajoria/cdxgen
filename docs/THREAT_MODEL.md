@@ -437,7 +437,8 @@ Trust boundary 5: cdxgen container ←→ container host
 **Mitigations:**
 
 - Secure mode enforces HTTPS-only for all connections including SBOM upload
-- cdxgen supports SBOM signing via `SBOM_SIGN_PRIVATE_KEY`
+- cdxgen supports SBOM signing via `SBOM_SIGN_PRIVATE_KEY`; the signed BOM is the one written, printed, and submitted to Dependency-Track
+- When signing is configured but fails, cdxgen exits with status 1 instead of publishing an unsigned BOM
 
 **Residual risk:** Low when secure mode and SBOM signing are enabled.
 
@@ -452,8 +453,10 @@ Trust boundary 5: cdxgen container ←→ container host
 - Following JSF, each signature covers the signature metadata as well as the content; only `value` is excluded, and it must be canonical base64url. A `chain` entry also covers every earlier entry
 - An embedded `publicKey` must match the verification key, and `excludes` is rejected, so no part of a signed object can be left unsigned
 - Malformed signature blocks and entries with other key types are reported as non-matching instead of throwing, so a hostile entry cannot stop later entries from being checked
+- `cdx-sign --mode chain` checks the existing chain entries against the earlier signers' public keys (`--verify-existing-with`) and refuses to countersign history it cannot verify, unless `--allow-unverified-history` is passed
+- `cdx-validate` verifies nested signatures by default, matching `cdx-verify`
 
-**Residual risk:** Low. Verification is only as trustworthy as the public key or shared secret the verifier supplies; distribute it out of band.
+**Residual risk:** Low. Verification is only as trustworthy as the public key or shared secret the verifier supplies; distribute it out of band. Removing the last entries of a chain is not detectable, so approvals must be checked with the approver's own key.
 
 ### 7. Dynamic Process Tracing (`tracebom`, `lib/inventory/traceRunner.js`)
 

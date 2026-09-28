@@ -739,6 +739,8 @@ To enable automatic signing during BOM generation, set the following environment
 
 To quickly generate a test key pair for `SBOM_SIGN_ALGORITHM` and sign your first BOM, you can run cdxgen with the `--generate-key-and-sign` argument.
 
+When signing is configured, cdxgen signs the BOM it writes, prints, or submits to Dependency-Track, and exits with status 1 if it cannot sign it.
+
 BOMs signed with cdxgen 13.2.0 or earlier must be re-signed with the current `cdx-sign` before they verify. See [cdx-sign](docs/CDX_SIGN.md#re-signing-boms-from-earlier-releases).
 
 ### Advanced Signing with `cdx-sign`

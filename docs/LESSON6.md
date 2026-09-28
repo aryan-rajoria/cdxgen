@@ -82,7 +82,7 @@ cdx-sign -i bom.json \
 
 If you open `bom.json` now, you will see the `signature` object has changed from a flat object into a `"signers": [ ... ]` array containing both the Builder and Auditor signatures.
 
-_(Note: To create a sequence chain where the Auditor explicitly signs the Builder's signature, you would simply change `--mode signers` to `--mode chain`. Each chain entry covers the entries before it, so reordering the chain or removing the Builder's entry invalidates the Auditor's signature.)_
+_(Note: To create a sequence chain where the Auditor explicitly signs the Builder's signature, change `--mode signers` to `--mode chain` and add `--verify-existing-with builder_public.pem`. Because the Auditor's chain entry vouches for the Builder's entry, `cdx-sign` refuses to append until the existing entry verifies with the Builder's public key. Each chain entry covers the entries before it, so reordering the chain or removing the Builder's entry invalidates the Auditor's signature.)_
 
 Each signature also covers its own `algorithm` and `keyId`, and the algorithm must match the signer's key type: the Builder's RSA key can only sign `RS*` or `PS*`, and the Auditor's P-256 key only `ES256`.
 

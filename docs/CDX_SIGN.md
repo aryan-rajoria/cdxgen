@@ -22,8 +22,8 @@ cdx-sign -i bom.json -o bom.signed.json -k builder_private.pem -a RS512
 # Append a second signature without replacing the existing one
 cdx-sign -i bom.json -k auditor_private.pem -a ES256 --mode signers
 
-# Create a chained signature history
-cdx-sign -i bom.json -k approver_private.pem -a Ed25519 --mode chain
+# Create a chained signature history after checking the builder's signature
+cdx-sign -i bom.json -k approver_private.pem -a Ed25519 --mode chain --verify-existing-with builder_public.pem
 ```
 
 ## CLI reference
@@ -36,6 +36,8 @@ cdx-sign -i bom.json -k approver_private.pem -a Ed25519 --mode chain
 | `-a, --algorithm`                              | `RS512`         | JSF signature algorithm. It must match the key type. Defaults to `SBOM_SIGN_ALGORITHM` if set                  |
 | `-m, --mode`                                   | `replace`       | Signature mode: `replace`, `signers`, or `chain`. Defaults to `SBOM_SIGN_MODE` if set                          |
 | `--key-id`                                     | —               | Optional `keyId` embedded in the signature                                                                     |
+| `--verify-existing-with`                       | —               | Earlier signer's public key (PEM), repeatable. Chain appends need every entry to verify                        |
+| `--allow-unverified-history`                   | off             | With `--mode chain`, append even when existing entries cannot be verified                                      |
 | `--sign-components` / `--no-sign-components`   | see below       | Sign nested components                                                                                         |
 | `--sign-services` / `--no-sign-services`       | see below       | Sign nested services                                                                                           |
 | `--sign-annotations` / `--no-sign-annotations` | see below       | Sign nested annotations                                                                                        |
@@ -90,6 +92,10 @@ Use when multiple parties sign the same BOM independently. This is the best fit 
 ### `chain`
 
 Use when each signer is expected to sign the result of the previous signer, creating an ordered approval trail. Each entry in `chain` also covers every earlier entry, including its value, so reordering the chain or removing or replacing an earlier entry is detected.
+
+Because a new chain entry vouches for every entry before it, `cdx-sign --mode chain` first checks the existing entries against the public keys given with `--verify-existing-with` (one per earlier signer) and refuses to append when any entry does not verify. Pass `--allow-unverified-history` only when you deliberately countersign history you cannot check.
+
+Removing the last entries of a chain leaves the earlier entries valid, so a chain proves who signed up to a point, not that nobody signed later or that an approval was not stripped. To confirm an approval, verify with that approver's public key; `cdx-verify` reports the entry that key matched, wherever it is in the chain.
 
 When a `signers` or `chain` entry is appended to a BOM that has a single `replace` signature, that signature becomes the first entry of the new array and still verifies there. To keep a document strictly JSF-conformant from the start, use the same `--mode` for the first signature too.
 
