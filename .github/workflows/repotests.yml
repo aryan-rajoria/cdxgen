@@ -37,6 +37,7 @@ on:
       - 'test/data/npm-hidden-lockfile-repotest/**'
       - 'test/data/pixi-workspace-repotest/**'
       - 'test/data/type-only-repotest/**'
+      - 'test/data/unused-runtime-dep-repotest/**'
       - 'test/repotests/introspect-*/**'
       - '!**.poku.js'
   # Release branches run the full suite unconditionally — no path filter. The
@@ -208,15 +209,25 @@ jobs:
           jq -e 'any(.components[]; .purl == "pkg:npm/material-symbols@0.28.2" and .scope == "required")' bomresults/bom-angular-css-config-fixture.json
           jq -e 'any(.components[]; .purl == "pkg:npm/bootstrap@5.3.3" and .scope == "required")' bomresults/bom-angular-css-config-fixture.json
           jq -e 'any(.components[]; .purl == "pkg:npm/angular-i18n@1.8.3" and .scope == "required")' bomresults/bom-angular-css-config-fixture.json
-          jq -e 'any(.components[]; .purl == "pkg:npm/left-pad@1.3.0" and .scope == "optional")' bomresults/bom-angular-css-config-fixture.json
+          jq -e 'any(.components[]; .purl == "pkg:npm/left-pad@1.3.0" and (.scope // "required") == "required")' bomresults/bom-angular-css-config-fixture.json
           jq -e 'any(.components[]; .purl == "pkg:npm/material-symbols@0.28.2" and .scope == "required")' bomresults/bom-angular-template-fixture.json
           jq -e 'any(.components[]; .purl == "pkg:npm/primeicons@7.0.0" and .scope == "required")' bomresults/bom-angular-template-fixture.json
           jq -e 'any(.components[]; .purl == "pkg:npm/bootstrap-icons@1.11.3" and .scope == "required")' bomresults/bom-angular-template-fixture.json
           jq -e 'any(.components[]; .group == "@fortawesome" and .name == "fontawesome-free" and .scope == "required")' bomresults/bom-angular-template-fixture.json
-          jq -e 'any(.components[]; .purl == "pkg:npm/left-pad@1.3.0" and .scope == "optional")' bomresults/bom-angular-template-fixture.json
+          jq -e 'any(.components[]; .purl == "pkg:npm/left-pad@1.3.0" and (.scope // "required") == "required")' bomresults/bom-angular-template-fixture.json
           jq -e 'any(.components[]; .purl == "pkg:npm/license-report@6.5.0" and .scope == "required" and any((.properties // [])[]; .name == "cdx:npm:bin" and (.value | contains("license-report"))))' bomresults/bom-angular-cli-scripts-fixture.json
           jq -e 'any(.components[]; .group == "@angular" and .name == "cli" and .scope == "required")' bomresults/bom-angular-cli-scripts-fixture.json
-          jq -e 'any(.components[]; .purl == "pkg:npm/left-pad@1.3.0" and .scope == "optional")' bomresults/bom-angular-cli-scripts-fixture.json
+          jq -e 'any(.components[]; .purl == "pkg:npm/left-pad@1.3.0" and (.scope // "required") == "required")' bomresults/bom-angular-cli-scripts-fixture.json
+        shell: bash
+      - name: repotests npm unused runtime dependency fixture
+        run: |
+          bin/cdxgen.js -t js test/data/unused-runtime-dep-repotest -o bomresults/bom-unused-runtime-dep-fixture.json --fail-on-error
+          bin/cdxgen.js -t js test/data/unused-runtime-dep-repotest -o bomresults/bom-unused-runtime-dep-required-fixture.json --required-only --fail-on-error
+          jq -e 'any(.components[]; .purl == "pkg:npm/left-pad@1.3.0" and .scope == null)' bomresults/bom-unused-runtime-dep-fixture.json
+          jq -e 'any(.components[]; .purl == "pkg:npm/ms@2.1.3" and .scope == "required")' bomresults/bom-unused-runtime-dep-fixture.json
+          jq -e 'any(.components[]; .purl == "pkg:npm/is-number@7.0.0" and .scope == "required" and any((.properties // [])[]; .name == "cdx:npm:package:development" and .value == "true"))' bomresults/bom-unused-runtime-dep-fixture.json
+          jq -e 'any(.components[]; .purl == "pkg:npm/picocolors@1.1.1" and .scope == "optional")' bomresults/bom-unused-runtime-dep-fixture.json
+          jq -e '[.components[].purl] | (index("pkg:npm/left-pad@1.3.0") != null) and (index("pkg:npm/ms@2.1.3") != null) and (index("pkg:npm/picocolors@1.1.1") == null)' bomresults/bom-unused-runtime-dep-required-fixture.json
         shell: bash
       - name: repotests npm hidden lockfile fixture
         run: |

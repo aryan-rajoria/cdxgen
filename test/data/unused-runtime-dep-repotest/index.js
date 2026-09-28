@@ -1,3 +1,4 @@
-const ms = require("ms");
+const debug = require("debug");
+const isNumber = require("is-number");
 
-console.log(ms(1000));
+debug("app")(isNumber(42));
