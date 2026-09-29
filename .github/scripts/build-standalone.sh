@@ -30,6 +30,9 @@ COMMON_SBOM_ARGS=(
   --lifecycle post-build
   --include-formulation
   --no-install-deps
+  # The post-build SBOM is generated from the repository root, so keep the
+  # test fixtures (lockfiles, gemspecs, jars) out of the binary's SBOM.
+  --exclude "test/**"
 )
 
 CAXA_PACKAGE="${CAXA_PACKAGE:-@cdxgen/caxa@^4.0.0}"

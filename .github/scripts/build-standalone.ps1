@@ -35,7 +35,11 @@ $commonSbomArgs = @(
   "--lifecycle",
   "post-build",
   "--include-formulation",
-  "--no-install-deps"
+  "--no-install-deps",
+  # See COMMON_SBOM_ARGS in build-standalone.sh: keep the test fixtures out of
+  # the binary's SBOM.
+  "--exclude",
+  "test/**"
 )
 
 # Unlike build-standalone.sh, no --lazy-auto: a running Windows exe cannot be
