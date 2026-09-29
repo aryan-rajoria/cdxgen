@@ -19,6 +19,12 @@
           }
         ]
       },
+      "externalReferences": [
+        {
+          "type": "distribution",
+          "url": "https://rubygems.org/gems/CFPropertyList-3.0.9.gem"
+        }
+      ],
       "group": "",
       "name": "CFPropertyList",
       "properties": [
@@ -53,6 +59,12 @@
           }
         ]
       },
+      "externalReferences": [
+        {
+          "type": "distribution",
+          "url": "https://rubygems.org/gems/abbrev-0.1.2.gem"
+        }
+      ],
       "group": "",
       "name": "abbrev",
       "properties": [
@@ -87,6 +99,12 @@
           }
         ]
       },
+      "externalReferences": [
+        {
+          "type": "distribution",
+          "url": "https://rubygems.org/gems/addressable-2.9.0.gem"
+        }
+      ],
       "group": "",
       "name": "addressable",
       "properties": [
@@ -121,6 +139,12 @@
           }
         ]
       },
+      "externalReferences": [
+        {
+          "type": "distribution",
+          "url": "https://rubygems.org/gems/artifactory-3.0.17.gem"
+        }
+      ],
       "group": "",
       "name": "artifactory",
       "properties": [
@@ -155,6 +179,12 @@
           }
         ]
       },
+      "externalReferences": [
+        {
+          "type": "distribution",
+          "url": "https://rubygems.org/gems/atomos-0.1.3.gem"
+        }
+      ],
       "group": "",
       "name": "atomos",
       "properties": [
@@ -189,6 +219,12 @@
           }
         ]
       },
+      "externalReferences": [
+        {
+          "type": "distribution",
+          "url": "https://rubygems.org/gems/aws-eventstream-1.3.2.gem"
+        }
+      ],
       "group": "",
       "name": "aws-eventstream",
       "properties": [
@@ -223,6 +259,12 @@
           }
         ]
       },
+      "externalReferences": [
+        {
+          "type": "distribution",
+          "url": "https://rubygems.org/gems/aws-partitions-1.1109.0.gem"
+        }
+      ],
       "group": "",
       "name": "aws-partitions",
       "properties": [
@@ -257,6 +299,12 @@
           }
         ]
       },
+      "externalReferences": [
+        {
+          "type": "distribution",
+          "url": "https://rubygems.org/gems/aws-sdk-core-3.224.1.gem"
+        }
+      ],
       "group": "",
       "name": "aws-sdk-core",
       "properties": [
@@ -291,6 +339,12 @@
           }
         ]
       },
+      "externalReferences": [
+        {
+          "type": "distribution",
+          "url": "https://rubygems.org/gems/aws-sdk-kms-1.101.0.gem"
+        }
+      ],
       "group": "",
       "name": "aws-sdk-kms",
       "properties": [
@@ -325,6 +379,12 @@
           }
         ]
       },
+      "externalReferences": [
+        {
+          "type": "distribution",
+          "url": "https://rubygems.org/gems/aws-sdk-s3-1.188.0.gem"
+        }
+      ],
       "group": "",
       "name": "aws-sdk-s3",
       "properties": [
@@ -359,6 +419,12 @@
           }
         ]
       },
+      "externalReferences": [
+        {
+          "type": "distribution",
+          "url": "https://rubygems.org/gems/aws-sigv4-1.11.0.gem"
+        }
+      ],
       "group": "",
       "name": "aws-sigv4",
       "properties": [
@@ -393,6 +459,12 @@
           }
         ]
       },
+      "externalReferences": [
+        {
+          "type": "distribution",
+          "url": "https://rubygems.org/gems/babosa-1.0.4.gem"
+        }
+      ],
       "group": "",
       "name": "babosa",
       "properties": [
@@ -427,6 +499,12 @@
           }
         ]
       },
+      "externalReferences": [
+        {
+          "type": "distribution",
+          "url": "https://rubygems.org/gems/base64-0.2.0.gem"
+        }
+      ],
       "group": "",
       "name": "base64",
       "properties": [
@@ -461,6 +539,12 @@
           }
         ]
       },
+      "externalReferences": [
+        {
+          "type": "distribution",
+          "url": "https://rubygems.org/gems/claide-1.1.0.gem"
+        }
+      ],
       "group": "",
       "name": "claide",
       "properties": [
@@ -495,6 +579,12 @@
           }
         ]
       },
+      "externalReferences": [
+        {
+          "type": "distribution",
+          "url": "https://rubygems.org/gems/colored2-3.1.2.gem"
+        }
+      ],
       "group": "",
       "name": "colored2",
       "properties": [
@@ -529,6 +619,12 @@
           }
         ]
       },
+      "externalReferences": [
+        {
+          "type": "distribution",
+          "url": "https://rubygems.org/gems/colored-1.2.gem"
+        }
+      ],
       "group": "",
       "name": "colored",
       "properties": [
@@ -563,6 +659,12 @@
           }
         ]
       },
+      "externalReferences": [
+        {
+          "type": "distribution",
+          "url": "https://rubygems.org/gems/commander-4.6.0.gem"
+        }
+      ],
       "group": "",
       "name": "commander",
       "properties": [
@@ -597,6 +699,12 @@
           }
         ]
       },
+      "externalReferences": [
+        {
+          "type": "distribution",
+          "url": "https://rubygems.org/gems/csv-3.3.5.gem"
+        }
+      ],
       "group": "",
       "name": "csv",
       "properties": [
@@ -631,6 +739,12 @@
           }
         ]
       },
+      "externalReferences": [
+        {
+          "type": "distribution",
+          "url": "https://rubygems.org/gems/declarative-0.0.20.gem"
+        }
+      ],
       "group": "",
       "name": "declarative",
       "properties": [
@@ -665,6 +779,12 @@
           }
         ]
       },
+      "externalReferences": [
+        {
+          "type": "distribution",
+          "url": "https://rubygems.org/gems/digest-crc-0.7.0.gem"
+        }
+      ],
       "group": "",
       "name": "digest-crc",
       "properties": [
@@ -699,6 +819,12 @@
           }
         ]
       },
+      "externalReferences": [
+        {
+          "type": "distribution",
+          "url": "https://rubygems.org/gems/domain_name-0.5.20190701.gem"
+        }
+      ],
       "group": "",
       "name": "domain_name",
       "properties": [
@@ -733,6 +859,12 @@
           }
         ]
       },
+      "externalReferences": [
+        {
+          "type": "distribution",
+          "url": "https://rubygems.org/gems/dotenv-2.8.1.gem"
+        }
+      ],
       "group": "",
       "name": "dotenv",
       "properties": [
@@ -767,6 +899,12 @@
           }
         ]
       },
+      "externalReferences": [
+        {
+          "type": "distribution",
+          "url": "https://rubygems.org/gems/emoji_regex-3.2.3.gem"
+        }
+      ],
       "group": "",
       "name": "emoji_regex",
       "properties": [
@@ -801,6 +939,12 @@
           }
         ]
       },
+      "externalReferences": [
+        {
+          "type": "distribution",
+          "url": "https://rubygems.org/gems/excon-0.109.0.gem"
+        }
+      ],
       "group": "",
       "name": "excon",
       "properties": [
@@ -835,6 +979,12 @@
           }
         ]
       },
+      "externalReferences": [
+        {
+          "type": "distribution",
+          "url": "https://rubygems.org/gems/faraday-cookie_jar-0.0.8.gem"
+        }
+      ],
       "group": "",
       "name": "faraday-cookie_jar",
       "properties": [
@@ -869,6 +1019,12 @@
           }
         ]
       },
+      "externalReferences": [
+        {
+          "type": "distribution",
+          "url": "https://rubygems.org/gems/faraday-em_http-1.0.0.gem"
+        }
+      ],
       "group": "",
       "name": "faraday-em_http",
       "properties": [
@@ -903,6 +1059,12 @@
           }
         ]
       },
+      "externalReferences": [
+        {
+          "type": "distribution",
+          "url": "https://rubygems.org/gems/faraday-em_synchrony-1.0.1.gem"
+        }
+      ],
       "group": "",
       "name": "faraday-em_synchrony",
       "properties": [
@@ -937,6 +1099,12 @@
           }
         ]
       },
+      "externalReferences": [
+        {
+          "type": "distribution",
+          "url": "https://rubygems.org/gems/faraday-excon-1.1.0.gem"
+        }
+      ],
       "group": "",
       "name": "faraday-excon",
       "properties": [
@@ -971,6 +1139,12 @@
           }
         ]
       },
+      "externalReferences": [
+        {
+          "type": "distribution",
+          "url": "https://rubygems.org/gems/faraday-httpclient-1.0.1.gem"
+        }
+      ],
       "group": "",
       "name": "faraday-httpclient",
       "properties": [
@@ -1005,6 +1179,12 @@
           }
         ]
       },
+      "externalReferences": [
+        {
+          "type": "distribution",
+          "url": "https://rubygems.org/gems/faraday-multipart-1.2.0.gem"
+        }
+      ],
       "group": "",
       "name": "faraday-multipart",
       "properties": [
@@ -1039,6 +1219,12 @@
           }
         ]
       },
+      "externalReferences": [
+        {
+          "type": "distribution",
+          "url": "https://rubygems.org/gems/faraday-net_http-1.0.2.gem"
+        }
+      ],
       "group": "",
       "name": "faraday-net_http",
       "properties": [
@@ -1073,6 +1259,12 @@
           }
         ]
       },
+      "externalReferences": [
+        {
+          "type": "distribution",
+          "url": "https://rubygems.org/gems/faraday-net_http_persistent-1.2.0.gem"
+        }
+      ],
       "group": "",
       "name": "faraday-net_http_persistent",
       "properties": [
@@ -1107,6 +1299,12 @@
           }
         ]
       },
+      "externalReferences": [
+        {
+          "type": "distribution",
+          "url": "https://rubygems.org/gems/faraday-patron-1.0.0.gem"
+        }
+      ],
       "group": "",
       "name": "faraday-patron",
       "properties": [
@@ -1141,6 +1339,12 @@
           }
         ]
       },
+      "externalReferences": [
+        {
+          "type": "distribution",
+          "url": "https://rubygems.org/gems/faraday-rack-1.0.0.gem"
+        }
+      ],
       "group": "",
       "name": "faraday-rack",
       "properties": [
@@ -1175,6 +1379,12 @@
           }
         ]
       },
+      "externalReferences": [
+        {
+          "type": "distribution",
+          "url": "https://rubygems.org/gems/faraday-retry-1.0.4.gem"
+        }
+      ],
       "group": "",
       "name": "faraday-retry",
       "properties": [
@@ -1209,6 +1419,12 @@
           }
         ]
       },
+      "externalReferences": [
+        {
+          "type": "distribution",
+          "url": "https://rubygems.org/gems/faraday-1.10.5.gem"
+        }
+      ],
       "group": "",
       "name": "faraday",
       "properties": [
@@ -1243,6 +1459,12 @@
           }
         ]
       },
+      "externalReferences": [
+        {
+          "type": "distribution",
+          "url": "https://rubygems.org/gems/faraday_middleware-1.2.1.gem"
+        }
+      ],
       "group": "",
       "name": "faraday_middleware",
       "properties": [
@@ -1277,6 +1499,12 @@
           }
         ]
       },
+      "externalReferences": [
+        {
+          "type": "distribution",
+          "url": "https://rubygems.org/gems/fastimage-2.4.1.gem"
+        }
+      ],
       "group": "",
       "name": "fastimage",
       "properties": [
@@ -1311,6 +1539,12 @@
           }
         ]
       },
+      "externalReferences": [
+        {
+          "type": "distribution",
+          "url": "https://rubygems.org/gems/fastlane-sirp-1.1.0.gem"
+        }
+      ],
       "group": "",
       "name": "fastlane-sirp",
       "properties": [
@@ -1345,6 +1579,12 @@
           }
         ]
       },
+      "externalReferences": [
+        {
+          "type": "distribution",
+          "url": "https://rubygems.org/gems/fastlane-2.230.0.gem"
+        }
+      ],
       "group": "",
       "name": "fastlane",
       "properties": [
@@ -1379,6 +1619,12 @@
           }
         ]
       },
+      "externalReferences": [
+        {
+          "type": "distribution",
+          "url": "https://rubygems.org/gems/gh_inspector-1.1.3.gem"
+        }
+      ],
       "group": "",
       "name": "gh_inspector",
       "properties": [
@@ -1413,6 +1659,12 @@
           }
         ]
       },
+      "externalReferences": [
+        {
+          "type": "distribution",
+          "url": "https://rubygems.org/gems/google-apis-androidpublisher_v3-0.54.0.gem"
+        }
+      ],
       "group": "",
       "name": "google-apis-androidpublisher_v3",
       "properties": [
@@ -1447,6 +1699,12 @@
           }
         ]
       },
+      "externalReferences": [
+        {
+          "type": "distribution",
+          "url": "https://rubygems.org/gems/google-apis-core-0.11.3.gem"
+        }
+      ],
       "group": "",
       "name": "google-apis-core",
       "properties": [
@@ -1481,6 +1739,12 @@
           }
         ]
       },
+      "externalReferences": [
+        {
+          "type": "distribution",
+          "url": "https://rubygems.org/gems/google-apis-iamcredentials_v1-0.17.0.gem"
+        }
+      ],
       "group": "",
       "name": "google-apis-iamcredentials_v1",
       "properties": [
@@ -1515,6 +1779,12 @@
           }
         ]
       },
+      "externalReferences": [
+        {
+          "type": "distribution",
+          "url": "https://rubygems.org/gems/google-apis-playcustomapp_v1-0.13.0.gem"
+        }
+      ],
       "group": "",
       "name": "google-apis-playcustomapp_v1",
       "properties": [
@@ -1549,6 +1819,12 @@
           }
         ]
       },
+      "externalReferences": [
+        {
+          "type": "distribution",
+          "url": "https://rubygems.org/gems/google-apis-storage_v1-0.29.0.gem"
+        }
+      ],
       "group": "",
       "name": "google-apis-storage_v1",
       "properties": [
@@ -1583,6 +1859,12 @@
           }
         ]
       },
+      "externalReferences": [
+        {
+          "type": "distribution",
+          "url": "https://rubygems.org/gems/google-cloud-core-1.6.1.gem"
+        }
+      ],
       "group": "",
       "name": "google-cloud-core",
       "properties": [
@@ -1617,6 +1899,12 @@
           }
         ]
       },
+      "externalReferences": [
+        {
+          "type": "distribution",
+          "url": "https://rubygems.org/gems/google-cloud-env-1.6.0.gem"
+        }
+      ],
       "group": "",
       "name": "google-cloud-env",
       "properties": [
@@ -1651,6 +1939,12 @@
           }
         ]
       },
+      "externalReferences": [
+        {
+          "type": "distribution",
+          "url": "https://rubygems.org/gems/google-cloud-errors-1.3.1.gem"
+        }
+      ],
       "group": "",
       "name": "google-cloud-errors",
       "properties": [
@@ -1685,6 +1979,12 @@
           }
         ]
       },
+      "externalReferences": [
+        {
+          "type": "distribution",
+          "url": "https://rubygems.org/gems/google-cloud-storage-1.45.0.gem"
+        }
+      ],
       "group": "",
       "name": "google-cloud-storage",
       "properties": [
@@ -1719,6 +2019,12 @@
           }
         ]
       },
+      "externalReferences": [
+        {
+          "type": "distribution",
+          "url": "https://rubygems.org/gems/googleauth-1.8.1.gem"
+        }
+      ],
       "group": "",
       "name": "googleauth",
       "properties": [
@@ -1753,6 +2059,12 @@
           }
         ]
       },
+      "externalReferences": [
+        {
+          "type": "distribution",
+          "url": "https://rubygems.org/gems/highline-2.0.3.gem"
+        }
+      ],
       "group": "",
       "name": "highline",
       "properties": [
@@ -1787,6 +2099,12 @@
           }
         ]
       },
+      "externalReferences": [
+        {
+          "type": "distribution",
+          "url": "https://rubygems.org/gems/http-cookie-1.0.8.gem"
+        }
+      ],
       "group": "",
       "name": "http-cookie",
       "properties": [
@@ -1821,6 +2139,12 @@
           }
         ]
       },
+      "externalReferences": [
+        {
+          "type": "distribution",
+          "url": "https://rubygems.org/gems/httpclient-2.9.0.gem"
+        }
+      ],
       "group": "",
       "name": "httpclient",
       "properties": [
@@ -1855,6 +2179,12 @@
           }
         ]
       },
+      "externalReferences": [
+        {
+          "type": "distribution",
+          "url": "https://rubygems.org/gems/jmespath-1.6.2.gem"
+        }
+      ],
       "group": "",
       "name": "jmespath",
       "properties": [
@@ -1889,6 +2219,12 @@
           }
         ]
       },
+      "externalReferences": [
+        {
+          "type": "distribution",
+          "url": "https://rubygems.org/gems/json-2.7.6.gem"
+        }
+      ],
       "group": "",
       "name": "json",
       "properties": [
@@ -1923,6 +2259,12 @@
           }
         ]
       },
+      "externalReferences": [
+        {
+          "type": "distribution",
+          "url": "https://rubygems.org/gems/jwt-2.10.3.gem"
+        }
+      ],
       "group": "",
       "name": "jwt",
       "properties": [
@@ -1957,6 +2299,12 @@
           }
         ]
       },
+      "externalReferences": [
+        {
+          "type": "distribution",
+          "url": "https://rubygems.org/gems/logger-1.7.0.gem"
+        }
+      ],
       "group": "",
       "name": "logger",
       "properties": [
@@ -1991,6 +2339,12 @@
           }
         ]
       },
+      "externalReferences": [
+        {
+          "type": "distribution",
+          "url": "https://rubygems.org/gems/mini_magick-4.13.2.gem"
+        }
+      ],
       "group": "",
       "name": "mini_magick",
       "properties": [
@@ -2025,6 +2379,12 @@
           }
         ]
       },
+      "externalReferences": [
+        {
+          "type": "distribution",
+          "url": "https://rubygems.org/gems/mini_mime-1.1.5.gem"
+        }
+      ],
       "group": "",
       "name": "mini_mime",
       "properties": [
@@ -2059,6 +2419,12 @@
           }
         ]
       },
+      "externalReferences": [
+        {
+          "type": "distribution",
+          "url": "https://rubygems.org/gems/multi_json-1.15.0.gem"
+        }
+      ],
       "group": "",
       "name": "multi_json",
       "properties": [
@@ -2093,6 +2459,12 @@
           }
         ]
       },
+      "externalReferences": [
+        {
+          "type": "distribution",
+          "url": "https://rubygems.org/gems/multipart-post-2.4.1.gem"
+        }
+      ],
       "group": "",
       "name": "multipart-post",
       "properties": [
@@ -2127,6 +2499,12 @@
           }
         ]
       },
+      "externalReferences": [
+        {
+          "type": "distribution",
+          "url": "https://rubygems.org/gems/mutex_m-0.3.0.gem"
+        }
+      ],
       "group": "",
       "name": "mutex_m",
       "properties": [
@@ -2161,6 +2539,12 @@
           }
         ]
       },
+      "externalReferences": [
+        {
+          "type": "distribution",
+          "url": "https://rubygems.org/gems/nanaimo-0.4.0.gem"
+        }
+      ],
       "group": "",
       "name": "nanaimo",
       "properties": [
@@ -2195,6 +2579,12 @@
           }
         ]
       },
+      "externalReferences": [
+        {
+          "type": "distribution",
+          "url": "https://rubygems.org/gems/naturally-2.3.0.gem"
+        }
+      ],
       "group": "",
       "name": "naturally",
       "properties": [
@@ -2229,6 +2619,12 @@
           }
         ]
       },
+      "externalReferences": [
+        {
+          "type": "distribution",
+          "url": "https://rubygems.org/gems/nkf-0.2.0.gem"
+        }
+      ],
       "group": "",
       "name": "nkf",
       "properties": [
@@ -2263,6 +2659,12 @@
           }
         ]
       },
+      "externalReferences": [
+        {
+          "type": "distribution",
+          "url": "https://rubygems.org/gems/optparse-0.8.1.gem"
+        }
+      ],
       "group": "",
       "name": "optparse",
       "properties": [
@@ -2297,6 +2699,12 @@
           }
         ]
       },
+      "externalReferences": [
+        {
+          "type": "distribution",
+          "url": "https://rubygems.org/gems/os-1.1.4.gem"
+        }
+      ],
       "group": "",
       "name": "os",
       "properties": [
@@ -2331,6 +2739,12 @@
           }
         ]
       },
+      "externalReferences": [
+        {
+          "type": "distribution",
+          "url": "https://rubygems.org/gems/plist-3.7.2.gem"
+        }
+      ],
       "group": "",
       "name": "plist",
       "properties": [
@@ -2365,6 +2779,12 @@
           }
         ]
       },
+      "externalReferences": [
+        {
+          "type": "distribution",
+          "url": "https://rubygems.org/gems/public_suffix-5.1.1.gem"
+        }
+      ],
       "group": "",
       "name": "public_suffix",
       "properties": [
@@ -2399,6 +2819,12 @@
           }
         ]
       },
+      "externalReferences": [
+        {
+          "type": "distribution",
+          "url": "https://rubygems.org/gems/rake-13.4.2.gem"
+        }
+      ],
       "group": "",
       "name": "rake",
       "properties": [
@@ -2433,6 +2859,12 @@
           }
         ]
       },
+      "externalReferences": [
+        {
+          "type": "distribution",
+          "url": "https://rubygems.org/gems/representable-3.2.0.gem"
+        }
+      ],
       "group": "",
       "name": "representable",
       "properties": [
@@ -2467,6 +2899,12 @@
           }
         ]
       },
+      "externalReferences": [
+        {
+          "type": "distribution",
+          "url": "https://rubygems.org/gems/retriable-3.8.0.gem"
+        }
+      ],
       "group": "",
       "name": "retriable",
       "properties": [
@@ -2501,6 +2939,12 @@
           }
         ]
       },
+      "externalReferences": [
+        {
+          "type": "distribution",
+          "url": "https://rubygems.org/gems/rexml-3.4.4.gem"
+        }
+      ],
       "group": "",
       "name": "rexml",
       "properties": [
@@ -2535,6 +2979,12 @@
           }
         ]
       },
+      "externalReferences": [
+        {
+          "type": "distribution",
+          "url": "https://rubygems.org/gems/rouge-3.28.0.gem"
+        }
+      ],
       "group": "",
       "name": "rouge",
       "properties": [
@@ -2569,6 +3019,12 @@
           }
         ]
       },
+      "externalReferences": [
+        {
+          "type": "distribution",
+          "url": "https://rubygems.org/gems/ruby2_keywords-0.0.5.gem"
+        }
+      ],
       "group": "",
       "name": "ruby2_keywords",
       "properties": [
@@ -2603,6 +3059,12 @@
           }
         ]
       },
+      "externalReferences": [
+        {
+          "type": "distribution",
+          "url": "https://rubygems.org/gems/rubyzip-2.4.1.gem"
+        }
+      ],
       "group": "",
       "name": "rubyzip",
       "properties": [
@@ -2637,6 +3099,12 @@
           }
         ]
       },
+      "externalReferences": [
+        {
+          "type": "distribution",
+          "url": "https://rubygems.org/gems/security-0.1.5.gem"
+        }
+      ],
       "group": "",
       "name": "security",
       "properties": [
@@ -2671,6 +3139,12 @@
           }
         ]
       },
+      "externalReferences": [
+        {
+          "type": "distribution",
+          "url": "https://rubygems.org/gems/signet-0.18.0.gem"
+        }
+      ],
       "group": "",
       "name": "signet",
       "properties": [
@@ -2705,6 +3179,12 @@
           }
         ]
       },
+      "externalReferences": [
+        {
+          "type": "distribution",
+          "url": "https://rubygems.org/gems/simctl-1.6.10.gem"
+        }
+      ],
       "group": "",
       "name": "simctl",
       "properties": [
@@ -2739,6 +3219,12 @@
           }
         ]
       },
+      "externalReferences": [
+        {
+          "type": "distribution",
+          "url": "https://rubygems.org/gems/terminal-notifier-2.0.0.gem"
+        }
+      ],
       "group": "",
       "name": "terminal-notifier",
       "properties": [
@@ -2773,6 +3259,12 @@
           }
         ]
       },
+      "externalReferences": [
+        {
+          "type": "distribution",
+          "url": "https://rubygems.org/gems/terminal-table-3.0.2.gem"
+        }
+      ],
       "group": "",
       "name": "terminal-table",
       "properties": [
@@ -2807,6 +3299,12 @@
           }
         ]
       },
+      "externalReferences": [
+        {
+          "type": "distribution",
+          "url": "https://rubygems.org/gems/trailblazer-option-0.1.2.gem"
+        }
+      ],
       "group": "",
       "name": "trailblazer-option",
       "properties": [
@@ -2841,6 +3339,12 @@
           }
         ]
       },
+      "externalReferences": [
+        {
+          "type": "distribution",
+          "url": "https://rubygems.org/gems/tty-cursor-0.7.1.gem"
+        }
+      ],
       "group": "",
       "name": "tty-cursor",
       "properties": [
@@ -2875,6 +3379,12 @@
           }
         ]
       },
+      "externalReferences": [
+        {
+          "type": "distribution",
+          "url": "https://rubygems.org/gems/tty-screen-0.8.2.gem"
+        }
+      ],
       "group": "",
       "name": "tty-screen",
       "properties": [
@@ -2909,6 +3419,12 @@
           }
         ]
       },
+      "externalReferences": [
+        {
+          "type": "distribution",
+          "url": "https://rubygems.org/gems/tty-spinner-0.9.3.gem"
+        }
+      ],
       "group": "",
       "name": "tty-spinner",
       "properties": [
@@ -2943,6 +3459,12 @@
           }
         ]
       },
+      "externalReferences": [
+        {
+          "type": "distribution",
+          "url": "https://rubygems.org/gems/uber-0.1.0.gem"
+        }
+      ],
       "group": "",
       "name": "uber",
       "properties": [
@@ -2977,6 +3499,12 @@
           }
         ]
       },
+      "externalReferences": [
+        {
+          "type": "distribution",
+          "url": "https://rubygems.org/gems/unf-0.2.0.gem"
+        }
+      ],
       "group": "",
       "name": "unf",
       "properties": [
@@ -3011,6 +3539,12 @@
           }
         ]
       },
+      "externalReferences": [
+        {
+          "type": "distribution",
+          "url": "https://rubygems.org/gems/unicode-display_width-2.6.0.gem"
+        }
+      ],
       "group": "",
       "name": "unicode-display_width",
       "properties": [
@@ -3045,6 +3579,12 @@
           }
         ]
       },
+      "externalReferences": [
+        {
+          "type": "distribution",
+          "url": "https://rubygems.org/gems/word_wrap-1.0.0.gem"
+        }
+      ],
       "group": "",
       "name": "word_wrap",
       "properties": [
@@ -3079,6 +3619,12 @@
           }
         ]
       },
+      "externalReferences": [
+        {
+          "type": "distribution",
+          "url": "https://rubygems.org/gems/xcodeproj-1.27.0.gem"
+        }
+      ],
       "group": "",
       "name": "xcodeproj",
       "properties": [
@@ -3113,6 +3659,12 @@
           }
         ]
       },
+      "externalReferences": [
+        {
+          "type": "distribution",
+          "url": "https://rubygems.org/gems/xcpretty-travis-formatter-1.0.1.gem"
+        }
+      ],
       "group": "",
       "name": "xcpretty-travis-formatter",
       "properties": [
@@ -3147,6 +3699,12 @@
           }
         ]
       },
+      "externalReferences": [
+        {
+          "type": "distribution",
+          "url": "https://rubygems.org/gems/xcpretty-0.4.1.gem"
+        }
+      ],
       "group": "",
       "name": "xcpretty",
       "properties": [
@@ -3716,8 +4274,14 @@
         }
       ],
       "name": "ruby-smoke",
+      "properties": [
+        {
+          "name": "internal:SrcFile",
+          "value": "$ROOT/ruby-smoke.gemspec"
+        }
+      ],
       "purl": "pkg:gem/ruby-smoke@1.0.0",
-      "type": "application",
+      "type": "library",
       "version": "1.0.0"
     },
     "lifecycles": [

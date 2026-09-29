@@ -1,11 +1,27 @@
 {
-  "description": "Ruby gemspec with a constant version, singular license/email, and interpolated metadata URIs. Covers metadata.component derivation from the root gemspec, version resolution from lib/**/version.rb, and lockfile reconciliation (discussions 4388/4389/4390).",
+  "description": "Ruby gemspec with a constant version, singular license/email, and interpolated metadata URIs. Covers metadata.component derivation from the root gemspec, version resolution from lib/**/version.rb, and lockfile reconciliation (discussions 4388/4389/4390). The registry-enrichment scenario replays real RubyGems API responses for four gems (rake, opentelemetry-api, opentelemetry-sdk, logger), locking in the API-driven authors, the library type of gems whose description mentions a framework (discussion 4405), and the distribution references (discussion 4406).",
   "fixture": "../../data/otel-action-mailer",
   "scenarios": [
     {
       "name": "default",
       "projectType": ["ruby"],
       "options": {}
+    },
+    {
+      "name": "registry-enrichment",
+      "projectType": ["ruby"],
+      "options": {},
+      "env": {
+        "FETCH_LICENSE": "true"
+      },
+      "registry": {
+        "fixture": "rubygems-registry.json",
+        "env": [
+          "RUBYGEMS_V2_URL",
+          "RUBYGEMS_V1_URL",
+          "RUBYGEMS_V1_VERSIONS_URL"
+        ]
+      }
     }
   ]
 }

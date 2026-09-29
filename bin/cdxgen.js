@@ -608,6 +608,12 @@ const args = _yargs
     default: false,
     description: "Synthesize custom LicenseRef IDs for unresolved licenses.",
   })
+  .option("metadata-property", {
+    description:
+      "Custom property to add to the BOM metadata, as name=value. Repeat the flag for several properties. Can also be set with the CDXGEN_METADATA_PROPERTIES environment variable or a config file.",
+    nargs: 1,
+    type: "array",
+  })
   .option("standard", {
     description:
       "The list of standards which may consist of regulations, industry or organizational-specific standards, maturity models, best practices, or any other requirements which can be evaluated against or attested to.",

@@ -1,0 +1,219 @@
+{
+ "/api/v2/rubygems/logger/versions/1.7.0.json": {
+  "authors": "Naotoshi Seo, SHIBATA Hiroshi",
+  "bug_tracker_uri": null,
+  "built_at": "2025-03-27T00:00:00.000Z",
+  "changelog_uri": "https://github.com/ruby/logger/releases",
+  "created_at": "2025-03-27T01:33:44.394Z",
+  "dependencies": {
+   "development": [],
+   "runtime": []
+  },
+  "description": "Provides a simple logging utility for outputting messages.",
+  "documentation_uri": null,
+  "downloads": 426539425,
+  "downloads_count": 302933575,
+  "funding_uri": null,
+  "gem_uri": "https://rubygems.org/gems/logger-1.7.0.gem",
+  "homepage_uri": "https://github.com/ruby/logger",
+  "info": "Provides a simple logging utility for outputting messages.",
+  "licenses": [
+   "Ruby",
+   "BSD-2-Clause"
+  ],
+  "mailing_list_uri": null,
+  "metadata": {
+   "changelog_uri": "https://github.com/ruby/logger/releases"
+  },
+  "name": "logger",
+  "number": "1.7.0",
+  "platform": "ruby",
+  "prerelease": false,
+  "project_uri": "https://rubygems.org/gems/logger",
+  "requirements": [],
+  "ruby_abi": null,
+  "ruby_version": ">= 2.5.0",
+  "rubygems_version": ">= 0",
+  "sha": "196edec7cc44b66cfb40f9755ce11b392f21f7967696af15d274dde7edff0203",
+  "source_code_uri": null,
+  "spec_sha": "7256048944fb1fa7b0b44e3f4cd193f5d33365881d0db55486c5d4494a55b7a6",
+  "summary": "Provides a simple logging utility for outputting messages.",
+  "version": "1.7.0",
+  "version_created_at": "2025-03-27T01:33:44.394Z",
+  "version_downloads": 302933575,
+  "wiki_uri": null,
+  "yanked": false
+ },
+ "/api/v2/rubygems/opentelemetry-api/versions/1.11.0.json": {
+  "authors": "OpenTelemetry Authors",
+  "bug_tracker_uri": "https://github.com/open-telemetry/opentelemetry-ruby/issues",
+  "built_at": "1980-01-02T00:00:00.000Z",
+  "changelog_uri": "https://rubydoc.info/gems/opentelemetry-api/1.11.0/file/CHANGELOG.md",
+  "created_at": "2026-07-21T20:59:54.007Z",
+  "dependencies": {
+   "development": [
+    {
+     "name": "concurrent-ruby",
+     "requirements": "~> 1.3"
+    }
+   ],
+   "runtime": [
+    {
+     "name": "logger",
+     "requirements": ">= 0"
+    }
+   ]
+  },
+  "description": "A stats collection and distributed tracing framework",
+  "documentation_uri": "https://rubydoc.info/gems/opentelemetry-api/1.11.0",
+  "downloads": 77188747,
+  "downloads_count": 1266414,
+  "funding_uri": null,
+  "gem_uri": "https://rubygems.org/gems/opentelemetry-api-1.11.0.gem",
+  "homepage_uri": "https://github.com/open-telemetry/opentelemetry-ruby",
+  "info": "A stats collection and distributed tracing framework",
+  "licenses": [
+   "Apache-2.0"
+  ],
+  "mailing_list_uri": null,
+  "metadata": {
+   "bug_tracker_uri": "https://github.com/open-telemetry/opentelemetry-ruby/issues",
+   "changelog_uri": "https://rubydoc.info/gems/opentelemetry-api/1.11.0/file/CHANGELOG.md",
+   "documentation_uri": "https://rubydoc.info/gems/opentelemetry-api/1.11.0",
+   "source_code_uri": "https://github.com/open-telemetry/opentelemetry-ruby/tree/opentelemetry-api/v1.11.0/api"
+  },
+  "name": "opentelemetry-api",
+  "number": "1.11.0",
+  "platform": "ruby",
+  "prerelease": false,
+  "project_uri": "https://rubygems.org/gems/opentelemetry-api",
+  "requirements": [],
+  "ruby_abi": null,
+  "ruby_version": ">= 3.3",
+  "rubygems_version": ">= 0",
+  "sha": "218c840170fa473974756668b32b6989570de07c7d3864627960209f189247e2",
+  "source_code_uri": "https://github.com/open-telemetry/opentelemetry-ruby/tree/opentelemetry-api/v1.11.0/api",
+  "spec_sha": "f4ff441a681819604cb1a09f274ced85cfc4bf296c280f94d6a1820e9d4ba74b",
+  "summary": "A stats collection and distributed tracing framework",
+  "version": "1.11.0",
+  "version_created_at": "2026-07-21T20:59:54.007Z",
+  "version_downloads": 1266414,
+  "wiki_uri": null,
+  "yanked": false
+ },
+ "/api/v2/rubygems/opentelemetry-sdk/versions/1.13.0.json": {
+  "authors": "OpenTelemetry Authors",
+  "bug_tracker_uri": "https://github.com/open-telemetry/opentelemetry-ruby/issues",
+  "built_at": "1980-01-02T00:00:00.000Z",
+  "changelog_uri": "https://rubydoc.info/gems/opentelemetry-sdk/1.13.0/file/CHANGELOG.md",
+  "created_at": "2026-07-21T21:00:06.189Z",
+  "dependencies": {
+   "development": [],
+   "runtime": [
+    {
+     "name": "logger",
+     "requirements": ">= 0"
+    },
+    {
+     "name": "opentelemetry-api",
+     "requirements": "~> 1.1"
+    },
+    {
+     "name": "opentelemetry-common",
+     "requirements": "~> 0.20"
+    },
+    {
+     "name": "opentelemetry-registry",
+     "requirements": "~> 0.2"
+    },
+    {
+     "name": "opentelemetry-semantic_conventions",
+     "requirements": ">= 0"
+    }
+   ]
+  },
+  "description": "A stats collection and distributed tracing framework",
+  "documentation_uri": "https://rubydoc.info/gems/opentelemetry-sdk/1.13.0",
+  "downloads": 62341533,
+  "downloads_count": 1107484,
+  "funding_uri": null,
+  "gem_uri": "https://rubygems.org/gems/opentelemetry-sdk-1.13.0.gem",
+  "homepage_uri": "https://github.com/open-telemetry/opentelemetry-ruby",
+  "info": "A stats collection and distributed tracing framework",
+  "licenses": [
+   "Apache-2.0"
+  ],
+  "mailing_list_uri": null,
+  "metadata": {
+   "bug_tracker_uri": "https://github.com/open-telemetry/opentelemetry-ruby/issues",
+   "changelog_uri": "https://rubydoc.info/gems/opentelemetry-sdk/1.13.0/file/CHANGELOG.md",
+   "documentation_uri": "https://rubydoc.info/gems/opentelemetry-sdk/1.13.0",
+   "source_code_uri": "https://github.com/open-telemetry/opentelemetry-ruby/tree/opentelemetry-sdk/v1.13.0/sdk"
+  },
+  "name": "opentelemetry-sdk",
+  "number": "1.13.0",
+  "platform": "ruby",
+  "prerelease": false,
+  "project_uri": "https://rubygems.org/gems/opentelemetry-sdk",
+  "requirements": [],
+  "ruby_abi": null,
+  "ruby_version": ">= 3.3",
+  "rubygems_version": ">= 0",
+  "sha": "eea4ab625eb901ecfe1083049862d4853fd16d94029f3cdd16526c81332f0fff",
+  "source_code_uri": "https://github.com/open-telemetry/opentelemetry-ruby/tree/opentelemetry-sdk/v1.13.0/sdk",
+  "spec_sha": "e4a6cc04d597f2dca33bcf4d3e6c8b0f7a556dd6c4f823364c58c3d82fc222ed",
+  "summary": "A stats collection and distributed tracing framework",
+  "version": "1.13.0",
+  "version_created_at": "2026-07-21T21:00:06.189Z",
+  "version_downloads": 1107484,
+  "wiki_uri": null,
+  "yanked": false
+ },
+ "/api/v2/rubygems/rake/versions/13.4.2.json": {
+  "authors": "Hiroshi SHIBATA, Eric Hodel, Jim Weirich",
+  "bug_tracker_uri": "https://github.com/ruby/rake/issues",
+  "built_at": "1980-01-02T00:00:00.000Z",
+  "changelog_uri": "https://github.com/ruby/rake/releases",
+  "created_at": "2026-04-16T04:47:46.997Z",
+  "dependencies": {
+   "development": [],
+   "runtime": []
+  },
+  "description": "Rake is a Make-like program implemented in Ruby. Tasks and dependencies are\nspecified in standard Ruby syntax.\nRake has the following features:\n  * Rakefiles (rake's version of Makefiles) are completely defined in standard Ruby syntax.\n    No XML files to edit. No quirky Makefile syntax to worry about (is that a tab or a space?)\n  * Users can specify tasks with prerequisites.\n  * Rake supports rule patterns to synthesize implicit tasks.\n  * Flexible FileLists that act like arrays but know about manipulating file names and paths.\n  * Supports parallel execution of tasks.\n",
+  "documentation_uri": "https://ruby.github.io/rake",
+  "downloads": 1423940178,
+  "downloads_count": 68134585,
+  "funding_uri": null,
+  "gem_uri": "https://rubygems.org/gems/rake-13.4.2.gem",
+  "homepage_uri": "https://github.com/ruby/rake",
+  "info": "Rake is a Make-like program implemented in Ruby. Tasks and dependencies are\nspecified in standard Ruby syntax.\nRake has the following features:\n  * Rakefiles (rake's version of Makefiles) are completely defined in standard Ruby syntax.\n    No XML files to edit. No quirky Makefile syntax to worry about (is that a tab or a space?)\n  * Users can specify tasks with prerequisites.\n  * Rake supports rule patterns to synthesize implicit tasks.\n  * Flexible FileLists that act like arrays but know about manipulating file names and paths.\n  * Supports parallel execution of tasks.\n",
+  "licenses": [
+   "MIT"
+  ],
+  "mailing_list_uri": null,
+  "metadata": {
+   "bug_tracker_uri": "https://github.com/ruby/rake/issues",
+   "changelog_uri": "https://github.com/ruby/rake/releases",
+   "documentation_uri": "https://ruby.github.io/rake",
+   "source_code_uri": "https://github.com/ruby/rake"
+  },
+  "name": "rake",
+  "number": "13.4.2",
+  "platform": "ruby",
+  "prerelease": false,
+  "project_uri": "https://rubygems.org/gems/rake",
+  "requirements": [],
+  "ruby_abi": null,
+  "ruby_version": ">= 2.3",
+  "rubygems_version": ">= 0",
+  "sha": "cb825b2bd5f1f8e91ca37bddb4b9aaf345551b4731da62949be002fa89283701",
+  "source_code_uri": "https://github.com/ruby/rake",
+  "spec_sha": "66f28a22124733b4dc8119d04e5404309af53ebf1f1ff396e9292fe5006899e1",
+  "summary": "Rake is a Make-like program implemented in Ruby",
+  "version": "13.4.2",
+  "version_created_at": "2026-04-16T04:47:46.997Z",
+  "version_downloads": 68134585,
+  "wiki_uri": null,
+  "yanked": false
+ }
+}

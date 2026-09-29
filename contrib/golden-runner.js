@@ -208,6 +208,17 @@ function applyEnv(env) {
 const TRAILING_SLASH_VARS = new Set(["NPM_URL", "RUST_CRATES_URL", "PYPI_URL"]);
 
 /**
+ * Registry env vars whose API lives under a fixed path prefix, so pointing
+ * them at a registry double means appending that prefix to the socket URL.
+ * The ruby ones override the whole endpoint base, API path included.
+ */
+const ENV_VAR_PATH_SUFFIXES = {
+  RUBYGEMS_V2_URL: "/api/v2/rubygems/",
+  RUBYGEMS_V1_URL: "/api/v1/gems/",
+  RUBYGEMS_V1_VERSIONS_URL: "/api/v1/versions/",
+};
+
+/**
  * Run a single scenario and return the normalized BOM.
  *
  * @param {string} project Project directory name.
@@ -243,9 +254,11 @@ export async function runScenario(project, scenario, manifest) {
   if (scenario.registry) {
     registry = await startRegistryDouble(scenario.registry.fixture);
     for (const key of scenario.registry.env || []) {
-      scenarioEnv[key] = TRAILING_SLASH_VARS.has(key)
-        ? `${registry.url}/`
-        : registry.url;
+      scenarioEnv[key] = ENV_VAR_PATH_SUFFIXES[key]
+        ? `${registry.url}${ENV_VAR_PATH_SUFFIXES[key]}`
+        : TRAILING_SLASH_VARS.has(key)
+          ? `${registry.url}/`
+          : registry.url;
     }
   }
   const restoreEnv = applyEnv(scenarioEnv);
