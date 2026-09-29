@@ -1,0 +1,8 @@
+{
+  "name": "cdxgen-bun-workspace-repro",
+  "private": true,
+  "workspaces": ["packages/*"],
+  "dependencies": {
+    "strip-ansi": "6.0.1"
+  }
+}
