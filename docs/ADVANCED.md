@@ -514,6 +514,28 @@ Environment variables override values from the configuration files.
 - Environment variables
 - Configuration files (JSON first, followed by yaml)
 
+### Custom metadata properties
+
+Properties such as the owning team or a cost centre can be added to `metadata.properties` next to the ones cdxgen discovers. Unlike other options, the sources are combined rather than overridden:
+
+```shell
+cdxgen -t java --metadata-property team=payments --metadata-property tier=1 .
+export CDXGEN_METADATA_PROPERTIES='{"team":"payments","tag":["pci","eu"]}'
+```
+
+```yaml
+metadataProperties:
+  team: payments
+  # a list repeats the property once per value
+  tag:
+    - pci
+    - eu
+```
+
+A config file may also use the flag's own spelling, `metadata-property: [team=payments]`, and `CDXGEN_METADATA_PROPERTY=team=payments` sets a single property. When several sources set the same name, that name takes its values from the source that wins in the order above; every other name is kept from wherever it was set. Values pass the same credential redaction as the discovered properties, and never replace a discovered property.
+
+The `cdx:` and `internal:` namespaces hold the facts cdxgen establishes itself, such as `cdx:bom:componentSrcFiles`. A config file lives in the tree being scanned, so it cannot set properties in those namespaces: cdxgen warns and ignores them. Pass such a property on the command line or in the environment when it is intentional.
+
 ## Evinse Mode / SaaSBOM
 
 Evinse (Evinse Verification Is Nearly SBOM Evidence) generates component evidence and SaaSBOM data for supported languages. The tool is powered by [atom](https://github.com/AppThreat/atom) for Java, JavaScript, TypeScript, Python, and C/C++ flows, by [dosai](https://github.com/owasp-dep-scan/dosai) for .NET flows, and by `golem` for Go semantic evidence. cdxgen also supports `--evidence` during BOM generation. This section focuses on direct `evinse` usage for advanced workflows. See [`EVINSE.md`](EVINSE.md) for the dedicated command guide.

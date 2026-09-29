@@ -1805,14 +1805,14 @@
       "version": "0.9.45"
     },
     {
-      "bom-ref": "pkg:generic/ruby@%3E%3D%203.3",
+      "bom-ref": "pkg:generic/ruby",
       "group": "",
       "isExternal": true,
       "name": "ruby",
-      "purl": "pkg:generic/ruby@%3E%3D%203.3",
+      "purl": "pkg:generic/ruby",
       "scope": "required",
-      "type": "framework",
-      "versionRange": ">= 3.3"
+      "type": "platform",
+      "versionRange": "vers:gem/>=3.3"
     }
   ],
   "dependencies": [
@@ -1906,7 +1906,7 @@
         "pkg:gem/simplecov@1.1.1",
         "pkg:gem/webmock@3.26.4",
         "pkg:gem/yard@0.9.45",
-        "pkg:generic/ruby@%3E%3D%203.3"
+        "pkg:generic/ruby"
       ],
       "ref": "pkg:gem/opentelemetry-instrumentation-action_mailer@0.8.1"
     },
@@ -2055,7 +2055,7 @@
     },
     {
       "dependsOn": [],
-      "ref": "pkg:generic/ruby@%3E%3D%203.3"
+      "ref": "pkg:generic/ruby"
     }
   ],
   "metadata": {

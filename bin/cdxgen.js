@@ -167,6 +167,11 @@ for (const configPattern of PROJECT_CONFIG_FILENAMES) {
         `Config file '${configPath}' sets '${foundKey}'. Verify this is intentional.`,
       );
     }
+    for (const propertyName of sanitized.reservedProperties) {
+      console.warn(
+        `\x1b[1;35mConfig file '${configPath}' sets the metadata property '${propertyName}', whose namespace cdxgen reserves for its own findings. Ignoring it. Pass the property with --metadata-property if this is intentional.\x1b[0m`,
+      );
+    }
   } catch (_e) {
     console.log("Invalid config file", configPath);
   }
@@ -610,7 +615,7 @@ const args = _yargs
   })
   .option("metadata-property", {
     description:
-      "Custom property to add to the BOM metadata, as name=value. Repeat the flag for several properties. Can also be set with the CDXGEN_METADATA_PROPERTIES environment variable or a config file.",
+      "Custom property to add to the BOM metadata, as name=value. Repeat the flag for several properties. Combined with the properties of the CDXGEN_METADATA_PROPERTIES environment variable and of a config file.",
     nargs: 1,
     type: "array",
   })
@@ -1056,6 +1061,7 @@ const { options, warnings: phase3Warnings } = buildOptionsFromArgs(args, {
   userSetSpecVersion,
   isDryRun,
   isSecureMode,
+  projectConfig: config,
 });
 // Exit status reserved for the introspection CI gate: the BOM was generated
 // and written, but its introspection score missed the configured threshold.

@@ -1993,34 +1993,14 @@
       "version": "0.9.45"
     },
     {
-      "bom-ref": "pkg:generic/ruby@%3E%3D%202.3",
+      "bom-ref": "pkg:generic/ruby",
       "group": "",
       "isExternal": true,
       "name": "ruby",
-      "purl": "pkg:generic/ruby@%3E%3D%202.3",
+      "purl": "pkg:generic/ruby",
       "scope": "required",
-      "type": "framework",
-      "versionRange": ">= 2.3"
-    },
-    {
-      "bom-ref": "pkg:generic/ruby@%3E%3D%202.5.0",
-      "group": "",
-      "isExternal": true,
-      "name": "ruby",
-      "purl": "pkg:generic/ruby@%3E%3D%202.5.0",
-      "scope": "required",
-      "type": "framework",
-      "versionRange": ">= 2.5.0"
-    },
-    {
-      "bom-ref": "pkg:generic/ruby@%3E%3D%203.3",
-      "group": "",
-      "isExternal": true,
-      "name": "ruby",
-      "purl": "pkg:generic/ruby@%3E%3D%203.3",
-      "scope": "required",
-      "type": "framework",
-      "versionRange": ">= 3.3"
+      "type": "platform",
+      "versionRange": "vers:gem/>=3.3"
     }
   ],
   "dependencies": [
@@ -2078,7 +2058,7 @@
     },
     {
       "dependsOn": [
-        "pkg:generic/ruby@%3E%3D%202.5.0"
+        "pkg:generic/ruby"
       ],
       "ref": "pkg:gem/logger@1.7.0"
     },
@@ -2092,7 +2072,7 @@
     {
       "dependsOn": [
         "pkg:gem/logger@1.7.0",
-        "pkg:generic/ruby@%3E%3D%203.3"
+        "pkg:generic/ruby"
       ],
       "ref": "pkg:gem/opentelemetry-api@1.11.0"
     },
@@ -2117,7 +2097,7 @@
         "pkg:gem/simplecov@1.1.1",
         "pkg:gem/webmock@3.26.4",
         "pkg:gem/yard@0.9.45",
-        "pkg:generic/ruby@%3E%3D%203.3"
+        "pkg:generic/ruby"
       ],
       "ref": "pkg:gem/opentelemetry-instrumentation-action_mailer@0.8.1"
     },
@@ -2148,7 +2128,7 @@
         "pkg:gem/opentelemetry-common@0.25.1",
         "pkg:gem/opentelemetry-registry@0.6.3",
         "pkg:gem/opentelemetry-semantic_conventions@1.44.0",
-        "pkg:generic/ruby@%3E%3D%203.3"
+        "pkg:generic/ruby"
       ],
       "ref": "pkg:gem/opentelemetry-sdk@1.13.0"
     },
@@ -2191,7 +2171,7 @@
     },
     {
       "dependsOn": [
-        "pkg:generic/ruby@%3E%3D%202.3"
+        "pkg:generic/ruby"
       ],
       "ref": "pkg:gem/rake@13.4.2"
     },
@@ -2269,15 +2249,7 @@
     },
     {
       "dependsOn": [],
-      "ref": "pkg:generic/ruby@%3E%3D%202.3"
-    },
-    {
-      "dependsOn": [],
-      "ref": "pkg:generic/ruby@%3E%3D%202.5.0"
-    },
-    {
-      "dependsOn": [],
-      "ref": "pkg:generic/ruby@%3E%3D%203.3"
+      "ref": "pkg:generic/ruby"
     }
   ],
   "metadata": {
