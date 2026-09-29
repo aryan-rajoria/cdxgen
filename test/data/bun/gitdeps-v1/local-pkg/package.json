@@ -1,7 +1,7 @@
 {
-  "name": "pkg-a",
+  "name": "local-pkg",
   "version": "1.0.0",
   "dependencies": {
-    "strip-ansi": "7.1.0"
+    "ansi-regex": "^2.1.1"
   }
 }

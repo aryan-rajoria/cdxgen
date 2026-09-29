@@ -1,0 +1,23 @@
+{
+  "lockfileVersion": 2,
+  "configVersion": 1,
+  "workspaces": {
+    "": {
+      "name": "cdxgen-bun-gitdeps-repro",
+      "dependencies": {
+        "kind-of": "github:jonschlinkert/kind-of",
+        "left-pad-tar": "https://registry.npmjs.org/left-pad/-/left-pad-1.3.0.tgz",
+        "local-pkg": "file:./local-pkg",
+      },
+    },
+  },
+  "packages": {
+    "ansi-regex": ["ansi-regex@2.1.1", "", {}, "sha512-TIGnTpdo+E3+pCyAluZvtED5p5wCqLdezCyhPZzKPcxvFplEt4i+W7OONCKgeZFT3+y5NZZfOOS/Bdcanm1MYA=="],
+
+    "kind-of": ["kind-of@github:jonschlinkert/kind-of#3c7e8fd", {}, "jonschlinkert-kind-of-3c7e8fd", "sha512-8kEP2NPVfNlJDn81KnJurpsb8HLtF9X+bfzz2VB/13KBX+eAuIka7tg3/W8P6FOlEi7VpdaK5roiFyfb5jmUPw=="],
+
+    "left-pad-tar": ["left-pad@https://registry.npmjs.org/left-pad/-/left-pad-1.3.0.tgz", {}, "sha512-XI5MPzVNApjAyhQzphX8BkmKsKUxD4LdyK24iZeQGinBN9yTQT3bFlCBy/aVx2HrNcqQGsdot8ghrjyrvMCoEA=="],
+
+    "local-pkg": ["local-pkg@file:local-pkg", { "dependencies": { "ansi-regex": "^2.1.1" } }],
+  }
+}

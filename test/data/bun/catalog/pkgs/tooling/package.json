@@ -1,0 +1,7 @@
+{
+  "name": "@repo/tooling",
+  "version": "0.1.0",
+  "dependencies": {
+    "left-pad": "catalog:"
+  }
+}

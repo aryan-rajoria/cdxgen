@@ -1,0 +1,8 @@
+{
+  "name": "util-pkg",
+  "version": "1.0.0",
+  "dependencies": {
+    "@acme/backend": "workspace:*",
+    "emoji-regex": "^9.2.2"
+  }
+}
