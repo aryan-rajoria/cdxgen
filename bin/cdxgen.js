@@ -573,6 +573,11 @@ const args = _yargs
     default: false,
     description: "Disable default ignore lists during scanning.",
   })
+  .option("caxa-app-dir", {
+    type: "string",
+    description:
+      "Directory of the app a caxa binary extracts. With -t caxa, also records the native tools, the vendored PHP, Ruby and Java packages, and the npm integrity hashes found there.",
+  })
   .option("export-proto", {
     type: "boolean",
     default: false,
