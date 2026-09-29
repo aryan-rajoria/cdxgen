@@ -32,7 +32,7 @@ COMMON_SBOM_ARGS=(
   --no-install-deps
 )
 
-CAXA_PACKAGE="${CAXA_PACKAGE:-@cdxgen/caxa@^3.1.0}"
+CAXA_PACKAGE="${CAXA_PACKAGE:-@cdxgen/caxa@^4.0.0}"
 
 cleanup_staging_dirs() {
   for staging_dir in "${STAGING_DIRS[@]:-}"; do
@@ -82,10 +82,18 @@ run_binary_build() {
   local output="$2"
   local metadata_file="$3"
   local entry_point="$4"
+  # --lazy-auto packs every native executable of at least 1 MiB (atom, trivy,
+  # osquery and the other plugins) as a lazy member: a cold start writes a
+  # small placeholder for each, which extracts the real file the first time it
+  # is executed, and a low-priority background process fills in the rest.
+  # Most scans run only a few of the plugins, so a cold start writes far less.
+  # cdxgen only ever executes these files, never reads them, which is what a
+  # lazy member requires. The node runtime and the entry point stay eager.
   local caxa_args=(
     --input "$staging_dir"
     --metadata-file "$metadata_file"
     --output "$output"
+    --lazy-auto
   )
 
   if [[ "$(uname -s)" == "Linux" ]]; then

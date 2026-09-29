@@ -111,7 +111,9 @@ jobs:
             node-download-url: https://unofficial-builds.nodejs.org/download/release
             ext: ''
             prepare: |
-              apk add --no-cache bash curl libstdc++ xz
+              # binutils provides strip, which caxa 4 uses to strip the bundled
+              # node binary; without it caxa bundles node unstripped.
+              apk add --no-cache bash curl libstdc++ xz binutils
               ARCH="amd64"
               UPX_SHA256="1ff660454227861e00772f743f66b900072116b9dc24f6ee28b97cce88a7828a"
               if [ "$(uname -m)" = "aarch64" ]; then

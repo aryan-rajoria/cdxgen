@@ -38,7 +38,10 @@ $commonSbomArgs = @(
   "--no-install-deps"
 )
 
-$caxaPackage = if ($env:CAXA_PACKAGE) { $env:CAXA_PACKAGE } else { "@cdxgen/caxa@^3.1.0" }
+# Unlike build-standalone.sh, no --lazy-auto: a running Windows exe cannot be
+# replaced in place, so caxa extracts lazy members eagerly on Windows and the
+# flag would only reorder the payload.
+$caxaPackage = if ($env:CAXA_PACKAGE) { $env:CAXA_PACKAGE } else { "@cdxgen/caxa@^4.0.0" }
 $stagingDirs = [System.Collections.Generic.List[string]]::new()
 $sharedPnpmStore = if ($env:STANDALONE_PNPM_STORE) { $env:STANDALONE_PNPM_STORE } else { Join-Path ([System.IO.Path]::GetTempPath()) "cdxgen-standalone-pnpm-store-$PID" }
 $slimMaxBytes = if ($env:STANDALONE_SLIM_MAX_BYTES) { [int64]$env:STANDALONE_SLIM_MAX_BYTES } else { 104857600 }
