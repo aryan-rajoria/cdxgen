@@ -294,6 +294,8 @@ The focused alias binaries use smaller dependency profiles than full `cdxgen`: `
 
 Use the asset name that matches your platform, for example `cdx-audit-linux-amd64`, `cdx-audit-darwin-arm64`, or `cdx-audit-windows-amd64.exe`.
 
+Each binary extracts itself into a cache directory on its first run, and on Linux and macOS extracts its large native plugins as scans need them; see [First run and the extraction cache](README.md#first-run-and-the-extraction-cache) for the cache location and the variables that control it.
+
 #### Linux
 
 ```bash

@@ -295,6 +295,15 @@ These variables control the on-disk metadata cache and CPU/IO parallelism.
 | CDXGEN_MAX_WORKERS      | Maximum number of worker threads the CPU-bound worker pool creates for a single call (AST parsing, file hashing). Defaults to the smaller of `availableParallelism()` and `8`.                                                                                                                                            |
 | CDXGEN_WORKER_THRESHOLD | Task count at or above which CPU-bound work is dispatched to worker threads instead of running inline on the calling thread. Below it, spawning a worker costs more than it saves. Defaults to `24`.                                                                                                                      |
 
+## Standalone binaries
+
+The standalone binaries are self-extracting caxa executables. These variables are read by the binary itself, before cdxgen starts; see [First run and the extraction cache](README.md#first-run-and-the-extraction-cache).
+
+| Variable      | Description                                                                                                                                                                                                   |
+| ------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| CAXA_TEMP_DIR | Directory the standalone binaries extract themselves into on their first run. Defaults to `caxa` under the system temp directory. Set it when the temp directory is read-only or mounted `noexec`.            |
+| CAXA_PREFETCH | Set to `0` to stop the Linux and macOS binaries from extracting the remaining native plugins in a low-priority background process after startup. Each plugin is then extracted the first time a scan runs it. |
+
 ## Rust acceleration
 
 cdxgen uses the optional `cdxrs` Rust binary to accelerate registry metadata fetches and other hot paths, falling back to the JavaScript path on any failure. These variables control that acceleration.
