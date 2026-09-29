@@ -38,6 +38,33 @@ export declare function validateSpecVersion(specVersion: number, commandName?: s
  */
 export declare function isUserProvided(value: any, yaDefault: any): boolean;
 /**
+ * Combine the custom metadata properties of every source (discussion 4391):
+ * the `--metadata-property` flag, the CDXGEN_METADATA_PROPERTY and
+ * CDXGEN_METADATA_PROPERTIES environment variables, and a config file's
+ * `metadata-property` or `metadataProperties` entry.
+ *
+ * yargs would let the highest-precedence source replace the others outright,
+ * so each is read on its own and they are merged instead. A name set by more
+ * than one source takes its values from the one that wins in the usual order
+ * — the command line, then the environment, then the config file — while a
+ * source may repeat a name for a multi-valued property.
+ *
+ * @param {object} args Parsed yargs argv
+ * @param {object} [context]
+ * @param {string[]} [context.argv] Raw command-line arguments, which tell a
+ *   flag on the command line from one yargs filled in from elsewhere
+ * @param {object} [context.projectConfig] The sanitized config file contents.
+ *   Without it, a programmatic caller's `args` are taken as the config.
+ * @returns {{name: string, value: string}[]} The merged properties
+ */
+export declare function resolveMetadataProperties(args: object, { argv, projectConfig }?: {
+    argv?: string[];
+    projectConfig?: object;
+}): {
+    name: string;
+    value: string;
+}[];
+/**
  * Apply command-name-based defaults to the raw parsed args. When cdxgen is
  * invoked via a symlink or alias (e.g. `obom`, `cbom`, `spdxgen`, `aibom`),
  * certain args receive implicit values.
@@ -50,10 +77,11 @@ export declare function isUserProvided(value: any, yaDefault: any): boolean;
  * @returns {object} A shallow copy of args with alias-based defaults applied
  */
 export declare function applyCommandNameDefaults(args: object, invokedCommandName: string): object;
-export declare function buildInitialOptions(args: any, { filePath, isRemoteOrPurl, argv }: {
+export declare function buildInitialOptions(args: any, { filePath, isRemoteOrPurl, argv, projectConfig }: {
     argv?: any;
     filePath: any;
     isRemoteOrPurl: any;
+    projectConfig: any;
 }): any;
 export type OptionsWarning = {
     /**
@@ -141,6 +169,9 @@ export declare function applyAdvancedOptions(options: object, context?: {
  *                                             passed `--spec-version`
  * @param {boolean} [context.isDryRun=false]   Dry-run mode
  * @param {boolean} [context.isSecureMode]     Secure mode
+ * @param {object} [context.projectConfig]     Sanitized config file contents,
+ *                                             whose metadata properties merge
+ *                                             with the other sources'
  * @returns {{ options: object, warnings: OptionsWarning[] }}
  */
 export declare function buildOptionsFromArgs(args: object, context: {
@@ -150,6 +181,7 @@ export declare function buildOptionsFromArgs(args: object, context: {
     userSetSpecVersion: boolean;
     isDryRun?: boolean;
     isSecureMode?: boolean;
+    projectConfig?: object;
 }): {
     options: object;
     warnings: OptionsWarning[];

@@ -65,7 +65,8 @@ export declare const componentToSimpleFullName: (comp: object) => string;
 /**
  * Strips transient keys (`evidence`, `_integrity`, `license`, `qualifiers`,
  * `repository`, `homepage`) from a parent component while preserving licenses
- * and external references (bug #1519).
+ * and external references (bug #1519). External references whose URL is not a
+ * valid IRI reference are dropped.
  *
  * @param {object} comp Parent component to clean in place
  * @returns {object} The cleaned parent component

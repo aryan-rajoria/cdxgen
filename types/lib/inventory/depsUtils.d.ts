@@ -30,6 +30,21 @@ export declare function markNpmTypesPackagesAsExcluded(components?: Object[]): O
  */
 export declare function propagateRequiredScopeFromDependencies(components?: Object[], dependencies?: Object[]): Object[];
 /**
+ * Scopes the dependencies of type-only npm packages as optional.
+ *
+ * A package imported only for its TypeScript types, like an `@types` package,
+ * is erased at compile time, and so is what it depends on unless a runtime
+ * package depends on it too. A component below a type-only package becomes
+ * optional when no dependency path from a root of the graph reaches it without
+ * passing through a type-only package. A component that already has a scope,
+ * from its manifest or from usage evidence, keeps it.
+ *
+ * @param {Object[]} components CycloneDX component objects
+ * @param {Object[]} dependencies CycloneDX dependency entries
+ * @returns {Object[]} The same component array with scopes updated in place
+ */
+export declare function markTypeOnlyDependenciesOptional(components?: Object[], dependencies?: Object[]): Object[];
+/**
  * Merge CycloneDX services using bom-ref or group/name/version identity.
  *
  * @param {Object[]|Object} services Existing service list

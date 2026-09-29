@@ -20,6 +20,13 @@ export declare function setNpmOptionalProperty(pkg: object): void;
  */
 export declare function setNpmPeerProperty(pkg: object): void;
 /**
+ * Marks an npm component as imported only for its TypeScript types.
+ *
+ * @param {object} pkg Component object to annotate
+ * @returns {void}
+ */
+export declare function setNpmTypeOnlyProperty(pkg: object): void;
+/**
  * Helper function to create a properly encoded workspace PURL
  *
  * @param {string} packageName - Package name (e.g., "@babel/core")

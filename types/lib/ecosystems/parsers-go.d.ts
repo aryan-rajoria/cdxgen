@@ -67,6 +67,16 @@ export declare function parseGoModGraph(rawOutput: string, goModFile: string, go
  */
 export declare function parseGoModWhy(rawOutput: string): string | undefined;
 /**
+ * Reports whether `go mod why -m` output says the main module does not need
+ * the module. go prints `(main module does not need module X)`, or
+ * `(main module does not need to vendor module X)` with `-vendor`, and exits
+ * with status 0 either way.
+ *
+ * @param {string} rawOutput Output from go mod why
+ * @returns {boolean} True when go reports the module as not needed
+ */
+export declare function isGoModWhyNotNeeded(rawOutput: string): boolean;
+/**
  * Parse go sum data
  * @param {string} gosumData Content of go.sum
  * @returns package list

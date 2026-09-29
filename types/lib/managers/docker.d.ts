@@ -54,6 +54,27 @@ export declare const getConnection: (_options: Object, forRegistry?: string) => 
  */
 export declare const makeRequest: (path: string, method: string, forRegistry?: string) => Promise<Object | Buffer | undefined>;
 /**
+ * Decide whether a CLI path argument is a container image reference in the
+ * styles the container pipeline documents: name, name:tag, namespace/name,
+ * registry/namespace/name:tag, registry:port/..., and any of those with a
+ * @digest. Everything that smells like a filesystem path, a URL or a CLI
+ * option never matches, so strings such as "c:\Users", "c:/tmp" or
+ * "file:///etc" can never reach the container clients: backslashes and
+ * schemes are rejected outright, and a drive-letter prefix fails because a
+ * lone letter is neither a dotted host nor a host:port, and a tag may not
+ * begin with the "/" that follows the colon in "c:/tmp".
+ *
+ * The check mirrors how the distribution reference grammar detects a registry
+ * host: the first component counts as a host only when it carries a dot, a
+ * numeric port, or is exactly localhost. Each piece is validated by a linear
+ * regex or plain string splitting, and the input is length-capped, so hostile
+ * inputs cannot backtrack expensively.
+ *
+ * @param {string} fullImageName Candidate image reference
+ * @returns {boolean} true when the string is a plausible image reference
+ */
+export declare const isImageReference: (fullImageName: string) => boolean;
+/**
  * Parse image name
  *
  * docker pull debian

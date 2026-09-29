@@ -495,7 +495,16 @@
       "version": "1.1.0"
     },
     {
+      "authors": [
+        {
+          "name": "Naotoshi Seo"
+        },
+        {
+          "name": "SHIBATA Hiroshi"
+        }
+      ],
       "bom-ref": "pkg:gem/logger@1.7.0",
+      "description": "Provides a simple logging utility for outputting messages.",
       "evidence": {
         "identity": [
           {
@@ -514,6 +523,16 @@
       },
       "externalReferences": [
         {
+          "comment": "changelog_uri",
+          "type": "release-notes",
+          "url": "https://github.com/ruby/logger/releases"
+        },
+        {
+          "comment": "homepage_uri",
+          "type": "website",
+          "url": "https://github.com/ruby/logger"
+        },
+        {
           "type": "distribution",
           "url": "https://rubygems.org/gems/logger-1.7.0.gem"
         }
@@ -525,11 +544,33 @@
           "content": "196edec7cc44b66cfb40f9755ce11b392f21f7967696af15d274dde7edff0203"
         }
       ],
+      "licenses": [
+        {
+          "license": {
+            "id": "BSD-2-Clause",
+            "url": "https://opensource.org/licenses/BSD-2-Clause"
+          }
+        },
+        {
+          "license": {
+            "id": "Ruby",
+            "url": "https://opensource.org/licenses/Ruby"
+          }
+        }
+      ],
       "name": "logger",
       "properties": [
         {
+          "name": "cdx:gem:gemUri",
+          "value": "https://rubygems.org/gems/logger-1.7.0.gem"
+        },
+        {
           "name": "cdx:gem:remote",
           "value": "https://rubygems.org/"
+        },
+        {
+          "name": "cdx:gem:rubyVersionSpecifiers",
+          "value": ">= 2.5.0"
         },
         {
           "name": "internal:SrcFile",
@@ -587,7 +628,13 @@
       "version": "6.0.6"
     },
     {
+      "authors": [
+        {
+          "name": "OpenTelemetry Authors"
+        }
+      ],
       "bom-ref": "pkg:gem/opentelemetry-api@1.11.0",
+      "description": "A stats collection and distributed tracing framework",
       "evidence": {
         "identity": [
           {
@@ -606,6 +653,31 @@
       },
       "externalReferences": [
         {
+          "comment": "bug_tracker_uri",
+          "type": "issue-tracker",
+          "url": "https://github.com/open-telemetry/opentelemetry-ruby/issues"
+        },
+        {
+          "comment": "source_code_uri",
+          "type": "vcs",
+          "url": "https://github.com/open-telemetry/opentelemetry-ruby/tree/opentelemetry-api/v1.11.0/api"
+        },
+        {
+          "comment": "homepage_uri",
+          "type": "website",
+          "url": "https://github.com/open-telemetry/opentelemetry-ruby"
+        },
+        {
+          "comment": "changelog_uri",
+          "type": "release-notes",
+          "url": "https://rubydoc.info/gems/opentelemetry-api/1.11.0/file/CHANGELOG.md"
+        },
+        {
+          "comment": "documentation_uri",
+          "type": "documentation",
+          "url": "https://rubydoc.info/gems/opentelemetry-api/1.11.0"
+        },
+        {
           "type": "distribution",
           "url": "https://rubygems.org/gems/opentelemetry-api-1.11.0.gem"
         }
@@ -617,11 +689,27 @@
           "content": "218c840170fa473974756668b32b6989570de07c7d3864627960209f189247e2"
         }
       ],
+      "licenses": [
+        {
+          "license": {
+            "id": "Apache-2.0",
+            "url": "https://opensource.org/licenses/Apache-2.0"
+          }
+        }
+      ],
       "name": "opentelemetry-api",
       "properties": [
         {
+          "name": "cdx:gem:gemUri",
+          "value": "https://rubygems.org/gems/opentelemetry-api-1.11.0.gem"
+        },
+        {
           "name": "cdx:gem:remote",
           "value": "https://rubygems.org/"
+        },
+        {
+          "name": "cdx:gem:rubyVersionSpecifiers",
+          "value": ">= 3.3"
         },
         {
           "name": "internal:SrcFile",
@@ -793,7 +881,13 @@
       "version": "0.6.3"
     },
     {
+      "authors": [
+        {
+          "name": "OpenTelemetry Authors"
+        }
+      ],
       "bom-ref": "pkg:gem/opentelemetry-sdk@1.13.0",
+      "description": "A stats collection and distributed tracing framework",
       "evidence": {
         "identity": [
           {
@@ -812,6 +906,31 @@
       },
       "externalReferences": [
         {
+          "comment": "bug_tracker_uri",
+          "type": "issue-tracker",
+          "url": "https://github.com/open-telemetry/opentelemetry-ruby/issues"
+        },
+        {
+          "comment": "source_code_uri",
+          "type": "vcs",
+          "url": "https://github.com/open-telemetry/opentelemetry-ruby/tree/opentelemetry-sdk/v1.13.0/sdk"
+        },
+        {
+          "comment": "homepage_uri",
+          "type": "website",
+          "url": "https://github.com/open-telemetry/opentelemetry-ruby"
+        },
+        {
+          "comment": "changelog_uri",
+          "type": "release-notes",
+          "url": "https://rubydoc.info/gems/opentelemetry-sdk/1.13.0/file/CHANGELOG.md"
+        },
+        {
+          "comment": "documentation_uri",
+          "type": "documentation",
+          "url": "https://rubydoc.info/gems/opentelemetry-sdk/1.13.0"
+        },
+        {
           "type": "distribution",
           "url": "https://rubygems.org/gems/opentelemetry-sdk-1.13.0.gem"
         }
@@ -823,11 +942,27 @@
           "content": "eea4ab625eb901ecfe1083049862d4853fd16d94029f3cdd16526c81332f0fff"
         }
       ],
+      "licenses": [
+        {
+          "license": {
+            "id": "Apache-2.0",
+            "url": "https://opensource.org/licenses/Apache-2.0"
+          }
+        }
+      ],
       "name": "opentelemetry-sdk",
       "properties": [
         {
+          "name": "cdx:gem:gemUri",
+          "value": "https://rubygems.org/gems/opentelemetry-sdk-1.13.0.gem"
+        },
+        {
           "name": "cdx:gem:remote",
           "value": "https://rubygems.org/"
+        },
+        {
+          "name": "cdx:gem:rubyVersionSpecifiers",
+          "value": ">= 3.3"
         },
         {
           "name": "internal:SrcFile",
@@ -1207,7 +1342,19 @@
       "version": "3.1.1"
     },
     {
+      "authors": [
+        {
+          "name": "Hiroshi SHIBATA"
+        },
+        {
+          "name": "Eric Hodel"
+        },
+        {
+          "name": "Jim Weirich"
+        }
+      ],
       "bom-ref": "pkg:gem/rake@13.4.2",
+      "description": "Rake is a Make-like program implemented in Ruby. Tasks and dependencies are\nspecified in standard Ruby syntax.\nRake has the following features:\n  * Rakefiles (rake's version of Makefiles) are completely defined in standard Ruby syntax.\n    No XML files to edit. No quirky Makefile syntax to worry about (is that a tab or a space?)\n  * Users can specify tasks with prerequisites.\n  * Rake supports rule patterns to synthesize implicit tasks.\n  * Flexible FileLists that act like arrays but know about manipulating file names and paths.\n  * Supports parallel execution of tasks.\n",
       "evidence": {
         "identity": [
           {
@@ -1226,6 +1373,31 @@
       },
       "externalReferences": [
         {
+          "comment": "bug_tracker_uri",
+          "type": "issue-tracker",
+          "url": "https://github.com/ruby/rake/issues"
+        },
+        {
+          "comment": "changelog_uri",
+          "type": "release-notes",
+          "url": "https://github.com/ruby/rake/releases"
+        },
+        {
+          "comment": "source_code_uri",
+          "type": "vcs",
+          "url": "https://github.com/ruby/rake"
+        },
+        {
+          "comment": "homepage_uri",
+          "type": "website",
+          "url": "https://github.com/ruby/rake"
+        },
+        {
+          "comment": "documentation_uri",
+          "type": "documentation",
+          "url": "https://ruby.github.io/rake"
+        },
+        {
           "type": "distribution",
           "url": "https://rubygems.org/gems/rake-13.4.2.gem"
         }
@@ -1237,11 +1409,27 @@
           "content": "cb825b2bd5f1f8e91ca37bddb4b9aaf345551b4731da62949be002fa89283701"
         }
       ],
+      "licenses": [
+        {
+          "license": {
+            "id": "MIT",
+            "url": "https://opensource.org/licenses/MIT"
+          }
+        }
+      ],
       "name": "rake",
       "properties": [
         {
+          "name": "cdx:gem:gemUri",
+          "value": "https://rubygems.org/gems/rake-13.4.2.gem"
+        },
+        {
           "name": "cdx:gem:remote",
           "value": "https://rubygems.org/"
+        },
+        {
+          "name": "cdx:gem:rubyVersionSpecifiers",
+          "value": ">= 2.3"
         },
         {
           "name": "internal:SrcFile",
@@ -1869,7 +2057,9 @@
       "ref": "pkg:gem/lint_roller@1.1.0"
     },
     {
-      "dependsOn": [],
+      "dependsOn": [
+        "pkg:generic/ruby"
+      ],
       "ref": "pkg:gem/logger@1.7.0"
     },
     {
@@ -1881,7 +2071,8 @@
     },
     {
       "dependsOn": [
-        "pkg:gem/logger@1.7.0"
+        "pkg:gem/logger@1.7.0",
+        "pkg:generic/ruby"
       ],
       "ref": "pkg:gem/opentelemetry-api@1.11.0"
     },
@@ -1936,7 +2127,8 @@
         "pkg:gem/opentelemetry-api@1.11.0",
         "pkg:gem/opentelemetry-common@0.25.1",
         "pkg:gem/opentelemetry-registry@0.6.3",
-        "pkg:gem/opentelemetry-semantic_conventions@1.44.0"
+        "pkg:gem/opentelemetry-semantic_conventions@1.44.0",
+        "pkg:generic/ruby"
       ],
       "ref": "pkg:gem/opentelemetry-sdk@1.13.0"
     },
@@ -1978,7 +2170,9 @@
       "ref": "pkg:gem/rainbow@3.1.1"
     },
     {
-      "dependsOn": [],
+      "dependsOn": [
+        "pkg:generic/ruby"
+      ],
       "ref": "pkg:gem/rake@13.4.2"
     },
     {

@@ -1,4 +1,12 @@
 /**
+ * Whether the @cdxgen/safer-exec tracing runtime could be loaded. When false,
+ * dynamic tracing cannot run at all, and every trace would otherwise exit 0
+ * with a valid but empty BOM, hiding the broken installation (#4378).
+ *
+ * @returns {boolean} True when the tracing runtime is available
+ */
+export declare function isSaferExecAvailable(): boolean;
+/**
  * Parses a command string into command and arguments array.
  * @param {string} cmdStr - Command string to parse
  * @returns {{cmd: string, args: string[]}} Parsed command and arguments
@@ -40,7 +48,19 @@ export declare function resolveSaferExecBinary(): string | undefined;
  * @param {boolean} [options.traceExec] - Log every child process spawned
  * @param {string[]} [options.allowExec] - Executables the command is allowed to run
  * @param {string[]} [options.blockExec] - Executables to block from running
- * @returns {Promise<{libPaths: string[], httpAccessEntries: Object[]}>} Collected libraries and HTTP URLs
+ * @param {boolean} [options.proxyEgress] - Route egress through safer-exec's hostname-pinning proxy (network stays enabled; only allowHosts are reachable)
+ * @param {boolean} [options.allowLoopback] - Allow loopback connections
+ * @param {boolean} [options.dryRun] - Deny every filesystem and network side effect and collect a dry-run report
+ * @param {string} [options.policy] - Named safer-exec ecosystem policy (npm, pypi, maven, ...)
+ * @param {string} [options.policyFile] - Path to a safer-exec JSON policy file
+ * @param {boolean} [options.blockInterpreters] - Block interpreters with sandbox or task-port exemptions (macOS)
+ * @param {boolean} [options.denyPersistenceWrites] - Deny writes to auto-execution and persistence locations
+ * @param {boolean} [options.privateTmp] - Private tmpfs /tmp and /var/tmp (Linux)
+ * @param {string} [options.protectHome] - Home isolation: read-only, tmpfs, or off (Linux)
+ * @returns {Promise<{libPaths: string[], httpAccessEntries: Object[], egressEntries?: Object[], dryRunSummary?: Object}>} Collected libraries, HTTP URLs, proxy egress decisions, and the dry-run summary
+ * @throws {Error} When the @cdxgen/safer-exec tracing runtime is not installed
+ *   (for example after pruning it from a standalone payload), since the traced
+ *   command could never run and the BOM would silently be empty
  */
 export declare function executeAndTrace(commandStr: string, workingDir?: string, options?: {
     readPaths?: string[];
@@ -62,10 +82,36 @@ export declare function executeAndTrace(commandStr: string, workingDir?: string,
     traceExec?: boolean;
     allowExec?: string[];
     blockExec?: string[];
+    proxyEgress?: boolean;
+    allowLoopback?: boolean;
+    dryRun?: boolean;
+    policy?: string;
+    policyFile?: string;
+    blockInterpreters?: boolean;
+    denyPersistenceWrites?: boolean;
+    privateTmp?: boolean;
+    protectHome?: string;
 }): Promise<{
     libPaths: string[];
     httpAccessEntries: Object[];
+    egressEntries?: Object[];
+    dryRunSummary?: Object;
 }>;
+/**
+ * Extracts the egress proxy's decisions from a safer-exec audit log.
+ * "proxy-connect" targets are "host:port"; "proxy-violation" targets are
+ * "CONNECT host:port" or "METHOD http://host[:port]/path". Only the authority
+ * is kept, never a path or query.
+ *
+ * @param {Object[]} auditLog - safer-exec audit entries
+ * @returns {{host: string, port: number, protocol: string, decision: string}[]} Unique egress decisions
+ */
+export declare function parseEgressEntries(auditLog: Object[]): {
+    host: string;
+    port: number;
+    protocol: string;
+    decision: string;
+}[];
 /**
  * Groups HTTP access entries into a CycloneDX services-ready map.
  * Each unique (host, port, protocol) combination becomes a service.

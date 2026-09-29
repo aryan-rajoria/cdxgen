@@ -502,7 +502,7 @@ jobs:
         run: |
           chmod +x contrib/free_disk_space.sh
           ./contrib/free_disk_space.sh
-      - uses: sbt/setup-sbt@82da71df4e122282484a99a8d70096bc2369dbd8  # v1.5.9
+      - uses: sbt/setup-sbt@6158cb0903b8ceeae04f830055f3155e1b6a5ad7  # v1.5.11
       - name: Install bazelisk - linux
         if: matrix.os == 'ubuntu-24.04'
         run: |
@@ -551,7 +551,7 @@ jobs:
           ~/.swiftly/bin/swiftly init --quiet-shell-followup && \
           . ~/.swiftly/env.sh && \
           hash -r
-      - uses: ruby/setup-ruby@a0102e0972be65f351c307e2d64b9314a57c8073  # v1.324.0
+      - uses: ruby/setup-ruby@14594264cd68ce8a2345dd349bc3d138a4ef85c8  # v1.327.0
         with:
           ruby-version: '3.4.9'
       - name: Set up Python
@@ -1581,7 +1581,7 @@ jobs:
         with:
           distribution: 'temurin'
           java-version: '21'
-      - uses: sbt/setup-sbt@82da71df4e122282484a99a8d70096bc2369dbd8  # v1.5.9
+      - uses: sbt/setup-sbt@6158cb0903b8ceeae04f830055f3155e1b6a5ad7  # v1.5.11
       - uses: coursier/setup-action@3174df5c784a0c8724f06b7924b849551c40c39e  # v3.0.3
         with:
           apps: scala3 scalac
@@ -2350,7 +2350,7 @@ jobs:
         with:
           distribution: 'temurin'
           java-version: ${{ matrix.java-version }}
-      - uses: sbt/setup-sbt@82da71df4e122282484a99a8d70096bc2369dbd8  # v1.5.9
+      - uses: sbt/setup-sbt@6158cb0903b8ceeae04f830055f3155e1b6a5ad7  # v1.5.11
       - uses: coursier/setup-action@3174df5c784a0c8724f06b7924b849551c40c39e  # v3.0.3
         with:
           apps: scala3 scalac
@@ -2369,7 +2369,7 @@ jobs:
         run: |
           chmod +x contrib/free_disk_space.sh
           ./contrib/free_disk_space.sh
-      - uses: sbt/setup-sbt@82da71df4e122282484a99a8d70096bc2369dbd8  # v1.5.9
+      - uses: sbt/setup-sbt@6158cb0903b8ceeae04f830055f3155e1b6a5ad7  # v1.5.11
       - name: Install bazelisk - linux
         if: matrix.os == 'ubuntu-24.04'
         run: |
@@ -2402,7 +2402,7 @@ jobs:
         uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97  # v7.0.0
         with:
           python-version: '3.13'
-      - uses: ruby/setup-ruby@a0102e0972be65f351c307e2d64b9314a57c8073  # v1.324.0
+      - uses: ruby/setup-ruby@14594264cd68ce8a2345dd349bc3d138a4ef85c8  # v1.327.0
         with:
           ruby-version: '3.4.9'
       - name: pip install custom-json-diff

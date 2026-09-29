@@ -13,6 +13,8 @@
  */
 
 import { strict as assert } from "node:assert";
+import { mkdtempSync, rmSync } from "node:fs";
+import { tmpdir } from "node:os";
 import path from "node:path";
 import process from "node:process";
 
@@ -72,6 +74,28 @@ async function withCassette(cassetteName, fn) {
 export async function main() {
   console.log("=== Cassette-backed metadata function tests ===\n");
   console.log("(All HTTP served from cassettes — outbound network blocked)\n");
+
+  // Point every package cache at an empty directory before cdxgen is loaded.
+  // getMvnMetadata answers from ~/.m2, the Gradle cache, and the Coursier
+  // cache before it asks the network, so on a machine that has built a Java
+  // project the cassette would go unused and the hit-count check would fail
+  // for reasons that have nothing to do with the code. The golden runner
+  // isolates the caches the same way.
+  const scratchHome = mkdtempSync(path.join(tmpdir(), "cdxgen-cassette-home-"));
+  for (const cacheVar of [
+    "HOME",
+    "USERPROFILE",
+    "LOCALAPPDATA",
+    "GRADLE_USER_HOME",
+    "GRADLE_CACHE_DIR",
+    "COURSIER_CACHE",
+    "MAVEN_CACHE_DIR",
+  ]) {
+    process.env[cacheVar] = scratchHome;
+  }
+  process.on("exit", () => {
+    rmSync(scratchHome, { recursive: true, force: true });
+  });
 
   const utils = await import(
     path.join(REPO_ROOT, "lib", "ecosystems", "utils.js")

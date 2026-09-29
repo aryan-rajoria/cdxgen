@@ -3,8 +3,11 @@
  *
  * For each component, resolves its module aliases (including the deno jsr
  * specifier), records imported/exported modules as properties, attaches
- * occurrence evidence, and adjusts the component scope to "required" when the
- * package is used or "optional" when it is not.
+ * occurrence evidence, and promotes the component scope to "required" when the
+ * package is used. A package with no observed usage keeps the scope its
+ * manifest parser assigned: static import analysis cannot see packages loaded
+ * from configuration, bundler entrypoints, stylesheets, or plugins, so a
+ * missing import is not evidence that a package is optional.
  *
  * @param {Array<object>} pkgList Package components to enrich.
  * @param {object} allImports Map of import specifier to usage evidence objects.
