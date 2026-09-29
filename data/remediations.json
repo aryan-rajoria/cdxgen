@@ -709,6 +709,30 @@
     },
     "docs": "https://cyclonedx.github.io/cdxgen/#/PROJECT_TYPES"
   },
+  "dosai.semantics.persist-failed": {
+    "ecosystem": "csharp",
+    "kind": "evidence.degraded",
+    "impact": "none",
+    "title": "The combined dosai report could not be written to the semantics slices file; the SBOM evidence is unaffected",
+    "targetTier": "resolved",
+    "actions": [
+      {
+        "kind": "config",
+        "detail": "Check that the --semantics-slices-file path is writable and has room for a report the size of the dosai slices."
+      },
+      {
+        "kind": "rerun"
+      }
+    ],
+    "verify": {
+      "rules": [],
+      "expectTier": "resolved",
+      "eventsCleared": [
+        "dosai.semantics.persist-failed"
+      ]
+    },
+    "docs": "https://cyclonedx.github.io/cdxgen/#/EVINSE"
+  },
   "cocoa.pods.missing": {
     "ecosystem": "cocoa",
     "kind": "fallback.engaged",
