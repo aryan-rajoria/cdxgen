@@ -62,6 +62,39 @@ export declare function simplifyRubyVersion(version: string): string;
  */
 export declare function toGemPurl(name: string, version: string | undefined, platform: string | undefined): string;
 /**
+ * Read the Ruby string literal at the start of `text`: a double or single
+ * quoted string, or a `%q`/`%Q`/`%` percent literal. Escaped delimiters and
+ * backslashes are unescaped; every other escape sequence is kept as written.
+ * An interpolation such as `#{spec.name}` is kept verbatim, including any
+ * quotes inside it.
+ *
+ * @param {string} text Source starting with the literal
+ * @returns {{value: string, interpolated: boolean, complete: boolean, rest: string} | undefined}
+ *   The literal's value, whether it holds an interpolation, whether it was
+ *   closed within `text`, and the source after it. Undefined when `text` does
+ *   not start with a string literal.
+ */
+export declare function readRubyStringLiteral(text: string): {
+    value: string;
+    interpolated: boolean;
+    complete: boolean;
+    rest: string;
+} | undefined;
+/**
+ * Read a Ruby list of strings as written for `authors`, `email`, or `licenses`:
+ * an array of string literals, a `%w[]` word array, or a single string. Array
+ * elements that are not string literals, such as constants, are skipped.
+ *
+ * @param {string} text Source of the value
+ * @returns {{values: string[], complete: boolean} | undefined} The strings,
+ *   and whether the array was closed within `text`. Undefined when the value
+ *   is an expression that cannot be read statically.
+ */
+export declare function readRubyStringList(text: string): {
+    values: string[];
+    complete: boolean;
+} | undefined;
+/**
  * Parse a single line from the `CHECKSUMS` section of a Gemfile.lock. Bundler
  * 2.5 onwards writes `name (version[-platform]) algo=digest[,algo=digest]`,
  * where the `name (version[-platform])` token is identical to the one used in
@@ -159,14 +192,34 @@ export declare function toGemModuleNames(name: any): string[];
  */
 export declare function collectGemModuleNames(rubyCommand: string, bundleCommand: string, gemHome: string, gemName: string, filePath: string): Array<string>;
 /**
- * Method to parse Gemspec file contents
+ * Method to parse Gemspec file contents.
+ *
+ * A source gemspec is Ruby code. The values that can be read without running
+ * it are string literals, lists of them, heredocs, and a version constant
+ * defined in the version file the gemspec requires. Anything else is left
+ * unresolved instead of being guessed.
+ *
+ * Bundler evaluates the gemspec of a project that uses the Gemfile `gemspec`
+ * directive, and locks the gem under `PATH remote: .`. Such a locked version
+ * can be supplied through `options.lockedVersions` and is used when the
+ * gemspec computes its version in a way that cannot be read statically.
  *
  * @param {string} gemspecData Gemspec data
  * @param {string} gemspecFile File name for evidence.
+ * @param {Object} [options] Parse options
+ * @param {Object<string, string>} [options.lockedVersions] Locked versions of
+ *   the gems the project directory serves, by gem name
  */
-export declare function parseGemspecData(gemspecData: string, gemspecFile: string): Promise<any[]>;
+export declare function parseGemspecData(gemspecData: string, gemspecFile: string, options?: {
+    lockedVersions?: Record<string, string>;
+}): Promise<any[]>;
 /**
  * Method to parse Gemfile.lock
+ *
+ * Besides the components and the dependency tree, the result lists as
+ * `projectGemRefs` the bom-refs of the gems served from the lockfile's own
+ * directory (`PATH` with `remote: .`), which is how Bundler records the gem a
+ * project builds when its Gemfile uses the `gemspec` directive.
  *
  * @param {object} gemLockData Gemfile.lock data
  * @param {string} lockFile Lock file
@@ -178,5 +231,93 @@ export declare function parseGemfileLockData(gemLockData: object, lockFile: stri
         dependsOn: any[];
     }[];
     rootList: any[];
+    projectGemRefs: any[];
 }>;
+/**
+ * Describe the gem a project builds in its parent component.
+ *
+ * A gem project sees its own gem more than once: in its gemspec, in the `PATH`
+ * entry the Gemfile `gemspec` directive adds to its lockfile, and possibly as
+ * an installed copy. Each of them describes the project itself, so all are
+ * folded into the parent (discussion 4388). The parent takes the gem's
+ * identity, its descriptive metadata, and its `cdx:gem:*` properties; the
+ * dependency edges of the sightings move to the parent; and the sightings
+ * leave the component list, so the gem is never a dependency of itself.
+ *
+ * An explicit `--project-version` names the version of the parent. Otherwise
+ * the version of the gemspec, which may have come from the lockfile, is used.
+ *
+ * @param {object} parentComponent Parent component, updated in place
+ * @param {object} projectGem Component parsed from the root gemspec
+ * @param {object[]} pkgList Components
+ * @param {object[]} dependencies Dependency edges
+ * @param {string[]} rootList bom-refs of the direct dependencies
+ * @param {string[]} projectGemRefs bom-refs of the gems the lockfiles serve from the project directory
+ * @param {object} options CLI options
+ * @returns {{pkgList: object[], dependencies: object[], rootList: string[]}}
+ *   The components, edges, and direct dependencies with the gem folded in
+ */
+export declare function describeProjectGem(parentComponent: object, projectGem: object, pkgList: object[], dependencies: object[], rootList: string[], projectGemRefs: string[], options?: object): {
+    pkgList: object[];
+    dependencies: object[];
+    rootList: string[];
+};
+/**
+ * Point each gem resolved from the public RubyGems registry at its `.gem`
+ * tarball with a `distribution` external reference (discussion 4406).
+ *
+ * The registry API supplies `gem_uri` when it is reachable, but an offline
+ * scan — a dry run, an air-gapped host, or one that only consulted Bundler's
+ * local caches — has no way to learn it. For the public registry the URL is
+ * deterministic, so it is derived from the recorded `cdx:gem:remote` and the
+ * release identity instead. Gems from any other remote are left alone: a
+ * private mirror's layout is its own business.
+ *
+ * @param {Array} pkgList Gem components, enriched in place
+ * @returns {Array} The package list
+ */
+export declare function addRubyGemsDistributionUrls(pkgList: any[]): any[];
+/**
+ * Intersect Gem::Requirement strings into one `vers` range with the RubyGems
+ * versioning scheme, as the CycloneDX `versionRange` requires. `>= 2.3` and
+ * `>= 3.3` intersect to `vers:gem/>=3.3`, and `~> 3.1` becomes
+ * `vers:gem/>=3.1|<4`, since vers has no pessimistic operator.
+ *
+ * @param {string[]} requirements Requirement strings, each possibly holding
+ *   several comma separated constraints
+ * @returns {string|null|undefined} The range, `null` when the requirements
+ *   exclude each other, or undefined when none of them could be read
+ */
+export declare function rubyRequirementToVers(requirements: string[]): string | null | undefined;
+/**
+ * Describe the Ruby runtime the gems require as one external `platform`
+ * component, and make the components that declare a `required_ruby_version`
+ * depend on it (discussion 4409).
+ *
+ * The component stands for the Ruby the bundle as a whole runs on, so its
+ * `versionRange` is the intersection of every requirement that could be read,
+ * in the `vers` syntax CycloneDX mandates for the field. Each component's own
+ * requirement stays in its `cdx:gem:rubyVersionSpecifiers` property. One
+ * runtime component per distinct requirement would describe the same
+ * interpreter many times over: a modest bundle spells `>= 2.x` a dozen ways.
+ *
+ * The type is `platform`, the CycloneDX type for a runtime environment that
+ * interprets software, and the one cdxgen gives the Ruby it finds in the
+ * build environment. The purl names no version, since a range is not one.
+ *
+ * `isExternal` and `versionRange` are CycloneDX 1.7 fields, and without them
+ * the component would claim the product bundles its interpreter, so the caller
+ * decides whether the BOM should carry it at all.
+ *
+ * @param {Array} pkgList Components
+ * @param {object} parentComponent The metadata.component, when the project is
+ *   itself a gem
+ * @param {Array} dependencies Dependency edges
+ * @returns {{pkgList: Array, dependencies: Array}} Components and edges with
+ *   the runtime component added
+ */
+export declare function addRubyRuntimeComponent(pkgList: any[], parentComponent: object, dependencies: any[]): {
+    pkgList: any[];
+    dependencies: any[];
+};
 //# sourceMappingURL=rubyutils.d.ts.map
