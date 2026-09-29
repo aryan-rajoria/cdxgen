@@ -155,11 +155,20 @@ For .NET projects, `evinse` uses the bundled `dosai` helper from `@cdxgen/cdxgen
   without the patterns.
 - When the input BOM was created with `--deep` in the same run, cdxgen reuses
   the dosai methods slice from `deps.slices.json` as the usages slice instead
-  of running dosai a second time. An existing `deps.slices.json` is reused
-  as-is, including one created with different `--exclude` patterns or an older
-  cdxgen release, so a stale cache can ignore your current excludes; delete
-  the file to force a fresh analysis. Pass `--usages-slices-file` to prefer
-  your own slice.
+  of running dosai a second time. `--evidence` implies `--deep`, so this
+  covers `cdxgen --evidence` as well. `--deps-slices-file` takes an absolute
+  path as given and resolves a relative one against the scanned directory. An
+  existing `deps.slices.json` is reused as-is, including one created with
+  different `--exclude` patterns or an older cdxgen release, so a stale cache
+  can ignore your current excludes; delete the file to force a fresh analysis.
+  Pass `--usages-slices-file` to prefer your own slice.
+- dosai reports of any size are read. A report larger than one JavaScript
+  string can hold (about 512 MB; `dotnet/efcore` produces 1.9 GB) is read in
+  bounded runs that keep only what cdxgen uses: the package reachability
+  facts, the call-graph nodes and edges they reference, the method calls into
+  package assemblies, and the services, endpoints, and AI components. The
+  report persisted to `--semantics-slices-file` is then assembled from the
+  native dosai files, so it stays complete.
 
 ```shell
 cdxgen -t dotnet --deep --evidence -o bom.json .
