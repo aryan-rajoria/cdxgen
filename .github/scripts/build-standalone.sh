@@ -22,16 +22,15 @@ DEFAULT_TARGETS=(
   tracebom
 )
 
+# The post-build SBOM describes one binary: its caxa metadata file, completed
+# from the app the binary extracts (see write_postbuild_sbom). It is generated
+# from the repository root, which formulation reads git metadata from, so keep
+# the test fixtures out of it.
 COMMON_SBOM_ARGS=(
   -t caxa
-  -t jar
-  -t php
-  -t ruby
   --lifecycle post-build
   --include-formulation
   --no-install-deps
-  # The post-build SBOM is generated from the repository root, so keep the
-  # test fixtures (lockfiles, gemspecs, jars) out of the binary's SBOM.
   --exclude "test/**"
 )
 
@@ -106,8 +105,8 @@ run_binary_build() {
   caxa_args+=(-- "{{caxa}}/node_modules/.bin/node" "{{caxa}}/$entry_point")
 
   run_caxa "${caxa_args[@]}"
-  node "$staging_dir/bin/cdxgen.js" "${COMMON_SBOM_ARGS[@]}" -o ".${output}-postbuild.cdx.json"
   chmod +x "$output"
+  write_postbuild_sbom "$staging_dir" "$output" "$metadata_file"
   "./$output" --version
   "./$output" --help
   if [[ "$output" == "cdxgen" || "$output" == "cbom" || "$output" == "saasbom" ]]; then
@@ -117,6 +116,33 @@ run_binary_build() {
     run_aibom_smoke_test "$output"
   fi
   assert_binary_size_limit "$output"
+}
+
+# The SBOM of a binary covers what it ships, so it is built from what the
+# binary extracts rather than from the staging tree, which still holds files
+# caxa leaves out of the payload. The binary runs once on a private cache with
+# the prefetcher off; its lazy members stay placeholders, which is enough, as
+# only their paths are needed. Every target writes its caxa metadata file into
+# the repository root, so --include-regex limits -t caxa to this target's own.
+write_postbuild_sbom() {
+  local staging_dir="$1"
+  local output="$2"
+  local metadata_file="$3"
+  local app_cache app_dir
+
+  app_cache="$(mktemp -d)"
+  STAGING_DIRS+=("$app_cache")
+  CAXA_TEMP_DIR="$app_cache" CAXA_PREFETCH=0 "./$output" --version >/dev/null
+  app_dir="$(find "$app_cache/apps" -mindepth 2 -maxdepth 2 -type d | head -n 1)"
+  if [[ -z "$app_dir" || ! -f "$app_dir/package.json" ]]; then
+    echo "Post-build SBOM failed: ./$output extracted no app into $app_cache." >&2
+    exit 1
+  fi
+  node "$staging_dir/bin/cdxgen.js" "${COMMON_SBOM_ARGS[@]}" \
+    --include-regex "$metadata_file" \
+    --caxa-app-dir "$app_dir" \
+    -o ".${output}-postbuild.cdx.json"
+  rm -rf "$app_cache"
 }
 
 # Spawn atom through the freshly built caxa binary so a payload-less or

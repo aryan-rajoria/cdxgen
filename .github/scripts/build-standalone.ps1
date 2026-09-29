@@ -23,21 +23,14 @@ $defaultTargets = @(
   "hbom-slim"
 )
 
+# See COMMON_SBOM_ARGS and write_postbuild_sbom in build-standalone.sh.
 $commonSbomArgs = @(
   "-t",
   "caxa",
-  "-t",
-  "jar",
-  "-t",
-  "php",
-  "-t",
-  "ruby",
   "--lifecycle",
   "post-build",
   "--include-formulation",
   "--no-install-deps",
-  # See COMMON_SBOM_ARGS in build-standalone.sh: keep the test fixtures out of
-  # the binary's SBOM.
   "--exclude",
   "test/**"
 )
@@ -77,6 +70,36 @@ function Assert-BinarySizeLimit {
   Write-Host "Standalone binary size check passed: $outputFile is $sizeBytes bytes (limit $maxBytes)."
 }
 
+# See write_postbuild_sbom in build-standalone.sh: the SBOM is built from the
+# app the binary extracts, and from this target's own metadata file.
+function Write-PostbuildSbom {
+  param(
+    [Parameter(Mandatory = $true)]
+    [string]$StagingDir,
+    [Parameter(Mandatory = $true)]
+    [string]$Output,
+    [Parameter(Mandatory = $true)]
+    [string]$MetadataFile
+  )
+
+  $appCache = Join-Path ([System.IO.Path]::GetTempPath()) "cdxgen-app-$Output-$PID-$([System.Guid]::NewGuid().ToString('N'))"
+  $stagingDirs.Add($appCache)
+  $previousTempDir = $env:CAXA_TEMP_DIR
+  $env:CAXA_TEMP_DIR = $appCache
+  try {
+    & ".\$Output.exe" --version | Out-Null
+  } finally {
+    $env:CAXA_TEMP_DIR = $previousTempDir
+  }
+  $appDir = Get-ChildItem -Path (Join-Path $appCache "apps") -Directory -ErrorAction SilentlyContinue |
+    ForEach-Object { Get-ChildItem -Path $_.FullName -Directory } |
+    Select-Object -First 1
+  if (-not $appDir -or -not (Test-Path (Join-Path $appDir.FullName "package.json"))) {
+    throw "Post-build SBOM failed: $Output.exe extracted no app into $appCache."
+  }
+  node (Join-Path $StagingDir "bin/cdxgen.js") @commonSbomArgs --include-regex $MetadataFile --caxa-app-dir $appDir.FullName -o ".${Output}-postbuild.cdx.json"
+}
+
 function Invoke-BinaryBuildFromStage {
   param(
     [Parameter(Mandatory = $true)]
@@ -90,7 +113,7 @@ function Invoke-BinaryBuildFromStage {
   )
 
   pnpm --package=$caxaPackage dlx caxa --input $StagingDir --metadata-file $MetadataFile --output "$Output.exe" -- "{{caxa}}/node_modules/.bin/node" "{{caxa}}/$EntryPoint"
-  node (Join-Path $StagingDir "bin/cdxgen.js") @commonSbomArgs -o ".${Output}-postbuild.cdx.json"
+  Write-PostbuildSbom -StagingDir $StagingDir -Output $Output -MetadataFile $MetadataFile
   & ".\$Output.exe" --version
   & ".\$Output.exe" --help
   if ($Output -in @("cdxgen", "cbom", "saasbom")) {
