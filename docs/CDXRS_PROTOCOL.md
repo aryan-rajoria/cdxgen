@@ -236,6 +236,17 @@ the batching win is unchanged; only the on-disk cache below is skipped.
 Within the pool, a credential the caller attached to a request wins over the
 ambient `GITHUB_TOKEN`. The ambient token is a fallback, never an override.
 
+A batch routed to `cdxrs fetch` is sent in runs of at most 250 URLs, one run
+at a time so each host still sees a single rate gate. The envelope has to
+become one JavaScript string, and a large pnpm workspace fetching full npm
+packuments in a single run produced more than V8's string limit allows (issue
+4393). If a run still fails with `stdout-too-large`, the bridge splits it in
+half and retries, which is cheap because the first attempt filled the disk
+cache below; only a single URL that is too large on its own goes to the JS
+pool. A run that fails for any other reason falls back to the JS pool without
+affecting the other runs. `lastBatchStats()` reports the whole batch: counts
+and elapsed time add up across runs, and peak concurrency is the widest run.
+
 ## Metadata cache
 
 `cdxrs fetch` writes an on-disk conditional cache under
@@ -303,26 +314,27 @@ if (cdxrsDisabled("info")) {
 Every failure mode logs once at `warn` and returns the `CDXRS_FALLBACK`
 sentinel (`{ ok: false, reason: "..." }`). The caller takes the JS path.
 
-| Failure                | `reason` field         |
-| ---------------------- | ---------------------- |
-| Binary not found       | `binary-not-found`     |
-| Non-zero exit          | `non-zero-exit:<code>` |
-| Timeout                | `timeout`              |
-| Oversized stdout       | `stdout-too-large`     |
-| Malformed stdout       | `malformed-stdout`     |
+| Failure                | `reason` field          |
+| ---------------------- | ----------------------- |
+| Binary not found       | `binary-not-found`      |
+| Non-zero exit          | `non-zero-exit:<code>`  |
+| Timeout                | `timeout`               |
+| Oversized stdout       | `stdout-too-large`      |
+| Malformed stdout       | `malformed-stdout`      |
 | Stdout not collectable | `stdout-collect-failed` |
-| Version-major mismatch | `version-mismatch`     |
-| CDXGEN_RS_DISABLE      | `disabled`             |
-| Spawn error            | `spawn-error`          |
-| Unknown subcommand     | `unknown-subcommand`   |
+| Version-major mismatch | `version-mismatch`      |
+| CDXGEN_RS_DISABLE      | `disabled`              |
+| Spawn error            | `spawn-error`           |
+| Unknown subcommand     | `unknown-subcommand`    |
 
 The bridge kills the **process group** on timeout (`process.kill(-pid,
 "SIGKILL")`) so a hung child cannot outlive the parent. It also kills the
 group once collected stdout passes `CDXGEN_RS_MAX_STDOUT_BYTES` (default:
 V8's maximum string length, 0x1fffffe8): stdout must become a single JS
-string, so an oversized payload can never be delivered — waiting for the
+string, so an oversized payload can never be delivered, and waiting for the
 child to finish would only end in `ERR_STRING_TOO_LONG` crashing the process
-(issue 4393). The ceiling exists precisely so that failover happens instead.
+(issue 4393). For `fetch`, the caller answers `stdout-too-large` by splitting
+the run (see [Batch transport selection](#batch-transport-selection)).
 
 ## BOM model and round-trip fidelity
 
