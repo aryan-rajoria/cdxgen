@@ -77,6 +77,14 @@ If you are a [Winget](https://learn.microsoft.com/en-us/windows/package-manager/
 winget install cdxgen
 ```
 
+#### First run and the extraction cache
+
+The standalone binaries are self-extracting [caxa](https://github.com/cdxgen/caxa) executables. The first run of a release extracts it into a cache directory, `caxa` under the system temp directory, and later runs start from there. Set `CAXA_TEMP_DIR` to use another directory, for example when the temp directory is read-only or mounted `noexec`.
+
+On Linux and macOS, the large native plugins such as atom, trivy and osquery are extracted the first time a scan runs them, so the first run stays short. A low-priority background process then extracts the rest; set `CAXA_PREFETCH=0` to turn it off. Windows binaries extract everything on the first run.
+
+Each release extracts into a directory of its own, and old ones are never removed automatically. To reclaim the space, delete the `caxa` cache directory while no cdxgen binary is running; the next run extracts again.
+
 ### npm and JavaScript package managers
 
 The npm package is an alternative when you already have Node.js >= 24 available or need cdxgen as a library.

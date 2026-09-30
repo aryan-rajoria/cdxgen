@@ -294,6 +294,8 @@ The focused alias binaries use smaller dependency profiles than full `cdxgen`: `
 
 Use the asset name that matches your platform, for example `cdx-audit-linux-amd64`, `cdx-audit-darwin-arm64`, or `cdx-audit-windows-amd64.exe`.
 
+Each binary extracts itself into a cache directory on its first run, and on Linux and macOS extracts its large native plugins as scans need them; see [First run and the extraction cache](README.md#first-run-and-the-extraction-cache) for the cache location and the variables that control it.
+
 #### Linux
 
 ```bash
@@ -458,6 +460,9 @@ Options:
       --exclude, --exclude-regex  Additional glob pattern(s) to ignore                                           [array]
       --no-ignore                 Disable default ignore lists (such as .git, .hg, node_modules) during scanning.
                                                                                               [boolean] [default: false]
+      --caxa-app-dir              Directory of the app a caxa binary extracts. With -t caxa, also records the native
+                                  tools, the vendored PHP, Ruby and Java packages, and the npm integrity hashes found
+                                  there.                                                                        [string]
       --export-proto              Serialize and export BOM as protobuf binary.                [boolean] [default: false]
       --format                    Export format(s). Supports cyclonedx, spdx, repeated --format flags, or a
                                   comma-separated list such as cyclonedx,spdx.                                   [array]

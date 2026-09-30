@@ -88,11 +88,15 @@ directory as a plain JavaScript project.
 ## caxa executables
 
 ```bash
-cdxgen -t caxa /absolute/path/to/binary -o /absolute/path/to/bom.json
+cdxgen -t caxa /absolute/path/to/dir-with-metadata -o /absolute/path/to/bom.json
 ```
 
-Extracts the embedded Node application BOM metadata from a self-extracting caxa
-executable.
+Reads the `*metadata.json` file that caxa writes next to a binary when it builds
+it (`--metadata-file`, default `binary-metadata.json`); the binary itself
+carries no BOM, so pointing `-t caxa` at it finds nothing. Add
+`--caxa-app-dir <extracted app>` to also record the native tools, the vendored
+PHP, Ruby and Java packages, and the npm hashes found in the app the binary
+extracts.
 
 ## Binaries without a package manager
 
