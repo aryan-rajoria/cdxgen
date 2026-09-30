@@ -1,0 +1,10 @@
+{
+  "name": "cdxgen-bun-alias-repro",
+  "version": "1.0.0",
+  "dependencies": {
+    "@isaacs/cliui": "8.0.2",
+    "my-wrap": "npm:wrap-ansi@^7.0.0",
+    "string-width": "4.2.3",
+    "strip-ansi": "6.0.1"
+  }
+}

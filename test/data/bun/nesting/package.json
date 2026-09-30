@@ -1,0 +1,10 @@
+{
+  "name": "cdxgen-bun-nesting-repro",
+  "private": true,
+  "dependencies": {
+    "@isaacs/cliui": "8.0.2",
+    "strip-ansi": "6.0.1",
+    "wrap-ansi": "7.0.0",
+    "string-width": "4.2.3"
+  }
+}

@@ -1,0 +1,17 @@
+{
+  "name": "cdxgen-bun-workspace-repro",
+  "version": "1.0.0",
+  "private": true,
+  "workspaces": ["packages/*"],
+  "dependencies": {
+    "strip-ansi": "6.0.1",
+    "@acme/backend": "workspace:*",
+    "util-pkg": "workspace:*"
+  },
+  "devDependencies": {
+    "typescript": "^5.0.0"
+  },
+  "optionalDependencies": {
+    "fsevents": "^2.3.3"
+  }
+}

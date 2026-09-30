@@ -1,0 +1,10 @@
+{
+  "name": "@acme/backend",
+  "version": "2.1.0",
+  "dependencies": {
+    "strip-ansi": "^7.1.0"
+  },
+  "devDependencies": {
+    "chalk": "^0.5.1"
+  }
+}

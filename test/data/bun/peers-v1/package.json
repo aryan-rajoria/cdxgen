@@ -1,0 +1,7 @@
+{
+  "name": "cdxgen-bun-peers-repro",
+  "version": "1.0.0",
+  "peerDependencies": {
+    "left-pad": "^1.3.0"
+  }
+}

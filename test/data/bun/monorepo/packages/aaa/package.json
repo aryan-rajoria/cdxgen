@@ -1,0 +1,8 @@
+{
+  "name": "aaa-member",
+  "version": "1.0.0",
+  "dependencies": {
+    "ansi-regex": "2.1.1",
+    "has-ansi": "2.0.0"
+  }
+}
