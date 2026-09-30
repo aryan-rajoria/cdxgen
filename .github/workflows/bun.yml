@@ -69,9 +69,14 @@ jobs:
           bun bin/cdxgen.js --version
           # Generate an SBOM for a bun project using the bun runtime itself.
           bun bin/cdxgen.js -t bun -o bomresults/bom-bun-runtime.json test/data/bun --no-recurse --fail-on-error
-          node -e "const b=require('./bomresults/bom-bun-runtime.json'); if ((b.components||[]).length !== 5) { console.error('Expected 5 components, got', (b.components||[]).length); process.exit(1); }"
+          node -e "const b=require('./bomresults/bom-bun-runtime.json'); if ((b.components||[]).length !== 13) { console.error('Expected 13 components, got', (b.components||[]).length); process.exit(1); }"
+          # Workspace members the root does not declare must still hang off the root.
+          bun bin/cdxgen.js -t bun -o bomresults/bom-bun-monorepo-runtime.json test/data/bun/monorepo --no-recurse --fail-on-error
+          node contrib/check-bom-reachability.js bomresults/bom-bun-monorepo-runtime.json 11
       - name: cdxgen parses bun.lock under node.js
         shell: bash
         run: |
           node bin/cdxgen.js -t bun -o bomresults/bom-bun-node.json test/data/bun --no-recurse --fail-on-error
-          node -e "const b=require('./bomresults/bom-bun-node.json'); if ((b.components||[]).length !== 5) { console.error('Expected 5 components, got', (b.components||[]).length); process.exit(1); }"
+          node -e "const b=require('./bomresults/bom-bun-node.json'); if ((b.components||[]).length !== 13) { console.error('Expected 13 components, got', (b.components||[]).length); process.exit(1); }"
+          node bin/cdxgen.js -t bun -o bomresults/bom-bun-monorepo-node.json test/data/bun/monorepo --no-recurse --fail-on-error
+          node contrib/check-bom-reachability.js bomresults/bom-bun-monorepo-node.json 11

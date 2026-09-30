@@ -1,0 +1,14 @@
+{
+  "name": "cdxgen-bun-monorepo-repro",
+  "version": "1.0.0",
+  "private": true,
+  "workspaces": ["packages/*"],
+  "dependencies": {
+    "aaa-alias": "workspace:packages/aaa",
+    "has-ansi": "4.0.1",
+    "local-tool": "file:./local-tool"
+  },
+  "devDependencies": {
+    "ansi-regex": "2.0.0"
+  }
+}
